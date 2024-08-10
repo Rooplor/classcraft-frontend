@@ -1,4 +1,4 @@
-# ClassCraft - Knowledge sharing never been this simple
+# ClassCraft - Knowledge sharing never been this easy
 
 Rooplor's capstone project
 
