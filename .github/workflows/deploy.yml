@@ -1,13 +1,9 @@
 name: CI/CD Pipeline
 
 on:
-  push:
-    branches-ignore:
-      - main
   pull_request:
     branches:
       - '*'
-  workflow_dispatch:
 
 jobs:
   build:
@@ -15,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -43,11 +39,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: github.event_name == 'workflow_dispatch'
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Download build files
         uses: actions/download-artifact@v3
@@ -58,15 +53,17 @@ jobs:
       - name: Install SSH client
         run: sudo apt-get install -y openssh-client
 
-      - name: Set up VPN
+      - name: Install OpenVPN
         run: |
-          echo "${{ secrets.VPN_CONFIG }}" > vpn-config.ovpn
-          echo "${{ secrets.VPN_USERNAME }}" > vpn-credentials
-          echo "${{ secrets.VPN_PASSWORD }}" >> vpn-credentials
-          sudo openvpn --config vpn-config.ovpn --auth-user-pass vpn-credentials --daemon
+          sudo apt update
+          sudo apt install -y openvpn openvpn-systemd-resolved
 
-      - name: Wait for VPN to connect
-        run: sleep 20
+      - name: Connect to VPN
+        uses: "kota65535/github-openvpn-connect-action@v2"
+        with:
+          config_file: .github/workflows/sitst-client.ovpn
+          username: ${{ secrets.VPN_USERNAME }}
+          password: ${{ secrets.VPN_PASSWORD }}
 
       - name: Copy build files to VM
         env:
@@ -78,7 +75,6 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p 22 $REMOTE_HOST >> ~/.ssh/known_hosts
-
           scp -P 22 -i ~/.ssh/id_rsa build/build.tar.gz $REMOTE_USER@$REMOTE_HOST:/home/sysadmin/classCraftWeb
 
       - name: Deploy Docker container on VM
@@ -93,6 +89,6 @@ jobs:
 
             docker stop classCraftWeb || true
             docker rm classCraftWeb || true
-            docker build -t classCraftImg:latest .
-            docker run -d --name classCraftWeb -p 80:80 classCraftImg:latest
+            docker build -t classcraftimg:latest .
+            docker run -d --name classCraftWeb -p 80:3000 classcraftimg:latest
           EOF
