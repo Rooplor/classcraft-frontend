@@ -1,3 +1,80 @@
 <script setup lang="ts"></script>
 
-<template>{{ $route.params.id }} edit</template>
+<template>
+    <div class="w-full">
+        <div class="flex justify-between">
+            <h1>Class name</h1>
+            <Button label="Share" icon="pi pi-share-alt" />
+        </div>
+        <div class="card flex justify-center">
+            <Stepper value="1" linear class="basis-full">
+                <StepList>
+                    <Step value="1">Fill class detail</Step>
+                    <Step value="2">Reserve venue</Step>
+                    <Step value="3">Craft your content</Step>
+                    <Step value="4">Prepare for registration</Step>
+                </StepList>
+                <StepPanels>
+                    <StepPanel v-slot="{ activateCallback }" value="1">
+                        <NuxtLayout name="fill-class-detail" />
+                        <div class="flex pt-6 justify-end">
+                            <Button
+                                label="Next"
+                                icon="pi pi-arrow-right"
+                                @click="activateCallback('2')"
+                            />
+                        </div>
+                    </StepPanel>
+                    <StepPanel v-slot="{ activateCallback }" value="2">
+                        <NuxtLayout name="reserve-venue" />
+
+                        <div class="flex pt-6 justify-between">
+                            <Button
+                                label="Back"
+                                severity="secondary"
+                                icon="pi pi-arrow-left"
+                                @click="activateCallback('1')"
+                            />
+                            <Button
+                                label="Next"
+                                icon="pi pi-arrow-right"
+                                iconPos="right"
+                                @click="activateCallback('3')"
+                            />
+                        </div>
+                    </StepPanel>
+                    <StepPanel v-slot="{ activateCallback }" value="3">
+                        <NuxtLayout name="craft-content" />
+
+                        <div class="flex pt-6 justify-between">
+                            <Button
+                                label="Back"
+                                severity="secondary"
+                                icon="pi pi-arrow-left"
+                                @click="activateCallback('2')"
+                            />
+                            <Button
+                                label="Next"
+                                icon="pi pi-arrow-right"
+                                iconPos="right"
+                                @click="activateCallback('4')"
+                            />
+                        </div>
+                    </StepPanel>
+                    <StepPanel v-slot="{ activateCallback }" value="4">
+                        <NuxtLayout name="prepare-registration" />
+
+                        <div class="pt-6">
+                            <Button
+                                label="Back"
+                                severity="secondary"
+                                icon="pi pi-arrow-left"
+                                @click="activateCallback('3')"
+                            />
+                        </div>
+                    </StepPanel>
+                </StepPanels>
+            </Stepper>
+        </div>
+    </div>
+</template>
