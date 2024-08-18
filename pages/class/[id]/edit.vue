@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const op = ref();
 
-const toggle = (event) => {
+const toggle = (event: MouseEvent) => {
     op.value.toggle(event);
 };
 </script>
@@ -53,6 +53,7 @@ const toggle = (event) => {
                             <Button
                                 label="Next"
                                 icon="pi pi-arrow-right"
+                                iconPos="right"
                                 @click="activateCallback('2')"
                             />
                         </div>
