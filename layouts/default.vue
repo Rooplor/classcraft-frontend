@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <p>Some default layout content shared across all pages</p>
-    <slot />
-  </div>
+    <div class="flex">
+        <NuxtLayout name="sidebar" />
+        <slot />
+    </div>
 </template>
