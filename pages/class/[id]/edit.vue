@@ -4,7 +4,10 @@
     <div class="w-full">
         <div class="flex justify-between">
             <h1>Class name</h1>
-            <Button label="Share" icon="pi pi-share-alt" />
+            <div class="flex items-center">
+                <div class="p-2 bg-green-300 rounded-md">14 People interested</div>
+                <Button label="Share" icon="pi pi-share-alt" />
+            </div>
         </div>
         <div class="card flex justify-center">
             <Stepper value="1" linear class="basis-full">
