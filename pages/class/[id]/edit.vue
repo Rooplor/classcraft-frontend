@@ -1,12 +1,41 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const op = ref();
+
+const toggle = (event) => {
+    op.value.toggle(event);
+};
+</script>
 
 <template>
     <div class="w-full">
         <div class="flex justify-between">
             <h1>Class name</h1>
             <div class="flex items-center">
-                <div class="p-2 bg-green-300 rounded-md">14 People interested</div>
-                <Button label="Share" icon="pi pi-share-alt" />
+                <div class="p-2 bg-green-300 rounded-md">
+                    14 People interested
+                </div>
+                <Button label="Share" icon="pi pi-share-alt" @click="toggle" />
+                <Popover ref="op">
+                    <div class="flex flex-col gap-4 w-[25rem]">
+                        <div>
+                            <span class="font-medium block mb-2"
+                                >Let the world know about this class</span
+                            >
+                            <InputGroup>
+                                <InputText
+                                    value="https://primevue.org/12323ff26t2g243g423g234gg52hy25XADXAG3"
+                                    readonly
+                                    class="w-[25rem]"
+                                ></InputText>
+                                <Button icon="pi pi-copy" severity="secondary" />
+                            </InputGroup>
+                        </div>
+                        <div class="flex gap-2 justify-end">
+                            <Button label="Publish" icon="pi pi-globe"></Button>
+                            <Button label="View" icon="pi pi-eye"></Button>
+                        </div>
+                    </div>
+                </Popover>
             </div>
         </div>
         <div class="card flex justify-center">
