@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const meetingUrl = ref();
+</script>
 
 <template>
     <div>
@@ -63,9 +65,9 @@
             <div>
                 <h3>Online platform</h3>
                 <div class="flex flex-col gap-2">
-                    <label for="prerequisite">Meeting url </label>
+                    <label for="meetingUrl">Meeting url</label>
                     <div class="flex">
-                        <InputText id="prerequisite" v-model="value" />
+                        <InputText id="meetingUrl" v-model="meetingUrl" />
                         <Button label="Save" icon="pi pi-check" @click="" />
                     </div>
                 </div>

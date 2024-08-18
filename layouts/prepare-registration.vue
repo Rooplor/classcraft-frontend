@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const registrationUrl = ref();
+</script>
 
 <template>
     <h2>Prepare for registration</h2>
@@ -12,9 +14,9 @@
                 <button class="w-32 aspect-square bg-gray-300 rounded-lg" />
             </div>
             <div class="flex flex-col gap-2">
-                <label for="prerequisite">Registration url</label>
+                <label for="registrationUrl">Registration url</label>
                 <div class="flex">
-                    <InputText id="prerequisite" v-model="value" />
+                    <InputText id="registrationUrl" v-model="registrationUrl" />
                     <Button label="Save" icon="pi pi-check" @click="" />
                 </div>
             </div>
