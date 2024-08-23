@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@primevue/themes": "^4.0.4",
+    "@vee-validate/nuxt": "^4.13.2",
     "nuxt": "^3.12.4",
     "primeicons": "^7.0.0",
     "primevue": "^4.0.4",
