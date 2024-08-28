@@ -7,7 +7,7 @@ const toggle = (event: MouseEvent) => {
 </script>
 
 <template>
-    <div class="w-full">
+    <div class="max-w-screen-lg">
         <div class="flex justify-between">
             <h1>Class name</h1>
             <div class="flex items-center">

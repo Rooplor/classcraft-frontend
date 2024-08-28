@@ -43,12 +43,18 @@ const onSubmit = handleSubmit((values: any) => {
             >
                 <div class="flex flex-col gap-2">
                     <label for="detail">รายละเอียด</label>
-                    <InputText
+                    <Editor
+                        id="detail"
+                        v-model="detail"
+                        editorStyle="height: 320px"
+                        :class="{ 'p-invalid': errors.detail }"
+                    />
+                    <!-- <InputText
                         id="detail"
                         v-model="detail"
                         aria-describedby="detail-help"
                         :class="{ 'p-invalid': errors.detail }"
-                    />
+                    /> -->
                     <VeeErrorMessage name="detail" class="text-red-500" />
                 </div>
                 <div class="flex flex-col gap-2">
@@ -87,14 +93,14 @@ const onSubmit = handleSubmit((values: any) => {
                     <VeeErrorMessage name="format" class="text-red-500" />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="capacity">จำนวนผู้เรียน </label>
+                    <label for="capacity">จำนวนผู้เข้าร่วม </label>
                     <SelectButton
                         v-model="capacity"
                         :options="[
-                            '1-10 คน',
-                            '11-20 คน',
-                            '21-30 คน',
-                            '31-50 คน',
+                            '10 คน',
+                            '20 คน',
+                            '30 คน',
+                            '50 คน',
                             'มากกว่า 50 คน',
                         ]"
                         :invalid="errors.capacity"

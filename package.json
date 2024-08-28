@@ -15,6 +15,7 @@
     "nuxt": "^3.12.4",
     "primeicons": "^7.0.0",
     "primevue": "^4.0.4",
+    "quill": "^2.0.2",
     "tailwindcss-primeui": "^0.3.4",
     "vue": "latest",
     "yup": "^1.4.0"
