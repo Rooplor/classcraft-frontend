@@ -2,7 +2,7 @@
 
 <template>
     <div
-        class="min-h-screen border-r w-72 p-4 pb-0 flex flex-col justify-between h-full"
+        class="min-h-screen border-r w-72 p-4 pb-0 sticky top-0 flex flex-col justify-between h-full"
     >
         <div class="flex flex-col gap-9">
             <h1 class="text-xl">Class<span class="font-bold">Craft</span></h1>
