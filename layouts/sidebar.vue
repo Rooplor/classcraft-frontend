@@ -1,23 +1,46 @@
+<script setup lang="ts"></script>
+
 <template>
     <div
-        class="min-h-screen border-r w-56 p-4 flex flex-col justify-between h-full"
+        class="sticky top-0 flex flex-col justify-between h-full min-h-screen p-4 pb-0 border-r w-72"
     >
-        <div>
-            <h1>ClassCraft</h1>
+        <div class="flex flex-col gap-9">
+            <h1 class="text-xl">Class<span class="font-bold">Craft</span></h1>
             <div>
-                <nuxt-link to="/home" class="bg-blue-100 rounded-lg p-3 block">
-                    Home
-                </nuxt-link>
+                <SidebarTab to="/home" name="Home" />
             </div>
-            <div class="flex justify-between">
-                <p>Your classes</p>
-                <p>+ Add</p>
+            <div>
+                <div class="flex justify-between mb-5">
+                    <p class="text-gray-500">Your classes</p>
+                    <nuxt-link to="/class/new" class="text-blue-500">
+                        + Add
+                    </nuxt-link>
+                </div>
+                <SidebarTab to="/class/123/edit" name="React 101" />
+                <SidebarTab to="/class/456/edit" name="Git & GitHub" />
             </div>
-            <nuxt-link to="/home" class="bg-blue-100 rounded-lg p-3 block">
-                React 101
-            </nuxt-link>
         </div>
 
-        <div>Name Lastname</div>
+        <div class="flex items-center justify-between px-2 py-4 border-t">
+            <div class="flex">
+                <Avatar
+                    image="https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj"
+                    class="mr-2"
+                    size="large"
+                    shape="circle"
+                />
+                <div>
+                    <p class="font-medium">Jerome Tana</p>
+                    <p class="text-gray-500">@username</p>
+                </div>
+            </div>
+            <Button
+                icon="pi pi-ellipsis-h"
+                severity="secondary"
+                text
+                rounded
+                aria-label="Filter"
+            />
+        </div>
     </div>
 </template>
