@@ -19,12 +19,12 @@ watch(route.currentRoute, () => {
 <template>
     <nuxt-link
         :to="to"
-        class="rounded-2xl p-3 py-4 hover:bg-blue-100 duration-100 flex items-center gap-2"
+        class="flex items-center gap-2 p-3 py-4 duration-100 rounded-2xl hover:bg-blue-100"
         :class="path === to ? 'bg-blue-100' : ''"
     >
         <!-- TODO: Change to class image -->
-         
-        <div class="h-6 rounded-md bg-blue-500 aspect-square" />
+
+        <div class="h-6 bg-blue-500 rounded-md aspect-square" />
         {{ name }}
     </nuxt-link>
 </template>
