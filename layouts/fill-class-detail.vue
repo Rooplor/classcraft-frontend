@@ -163,6 +163,8 @@ const removeImage = () => {
                         selectionMode="multiple"
                         :manualInput="false"
                         :invalid="errors.dates"
+                        showTime
+                        hourFormat="24"
                     />
                     <VeeErrorMessage name="dates" class="text-red-500" />
                 </div>
