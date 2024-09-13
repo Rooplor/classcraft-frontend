@@ -1,24 +1,42 @@
 <script setup lang="ts">
+const toast = useToast();
+
+const show = () => {
+    toast.add({
+        severity: "secondary",
+        summary: "Url is copied to clipboard",
+        group: "tc",
+        life: 1000,
+    });
+};
 const op = ref();
 
 const toggle = (event: MouseEvent) => {
     op.value.toggle(event);
 };
+
+const copyLink = () => {
+    navigator.clipboard.writeText("Geeksforgeeks is best learning platform.");
+    show();
+};
 </script>
 
 <template>
-    <div class="w-full">
-        <div class="flex justify-between">
-            <h1>Class name</h1>
-            <div class="flex items-center">
-                <div class="p-2 bg-green-300 rounded-md">
-                    14 People interested
+    <Toast position="top-center" group="tc" />
+    <div class="w-full p-8">
+        <div class="flex justify-between mb-10">
+            <h1 class="text-3xl font-bold">Class name</h1>
+            <div class="flex items-center gap-2">
+                <div
+                    class="h-full p-2 px-3 text-green-700 bg-green-200 rounded-md"
+                >
+                    <i class="pi pi-star-fill" />&nbsp;14 People interested
                 </div>
                 <Button label="Share" icon="pi pi-share-alt" @click="toggle" />
                 <Popover ref="op">
                     <div class="flex flex-col gap-4 w-[25rem]">
                         <div>
-                            <span class="font-medium block mb-2"
+                            <span class="block mb-2 font-medium"
                                 >Let the world know about this class</span
                             >
                             <InputGroup>
@@ -27,10 +45,14 @@ const toggle = (event: MouseEvent) => {
                                     readonly
                                     class="w-[25rem]"
                                 ></InputText>
-                                <Button icon="pi pi-copy" severity="secondary" />
+                                <Button
+                                    icon="pi pi-copy"
+                                    severity="secondary"
+                                    @click="copyLink"
+                                />
                             </InputGroup>
                         </div>
-                        <div class="flex gap-2 justify-end">
+                        <div class="flex justify-end gap-2">
                             <Button label="Publish" icon="pi pi-globe"></Button>
                             <Button label="View" icon="pi pi-eye"></Button>
                         </div>
@@ -38,72 +60,82 @@ const toggle = (event: MouseEvent) => {
                 </Popover>
             </div>
         </div>
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <Stepper value="1" linear class="basis-full">
-                <StepList>
-                    <Step value="1">Fill class detail</Step>
-                    <Step value="2">Reserve venue</Step>
-                    <Step value="3">Craft your content</Step>
-                    <Step value="4">Prepare for registration</Step>
-                </StepList>
+                <div class="mb-5">
+                    <StepList>
+                        <Step value="1">Fill class detail</Step>
+                        <Step value="2">Reserve venue</Step>
+                        <Step value="3">Craft your content</Step>
+                        <Step value="4">Prepare for registration</Step>
+                    </StepList>
+                </div>
                 <StepPanels>
                     <StepPanel v-slot="{ activateCallback }" value="1">
-                        <NuxtLayout name="fill-class-detail" />
-                        <div class="flex pt-6 justify-end">
-                            <Button
-                                label="Next"
-                                icon="pi pi-arrow-right"
-                                iconPos="right"
-                                @click="activateCallback('2')"
-                            />
+                        <div class="bg-gray-50">
+                            <NuxtLayout name="fill-class-detail" />
+                            <div class="flex justify-end pt-6">
+                                <Button
+                                    label="Next"
+                                    severity="contrast"
+                                    icon="pi pi-arrow-right"
+                                    iconPos="right"
+                                    @click="activateCallback('2')"
+                                />
+                            </div>
                         </div>
                     </StepPanel>
                     <StepPanel v-slot="{ activateCallback }" value="2">
-                        <NuxtLayout name="reserve-venue" />
-
-                        <div class="flex pt-6 justify-between">
-                            <Button
-                                label="Back"
-                                severity="secondary"
-                                icon="pi pi-arrow-left"
-                                @click="activateCallback('1')"
-                            />
-                            <Button
-                                label="Next"
-                                icon="pi pi-arrow-right"
-                                iconPos="right"
-                                @click="activateCallback('3')"
-                            />
+                        <div class="bg-gray-50">
+                            <NuxtLayout name="reserve-venue" />
+                            <div class="flex justify-between pt-6">
+                                <Button
+                                    label="Back"
+                                    severity="secondary"
+                                    icon="pi pi-arrow-left"
+                                    @click="activateCallback('1')"
+                                />
+                                <Button
+                                    label="Next"
+                                    severity="contrast"
+                                    icon="pi pi-arrow-right"
+                                    iconPos="right"
+                                    @click="activateCallback('3')"
+                                />
+                            </div>
                         </div>
                     </StepPanel>
                     <StepPanel v-slot="{ activateCallback }" value="3">
-                        <NuxtLayout name="craft-content" />
-
-                        <div class="flex pt-6 justify-between">
-                            <Button
-                                label="Back"
-                                severity="secondary"
-                                icon="pi pi-arrow-left"
-                                @click="activateCallback('2')"
-                            />
-                            <Button
-                                label="Next"
-                                icon="pi pi-arrow-right"
-                                iconPos="right"
-                                @click="activateCallback('4')"
-                            />
+                        <div class="bg-gray-50">
+                            <NuxtLayout name="craft-content" />
+                            <div class="flex justify-between pt-6">
+                                <Button
+                                    label="Back"
+                                    severity="secondary"
+                                    icon="pi pi-arrow-left"
+                                    @click="activateCallback('2')"
+                                />
+                                <Button
+                                    label="Next"
+                                    severity="contrast"
+                                    icon="pi pi-arrow-right"
+                                    iconPos="right"
+                                    @click="activateCallback('4')"
+                                />
+                            </div>
                         </div>
                     </StepPanel>
                     <StepPanel v-slot="{ activateCallback }" value="4">
-                        <NuxtLayout name="prepare-registration" />
-
-                        <div class="pt-6">
-                            <Button
-                                label="Back"
-                                severity="secondary"
-                                icon="pi pi-arrow-left"
-                                @click="activateCallback('3')"
-                            />
+                        <div class="bg-gray-50">
+                            <NuxtLayout name="prepare-registration" />
+                            <div class="pt-6">
+                                <Button
+                                    label="Back"
+                                    severity="secondary"
+                                    icon="pi pi-arrow-left"
+                                    @click="activateCallback('3')"
+                                />
+                            </div>
                         </div>
                     </StepPanel>
                 </StepPanels>
