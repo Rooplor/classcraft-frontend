@@ -1,4 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const { getAllClasses } = useClass();
+const classes = ref([]);
+
+classes.value = await getAllClasses();
+</script>
 
 <template>
     <div
@@ -16,8 +21,11 @@
                         + Add
                     </nuxt-link>
                 </div>
-                <SidebarTab to="/class/123/edit" name="React 101" />
-                <SidebarTab to="/class/456/edit" name="Git & GitHub" />
+                <SidebarTab
+                    :to="`/class/${classroom.id}/edit`"
+                    :name="classroom.title"
+                    v-for="classroom in classes"
+                />
             </div>
         </div>
 

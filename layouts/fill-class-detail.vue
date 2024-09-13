@@ -51,7 +51,6 @@ const removeImage = () => {
 
 <template>
     <div>
-        <!-- <h2>Fill class detail</h2> -->
         <div class="flex gap-4">
             <div
                 class="w-[32rem] h-[32rem] border aspect-square rounded-3xl overflow-clip relative"
