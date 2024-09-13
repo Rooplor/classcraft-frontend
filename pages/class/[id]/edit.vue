@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// const { $useToast } = useNuxtApp()
 const toast = useToast();
 
 const show = () => {
