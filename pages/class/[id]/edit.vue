@@ -6,7 +6,6 @@ const show = () => {
     toast.add({
         severity: "secondary",
         summary: "Url is copied to clipboard",
-        // detail: "Message Content",
         group: "tc",
         life: 1000,
     });
