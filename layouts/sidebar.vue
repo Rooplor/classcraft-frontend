@@ -26,7 +26,6 @@ classes.value = await getAllClasses();
                     :name="classroom.title"
                     v-for="classroom in classes"
                 />
-                <!-- <SidebarTab to="/class/456/edit" name="Git & GitHub" /> -->
             </div>
         </div>
 
