@@ -1,9 +1,9 @@
-const useClass = () => {
+const useClassroom = () => {
     const config = useRuntimeConfig();
     // const { data } = useAuth();
     // const accessToken = data.value?.user?.accessToken;
 
-    const getAllClasses = () => {
+    const getAllClassroom = () => {
         return $fetch(`${config.public.baseUrl}/api/class`, {
             method: "GET",
             // headers: {
@@ -11,7 +11,7 @@ const useClass = () => {
             // },
         });
     };
-    return { getAllClasses };
+    return { getAllClassroom };
 };
 
-export default useClass;
+export default useClassroom;

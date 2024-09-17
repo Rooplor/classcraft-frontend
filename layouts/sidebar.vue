@@ -1,8 +1,8 @@
 <script setup lang="ts">
-const { getAllClasses } = useClass();
+const { getAllClassroom } = useClassroom();
 const classes = ref([]);
 
-classes.value = await getAllClasses();
+classes.value = await getAllClassroom();
 </script>
 
 <template>
