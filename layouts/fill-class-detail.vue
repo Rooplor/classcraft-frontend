@@ -2,33 +2,62 @@
 import { useForm } from "vee-validate";
 import * as yup from "yup";
 
+const { addClassroom } = useClassroom();
+const router = useRouter();
+
 const schema = yup.object({
-    detail: yup.string().required(),
+    title: yup.string().required(),
+    details: yup.string().required(),
     target: yup.string().required(),
     prerequisite: yup.string(),
-    classType: yup.string().required(),
+    type: yup.string().required(),
     format: yup.string().required(),
-    capacity: yup.string().required(),
-    dates: yup.array().required(),
-    imageUrl: yup.string(),
+    capacity: yup.number().required(),
+    date: yup.array().required(),
+    // imageUrl: yup.string(),
 });
 
 const { defineField, handleSubmit, resetForm, errors } = useForm({
     validationSchema: schema,
 });
 
-const [detail] = defineField("detail");
+const [title] = defineField("title");
+const [details] = defineField("details");
 const [target] = defineField("target");
 const [prerequisite] = defineField("prerequisite");
-const [classType] = defineField("classType");
+const [type] = defineField("type");
 const [format] = defineField("format");
 const [capacity] = defineField("capacity");
-const [dates] = defineField("dates");
-const [imageUrl] = defineField("imageUrl");
+const [date] = defineField("date");
+// const [imageUrl] = defineField("imageUrl");
+const imageUrl = ref<string | null>(null);
+
+const capacityOption = ref([
+    { name: "10 คน", value: 10 },
+    { name: "20 คน", value: 20 },
+    { name: "30 คน", value: 30 },
+    { name: "40 คน", value: 40 },
+    { name: "50 คน", value: 50 },
+]);
+
+const formatOption = ref([
+    { name: "Online", value: "ONLINE" },
+    { name: "On-site", value: "ONSITE" },
+    { name: "Mixed", value: "MIXED" },
+]);
+
+const typeOption = ref([
+    { name: "Lecture", value: "LECTURE" },
+    { name: "Workshop", value: "WORKSHOP" },
+    { name: "Discussion", value: "DISCUSSION" },
+]);
 
 const onSubmit = handleSubmit((values: any) => {
-    // TODO: send data to backend
-    console.table("values: ", values);
+    values.date = values.date.map((date: Date) => date.toISOString());
+    addClassroom(values).then((res) => {
+        router.push(`/class/${res.id}/edit`);
+    });
+    resetForm();
 });
 
 const onFileChange = (event: any) => {
@@ -46,7 +75,7 @@ const removeImage = () => {
     imageUrl.value = null;
 };
 
-// TODO: fetch class detail and filled to the form
+// TODO: fetch class details and filled to the form
 </script>
 
 <template>
@@ -96,14 +125,24 @@ const removeImage = () => {
                 class="flex flex-col w-full gap-8 px-6 py-8 bg-white border rounded-3xl"
             >
                 <div class="flex flex-col gap-2">
-                    <label for="detail">รายละเอียด</label>
-                    <Editor
-                        id="detail"
-                        v-model="detail"
-                        editorStyle="height: 320px"
-                        :class="{ 'p-invalid': errors.detail }"
+                    <label for="target">Class title</label>
+                    <InputText
+                        id="title"
+                        v-model="title"
+                        aria-describedby="title-help"
+                        :class="{ 'p-invalid': errors.title }"
                     />
-                    <VeeErrorMessage name="detail" class="text-red-500" />
+                    <VeeErrorMessage name="title" class="text-red-500" />
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="details">รายละเอียด</label>
+                    <Editor
+                        id="details"
+                        v-model="details"
+                        editorStyle="height: 320px"
+                        :class="{ 'p-invalid': errors.details }"
+                    />
+                    <VeeErrorMessage name="details" class="text-red-500" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="target">เหมาะกับใคร</label>
@@ -123,19 +162,23 @@ const removeImage = () => {
                     <VeeErrorMessage name="prerequisite" class="text-red-500" />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="classType">ประเภทคลาสเรียน</label>
+                    <label for="type">ประเภทคลาสเรียน</label>
                     <SelectButton
-                        v-model="classType"
-                        :options="['Lecture', 'Workshop', 'Discussion']"
-                        :invalid="errors.classType"
+                        v-model="type"
+                        :options="typeOption"
+                        optionLabel="name"
+                        optionValue="value"
+                        :invalid="errors.type"
                     />
-                    <VeeErrorMessage name="classType" class="text-red-500" />
+                    <VeeErrorMessage name="type" class="text-red-500" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="format">รูปแบบการเรียน </label>
                     <SelectButton
                         v-model="format"
-                        :options="['Online', 'On-site', 'Hybrid']"
+                        :options="formatOption"
+                        optionLabel="name"
+                        optionValue="value"
                         :invalid="errors.format"
                     />
                     <VeeErrorMessage name="format" class="text-red-500" />
@@ -144,13 +187,9 @@ const removeImage = () => {
                     <label for="capacity">จำนวนผู้เข้าร่วม </label>
                     <SelectButton
                         v-model="capacity"
-                        :options="[
-                            '10 คน',
-                            '20 คน',
-                            '30 คน',
-                            '50 คน',
-                            'มากกว่า 50 คน',
-                        ]"
+                        :options="capacityOption"
+                        optionLabel="name"
+                        optionValue="value"
                         :invalid="errors.capacity"
                     />
                     <VeeErrorMessage name="capacity" class="text-red-500" />
@@ -158,14 +197,14 @@ const removeImage = () => {
                 <div class="flex flex-col gap-2">
                     <label for="prerequisite">วันที่เรียน</label>
                     <DatePicker
-                        v-model="dates"
+                        v-model="date"
                         selectionMode="multiple"
                         :manualInput="false"
-                        :invalid="errors.dates"
+                        :invalid="errors.date"
                         showTime
                         hourFormat="24"
                     />
-                    <VeeErrorMessage name="dates" class="text-red-500" />
+                    <VeeErrorMessage name="date" class="text-red-500" />
                 </div>
                 <div class="flex justify-end">
                     <Button label="Save" icon="pi pi-check" type="submit" />

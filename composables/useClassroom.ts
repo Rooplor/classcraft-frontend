@@ -1,3 +1,5 @@
+import type { addClassroomDTO } from "../types/Classroom";
+
 const useClassroom = () => {
     const config = useRuntimeConfig();
     // const { data } = useAuth();
@@ -11,7 +13,17 @@ const useClassroom = () => {
             // },
         });
     };
-    return { getAllClassroom };
+
+    const addClassroom = (classroom: addClassroomDTO) => {
+        return $fetch(`${config.public.baseUrl}/api/class`, {
+            method: "POST",
+            // headers: {
+            //     authorization: "Bearer " + accessToken,
+            // },
+            body: JSON.stringify(classroom),
+        });
+    };
+    return { getAllClassroom, addClassroom };
 };
 
 export default useClassroom;
