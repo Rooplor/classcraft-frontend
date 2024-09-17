@@ -1,13 +1,13 @@
 import type { Venue } from "./Venue";
 
-interface Class {
+interface Classroom {
     id: string;
     title: string;
     details: string;
     target: string;
     prerequisite: string;
-    type: ClassType;
-    format: ClassFormat;
+    type: ClassroomType;
+    format: ClassroomFormat;
     capacity: number;
     date: Date;
     stepperStatus: StepperStatus;
@@ -20,20 +20,20 @@ interface Class {
     published: boolean;
 }
 
-enum ClassType {
+enum ClassroomType {
     LECTURE = "lecture",
     WORKSHOP = "workshop",
     DISCUSSION = "discussion",
 }
 
-enum ClassFormat {
+enum ClassroomFormat {
     ONSITE = "onsite",
     ONLINE = "online",
     MIXED = "mixed",
 }
 
 enum StepperStatus {
-    FILL_CASS_DETAIL = "fill_class_detail",
+    FILL_CASS_DETAIL = "fill_classroom_detail",
     RESERVE_VENUE = "reserve_venue",
     CRAFT_CONTENT = "craft_content",
     PREPARE_FOR_REG = "prepare_for_reg",
@@ -45,4 +45,4 @@ enum VenueRequestStatus {
     REJECTED = "rejected",
 }
 
-export type { Class };
+export type { Classroom };
