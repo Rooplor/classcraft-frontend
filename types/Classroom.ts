@@ -32,15 +32,15 @@ interface addClassroomDTO {
 }
 
 enum ClassroomType {
-    LECTURE = "lecture",
-    WORKSHOP = "workshop",
-    DISCUSSION = "discussion",
+    LECTURE,
+    WORKSHOP,
+    DISCUSSION,
 }
 
 enum ClassroomFormat {
-    ONSITE = "onsite",
-    ONLINE = "online",
-    MIXED = "mixed",
+    ONSITE,
+    ONLINE,
+    MIXED,
 }
 
 enum StepperStatus {
