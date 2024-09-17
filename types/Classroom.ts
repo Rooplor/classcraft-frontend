@@ -20,6 +20,17 @@ interface Classroom {
     published: boolean;
 }
 
+interface addClassroomDTO {
+    title: string;
+    details: string;
+    target: string;
+    prerequisite: string;
+    type: ClassroomType;
+    format: ClassroomFormat;
+    capacity: number;
+    date: Date;
+}
+
 enum ClassroomType {
     LECTURE = "lecture",
     WORKSHOP = "workshop",
@@ -45,4 +56,4 @@ enum VenueRequestStatus {
     REJECTED = "rejected",
 }
 
-export type { Classroom };
+export type { Classroom, addClassroomDTO };
