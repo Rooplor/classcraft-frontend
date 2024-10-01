@@ -23,7 +23,16 @@ const useClassroom = () => {
             body: JSON.stringify(classroom),
         });
     };
-    return { getAllClassroom, addClassroom };
+
+    const getClassroomById = (id: string) => {
+        return $fetch(`${config.public.baseUrl}/api/class/${id}`, {
+            method: "GET",
+            // headers: {
+            //     authorization: "Bearer " + accessToken,
+            // },
+        });
+    };
+    return { getAllClassroom, addClassroom, getClassroomById };
 };
 
 export default useClassroom;

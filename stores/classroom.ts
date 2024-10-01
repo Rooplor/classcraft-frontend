@@ -1,15 +1,19 @@
 import { defineStore } from "pinia";
 
-export const useClassroomStore = defineStore("user", {
+export const useClassroomStore = defineStore("classroom", {
     state: () => ({
         classrooms: [],
+        editingClassroom: null,
     }),
     actions: {
-        setClassroom(classrooms:any) {
+        setClassrooms(classrooms: any) {
             this.classrooms = classrooms;
         },
-        addClassroom(classroom:any) {
+        setEditingClassroom(classroom: any) {
+            this.editingClassroom = classroom;
+        },
+        addClassroom(classroom: any) {
             this.classrooms = [...this.classrooms, classroom];
-        }
+        },
     },
 });

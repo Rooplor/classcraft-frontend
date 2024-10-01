@@ -6,10 +6,7 @@ const classroomStore = useClassroomStore();
 const { classrooms } = storeToRefs(classroomStore);
 const { getAllClassroom } = useClassroom();
 
-const classesResponse = ref();
-
-classesResponse.value = await getAllClassroom();
-classroomStore.setClassroom(classesResponse.value);
+classroomStore.setClassrooms(await getAllClassroom());
 </script>
 
 <template>
@@ -24,7 +21,7 @@ classroomStore.setClassroom(classesResponse.value);
             <div>
                 <div class="flex justify-between mb-5">
                     <p class="text-gray-500">Your classes</p>
-                    <nuxt-link to="/class/new" class="text-blue-500">
+                    <nuxt-link to="/class/new/edit" class="text-blue-500">
                         + Add
                     </nuxt-link>
                 </div>

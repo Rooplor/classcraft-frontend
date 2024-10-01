@@ -3,10 +3,14 @@ import { useForm } from "vee-validate";
 import * as yup from "yup";
 import { useClassroomStore } from "../stores/classroom";
 
-const { addClassroom } = useClassroom();
+const { getClassroomById, addClassroom } = useClassroom();
 const router = useRouter();
+const id = router.currentRoute.value.params.id;
+const classroomRes = id && typeof id === 'string' ? await getClassroomById(id) : null;
 
 const classroomStore = useClassroomStore();
+const { editingClassroom } = storeToRefs(classroomStore);
+classroomStore.setEditingClassroom(classroomRes);
 
 const schema = yup.object({
     title: yup.string().required(),
@@ -20,7 +24,20 @@ const schema = yup.object({
     // imageUrl: yup.string(),
 });
 
+const initialValues = {
+    title: editingClassroom.value.title,
+    details: editingClassroom.value.details,
+    target: editingClassroom.value.target,
+    prerequisite: editingClassroom.value.prerequisite,
+    type: editingClassroom.value.type,
+    format: editingClassroom.value.format,
+    capacity: editingClassroom.value.capacity,
+    date: editingClassroom.value.date.map((date: string) => new Date(date)),
+    // imageUrl: editingClassroom.value.imageUrl,
+};
+
 const { defineField, handleSubmit, resetForm, errors } = useForm({
+    initialValues,
     validationSchema: schema,
 });
 
@@ -79,7 +96,14 @@ const removeImage = () => {
     imageUrl.value = null;
 };
 
-// TODO: fetch class details and filled to the form
+function initEditorValue({ instance }) {
+  instance.setContents(instance.clipboard.convert({
+    html: editingClassroom.value.details,
+    // or
+    // text: 'some text',
+  }));
+}
+
 </script>
 
 <template>
@@ -143,6 +167,7 @@ const removeImage = () => {
                     <Editor
                         id="details"
                         v-model="details"
+                        @load="initEditorValue"
                         editorStyle="height: 320px"
                         :class="{ 'p-invalid': errors.details }"
                     />

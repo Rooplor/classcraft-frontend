@@ -8,7 +8,7 @@ const classes = ref([]);
 
 const getClassroom = async () => {
     classes.value = await getAllClassroom();
-    classroomStore.setClassroom(classes.value);
+    classroomStore.setClassrooms(classes.value);
 };
 </script>
 
