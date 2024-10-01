@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
 import * as yup from "yup";
+import { useClassroomStore } from "../stores/classroom";
 
 const { addClassroom } = useClassroom();
 const router = useRouter();
+
+const classroomStore = useClassroomStore();
 
 const schema = yup.object({
     title: yup.string().required(),
@@ -56,6 +59,7 @@ const onSubmit = handleSubmit((values: any) => {
     values.date = values.date.map((date: Date) => date.toISOString());
     addClassroom(values).then((res) => {
         router.push(`/class/${res.id}/edit`);
+        classroomStore.addClassroom(res);
     });
     resetForm();
 });

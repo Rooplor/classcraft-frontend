@@ -8,6 +8,7 @@ export default defineNuxtConfig({
         "@primevue/nuxt-module",
         "@nuxtjs/tailwindcss",
         "@vee-validate/nuxt",
+        "@pinia/nuxt",
     ],
     veeValidate: {
         // disable or enable auto imports
@@ -29,6 +30,9 @@ export default defineNuxtConfig({
                 },
             },
         },
+    },
+    pinia: {
+        storesDirs: ["./stores/**", "./custom-folder/stores/**"],
     },
     runtimeConfig: {
         public: {

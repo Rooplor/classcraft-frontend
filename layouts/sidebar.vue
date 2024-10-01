@@ -1,8 +1,15 @@
 <script setup lang="ts">
-const { getAllClassroom } = useClassroom();
-const classes = ref([]);
+import { storeToRefs } from 'pinia'
+import { useClassroomStore } from '../stores/classroom';
 
-classes.value = await getAllClassroom();
+const classroomStore = useClassroomStore();
+const { classrooms } = storeToRefs(classroomStore);
+const { getAllClassroom } = useClassroom();
+
+const classesResponse = ref();
+
+classesResponse.value = await getAllClassroom();
+classroomStore.setClassroom(classesResponse.value);
 </script>
 
 <template>
@@ -24,7 +31,7 @@ classes.value = await getAllClassroom();
                 <SidebarTab
                     :to="`/class/${classroom.id}/edit`"
                     :name="classroom.title"
-                    v-for="classroom in classes"
+                    v-for="classroom in classrooms"
                 />
             </div>
         </div>
