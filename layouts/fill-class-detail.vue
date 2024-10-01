@@ -99,11 +99,8 @@ const removeImage = () => {
 function initEditorValue({ instance }) {
   instance.setContents(instance.clipboard.convert({
     html: editingClassroom.value.details,
-    // or
-    // text: 'some text',
   }));
 }
-
 </script>
 
 <template>
