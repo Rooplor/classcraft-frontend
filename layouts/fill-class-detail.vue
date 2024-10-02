@@ -24,7 +24,7 @@ const schema = yup.object({
     // imageUrl: yup.string(),
 });
 
-const initialValues = {
+const initialValues = editingClassroom.value && {
     title: editingClassroom.value.title,
     details: editingClassroom.value.details,
     target: editingClassroom.value.target,
@@ -97,15 +97,15 @@ const removeImage = () => {
 };
 
 function initEditorValue({ instance }) {
-  instance.setContents(instance.clipboard.convert({
-    html: editingClassroom.value.details,
-  }));
+    instance.setContents(instance.clipboard.convert({
+            html: editingClassroom.value.details,
+        }));
 }
 </script>
 
 <template>
     <div>
-        <div class="flex gap-4">
+        <div class="flex gap-2">
             <div
                 class="w-[32rem] h-[32rem] border aspect-square rounded-3xl overflow-clip relative"
             >

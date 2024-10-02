@@ -1,4 +1,5 @@
 import Aura from "@primevue/themes/aura";
+import { resolve } from "path";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -37,6 +38,15 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             baseUrl: "",
+        },
+    },
+    hooks: {
+        "pages:extend"(pages) {
+            pages.push({
+                name: "createNewClassroom",
+                path: "/class/new/edit",
+                file: resolve(__dirname, "pages/class/[id]/edit.vue"),
+            });
         },
     },
 });
