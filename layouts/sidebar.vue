@@ -1,8 +1,12 @@
 <script setup lang="ts">
-const { getAllClassroom } = useClassroom();
-const classes = ref([]);
+import { storeToRefs } from 'pinia'
+import { useClassroomStore } from '../stores/classroom';
 
-classes.value = await getAllClassroom();
+const classroomStore = useClassroomStore();
+const { classrooms } = storeToRefs(classroomStore);
+const { getAllClassroom } = useClassroom();
+
+classroomStore.setClassrooms(await getAllClassroom());
 </script>
 
 <template>
@@ -17,14 +21,14 @@ classes.value = await getAllClassroom();
             <div>
                 <div class="flex justify-between mb-5">
                     <p class="text-gray-500">Your classes</p>
-                    <nuxt-link to="/class/new" class="text-blue-500">
+                    <nuxt-link to="/class/new/edit" class="text-blue-500">
                         + Add
                     </nuxt-link>
                 </div>
                 <SidebarTab
                     :to="`/class/${classroom.id}/edit`"
                     :name="classroom.title"
-                    v-for="classroom in classes"
+                    v-for="classroom in classrooms"
                 />
             </div>
         </div>
