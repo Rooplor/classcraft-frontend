@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { SIT_BOOKING_WEBSITE } from "../constants/url";
 import { mockVenues } from "../types/Venue";
 
 const classroomStore = useClassroomStore();
@@ -53,7 +54,7 @@ mockVenues.forEach((venue) => {
 <template>
     <div class="space-y-[10px]">
         <nuxt-link
-            href="https://webapp3.sit.kmutt.ac.th/booking/web/week.php"
+            :href="SIT_BOOKING_WEBSITE"
             target="_blank"
             class="block bg-gradient-to-l from-blue-200 to-teal-200 text-blue-500 text-xl font-medium p-6 rounded-xl border border-blue-500 duration-150 hover:text-blue-700 hover:border-blue-700 animate-scalein"
         >
