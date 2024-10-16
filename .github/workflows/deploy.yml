@@ -80,9 +80,13 @@ jobs:
           ssh-add ~/.ssh/id_rsa
           ssh-keyscan -p 22 ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
 
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+
       - name: Copy build files to VM
         run: |
-          scp -P 22 build/build.tar.gz ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/home/sysadmin/classCraftWeb
+          sshpass -p "${{ secrets.REMOTE_PASSWORD }}" scp -P 22 build/build.tar.gz ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/home/sysadmin/classCraftWeb
+
       
 
       - name: Deploy Docker container on VM
