@@ -1,0 +1,40 @@
+# name: CI Pipeline
+
+# on:
+#   pull_request:
+#     branches:
+#       - '*'
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '20'
+
+#       - name: Install pnpm
+#         run: npm install -g pnpm
+
+#       - name: Install dependencies
+#         run: pnpm install
+
+#       - name: Build project
+#         run: pnpm run build
+
+#       - name: Archive build files
+#         run: tar -czf build.tar.gz ./.output
+
+#       - name: Upload build files
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: build-files
+#           path: build.tar.gz

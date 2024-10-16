@@ -1,5 +1,6 @@
-name: CI/CD Pipeline
+name: deploy Pipeline
 
+# on: workflow_dispatch
 on:
   pull_request:
     branches:
@@ -90,8 +91,6 @@ jobs:
             cd /home/sysadmin/classCraftWeb
             tar -xzf build.tar.gz
 
-            docker stop classCraftWeb || true
-            docker rm classCraftWeb || true
-            docker build -t classcraftimg:latest .
-            docker run -d --name classCraftWeb -p 80:3000 classcraftimg:latest
+            docker compose stop || true
+            docker compose up -d
           EOF
