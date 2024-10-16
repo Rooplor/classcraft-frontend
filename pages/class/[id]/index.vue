@@ -9,11 +9,6 @@ const { getClassroomById } = useClassroom();
 const classroom: Classroom =
     id && typeof id === "string" ? await getClassroomById(id) : null;
 
-if (!classroom) {
-    // Handle the case where there is no response
-    console.error("No classroom found with the given ID");
-    // You can also set a default value or take other actions as needed
-}
 </script>
 <template>
     <div class="w-full px-[10px] flex flex-col gap-[10px]">

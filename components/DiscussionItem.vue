@@ -1,15 +1,20 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { type Discussion } from "../types/Discussion";
+defineProps({
+    discussion: {
+        type: Object as PropType<Discussion>,
+        required: true,
+    },
+});
+</script>
 <template>
     <div
         class="flex gap-6 bg-white border rounded-3xl p-5 duration-150 hover:drop-shadow-sm"
     >
         <div class="w-full flex flex-col gap-4">
-            <h1 class="font-bold text-xl">Title</h1>
+            <h1 class="font-bold text-xl">{{ discussion.title }}</h1>
             <p class="text-gray-500">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui
-                laboriosam eveniet nihil doloribus? Quis dolores impedit officia
-                animi voluptate recusandae odit enim, eius beatae id! Animi
-                quaerat ab consequatur fugiat.
+                {{ discussion.description }}
             </p>
             <div class="w-full flex justify-end gap-2">
                 <Button
@@ -17,9 +22,9 @@
                     severity="info"
                     rounded
                     outlined
-                    label="88"
+                    :label="discussion.upvotes.toString()"
                 />
-                <Button @click.prevent=""> Register </Button>
+                <Button @click.prevent=""> Create class </Button>
             </div>
         </div>
     </div>

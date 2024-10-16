@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Feedbar from "../../layouts/Feedbar.vue";
+import { mockDiscussions } from "../../types/Discussion";
 
 const value = ref("Pending");
 const options = ref(["Pending", "Closed"]);
@@ -21,12 +22,11 @@ const options = ref(["Pending", "Closed"]);
                 </Button>
             </div>
             <div class="space-y-[10px]">
-                <DiscussionItem />
-                <DiscussionItem />
-                <DiscussionItem />
-                <DiscussionItem />
-                <DiscussionItem />
-                <DiscussionItem />
+                <DiscussionItem
+                    v-for="(discussion, index) in mockDiscussions"
+                    :key="index"
+                    :discussion="discussion"
+                />
             </div>
         </div>
     </div>
