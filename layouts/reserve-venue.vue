@@ -4,12 +4,13 @@ import { mockVenues } from "../types/Venue";
 const classroomStore = useClassroomStore();
 const { editingClassroom } = storeToRefs(classroomStore);
 
+const config = useRuntimeConfig();
 const meetingUrl = ref();
 const selectedVenues = ref<number[]>([]);
 const dialogVisible = ref<Record<number, boolean>>({});
 
 const handleSendRequest = () => {
-    window.location.href = `mailto:naronkrach@gmail.com
+    window.location.href = `mailto:${config.public.reservationEmailContact}
         ?subject=Venue reservation request
         &body=I would like to reserve the following venue(s):
         ${selectedVenues.value
