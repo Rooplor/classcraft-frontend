@@ -30,11 +30,5 @@
 #       - name: Build project
 #         run: pnpm run build
 
-#       - name: Archive build files
-#         run: tar -czf build.tar.gz ./.output
-
-#       - name: Upload build files
-#         uses: actions/upload-artifact@v3
-#         with:
-#           name: build-files
-#           path: build.tar.gz
+# # TODO
+# # run test when there is a test section
