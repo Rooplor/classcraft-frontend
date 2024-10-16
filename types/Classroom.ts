@@ -9,7 +9,7 @@ interface Classroom {
     type: ClassroomType;
     format: ClassroomFormat;
     capacity: number;
-    date: Date;
+    date: Date[];
     stepperStatus: StepperStatus;
     meetingUrl: string;
     content: string;
@@ -18,6 +18,7 @@ interface Classroom {
     venueStatus: VenueRequestStatus;
     venue: Venue;
     published: boolean;
+    imageUrl: string;
 }
 
 interface addClassroomDTO {

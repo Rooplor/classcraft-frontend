@@ -1,21 +1,36 @@
 <script setup>
-import { useClassroomStore } from "../../stores/classroom";
+import Feedbar from "../../layouts/Feedbar.vue";
 
 const classroomStore = useClassroomStore();
-const { getAllClassroom } = useClassroom();
+const { classrooms } = storeToRefs(classroomStore);
 
-const classes = ref([]);
-
-const getClassroom = async () => {
-    classes.value = await getAllClassroom();
-    classroomStore.setClassrooms(classes.value);
-};
+const value = ref("Upcoming");
+const options = ref(["Upcoming", "Past"]);
 </script>
 
 <template>
-    <div>
-        <p>Classroom: {{ classroomStore.classroom }}</p>
-
-        <button @click="getClassroom">Get Classroom</button>
+    <div class="w-full px-[10px]">
+        <Feedbar />
+        <div class="flex flex-col gap-4 pt-6 pb-[10px]">
+            <div class="flex justify-between">
+                <SelectButton
+                    v-model="value"
+                    :options="options"
+                    aria-labelledby="basic"
+                />
+                <nuxt-link to="class/new">
+                    <Button severity="info">
+                        <p><i class="pi pi-plus" /> Add class</p>
+                    </Button>
+                </nuxt-link>
+            </div>
+            <div class="space-y-[10px]">
+                <ClassroomItem
+                    v-for="(classroom, index) in classrooms"
+                    :key="index"
+                    :classroom="classroom"
+                />
+            </div>
+        </div>
     </div>
 </template>
