@@ -61,21 +61,6 @@ mockVenues.forEach((venue) => {
                 <i class="pi pi-external-link" />
             </p>
         </nuxt-link>
-        <!-- {{
-            //show all date from array in format Fri 25 Oct 2024 08:56
-
-            editingClassroom.date.map((date) => {
-                return new Date(date).toLocaleString("en-US", {
-                    weekday: "short",
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                });
-            })
-        }} -->
-
         <div class="p-4 bg-white border rounded-lg">
             <div class="space-y-4">
                 <div class="flex flex-col gap-16">

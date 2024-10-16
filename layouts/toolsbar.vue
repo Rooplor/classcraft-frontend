@@ -83,27 +83,6 @@ userStore.setUser(
                     </div>
                 </div>
             </Popover>
-            <!-- <div class="flex flex-col gap-9">
-                <h1 class="text-xl">
-                    Class<span class="font-bold">Craft</span>
-                </h1>
-                <div>
-                    <SidebarTab to="/class" name="Class" />
-                </div>
-                <div>
-                    <div class="flex justify-between mb-5">
-                        <p class="text-gray-500">Your classes</p>
-                        <nuxt-link to="/class/new/edit" class="text-blue-500">
-                            + Add
-                        </nuxt-link>
-                    </div>
-                    <SidebarTab
-                        :to="`/class/${classroom.id}/edit`"
-                        :name="classroom.title"
-                        v-for="classroom in classrooms"
-                    />
-                </div>
-            </div> -->
         </div>
     </div>
 </template>
