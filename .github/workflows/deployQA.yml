@@ -98,8 +98,8 @@ jobs:
           sshpass -p "$REMOTE_PASSWORD" ssh -t -o StrictHostKeyChecking=no -p 22 $REMOTE_USER@$REMOTE_HOST << 'EOF'
             cd /home/sysadmin/classCraftWebQA
             tar -xzf build.tar.gz
-
-            docker compose stop || true
-            docker compose up -d
+            cd ..
+            docker compose -p classcraft-qa -f compose.qa.yaml stop || true
+            docker compose -p classcraft-qa -f compose.qa.yaml up -d
           EOF
 
