@@ -69,17 +69,21 @@ jobs:
           username: ${{ secrets.VPN_USERNAME }}
           password: ${{ secrets.VPN_PASSWORD }}
 
-      - name: Copy build files to VM
+      - name: Setup SSH agent and add private key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | sed 's/\\n/\n/g' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -p 22 $REMOTE_HOST >> ~/.ssh/known_hosts
-          scp -P 22 -i ~/.ssh/id_rsa build/build.tar.gz $REMOTE_USER@$REMOTE_HOST:/home/sysadmin/classCraftWeb
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+          ssh-keyscan -p 22 ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Copy build files to VM
+        run: |
+          scp -P 22 build/build.tar.gz ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/home/sysadmin/classCraftWeb
+      
 
       - name: Deploy Docker container on VM
         env:
