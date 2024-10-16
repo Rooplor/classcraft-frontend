@@ -1,34 +1,34 @@
-# name: CI Pipeline
+name: CI Pipeline
 
-# on:
-#   pull_request:
-#     branches:
-#       - '*'
-#   push:
-#     branches:
-#       - main
+on:
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - main
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: '20'
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-#       - name: Install pnpm
-#         run: npm install -g pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-#       - name: Install dependencies
-#         run: pnpm install
+      - name: Install dependencies
+        run: pnpm install
 
-#       - name: Build project
-#         run: pnpm run build
+      - name: Build project
+        run: pnpm run build
 
-# # TODO
-# # run test when there is a test section
+# TODO
+# run test when there is a test section
