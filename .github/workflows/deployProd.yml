@@ -92,7 +92,7 @@ jobs:
             cd /home/sysadmin/classCraftWeb
             tar -xzf build.tar.gz
             cd ..
-            docker compose -p classcraft-qa -f compose.prod.yaml stop || true
-            docker compose -p classcraft-prod -f compose.prod.yaml up -d
+            docker compose -p classcraft-qa -f compose.prod.yaml stop web || true
+            docker compose -p classcraft-prod -f compose.prod.yaml up -d --build web
           EOF
 
