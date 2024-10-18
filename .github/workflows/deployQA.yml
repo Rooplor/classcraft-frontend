@@ -1,4 +1,4 @@
-name: deploy Pipeline
+name: Deploy QA Pipeline
 
 on: workflow_dispatch
 

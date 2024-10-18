@@ -1,4 +1,4 @@
-name: deploy Pipeline
+name: Deploy Prod Pipeline
 
 on: workflow_dispatch
 
