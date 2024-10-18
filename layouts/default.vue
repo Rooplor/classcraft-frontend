@@ -1,4 +1,13 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const user = useCurrentUser();
+const router = useRouter();
+
+watch(user, (currentUser, prevUser) => {
+    if (prevUser !== currentUser) {
+        return router.replace("/login");
+    }
+});
+</script>
 
 <template>
     <Toast position="top-center" group="tc" />
