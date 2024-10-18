@@ -1,25 +1,24 @@
 <script setup lang="ts">
-import { useUserStore } from '../stores/user';
-
 const classroomStore = useClassroomStore();
 const { classrooms } = storeToRefs(classroomStore);
 
-const userStore = useUserStore();
-const { user } = storeToRefs(userStore);
+const user = useCurrentUser();
 </script>
 
 <template>
     <div class="w-full flex flex-col gap-[10px] p-[10px]">
         <div class="flex gap-8 bg-white border rounded-xl p-8">
             <img
-                :src="user.profilePicture"
-                :alt="user.username"
+                :src="user.photoURL"
+                :alt="user.displayName"
                 class="rounded-full w-52 h-52 aspect-square object-cover bg-gray-200"
             />
             <div class="space-y-4">
                 <div>
                     <div class="flex items-center gap-4">
-                        <h1 class="text-2xl font-bold">{{ user.username }}</h1>
+                        <h1 class="text-2xl font-bold">
+                            {{ user.displayName }}
+                        </h1>
                         <Button label="Follow" icon="pi pi-plus" />
                     </div>
                     <p class="text-gray-500">{{ user.email }}</p>
