@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import useAuth from "../composables/userAuth";
+import useAuth from "../composables/useAuth";
 
 definePageMeta({
     layout: false,
