@@ -1,4 +1,4 @@
-import type { addClassroomDTO } from "../types/Classroom";
+import type { addClassroomDTO, Classroom } from "../types/Classroom";
 
 const useClassroom = () => {
     const config = useRuntimeConfig();
@@ -7,6 +7,9 @@ const useClassroom = () => {
 
     const getAllClassroom = () => {
         return $fetch(`${config.public.baseUrl}/api/class`, {
+            params: {
+                registrationStatus: false,
+            },
             method: "GET",
         });
     };
@@ -18,12 +21,31 @@ const useClassroom = () => {
         });
     };
 
-    const getClassroomById = (id: string) => {
+    const getClassroomById = (id: string): Promise<Classroom> => {
         return $fetch(`${config.public.baseUrl}/api/class/${id}`, {
             method: "GET",
         });
     };
-    return { getAllClassroom, addClassroom, getClassroomById };
+
+    const updateClassroom = (id: string, classroom: addClassroomDTO) => {
+        return $fetch(`${config.public.baseUrl}/api/class/${id}`, {
+            method: "PUT",
+            body: JSON.stringify(classroom),
+        });
+    };
+
+    const deleteClassroom = (id: string) => {
+        return $fetch(`${config.public.baseUrl}/api/class/${id}`, {
+            method: "DELETE",
+        });
+    };
+    return {
+        getAllClassroom,
+        addClassroom,
+        getClassroomById,
+        updateClassroom,
+        deleteClassroom,
+    };
 };
 
 export default useClassroom;

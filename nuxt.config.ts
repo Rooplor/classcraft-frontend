@@ -38,6 +38,7 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             baseUrl: "",
+            reservationEmailContact: "",
         },
     },
     hooks: {

@@ -1,11 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import Feedbar from "../../layouts/Feedbar.vue";
+import { mockDiscussions } from "../../types/Discussion";
 
-const classroomStore = useClassroomStore();
-const { classrooms } = storeToRefs(classroomStore);
-
-const value = ref("Upcoming");
-const options = ref(["Upcoming", "Past"]);
+const value = ref("Pending");
+const options = ref(["Pending", "Closed"]);
 </script>
 
 <template>
@@ -18,17 +16,16 @@ const options = ref(["Upcoming", "Past"]);
                     :options="options"
                     aria-labelledby="basic"
                 />
-                <nuxt-link to="class/new">
-                    <Button severity="info">
-                        <p><i class="pi pi-plus" /> Add class</p>
-                    </Button>
-                </nuxt-link>
+
+                <Button severity="info">
+                    <p><i class="pi pi-plus" /> Add discussion</p>
+                </Button>
             </div>
             <div class="space-y-[10px]">
-                <ClassroomItem
-                    v-for="(classroom, index) in classrooms"
+                <DiscussionItem
+                    v-for="(discussion, index) in mockDiscussions"
                     :key="index"
-                    :classroom="classroom"
+                    :discussion="discussion"
                 />
             </div>
         </div>

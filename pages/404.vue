@@ -1,3 +1,2 @@
 <script setup lang="ts"></script>
-
-<template>home</template>
+<template>404</template>
