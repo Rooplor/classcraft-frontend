@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import useAuth from "../composables/userAuth";
 
 definePageMeta({
     layout: false,
@@ -8,10 +9,15 @@ definePageMeta({
 const auth = useFirebaseAuth();
 const router = useRouter();
 
-const signInWithGoogle = () => {
-    signInWithPopup(auth, new GoogleAuthProvider()).then(() => {
+const signInWithGoogle = async () => {
+    try {
+        const res = await signInWithPopup(auth, new GoogleAuthProvider());
+        const token = await res.user.getIdToken();
+        await useAuth().login(token);
         router.push("/");
-    });
+    } catch (error) {
+        console.error("Error signing in with Google:", error);
+    }
 };
 </script>
 <template>
