@@ -1,23 +1,33 @@
 <script setup lang="ts">
-import { useUserStore } from "../stores/user";
+import { signOut } from "firebase/auth";
+import Image from "primevue/image";
 
 const op = ref();
 const router = useRouter();
 const toggle = (event: MouseEvent) => {
     op.value.toggle(event);
 };
-const userStore = useUserStore();
-const { user } = storeToRefs(userStore);
-const { getUserById } = useUser();
+
+const auth = useFirebaseAuth();
+const user = useCurrentUser();
+
+const userPfp = user.value.photoURL;
+
+const handleSignOut = async () => {
+    try {
+        if (auth) {
+            await signOut(auth);
+            await userAuth().logout();
+        }
+    } catch (error) {
+        console.error("Error signing out:", error);
+    }
+};
 
 const handleProfileClick = () => {
     router.push("/profile");
     op.value.hide();
 };
-
-userStore.setUser(
-    await getUserById("670cb591c20cf62a6859dd4d").then((res) => res.result)
-);
 </script>
 <template>
     <div class="sticky top-[10px] h-[calc(100vh-20px)]">
@@ -57,19 +67,25 @@ userStore.setUser(
                 aria-label="Bookmark"
                 @click="toggle"
             >
-                <Avatar :image="user.profilePicture" shape="circle" />
+                <Avatar :image="userPfp" shape="circle" />
             </Button>
-            <Popover ref="op">
+            <Popover ref="op" class="pt-4">
                 <div
                     class="flex flex-col justify-center items-center gap-4 w-[12rem]"
                 >
-                    <img
-                        :src="user.profilePicture"
-                        alt=""
-                        class="rounded-full w-32 h-32 aspect-square"
-                    />
+                    <Image :alt="`${user.displayName} profile picture`">
+                        <template #image>
+                            <img
+                                :src="userPfp"
+                                :alt="`${user.displayName} profile picture`"
+                                class="rounded-full w-24 h-24"
+                            />
+                        </template>
+                    </Image>
                     <div class="text-center">
-                        <h2 class="text-lg font-bold">{{ user.username }}</h2>
+                        <h2 class="text-lg font-bold">
+                            {{ user.displayName }}
+                        </h2>
                         <p class="text-gray-500">{{ user.email }}</p>
                     </div>
                     <div class="flex flex-col w-full gap-2">
@@ -79,7 +95,11 @@ userStore.setUser(
                             severity="secondary"
                             @click="handleProfileClick"
                         />
-                        <Button label="Logout" severity="danger" />
+                        <Button
+                            @click="handleSignOut"
+                            label="Logout"
+                            severity="danger"
+                        />
                     </div>
                 </div>
             </Popover>
