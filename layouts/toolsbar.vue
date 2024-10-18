@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { signOut } from "firebase/auth";
-import { useUserStore } from "../stores/user";
 import Image from "primevue/image";
 
 const op = ref();
@@ -8,31 +7,27 @@ const router = useRouter();
 const toggle = (event: MouseEvent) => {
     op.value.toggle(event);
 };
-const userStore = useUserStore();
-// const { user } = storeToRefs(userStore);
-const { getUserById } = useUser();
 
 const auth = useFirebaseAuth();
 const user = useCurrentUser();
 
 const userPfp = user.value.photoURL;
 
-const handleSignOut = () => {
-    signOut(auth)
+const handleSignOut = async () => {
+    try {
+        if (auth) {
+            await signOut(auth);
+            await userAuth().logout();
+        }
+    } catch (error) {
+        console.error("Error signing out:", error);
+    }
 };
 
 const handleProfileClick = () => {
     router.push("/profile");
     op.value.hide();
 };
-
-console.log("user", user.value);
-console.log("auth", auth);
-
-
-userStore.setUser(
-    await getUserById("670cb591c20cf62a6859dd4d").then((res) => res.result)
-);
 </script>
 <template>
     <div class="sticky top-[10px] h-[calc(100vh-20px)]">
