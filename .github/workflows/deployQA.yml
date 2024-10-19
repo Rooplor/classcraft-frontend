@@ -21,6 +21,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Inject environment variables
+        run: |
+          touch .env
+          echo "NUXT_PUBLIC_BASE_URL=${{ secrets.NUXT_PUBLIC_BASE_URL }}" >> .env
+          echo "NUXT_PUBLIC_RESERVATION_EMAIL_CONTACT=${{ secrets.NUXT_PUBLIC_RESERVATION_EMAIL_CONTACT }}" >> .env
+
       - name: Build project
         run: pnpm run build
 
