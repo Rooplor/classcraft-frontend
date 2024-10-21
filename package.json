@@ -12,8 +12,10 @@
   "dependencies": {
     "@pinia/nuxt": "^0.5.5",
     "@primevue/themes": "^4.0.4",
-    "@vee-validate/nuxt": "^4.13.2",
+    "@vee-validate/nuxt": "^4.14.3",
+    "firebase": "^10.14.1",
     "nuxt": "^3.12.4",
+    "nuxt-vuefire": "^1.0.4",
     "primeicons": "^7.0.0",
     "primevue": "^4.0.4",
     "quill": "^2.0.2",
