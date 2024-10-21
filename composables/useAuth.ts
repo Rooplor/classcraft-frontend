@@ -1,8 +1,5 @@
 const useAuth = () => {
     const config = useRuntimeConfig();
-    // const { data } = useAuth();
-    // const accessToken = data.value?.user?.accessToken;
-
     const login = (idToken: string) => {
         return $fetch(`${config.public.baseUrl}/api/auth/login`, {
             body: JSON.stringify({ idToken }),

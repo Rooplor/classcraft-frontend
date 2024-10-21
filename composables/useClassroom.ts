@@ -2,8 +2,6 @@ import type { addClassroomDTO, Classroom } from "../types/Classroom";
 
 const useClassroom = () => {
     const config = useRuntimeConfig();
-    // const { data } = useAuth();
-    // const accessToken = data.value?.user?.accessToken;
 
     const getAllClassroom = () => {
         return $fetch(`${config.public.baseUrl}/api/class`, {
