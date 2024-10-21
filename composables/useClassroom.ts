@@ -1,9 +1,10 @@
 import type { addClassroomDTO, Classroom } from "../types/Classroom";
+import type { HttpResponse } from "../types/HttpResponse";
 
 const useClassroom = () => {
     const config = useRuntimeConfig();
 
-    const getAllClassroom = () => {
+    const getAllClassroom = (): Promise<Classroom[]> => {
         return $fetch(`${config.public.baseUrl}/api/class`, {
             params: {
                 registrationStatus: false,
@@ -12,7 +13,7 @@ const useClassroom = () => {
         });
     };
 
-    const addClassroom = (classroom: addClassroomDTO) => {
+    const addClassroom = (classroom: addClassroomDTO): Promise<Classroom> => {
         return $fetch(`${config.public.baseUrl}/api/class`, {
             method: "POST",
             body: JSON.stringify(classroom),
@@ -25,14 +26,17 @@ const useClassroom = () => {
         });
     };
 
-    const updateClassroom = (id: string, classroom: addClassroomDTO) => {
+    const updateClassroom = (
+        id: string,
+        classroom: addClassroomDTO
+    ): Promise<Classroom> => {
         return $fetch(`${config.public.baseUrl}/api/class/${id}`, {
             method: "PUT",
             body: JSON.stringify(classroom),
         });
     };
 
-    const deleteClassroom = (id: string) => {
+    const deleteClassroom = (id: string): Promise<HttpResponse> => {
         return $fetch(`${config.public.baseUrl}/api/class/${id}`, {
             method: "DELETE",
         });
