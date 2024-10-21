@@ -1,3 +1,5 @@
+import type { HttpResponse } from "./HttpResponse";
+
 interface User {
     id: string;
     username: string;
@@ -5,10 +7,8 @@ interface User {
     profilePicture?: string;
 }
 
-interface ResponseListUser {
-    success: boolean;
+interface ResponseListUser extends HttpResponse {
     result: User[];
-    error: string;
 }
 
 interface ResponseUser {
@@ -16,6 +16,5 @@ interface ResponseUser {
     result: User;
     error: string;
 }
-
 
 export type { User, ResponseListUser, ResponseUser };
