@@ -38,7 +38,7 @@ const schema = yup.object({
     instructorBio: yup.string().required(),
     instructorAvatar: yup.string(),
     instructorFamiliarity: yup.string(),
-    imageUrl: yup.string(),
+    coverImage: yup.string(),
 });
 
 const initialValues = editingClassroom.value && {
@@ -59,7 +59,7 @@ const initialValues = editingClassroom.value && {
     instructorBio: editingClassroom.value.instructorBio,
     instructorAvatar: editingClassroom.value.instructorAvatar,
     instructorFamiliarity: editingClassroom.value.instructorFamiliarity,
-    imageUrl: editingClassroom.value.imageUrl,
+    coverImage: editingClassroom.value.coverImage,
 };
 
 const { defineField, handleSubmit, resetForm, errors } = useForm({
@@ -79,7 +79,7 @@ const [instructorName] = defineField("instructorName");
 const [instructorBio] = defineField("instructorBio");
 const [instructorAvatar] = defineField("instructorAvatar");
 const [instructorFamiliarity] = defineField("instructorFamiliarity");
-const [imageUrl] = defineField("imageUrl");
+const [coverImage] = defineField("coverImage");
 
 const selfInstructored = ref(false);
 
@@ -129,7 +129,7 @@ const onSubmit = handleSubmit((values: any) => {
 const onFileChange = async (
     event: any,
     uploadFile: Function,
-    imageUrl: Ref<string>,
+    imageUrlRef: Ref<string>,
     editingClassroomId: string
 ) => {
     const file = event.target.files[0];
@@ -142,7 +142,7 @@ const onFileChange = async (
         try {
             const res = await uploadFile(editingClassroomId, e.target.result);
             if (res) {
-                imageUrl.value = res.result;
+                imageUrlRef.value = res.result;
             }
         } catch (error) {
             console.error("Error uploading file:", error);
@@ -152,8 +152,8 @@ const onFileChange = async (
     reader.readAsDataURL(file);
 };
 
-const removeImage = (imageUrl: Ref<string | null>) => {
-    imageUrl.value = null;
+const removeImage = (imageUrlRef: Ref<string | null>) => {
+    imageUrlRef.value = null;
 };
 
 function initEditorValue({ instance }) {
@@ -189,8 +189,8 @@ watch(selfInstructored, (value) => {
                         class="w-[32rem] h-[32rem] aspect-square bg-clip-border relative"
                     >
                         <img
-                            v-if="imageUrl"
-                            :src="imageUrl"
+                            v-if="coverImage"
+                            :src="coverImage"
                             alt="Uploaded Image"
                             class="object-cover w-full h-full"
                         />
@@ -210,20 +210,20 @@ watch(selfInstructored, (value) => {
                                 onFileChange(
                                     $event,
                                     uploadFile,
-                                    imageUrl,
+                                    coverImage,
                                     editingClassroom.value?.id
                                 )
                             "
                         />
                         <div class="absolute top-2 right-2">
                             <Button
-                                v-if="imageUrl"
+                                v-if="coverImage"
                                 icon="pi pi-times"
                                 severity="danger"
                                 text
                                 rounded
                                 aria-label="Cancel"
-                                @click="removeImage(imageUrl)"
+                                @click="removeImage(coverImage)"
                             />
                         </div>
                     </div>
@@ -478,7 +478,7 @@ watch(selfInstructored, (value) => {
                                     />
                                     <div class="absolute top-2 right-2">
                                         <Button
-                                            v-if="imageUrl"
+                                            v-if="instructorAvatar"
                                             icon="pi pi-times"
                                             severity="danger"
                                             text
