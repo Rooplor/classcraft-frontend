@@ -95,8 +95,6 @@ const typeOption = ref([
 ]);
 
 const onSubmit = handleSubmit((values: any) => {
-    console.log("values", values);
-
     values.date = values.date.map((date: Date) => date.toISOString());
     if (editingClassroom.value) {
         updateClassroom(editingClassroom.value.id, values).then((res) => {
