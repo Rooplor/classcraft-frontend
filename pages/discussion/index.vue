@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Feedbar from "../../layouts/Feedbar.vue";
 import { mockDiscussions } from "../../types/Discussion";
 
 const value = ref("Pending");

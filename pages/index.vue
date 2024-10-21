@@ -1,6 +1,6 @@
 <script setup lang="ts">
-await navigateTo('/class')
+definePageMeta({
+    redirect: "/class",
+});
 </script>
-<template>
-   
-</template>
+<template></template>

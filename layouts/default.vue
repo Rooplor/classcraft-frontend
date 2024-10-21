@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const user = useCurrentUser();
 const router = useRouter();
+const classroomStore = useClassroomStore();
+const { getAllClassroom } = useClassroom();
+
+classroomStore.setClassrooms(await getAllClassroom());
 
 watch(user, (currentUser, prevUser) => {
     if (prevUser !== currentUser) {

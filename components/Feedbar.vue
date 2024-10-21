@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import {
-    ClassroomFeedDisplay,
-    DiscussionFeedDisplay,
-} from "../stores/feedDisplay";
-
 const route = useRouter();
 const path = ref(route.currentRoute.value.path);
 </script>

@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { useClassroomStore } from "../stores/classroom";
 
 const classroomStore = useClassroomStore();
 const { classrooms } = storeToRefs(classroomStore);
-const { getAllClassroom } = useClassroom();
-
-classroomStore.setClassrooms(await getAllClassroom());
 </script>
 
 <template>

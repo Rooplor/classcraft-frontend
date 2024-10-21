@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import Feedbar from "../../../layouts/Feedbar.vue";
 import type { Classroom } from "../../../types/Classroom";
 
-const route = useRouter();
-const { id } = route.currentRoute.value.params;
+const router = useRouter();
+const { id } = router.currentRoute.value.params;
 const { getClassroomById } = useClassroom();
 
-const classroom: Classroom =
-    id && typeof id === "string" ? await getClassroomById(id) : null;
+let classroom: Classroom = {} as Classroom;
 
+try {
+    classroom = await getClassroomById(id.toString());
+} catch (error) {
+    router.replace("/404");
+}
 </script>
 <template>
     <div class="w-full px-[10px] flex flex-col gap-[10px]">
