@@ -45,7 +45,7 @@ enum EClassroomFormat {
 }
 
 enum EStepperStatus {
-    FILL_CASS_DETAIL = "fill_classroom_detail",
+    FILL_CLASS_DETAIL = "fill_classroom_detail",
     RESERVE_VENUE = "reserve_venue",
     CRAFT_CONTENT = "craft_content",
     PREPARE_FOR_REG = "prepare_for_reg",
