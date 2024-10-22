@@ -1,17 +1,14 @@
 <script setup lang="ts">
 const toast = useToast();
-
-const { getClassroomById } = useClassroom();
 const router = useRouter();
 const id = router.currentRoute.value.params.id;
-const classroomRes =
-    id && typeof id === "string" ? await getClassroomById(id) : null;
-
 const classroomStore = useClassroomStore();
+const { getClassroomById } = useClassroom();
 const { editingClassroom } = storeToRefs(classroomStore);
-classroomStore.setEditingClassroom(classroomRes);
+const op = ref();
+const currentUrl = window?.location?.href.replace(/\/edit$/, "");
 
-const show = () => {
+const showToast = () => {
     toast.add({
         severity: "secondary",
         summary: "Url is copied to clipboard",
@@ -19,23 +16,34 @@ const show = () => {
         life: 1000,
     });
 };
-const op = ref();
-const currentUrl = window?.location?.href.replace(/\/edit$/, "");
+
 const toggle = (event: MouseEvent) => {
     op.value.toggle(event);
 };
 
 const copyLink = () => {
     navigator.clipboard.writeText(currentUrl);
-    show();
+    showToast();
 };
 
-const steps = ref([
+const steps = [
     { label: "Fill class detail", value: "1" },
     { label: "Reserve venue", value: "2" },
     { label: "Craft your content", value: "3" },
     { label: "Prepare for registration", value: "4" },
-]);
+];
+
+classroomStore.clearEditingClassroom();
+
+if (id) {
+    try {
+        classroomStore.setEditingClassroom(
+            await getClassroomById(id.toString())
+        );
+    } catch (error) {
+        router.replace("/404");
+    }
+}
 </script>
 
 <template>

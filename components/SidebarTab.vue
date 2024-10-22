@@ -35,7 +35,7 @@ const handleEdit = () => {
 const handleDelete = () => {
     if (!props.id) return;
     deleteClassroom(props.id);
-    classroomStore.removeClassroom(props.id);
+    classroomStore.removeClassroomById(props.id);
     op.value.hide();
 };
 
