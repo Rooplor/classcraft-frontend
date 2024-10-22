@@ -48,10 +48,7 @@ if (id) {
 
 <template>
     <div class="w-full py-9 px-[10px]">
-        <div class="flex justify-between mb-10">
-            <h1 class="text-3xl font-bold">
-                {{ editingClassroom?.title || "New class" }}
-            </h1>
+        <div class="flex justify-end mb-10">
             <div class="flex items-center gap-2">
                 <div
                     class="h-full p-2 px-3 text-green-700 bg-green-200 rounded-md"
@@ -107,13 +104,14 @@ if (id) {
                     <StepPanel v-slot="{ activateCallback }" value="1">
                         <div class="bg-gray-50">
                             <NuxtLayout name="fill-class-detail" />
-                            <div class="flex justify-end pt-6">
+                            <div class="flex justify-end pt-6 gap-2 h-36">
                                 <Button
                                     label="Next"
-                                    severity="contrast"
+                                    severity="secondary"
                                     icon="pi pi-arrow-right"
                                     iconPos="right"
                                     @click="activateCallback('2')"
+                                    class="w-1/2"
                                 />
                             </div>
                         </div>
@@ -121,19 +119,21 @@ if (id) {
                     <StepPanel v-slot="{ activateCallback }" value="2">
                         <div class="bg-gray-50">
                             <NuxtLayout name="reserve-venue" />
-                            <div class="flex justify-between pt-6">
+                            <div class="flex justify-between pt-6 gap-2 h-36">
                                 <Button
                                     label="Back"
                                     severity="secondary"
                                     icon="pi pi-arrow-left"
                                     @click="activateCallback('1')"
+                                    class="w-full"
                                 />
                                 <Button
                                     label="Next"
-                                    severity="contrast"
+                                    severity="secondary"
                                     icon="pi pi-arrow-right"
                                     iconPos="right"
                                     @click="activateCallback('3')"
+                                    class="w-full"
                                 />
                             </div>
                         </div>
@@ -141,19 +141,21 @@ if (id) {
                     <StepPanel v-slot="{ activateCallback }" value="3">
                         <div class="bg-gray-50">
                             <NuxtLayout name="craft-content" />
-                            <div class="flex justify-between pt-6">
+                            <div class="flex justify-between pt-6 gap-2 h-36">
                                 <Button
                                     label="Back"
                                     severity="secondary"
                                     icon="pi pi-arrow-left"
                                     @click="activateCallback('2')"
+                                    class="w-full"
                                 />
                                 <Button
                                     label="Next"
-                                    severity="contrast"
+                                    severity="secondary"
                                     icon="pi pi-arrow-right"
                                     iconPos="right"
                                     @click="activateCallback('4')"
+                                    class="w-full"
                                 />
                             </div>
                         </div>
@@ -161,12 +163,21 @@ if (id) {
                     <StepPanel v-slot="{ activateCallback }" value="4">
                         <div class="bg-gray-50">
                             <NuxtLayout name="prepare-registration" />
-                            <div class="pt-6">
+                            <div class="flex justify-between pt-6 gap-2 h-36">
                                 <Button
                                     label="Back"
                                     severity="secondary"
                                     icon="pi pi-arrow-left"
                                     @click="activateCallback('3')"
+                                    class="w-full"
+                                />
+                                <Button
+                                    label="Go to the classroom"
+                                    severity="secondary"
+                                    icon=""
+                                    iconPos="right"
+                                    class="w-full"
+                                    @click="router.push(`/class/${id}`)"
                                 />
                             </div>
                         </div>
