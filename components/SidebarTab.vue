@@ -46,7 +46,11 @@ watch(router.currentRoute, () => {
 <template>
     <nuxt-link
         :to="to"
-        :class="path.includes(to) ? 'bg-blue-100 hover:!bg-blue-100' : ''"
+        :class="
+            path.includes(to)
+                ? 'text-blue-500 bg-blue-100 hover:!bg-blue-100'
+                : ''
+        "
         class="flex justify-between items-center p-3 py-4 duration-100 rounded-lg hover:bg-gray-100"
     >
         <div class="flex gap-2">
