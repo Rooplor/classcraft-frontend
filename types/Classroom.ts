@@ -1,60 +1,58 @@
 import type { Venue } from "./Venue";
 
-interface Classroom {
+export interface IClassroom {
     id: string;
     title: string;
     details: string;
     target: string;
     prerequisite: string;
-    type: ClassroomType;
-    format: ClassroomFormat;
+    type: EClassroomType;
+    format: EClassroomFormat;
     capacity: number;
     date: Date[];
-    stepperStatus: StepperStatus;
+    stepperStatus: EStepperStatus;
     meetingUrl: string;
     content: string;
     registrationUrl: string;
     registrationStatus: boolean;
-    venueStatus: VenueRequestStatus;
+    venueStatus: EVenueRequestStatus;
     venue: Venue;
     published: boolean;
     imageUrl: string;
 }
 
-interface addClassroomDTO {
+export interface IAddClassroomDTO {
     title: string;
     details: string;
     target: string;
     prerequisite: string;
-    type: ClassroomType;
-    format: ClassroomFormat;
+    type: EClassroomType;
+    format: EClassroomFormat;
     capacity: number;
     date: Date;
 }
 
-enum ClassroomType {
+enum EClassroomType {
     LECTURE,
     WORKSHOP,
     DISCUSSION,
 }
 
-enum ClassroomFormat {
+enum EClassroomFormat {
     ONSITE,
     ONLINE,
     MIXED,
 }
 
-enum StepperStatus {
+enum EStepperStatus {
     FILL_CASS_DETAIL = "fill_classroom_detail",
     RESERVE_VENUE = "reserve_venue",
     CRAFT_CONTENT = "craft_content",
     PREPARE_FOR_REG = "prepare_for_reg",
 }
 
-enum VenueRequestStatus {
+enum EVenueRequestStatus {
     PENDING = "pending",
     APPROVED = "approved",
     REJECTED = "rejected",
 }
-
-export type { Classroom, addClassroomDTO };

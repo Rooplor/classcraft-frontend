@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import Feedbar from "../../../layouts/Feedbar.vue";
-import type { Classroom } from "../../../types/Classroom";
+import type { IClassroom } from "../../../types/Classroom";
 
 const route = useRouter();
 const { id } = route.currentRoute.value.params;
 const { getClassroomById } = useClassroom();
 
-const classroom: Classroom =
+const classroom: IClassroom =
     id && typeof id === "string" ? await getClassroomById(id) : null;
 
 </script>
