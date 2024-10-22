@@ -22,7 +22,7 @@ const schema = yup.object({
     type: yup.string().required(),
     format: yup.string().required(),
     capacity: yup.number().required(),
-    date: yup.array().of(yup.date().required()),    
+    date: yup.array().of(yup.date().required()),
     // dates: yup.array().of(
     //     yup
     //         .object({
@@ -141,6 +141,7 @@ const removeImage = () => {
 };
 
 function initEditorValue({ instance }) {
+    if (!editingClassroom.value) return;
     instance.setContents(
         instance.clipboard.convert({
             html: editingClassroom.value.details,

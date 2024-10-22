@@ -33,10 +33,16 @@ const steps = [
     { label: "Prepare for registration", value: "4" },
 ];
 
-try {
-    classroomStore.setEditingClassroom(await getClassroomById(id.toString()));
-} catch (error) {
-    router.replace("/404");
+classroomStore.clearEditingClassroom();
+
+if (id) {
+    try {
+        classroomStore.setEditingClassroom(
+            await getClassroomById(id.toString())
+        );
+    } catch (error) {
+        router.replace("/404");
+    }
 }
 </script>
 
