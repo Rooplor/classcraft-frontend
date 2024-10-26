@@ -3,17 +3,9 @@ import type { IFileUpload } from "../types/FileUpload";
 const useFileUpload = () => {
     const config = useRuntimeConfig();
 
-    const uploadFile = (
-        classId: string,
-        file: string
-    ): Promise<IFileUpload> => {
+    const uploadFile = (formData: FormData): Promise<IFileUpload> => {
         return $fetch(`${config.public.baseUrl}/api/file/upload`, {
-            params: {
-                classId: classId,
-            },
-            body: {
-                file: file,
-            },
+            body: formData,
             method: "POST",
         });
     };

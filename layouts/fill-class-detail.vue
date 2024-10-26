@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
 import * as yup from "yup";
+import { useUserStore } from "../stores/user";
 
 const { addClassroom, updateClassroom } = useClassroom();
 const router = useRouter();
@@ -10,7 +11,8 @@ const { editingClassroom } = storeToRefs(classroomStore);
 
 const { uploadFile } = useFileUpload();
 
-const user = useCurrentUser();
+const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
 
 const toast = useToast();
 
@@ -98,8 +100,7 @@ const onSubmit = handleSubmit((values: any) => {
     if (editingClassroom.value) {
         updateClassroom(editingClassroom.value.id, values).then((res) => {
             if (res) {
-                classroomStore.updateClassroom(res);
-                classroomStore.setEditingClassroom(res);
+                useClassroomStore().updateClassroom(res);
                 toast.add({
                     severity: "success",
                     summary: "Class updated",
@@ -125,38 +126,51 @@ const onSubmit = handleSubmit((values: any) => {
     resetForm();
 });
 
-const onFileChange = async (
-    event: any,
-    uploadFile: Function,
-    imageUrlRef: Ref<string>,
-    editingClassroomId: string
-) => {
+const onCoverImageChange = async (event: any) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = async (e: any) => {
-        if (!e.target.result) return;
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("classId", editingClassroom.value.id);
 
-        try {
-            const res = await uploadFile(editingClassroomId, e.target.result);
-            if (res) {
-                imageUrlRef.value = res.result;
-            }
-        } catch (error) {
-            console.error("Error uploading file:", error);
-            // Handle error appropriately, e.g., show a notification to the user
+    try {
+        const res = await uploadFile(formData);
+        if (res) {
+            coverImage.value = res.result.url;
         }
-    };
-    reader.readAsDataURL(file);
+    } catch (error) {
+        console.error("Error uploading file:", error);
+    }
 };
 
-const removeImage = (imageUrlRef: Ref<string | null>) => {
-    imageUrlRef.value = null;
+const removeCoverImage = () => {
+    coverImage.value = null;
+};
+
+const onInstructorAvatarChange = async (event: any) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("classId", editingClassroom.value.id);
+
+    try {
+        const res = await uploadFile(formData);
+        if (res) {
+            instructorAvatar.value = res.result.url;
+        }
+    } catch (error) {
+        console.error("Error uploading file:", error);
+    }
+};
+
+const removeInstructorAvatar = () => {
+    instructorAvatar.value = null;
 };
 
 function initEditorValue({ instance }) {
-    if (!editingClassroom.value) return;
     instance.setContents(
         instance.clipboard.convert({
             html: editingClassroom.value.details,
@@ -166,9 +180,9 @@ function initEditorValue({ instance }) {
 
 watch(selfInstructored, (value) => {
     if (value) {
-        instructorName.value = user.value?.displayName;
-        instructorBio.value = user.value?.email;
-        instructorAvatar.value = user.value?.photoURL;
+        instructorName.value = user.value.username;
+        instructorBio.value = user.value.email;
+        instructorAvatar.value = user.value.profilePicture;
     } else {
         instructorName.value = "";
         instructorBio.value = "";
@@ -205,14 +219,7 @@ watch(selfInstructored, (value) => {
                             type="file"
                             accept="image/*"
                             class="absolute inset-0 opacity-0 cursor-pointer"
-                            @change="
-                                onFileChange(
-                                    $event,
-                                    uploadFile,
-                                    coverImage,
-                                    editingClassroom.value?.id
-                                )
-                            "
+                            @change="onCoverImageChange"
                         />
                         <div class="absolute top-2 right-2">
                             <Button
@@ -222,7 +229,7 @@ watch(selfInstructored, (value) => {
                                 text
                                 rounded
                                 aria-label="Cancel"
-                                @click="removeImage(coverImage)"
+                                @click="removeCoverImage"
                             />
                         </div>
                     </div>
@@ -232,14 +239,13 @@ watch(selfInstructored, (value) => {
                         class="flex flex-col w-full gap-8 px-6 py-8 bg-white border rounded-3xl"
                     >
                         <div class="flex flex-col gap-2">
+                            <label for="target">Title</label>
                             <InputText
                                 id="title"
                                 v-model="title"
                                 aria-describedby="title-help"
                                 :class="errors.title && 'p-invalid'"
-                                placeholder="Class title"
-                                class="!text-4xl font-bold outline-none"
-                                unstyled
+                                placeholder="Enter class title"
                             />
                             <VeeErrorMessage
                                 name="title"
@@ -247,13 +253,13 @@ watch(selfInstructored, (value) => {
                             />
                         </div>
                         <div class="flex flex-col gap-2">
+                            <label for="details">Details</label>
                             <Editor
                                 id="details"
                                 v-model="details"
                                 @load="initEditorValue"
                                 editorStyle="height: 320px"
                                 :class="errors.details && 'p-invalid'"
-                                placeholder="Enter class details"
                             />
                             <VeeErrorMessage
                                 name="details"
@@ -428,12 +434,9 @@ watch(selfInstructored, (value) => {
                     </div>
 
                     <div
-                        class="flex flex-col w-full bg-white border rounded-3xl"
+                        class="flex flex-col w-full gap-8 px-6 py-8 bg-white border rounded-3xl"
                     >
-                        <div
-                            class="flex items-center gap-2 p-4 rounded-t-3xl border-b"
-                            :class="selfInstructored && 'bg-gray-200'"
-                        >
+                        <div class="flex items-center gap-2">
                             <Checkbox
                                 inputId="selfInstructored"
                                 v-model="selfInstructored"
@@ -443,122 +446,108 @@ watch(selfInstructored, (value) => {
                                 I'm the instructor
                             </label>
                         </div>
-                        <div class="flex flex-col gap-8 px-6 py-8">
-                            <div class="flex gap-6">
+                        <div class="flex gap-6">
+                            <div
+                                class="w-52 h-52 border aspect-square rounded-full overflow-clip relative"
+                            >
                                 <div
-                                    class="w-52 h-52 border aspect-square rounded-full overflow-clip relative"
+                                    class="w-52 h-52 aspect-square bg-clip-border relative"
                                 >
-                                    <div
-                                        class="w-52 h-52 aspect-square bg-clip-border relative"
+                                    <img
+                                        v-if="instructorAvatar"
+                                        :src="instructorAvatar"
+                                        alt="Uploaded Image"
+                                        class="object-cover w-full h-full"
+                                    />
+                                    <button
+                                        v-else
+                                        class="flex items-center justify-center w-full h-full bg-gray-200"
                                     >
-                                        <img
-                                            v-if="instructorAvatar"
-                                            :src="instructorAvatar"
-                                            alt="Uploaded Image"
-                                            class="object-cover w-full h-full"
-                                        />
-                                        <button
-                                            v-else
-                                            class="flex items-center justify-center w-full h-full bg-gray-200"
-                                        >
-                                            <span class="text-gray-400">
-                                                <i
-                                                    class="pi pi-image text-[3rem]"
-                                                />
-                                            </span>
-                                        </button>
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            class="absolute inset-0 opacity-0 cursor-pointer"
-                                            @change="
-                                                onFileChange(
-                                                    $event,
-                                                    uploadFile,
-                                                    instructorAvatar,
-                                                    editingClassroom.value?.id
-                                                )
-                                            "
-                                        />
-                                        <div class="absolute top-2 right-2">
-                                            <Button
-                                                v-if="instructorAvatar"
-                                                icon="pi pi-times"
-                                                severity="danger"
-                                                text
-                                                rounded
-                                                aria-label="Cancel"
-                                                @click="
-                                                    removeImage(
-                                                        instructorAvatar
-                                                    )
-                                                "
+                                        <span class="text-gray-400">
+                                            <i
+                                                class="pi pi-image text-[3rem]"
                                             />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="space-y-4 w-full">
-                                    <div class="flex flex-col gap-2">
-                                        <InputText
-                                            id="instructorName"
-                                            v-model="instructorName"
-                                            aria-describedby="instructorName-help"
-                                            :class="
-                                                errors.instructorName &&
-                                                'p-invalid'
-                                            "
-                                            placeholder="Instructor name"
-                                            :disabled="selfInstructored"
-                                            class="!text-2xl font-bold outline-none"
-                                            unstyled
-                                        />
-                                        <VeeErrorMessage
-                                            name="instructorName"
-                                            class="text-red-500"
-                                        />
-                                    </div>
-                                    <div class="flex flex-col gap-2">
-                                        <Textarea
-                                            id="instructorBio"
-                                            v-model="instructorBio"
-                                            aria-describedby="instructorBio-help"
-                                            :class="
-                                                errors.instructorBio &&
-                                                'p-invalid'
-                                            "
-                                            rows="5"
-                                            style="resize: none"
-                                            placeholder="Tell us about the instructor"
-                                            :disabled="selfInstructored"
-                                        />
-                                        <VeeErrorMessage
-                                            name="instructorBio"
-                                            class="text-red-500"
+                                        </span>
+                                    </button>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        class="absolute inset-0 opacity-0 cursor-pointer"
+                                        @change="onInstructorAvatarChange"
+                                    />
+                                    <div class="absolute top-2 right-2">
+                                        <Button
+                                            v-if="instructorAvatar"
+                                            icon="pi pi-times"
+                                            severity="danger"
+                                            text
+                                            rounded
+                                            aria-label="Cancel"
+                                            @click="removeInstructorAvatar"
                                         />
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex flex-col gap-2">
-                                <label for="instructorFamiliarity"
-                                    >Familiarity to the topic</label
-                                >
-                                <Textarea
-                                    id="instructorFamiliarity"
-                                    v-model="instructorFamiliarity"
-                                    aria-describedby="instructorFamiliarity-help"
-                                    :class="
-                                        errors.instructorFamiliarity &&
-                                        'p-invalid'
-                                    "
-                                    rows="5"
-                                    style="resize: none"
-                                    placeholder="How familiar is the instructor with the topic?"
-                                />
-                                <VeeErrorMessage
-                                    name="instructorFamiliarity"
-                                    class="text-red-500"
-                                />
+                            <div class="space-y-4 w-full">
+                                <div class="flex flex-col gap-2">
+                                    <label for="instructorName">
+                                        Instructor name
+                                    </label>
+                                    <InputText
+                                        id="instructorName"
+                                        v-model="instructorName"
+                                        aria-describedby="instructorName-help"
+                                        :class="
+                                            errors.instructorName && 'p-invalid'
+                                        "
+                                        placeholder="Enter instructor name"
+                                        :disabled="selfInstructored"
+                                    />
+                                    <VeeErrorMessage
+                                        name="instructorName"
+                                        class="text-red-500"
+                                    />
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label for="instructorBio">Bio</label>
+                                    <Textarea
+                                        id="instructorBio"
+                                        v-model="instructorBio"
+                                        aria-describedby="instructorBio-help"
+                                        :class="
+                                            errors.instructorBio && 'p-invalid'
+                                        "
+                                        rows="3"
+                                        style="resize: none"
+                                        placeholder="Tell us about the instructor"
+                                        :disabled="selfInstructored"
+                                    />
+                                    <VeeErrorMessage
+                                        name="instructorBio"
+                                        class="text-red-500"
+                                    />
+                                </div>
                             </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label for="instructorFamiliarity"
+                                >Familiarity to the topic</label
+                            >
+                            <Textarea
+                                id="instructorFamiliarity"
+                                v-model="instructorFamiliarity"
+                                aria-describedby="instructorFamiliarity-help"
+                                :class="
+                                    errors.instructorFamiliarity && 'p-invalid'
+                                "
+                                rows="5"
+                                style="resize: none"
+                                placeholder="How familiar is the instructor with the topic?"
+                            />
+                            <VeeErrorMessage
+                                name="instructorFamiliarity"
+                                class="text-red-500"
+                            />
                         </div>
                     </div>
                     <div class="flex justify-end">
