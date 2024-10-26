@@ -19,9 +19,8 @@ const onSubmit = handleSubmit((values: any) => {
 </script>
 
 <template>
-    <h2>Prepare for registration</h2>
     <div>
-        <form @submit="onSubmit" class="p-4 bg-white border rounded-lg">
+        <form @submit="onSubmit" class="p-4 bg-white border rounded-3xl">
             <div>
                 <h3>Use our registration form template</h3>
             </div>
