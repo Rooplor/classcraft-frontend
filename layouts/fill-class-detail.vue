@@ -126,11 +126,7 @@ const onSubmit = handleSubmit((values: any) => {
     resetForm();
 });
 
-const onFileChange = async (
-    event: any,
-    uploadFile: Function,
-    imageUrlRef: any
-) => {
+const onCoverImageChange = async (event: any) => {
     const file = event.target.files[0];
     if (!file) return;
 
@@ -141,16 +137,37 @@ const onFileChange = async (
     try {
         const res = await uploadFile(formData);
         if (res) {
-            console.log(imageUrlRef);
-            imageUrlRef.value = res.result.url;
+            coverImage.value = res.result.url;
         }
     } catch (error) {
         console.error("Error uploading file:", error);
     }
 };
 
-const removeImage = (imageUrlRef: Ref<string | null>) => {
-    imageUrlRef.value = null;
+const removeCoverImage = () => {
+    coverImage.value = null;
+};
+
+const onInstructorAvatarChange = async (event: any) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("classId", editingClassroom.value.id);
+
+    try {
+        const res = await uploadFile(formData);
+        if (res) {
+            instructorAvatar.value = res.result.url;
+        }
+    } catch (error) {
+        console.error("Error uploading file:", error);
+    }
+};
+
+const removeInstructorAvatar = () => {
+    instructorAvatar.value = null;
 };
 
 function initEditorValue({ instance }) {
@@ -203,9 +220,7 @@ watch(selfInstructored, (value) => {
                             type="file"
                             accept="image/*"
                             class="absolute inset-0 opacity-0 cursor-pointer"
-                            @change="
-                                onFileChange($event, uploadFile, coverImage)
-                            "
+                            @change="onCoverImageChange"
                         />
                         <div class="absolute top-2 right-2">
                             <Button
@@ -215,7 +230,7 @@ watch(selfInstructored, (value) => {
                                 text
                                 rounded
                                 aria-label="Cancel"
-                                @click="removeImage(coverImage)"
+                                @click="removeCoverImage"
                             />
                         </div>
                     </div>
@@ -459,13 +474,7 @@ watch(selfInstructored, (value) => {
                                         type="file"
                                         accept="image/*"
                                         class="absolute inset-0 opacity-0 cursor-pointer"
-                                        @change="
-                                            onFileChange(
-                                                $event,
-                                                uploadFile,
-                                                instructorAvatar
-                                            )
-                                        "
+                                        @change="onInstructorAvatarChange"
                                     />
                                     <div class="absolute top-2 right-2">
                                         <Button
@@ -475,9 +484,7 @@ watch(selfInstructored, (value) => {
                                             text
                                             rounded
                                             aria-label="Cancel"
-                                            @click="
-                                                removeImage(instructorAvatar)
-                                            "
+                                            @click="removeInstructorAvatar"
                                         />
                                     </div>
                                 </div>
