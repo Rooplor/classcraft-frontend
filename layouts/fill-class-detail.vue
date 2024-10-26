@@ -129,27 +129,24 @@ const onSubmit = handleSubmit((values: any) => {
 const onFileChange = async (
     event: any,
     uploadFile: Function,
-    imageUrlRef: Ref<string>,
-    editingClassroomId: string
+    imageUrlRef: any
 ) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = async (e: any) => {
-        if (!e.target.result) return;
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("classId", editingClassroom.value.id);
 
-        try {
-            const res = await uploadFile(editingClassroomId, e.target.result);
-            if (res) {
-                imageUrlRef.value = res.result;
-            }
-        } catch (error) {
-            console.error("Error uploading file:", error);
-            // Handle error appropriately, e.g., show a notification to the user
+    try {
+        const res = await uploadFile(formData);
+        if (res) {
+            console.log(imageUrlRef);
+            imageUrlRef.value = res.result.url;
         }
-    };
-    reader.readAsDataURL(file);
+    } catch (error) {
+        console.error("Error uploading file:", error);
+    }
 };
 
 const removeImage = (imageUrlRef: Ref<string | null>) => {
@@ -206,12 +203,7 @@ watch(selfInstructored, (value) => {
                             accept="image/*"
                             class="absolute inset-0 opacity-0 cursor-pointer"
                             @change="
-                                onFileChange(
-                                    $event,
-                                    uploadFile,
-                                    coverImage,
-                                    editingClassroom.value?.id
-                                )
+                                onFileChange($event, uploadFile, coverImage)
                             "
                         />
                         <div class="absolute top-2 right-2">
@@ -470,8 +462,7 @@ watch(selfInstructored, (value) => {
                                             onFileChange(
                                                 $event,
                                                 uploadFile,
-                                                instructorAvatar,
-                                                editingClassroom.value?.id
+                                                instructorAvatar
                                             )
                                         "
                                     />
