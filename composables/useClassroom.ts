@@ -22,7 +22,7 @@ const useClassroom = () => {
     const getClassroomByUserId = (userId: string[]): Promise<IClassroom[]> => {
         return $fetch(`${config.public.baseUrl}/api/class/owners`, {
             params: {
-                userId,
+                owners: userId.join(","),
             },
             method: "GET",
         });

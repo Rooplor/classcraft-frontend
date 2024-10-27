@@ -10,9 +10,10 @@ const useVenue = () => {
         });
     };
 
-    const getVenueById = (id: string): Promise<IVenue> => {
-        return $fetch(`${config.public.baseUrl}/api/venue/${id}`, {
-            method: "GET",
+    const getVenueById = (venue: IVenue): Promise<IVenue> => {
+        return $fetch(`${config.public.baseUrl}/api/venue`, {
+            body: JSON.stringify(venue),
+            method: "POST",
         });
     };
 
