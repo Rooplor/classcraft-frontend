@@ -126,37 +126,52 @@ const onSubmit = handleSubmit((values: any) => {
     resetForm();
 });
 
-const onFileChange = async (
-    event: any,
-    uploadFile: Function,
-    imageUrlRef: Ref<string>,
-    editingClassroomId: string
-) => {
+const onCoverImageChange = async (event: any) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = async (e: any) => {
-        if (!e.target.result) return;
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("classId", editingClassroom.value.id);
 
-        try {
-            const res = await uploadFile(editingClassroomId, e.target.result);
-            if (res) {
-                imageUrlRef.value = res.result;
-            }
-        } catch (error) {
-            console.error("Error uploading file:", error);
-            // Handle error appropriately, e.g., show a notification to the user
+    try {
+        const res = await uploadFile(formData);
+        if (res) {
+            coverImage.value = res.result.url;
         }
-    };
-    reader.readAsDataURL(file);
+    } catch (error) {
+        console.error("Error uploading file:", error);
+    }
 };
 
-const removeImage = (imageUrlRef: Ref<string | null>) => {
-    imageUrlRef.value = null;
+const removeCoverImage = () => {
+    coverImage.value = null;
+};
+
+const onInstructorAvatarChange = async (event: any) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("classId", editingClassroom.value.id);
+
+    try {
+        const res = await uploadFile(formData);
+        if (res) {
+            instructorAvatar.value = res.result.url;
+        }
+    } catch (error) {
+        console.error("Error uploading file:", error);
+    }
+};
+
+const removeInstructorAvatar = () => {
+    instructorAvatar.value = null;
 };
 
 function initEditorValue({ instance }) {
+    if (!editingClassroom.value) return;
     instance.setContents(
         instance.clipboard.convert({
             html: editingClassroom.value.details,
@@ -205,14 +220,7 @@ watch(selfInstructored, (value) => {
                             type="file"
                             accept="image/*"
                             class="absolute inset-0 opacity-0 cursor-pointer"
-                            @change="
-                                onFileChange(
-                                    $event,
-                                    uploadFile,
-                                    coverImage,
-                                    editingClassroom.value?.id
-                                )
-                            "
+                            @change="onCoverImageChange"
                         />
                         <div class="absolute top-2 right-2">
                             <Button
@@ -222,7 +230,7 @@ watch(selfInstructored, (value) => {
                                 text
                                 rounded
                                 aria-label="Cancel"
-                                @click="removeImage(coverImage)"
+                                @click="removeCoverImage"
                             />
                         </div>
                     </div>
@@ -466,14 +474,7 @@ watch(selfInstructored, (value) => {
                                         type="file"
                                         accept="image/*"
                                         class="absolute inset-0 opacity-0 cursor-pointer"
-                                        @change="
-                                            onFileChange(
-                                                $event,
-                                                uploadFile,
-                                                instructorAvatar,
-                                                editingClassroom.value?.id
-                                            )
-                                        "
+                                        @change="onInstructorAvatarChange"
                                     />
                                     <div class="absolute top-2 right-2">
                                         <Button
@@ -483,9 +484,7 @@ watch(selfInstructored, (value) => {
                                             text
                                             rounded
                                             aria-label="Cancel"
-                                            @click="
-                                                removeImage(instructorAvatar)
-                                            "
+                                            @click="removeInstructorAvatar"
                                         />
                                     </div>
                                 </div>

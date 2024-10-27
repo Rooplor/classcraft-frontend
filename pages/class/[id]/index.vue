@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import Feedbar from "../../../layouts/Feedbar.vue";
 import type { IClassroom } from "../../../types/Classroom";
 
-const route = useRouter();
-const { id } = route.currentRoute.value.params;
+const router = useRouter();
+const { id } = router.currentRoute.value.params;
 const { getClassroomById } = useClassroom();
 
-const classroom: IClassroom =
-    id && typeof id === "string" ? await getClassroomById(id) : null;
+let classroom: IClassroom = {} as IClassroom;
 
+try {
+    classroom = await getClassroomById(id.toString());
+} catch (error) {
+    router.replace("/404");
+}
 </script>
 <template>
     <div class="w-full px-[10px] flex flex-col gap-[10px]">
@@ -70,7 +73,7 @@ const classroom: IClassroom =
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Location</p>
-                    <div>{{ classroom.venue?.name || "TBA" }}</div>
+                    <div>{{ classroom.venue?.room || "TBA" }}</div>
                 </div>
                 <div class="flex justify-end gap-2">
                     <Button
