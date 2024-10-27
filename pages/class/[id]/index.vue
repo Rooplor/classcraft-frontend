@@ -20,12 +20,12 @@ try {
             <img
                 :src="classroom.imageUrl"
                 :alt="`${classroom.title} class cover image`"
-                class="w-[32rem] h-[32rem] aspect-square bg-gray-200 border rounded-3xl"
+                class="w-96 h-96 aspect-square bg-gray-200 border rounded-3xl"
             />
             <div
-                class="w-full bg-white px-6 py-8 border rounded-3xl flex flex-col gap-10"
+                class="w-full bg-white p-3 border rounded-3xl flex flex-col gap-10"
             >
-                <h1 class="text-4xl font-bold">{{ classroom.title }}</h1>
+                <h1 class="text-2xl font-bold">{{ classroom.title }}</h1>
                 <div class="flex gap-2">
                     <Tag
                         icon="pi pi-comment"

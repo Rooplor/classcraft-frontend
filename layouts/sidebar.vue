@@ -15,7 +15,7 @@ const { classrooms } = storeToRefs(classroomStore);
                     Class<span class="font-bold">Craft</span>
                 </h1>
                 <div>
-                    <SidebarTab to="/class" name="Classroom" :hasAction="false" />
+                    <SidebarTab to="/class" name="Class" :hasAction="false" />
                     <SidebarTab
                         to="/discussion"
                         name="Discussion"

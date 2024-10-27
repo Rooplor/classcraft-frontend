@@ -23,10 +23,6 @@ const { deleteClassroom } = useClassroom();
 const classroomStore = useClassroomStore();
 
 const op = ref();
-
-const confirm = useConfirm();
-const toast = useToast();
-
 const toggle = (event: MouseEvent) => {
     op.value.toggle(event);
 };
@@ -34,31 +30,6 @@ const toggle = (event: MouseEvent) => {
 const handleEdit = () => {
     router.push(props.to);
     op.value.hide();
-};
-
-const confirmDelete = (name: string) => {
-    confirm.require({
-        message: `Are you sure you want to delete "${name}" classroom?`,
-        header: "Delete Confirmation",
-        icon: "pi pi-exclamation-triangle",
-        rejectProps: {
-            label: "Cancel",
-        },
-        acceptProps: {
-            label: "Delete",
-            text: true,
-        },
-        accept: () => {
-            handleDelete();
-            toast.add({
-                severity: "error",
-                summary: "Deleted",
-                detail: `Your classroom has been deleted`,
-                group: "tc",
-                life: 3000,
-            });
-        },
-    });
 };
 
 const handleDelete = () => {
@@ -75,11 +46,7 @@ watch(router.currentRoute, () => {
 <template>
     <nuxt-link
         :to="to"
-        :class="
-            path.includes(to)
-                ? 'text-blue-500 bg-blue-100 hover:!bg-blue-100'
-                : ''
-        "
+        :class="path.includes(to) ? 'bg-blue-100 hover:!bg-blue-100' : ''"
         class="flex justify-between items-center p-3 py-4 duration-100 rounded-lg hover:bg-gray-100"
     >
         <div class="flex gap-2">
@@ -97,7 +64,7 @@ watch(router.currentRoute, () => {
             v-if="hasAction"
         />
         <Popover ref="op">
-            <div class="flex flex-col gap-1">
+            <div class="flex flex-col gap-2">
                 <Button
                     label="Edit"
                     icon="pi pi-pencil"
@@ -109,7 +76,7 @@ watch(router.currentRoute, () => {
                     icon="pi pi-trash"
                     severity="danger"
                     text
-                    @click="confirmDelete(name)"
+                    @click="handleDelete"
                 />
             </div>
         </Popover>
