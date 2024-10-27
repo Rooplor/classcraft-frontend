@@ -106,7 +106,7 @@ if (id) {
                             <NuxtLayout name="fill-class-detail" />
                             <div class="flex justify-end pt-6 gap-2 h-36">
                                 <Button
-                                    label="Next"
+                                    label="Reserve venue"
                                     severity="secondary"
                                     icon="pi pi-arrow-right"
                                     iconPos="right"
@@ -121,14 +121,14 @@ if (id) {
                             <NuxtLayout name="reserve-venue" />
                             <div class="flex justify-between pt-6 gap-2 h-36">
                                 <Button
-                                    label="Back"
+                                    label="Fill class detail"
                                     severity="secondary"
                                     icon="pi pi-arrow-left"
                                     @click="activateCallback('1')"
                                     class="w-full"
                                 />
                                 <Button
-                                    label="Next"
+                                    label="Craft your content"
                                     severity="secondary"
                                     icon="pi pi-arrow-right"
                                     iconPos="right"
@@ -143,14 +143,14 @@ if (id) {
                             <NuxtLayout name="craft-content" />
                             <div class="flex justify-between pt-6 gap-2 h-36">
                                 <Button
-                                    label="Back"
+                                    label="Reserve venue"
                                     severity="secondary"
                                     icon="pi pi-arrow-left"
                                     @click="activateCallback('2')"
                                     class="w-full"
                                 />
                                 <Button
-                                    label="Next"
+                                    label="Prepare for registration"
                                     severity="secondary"
                                     icon="pi pi-arrow-right"
                                     iconPos="right"
@@ -165,7 +165,7 @@ if (id) {
                             <NuxtLayout name="prepare-registration" />
                             <div class="flex justify-between pt-6 gap-2 h-36">
                                 <Button
-                                    label="Back"
+                                    label="Reserve venue"
                                     severity="secondary"
                                     icon="pi pi-arrow-left"
                                     @click="activateCallback('3')"
