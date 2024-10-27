@@ -10,7 +10,7 @@ const useVenue = () => {
         });
     };
 
-    const getVenueById = (venue: IVenue): Promise<IVenue> => {
+    const addVenue = (venue: IVenue): Promise<IVenue> => {
         return $fetch(`${config.public.baseUrl}/api/venue`, {
             body: JSON.stringify(venue),
             method: "POST",
@@ -25,7 +25,7 @@ const useVenue = () => {
 
     return {
         getAllVenue,
-        getVenueById,
+        addVenue,
         deleteVenue,
     };
 };
