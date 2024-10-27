@@ -1,4 +1,4 @@
-import type { Venue } from "./Venue";
+import type { IVenue } from "./Venue";
 
 export interface IClassroom {
     id: string;
@@ -16,7 +16,7 @@ export interface IClassroom {
     registrationUrl: string;
     registrationStatus: boolean;
     venueStatus: EVenueRequestStatus;
-    venue: Venue;
+    venue: IVenue;
     published: boolean;
     imageUrl: string;
 }
