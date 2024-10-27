@@ -3,9 +3,16 @@ const toast = useToast();
 const router = useRouter();
 const id = router.currentRoute.value.params.id;
 const classroomStore = useClassroomStore();
-const { getClassroomById } = useClassroom();
+const { editingClassroom } = storeToRefs(classroomStore);
+const { getClassroomById, togglePublishStatus } = useClassroom();
 const op = ref();
 const currentUrl = window?.location?.href.replace(/\/edit$/, "");
+const steps = [
+    { label: "Fill class detail", value: "1" },
+    { label: "Reserve venue", value: "2" },
+    { label: "Craft your content", value: "3" },
+    { label: "Prepare for registration", value: "4" },
+];
 
 const showToast = () => {
     toast.add({
@@ -25,12 +32,30 @@ const copyLink = () => {
     showToast();
 };
 
-const steps = [
-    { label: "Fill class detail", value: "1" },
-    { label: "Reserve venue", value: "2" },
-    { label: "Craft your content", value: "3" },
-    { label: "Prepare for registration", value: "4" },
-];
+const onPublish = async () => {
+    togglePublishStatus(id.toString()).then((res) => {
+        classroomStore.setEditingClassroom(res);
+        if (editingClassroom.value.published) {
+            toast.add({
+                severity: "success",
+                summary: "Classroom is published",
+                group: "tc",
+                life: 1000,
+            });
+        } else {
+            toast.add({
+                severity: "info",
+                summary: "Classroom is unpublished",
+                group: "tc",
+                life: 1000,
+            });
+        }
+    });
+};
+
+const onPreviewClassroom = () => {
+    router.push(`/class/${id}`);
+};
 
 classroomStore.clearEditingClassroom();
 
@@ -76,12 +101,35 @@ if (id) {
                             </InputGroup>
                         </div>
                         <div class="flex justify-end gap-2">
-                            <Button label="Publish" icon="pi pi-globe"></Button>
                             <Button
-                                label="View"
-                                severity="secondary"
+                                :label="
+                                    editingClassroom.published
+                                        ? 'Unpublish'
+                                        : 'Publish'
+                                "
+                                :icon="
+                                    editingClassroom.published
+                                        ? 'pi pi-lock-open'
+                                        : 'pi pi-lock'
+                                "
+                                :severity="
+                                    editingClassroom.published
+                                        ? 'secondary'
+                                        : 'primary'
+                                "
+                                @click="onPublish"
+                            />
+
+                            <Button
+                                label="Preview"
+                                :severity="
+                                    editingClassroom.published
+                                        ? 'primary'
+                                        : 'secondary'
+                                "
                                 icon="pi pi-eye"
-                            ></Button>
+                                @click="onPreviewClassroom"
+                            />
                         </div>
                     </div>
                 </Popover>
