@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
 import * as yup from "yup";
-import { useUserStore } from "../stores/user";
 
 const { addClassroom, updateClassroom } = useClassroom();
 const router = useRouter();
@@ -11,8 +10,7 @@ const { editingClassroom } = storeToRefs(classroomStore);
 
 const { uploadFile } = useFileUpload();
 
-const userStore = useUserStore();
-const { user } = storeToRefs(userStore);
+const user = useCurrentUser();
 
 const toast = useToast();
 
@@ -100,7 +98,8 @@ const onSubmit = handleSubmit((values: any) => {
     if (editingClassroom.value) {
         updateClassroom(editingClassroom.value.id, values).then((res) => {
             if (res) {
-                useClassroomStore().updateClassroom(res);
+                classroomStore.updateClassroom(res);
+                classroomStore.setEditingClassroom(res);
                 toast.add({
                     severity: "success",
                     summary: "Class updated",
@@ -173,16 +172,16 @@ const removeInstructorAvatar = () => {
 function initEditorValue({ instance }) {
     instance.setContents(
         instance.clipboard.convert({
-            html: editingClassroom.value.details,
+            html: editingClassroom.value?.details,
         })
     );
 }
 
 watch(selfInstructored, (value) => {
     if (value) {
-        instructorName.value = user.value.username;
-        instructorBio.value = user.value.email;
-        instructorAvatar.value = user.value.profilePicture;
+        instructorName.value = user.value?.displayName;
+        instructorBio.value = user.value?.email;
+        instructorAvatar.value = user.value?.photoURL;
     } else {
         instructorName.value = "";
         instructorBio.value = "";
