@@ -49,7 +49,7 @@ const initialValues = editingClassroom.value && {
     type: editingClassroom.value.type,
     format: editingClassroom.value.format,
     capacity: editingClassroom.value.capacity,
-    date: editingClassroom.value.date,
+    date: editingClassroom.value.date.map((date: string) => new Date(date)),
     // dates: editingClassroom.value.dates.map((date) => ({
     //     date: new Date(date.date),
     //     startTime: new Date(date.startTime),
@@ -239,13 +239,14 @@ watch(selfInstructored, (value) => {
                         class="flex flex-col w-full gap-8 px-6 py-8 bg-white border rounded-3xl"
                     >
                         <div class="flex flex-col gap-2">
-                            <label for="target">Title</label>
                             <InputText
                                 id="title"
                                 v-model="title"
                                 aria-describedby="title-help"
                                 :class="errors.title && 'p-invalid'"
-                                placeholder="Enter class title"
+                                placeholder="Class title"
+                                class="!text-4xl font-bold outline-none"
+                                unstyled
                             />
                             <VeeErrorMessage
                                 name="title"
@@ -253,13 +254,13 @@ watch(selfInstructored, (value) => {
                             />
                         </div>
                         <div class="flex flex-col gap-2">
-                            <label for="details">Details</label>
                             <Editor
                                 id="details"
                                 v-model="details"
                                 @load="initEditorValue"
                                 editorStyle="height: 320px"
                                 :class="errors.details && 'p-invalid'"
+                                placeholder="Enter class details"
                             />
                             <VeeErrorMessage
                                 name="details"
@@ -434,9 +435,12 @@ watch(selfInstructored, (value) => {
                     </div>
 
                     <div
-                        class="flex flex-col w-full gap-8 px-6 py-8 bg-white border rounded-3xl"
+                        class="flex flex-col w-full bg-white border rounded-3xl"
                     >
-                        <div class="flex items-center gap-2">
+                        <div
+                            class="flex items-center gap-2 p-4 rounded-t-3xl border-b"
+                            :class="selfInstructored && 'bg-gray-200'"
+                        >
                             <Checkbox
                                 inputId="selfInstructored"
                                 v-model="selfInstructored"
@@ -446,108 +450,111 @@ watch(selfInstructored, (value) => {
                                 I'm the instructor
                             </label>
                         </div>
-                        <div class="flex gap-6">
-                            <div
-                                class="w-52 h-52 border aspect-square rounded-full overflow-clip relative"
-                            >
+                        <div class="flex flex-col gap-8 px-6 py-8">
+                            <div class="flex gap-6">
                                 <div
-                                    class="w-52 h-52 aspect-square bg-clip-border relative"
+                                    class="w-52 h-52 border aspect-square rounded-full overflow-clip relative"
                                 >
-                                    <img
-                                        v-if="instructorAvatar"
-                                        :src="instructorAvatar"
-                                        alt="Uploaded Image"
-                                        class="object-cover w-full h-full"
-                                    />
-                                    <button
-                                        v-else
-                                        class="flex items-center justify-center w-full h-full bg-gray-200"
+                                    <div
+                                        class="w-52 h-52 aspect-square bg-clip-border relative"
                                     >
-                                        <span class="text-gray-400">
-                                            <i
-                                                class="pi pi-image text-[3rem]"
-                                            />
-                                        </span>
-                                    </button>
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        class="absolute inset-0 opacity-0 cursor-pointer"
-                                        @change="onInstructorAvatarChange"
-                                    />
-                                    <div class="absolute top-2 right-2">
-                                        <Button
+                                        <img
                                             v-if="instructorAvatar"
-                                            icon="pi pi-times"
-                                            severity="danger"
-                                            text
-                                            rounded
-                                            aria-label="Cancel"
-                                            @click="removeInstructorAvatar"
+                                            :src="instructorAvatar"
+                                            alt="Uploaded Image"
+                                            class="object-cover w-full h-full"
+                                        />
+                                        <button
+                                            v-else
+                                            class="flex items-center justify-center w-full h-full bg-gray-200"
+                                        >
+                                            <span class="text-gray-400">
+                                                <i
+                                                    class="pi pi-image text-[3rem]"
+                                                />
+                                            </span>
+                                        </button>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            class="absolute inset-0 opacity-0 cursor-pointer"
+                                            @change="onInstructorAvatarChange"
+                                        />
+                                        <div class="absolute top-2 right-2">
+                                            <Button
+                                                v-if="instructorAvatar"
+                                                icon="pi pi-times"
+                                                severity="danger"
+                                                text
+                                                rounded
+                                                aria-label="Cancel"
+                                                @click="removeInstructorAvatar"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-y-4 w-full">
+                                    <div class="flex flex-col gap-2">
+                                        <InputText
+                                            id="instructorName"
+                                            v-model="instructorName"
+                                            aria-describedby="instructorName-help"
+                                            :class="
+                                                errors.instructorName &&
+                                                'p-invalid'
+                                            "
+                                            placeholder="Instructor name"
+                                            :disabled="selfInstructored"
+                                            class="!text-2xl font-bold outline-none"
+                                            unstyled
+                                        />
+                                        <VeeErrorMessage
+                                            name="instructorName"
+                                            class="text-red-500"
+                                        />
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <Textarea
+                                            id="instructorBio"
+                                            v-model="instructorBio"
+                                            aria-describedby="instructorBio-help"
+                                            :class="
+                                                errors.instructorBio &&
+                                                'p-invalid'
+                                            "
+                                            rows="5"
+                                            style="resize: none"
+                                            placeholder="Tell us about the instructor"
+                                            :disabled="selfInstructored"
+                                        />
+                                        <VeeErrorMessage
+                                            name="instructorBio"
+                                            class="text-red-500"
                                         />
                                     </div>
                                 </div>
                             </div>
-                            <div class="space-y-4 w-full">
-                                <div class="flex flex-col gap-2">
-                                    <label for="instructorName">
-                                        Instructor name
-                                    </label>
-                                    <InputText
-                                        id="instructorName"
-                                        v-model="instructorName"
-                                        aria-describedby="instructorName-help"
-                                        :class="
-                                            errors.instructorName && 'p-invalid'
-                                        "
-                                        placeholder="Enter instructor name"
-                                        :disabled="selfInstructored"
-                                    />
-                                    <VeeErrorMessage
-                                        name="instructorName"
-                                        class="text-red-500"
-                                    />
-                                </div>
-                                <div class="flex flex-col gap-2">
-                                    <label for="instructorBio">Bio</label>
-                                    <Textarea
-                                        id="instructorBio"
-                                        v-model="instructorBio"
-                                        aria-describedby="instructorBio-help"
-                                        :class="
-                                            errors.instructorBio && 'p-invalid'
-                                        "
-                                        rows="3"
-                                        style="resize: none"
-                                        placeholder="Tell us about the instructor"
-                                        :disabled="selfInstructored"
-                                    />
-                                    <VeeErrorMessage
-                                        name="instructorBio"
-                                        class="text-red-500"
-                                    />
-                                </div>
+                            <div class="flex flex-col gap-2">
+                                <label for="instructorFamiliarity"
+                                    >Familiarity to the topic</label
+                                >
+                                <Textarea
+                                    id="instructorFamiliarity"
+                                    v-model="instructorFamiliarity"
+                                    aria-describedby="instructorFamiliarity-help"
+                                    :class="
+                                        errors.instructorFamiliarity &&
+                                        'p-invalid'
+                                    "
+                                    rows="5"
+                                    style="resize: none"
+                                    placeholder="How familiar is the instructor with the topic?"
+                                />
+                                <VeeErrorMessage
+                                    name="instructorFamiliarity"
+                                    class="text-red-500"
+                                />
                             </div>
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="instructorFamiliarity"
-                                >Familiarity to the topic</label
-                            >
-                            <Textarea
-                                id="instructorFamiliarity"
-                                v-model="instructorFamiliarity"
-                                aria-describedby="instructorFamiliarity-help"
-                                :class="
-                                    errors.instructorFamiliarity && 'p-invalid'
-                                "
-                                rows="5"
-                                style="resize: none"
-                                placeholder="How familiar is the instructor with the topic?"
-                            />
-                            <VeeErrorMessage
-                                name="instructorFamiliarity"
-                                class="text-red-500"
-                            />
                         </div>
                     </div>
                     <div class="flex justify-end">
