@@ -7,21 +7,21 @@ const user = useCurrentUser();
 
 <template>
     <div class="w-full flex flex-col gap-[10px] p-[10px]">
-        <div class="flex gap-8 bg-white border rounded-xl p-8">
+        <div class="flex gap-8 bg-white border rounded-3xl p-8">
             <img
-                :src="user.photoURL"
-                :alt="user.displayName"
+                :src="user?.photoURL"
+                :alt="user?.displayName"
                 class="rounded-full w-52 h-52 aspect-square object-cover bg-gray-200"
             />
             <div class="space-y-4">
-                <div>
+                <div class="space-y-2">
                     <div class="flex items-center gap-4">
                         <h1 class="text-2xl font-bold">
-                            {{ user.displayName }}
+                            {{ user?.displayName }}
                         </h1>
                         <Button label="Follow" icon="pi pi-plus" />
                     </div>
-                    <p class="text-gray-500">{{ user.email }}</p>
+                    <p class="text-gray-500">{{ user?.email }}</p>
                 </div>
                 <p class="space-x-2">
                     <span>2 Classes</span> <span>5 Followers</span>
@@ -35,7 +35,7 @@ const user = useCurrentUser();
                 </p>
             </div>
         </div>
-        <div class="flex flex-col gap-6 p-8 bg-white rounded-lg border">
+        <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border">
             <h2 class="text-xl font-bold">Hosted classes</h2>
             <div class="space-y-[10px]">
                 <ClassroomItem
