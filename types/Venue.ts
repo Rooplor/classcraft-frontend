@@ -79,4 +79,4 @@ export const mockVenues: IVenue[] = [
     },
 ];
 
-export type { IVenue as Venue };
+export type { IVenue };

@@ -1,18 +1,18 @@
-import type { IHttpResponse } from "./HttpResponse";
+import type { IResponse } from "./Response";
 
-export interface User {
+export interface IUser {
     id: string;
     username: string;
     email: string;
     profilePicture?: string;
 }
 
-export interface IListUserResponse extends IHttpResponse {
-    result: User[];
+export interface IListUserResponse extends IResponse {
+    result: IUser[];
 }
 
 export interface IResponseUser {
     success: boolean;
-    result: User;
+    result: IUser;
     error: string;
 }

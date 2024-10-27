@@ -1,4 +1,4 @@
-export interface IHttpResponse {
+export interface IResponse {
     success: boolean;
     result: any;
     error: string;
