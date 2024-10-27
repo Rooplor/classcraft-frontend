@@ -4,13 +4,12 @@ const router = useRouter();
 const id = router.currentRoute.value.params.id;
 const classroomStore = useClassroomStore();
 const { getClassroomById } = useClassroom();
-const { editingClassroom } = storeToRefs(classroomStore);
 const op = ref();
 const currentUrl = window?.location?.href.replace(/\/edit$/, "");
 
 const showToast = () => {
     toast.add({
-        severity: "secondary",
+        severity: "success",
         summary: "Url is copied to clipboard",
         group: "tc",
         life: 1000,
