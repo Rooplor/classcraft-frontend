@@ -1,6 +1,6 @@
-import type { HttpResponse } from "./HttpResponse";
+import type { IHttpResponse } from "./HttpResponse";
 
-export interface IFileUpload extends HttpResponse {
+export interface IFileUpload extends IHttpResponse {
     result: {
         url: string;
     };

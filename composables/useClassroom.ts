@@ -1,10 +1,10 @@
-import type { addClassroomDTO, Classroom } from "../types/Classroom";
-import type { HttpResponse } from "../types/HttpResponse";
+import type { IAddClassroomDTO, IClassroom } from "../types/Classroom";
+import type { IHttpResponse } from "../types/HttpResponse";
 
 const useClassroom = () => {
     const config = useRuntimeConfig();
 
-    const getAllClassroom = (): Promise<Classroom[]> => {
+    const getAllClassroom = (): Promise<IClassroom[]> => {
         return $fetch(`${config.public.baseUrl}/api/class`, {
             params: {
                 registrationStatus: false,
@@ -13,14 +13,14 @@ const useClassroom = () => {
         });
     };
 
-    const addClassroom = (classroom: addClassroomDTO): Promise<Classroom> => {
+    const addClassroom = (classroom: IAddClassroomDTO): Promise<IClassroom> => {
         return $fetch(`${config.public.baseUrl}/api/class`, {
             method: "POST",
             body: JSON.stringify(classroom),
         });
     };
 
-    const getClassroomById = (id: string): Promise<Classroom> => {
+    const getClassroomById = (id: string): Promise<IClassroom> => {
         return $fetch(`${config.public.baseUrl}/api/class/${id}`, {
             method: "GET",
         });
@@ -28,15 +28,15 @@ const useClassroom = () => {
 
     const updateClassroom = (
         id: string,
-        classroom: addClassroomDTO
-    ): Promise<Classroom> => {
+        classroom: IAddClassroomDTO
+    ): Promise<IClassroom> => {
         return $fetch(`${config.public.baseUrl}/api/class/${id}`, {
             method: "PUT",
             body: JSON.stringify(classroom),
         });
     };
 
-    const deleteClassroom = (id: string): Promise<HttpResponse> => {
+    const deleteClassroom = (id: string): Promise<IHttpResponse> => {
         return $fetch(`${config.public.baseUrl}/api/class/${id}`, {
             method: "DELETE",
         });

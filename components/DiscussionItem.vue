@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { type Discussion } from "../types/Discussion";
+import { type IDiscussion } from "../types/Discussion";
 defineProps({
     discussion: {
-        type: Object as PropType<Discussion>,
+        type: Object as PropType<IDiscussion>,
         required: true,
     },
 });

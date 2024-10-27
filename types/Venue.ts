@@ -1,9 +1,16 @@
-interface Venue {
-    id: string;
-    name: string;
+interface IVenue {
+    id: number;
+    room: string;
+    location: {
+        building: string;
+        floor: number;
+    };
+    description: string;
+    capacity: number;
+    imageUrl: string;
 }
 
-export const mockVenues = [
+export const mockVenues: IVenue[] = [
     {
         id: 1,
         room: "Train 3",
@@ -72,4 +79,4 @@ export const mockVenues = [
     },
 ];
 
-export type { Venue };
+export type { IVenue as Venue };

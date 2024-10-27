@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { Classroom } from "../../../types/Classroom";
+import type { IClassroom } from "../../../types/Classroom";
 
 const router = useRouter();
 const { id } = router.currentRoute.value.params;
 const { getClassroomById } = useClassroom();
 
-let classroom: Classroom = {} as Classroom;
+let classroom: IClassroom = {} as IClassroom;
 
 try {
     classroom = await getClassroomById(id.toString());
@@ -73,7 +73,7 @@ try {
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Location</p>
-                    <div>{{ classroom.venue?.name || "TBA" }}</div>
+                    <div>{{ classroom.venue?.room || "TBA" }}</div>
                 </div>
                 <div class="flex justify-end gap-2">
                     <Button

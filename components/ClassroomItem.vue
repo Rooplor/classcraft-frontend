@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Classroom } from "../types/Classroom";
+import type { IClassroom } from "../types/Classroom";
 
 const props = defineProps<{
-    classroom: Classroom;
+    classroom: IClassroom;
 }>();
 </script>
 <template>

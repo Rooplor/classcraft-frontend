@@ -1,20 +1,18 @@
-import type { HttpResponse } from "./HttpResponse";
+import type { IHttpResponse } from "./HttpResponse";
 
-interface User {
+export interface User {
     id: string;
     username: string;
     email: string;
     profilePicture?: string;
 }
 
-interface ResponseListUser extends HttpResponse {
+export interface IListUserResponse extends IHttpResponse {
     result: User[];
 }
 
-interface ResponseUser {
+export interface IResponseUser {
     success: boolean;
     result: User;
     error: string;
 }
-
-export type { User, ResponseListUser, ResponseUser };
