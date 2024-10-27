@@ -73,7 +73,7 @@ try {
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Location</p>
-                    <div>{{ classroom.venue?.name || "TBA" }}</div>
+                    <div>{{ classroom.venue?.room || "TBA" }}</div>
                 </div>
                 <div class="flex justify-end gap-2">
                     <Button
