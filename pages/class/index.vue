@@ -1,6 +1,4 @@
-<script setup>
-import Feedbar from "../../layouts/Feedbar.vue";
-
+<script setup lang="ts">
 const classroomStore = useClassroomStore();
 const { classrooms } = storeToRefs(classroomStore);
 

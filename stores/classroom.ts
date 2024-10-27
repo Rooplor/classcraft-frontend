@@ -12,14 +12,19 @@ export const useClassroomStore = defineStore("classroom", {
         setEditingClassroom(classroom: any) {
             this.editingClassroom = classroom;
         },
+        clearEditingClassroom() {
+            this.editingClassroom = null;
+        },
         addClassroom(classroom: any) {
             this.classrooms = [...this.classrooms, classroom];
         },
         updateClassroom(classroom: any) {
-            const index = this.classrooms.findIndex((c) => c.id === classroom.id);
+            const index = this.classrooms.findIndex(
+                (c) => c.id === classroom.id
+            );
             this.classrooms[index] = classroom;
         },
-        removeClassroom(id: string) {
+        removeClassroomById(id: string) {
             this.classrooms = this.classrooms.filter((c) => c.id !== id);
         },
     },

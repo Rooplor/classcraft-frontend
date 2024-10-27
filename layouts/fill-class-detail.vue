@@ -171,6 +171,7 @@ const removeInstructorAvatar = () => {
 };
 
 function initEditorValue({ instance }) {
+    if (!editingClassroom.value) return;
     instance.setContents(
         instance.clipboard.convert({
             html: editingClassroom.value.details,
