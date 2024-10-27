@@ -1,6 +1,6 @@
 import type { IHttpResponse } from "./HttpResponse";
 
-export interface User {
+export interface IUser {
     id: string;
     username: string;
     email: string;
@@ -8,11 +8,11 @@ export interface User {
 }
 
 export interface IListUserResponse extends IHttpResponse {
-    result: User[];
+    result: IUser[];
 }
 
 export interface IResponseUser {
     success: boolean;
-    result: User;
+    result: IUser;
     error: string;
 }
