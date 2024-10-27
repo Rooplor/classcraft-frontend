@@ -79,7 +79,12 @@ if (id) {
                 >
                     <i class="pi pi-star-fill" />&nbsp;14 People interested
                 </div>
-                <Button label="Share" icon="pi pi-share-alt" @click="toggle" />
+                <Button
+                    label="Share"
+                    icon="pi pi-share-alt"
+                    @click="toggle"
+                    :disabled="!editingClassroom"
+                />
                 <Popover ref="op">
                     <div class="flex flex-col gap-4 w-[25rem]">
                         <div>
@@ -159,6 +164,7 @@ if (id) {
                                     icon="pi pi-arrow-right"
                                     iconPos="right"
                                     @click="activateCallback('2')"
+                                    :disabled="!editingClassroom"
                                     class="w-1/2"
                                 />
                             </div>
