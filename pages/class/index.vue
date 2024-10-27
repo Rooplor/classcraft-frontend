@@ -32,3 +32,8 @@ const options = ref(["Upcoming", "Past"]);
         </div>
     </div>
 </template>
+<style>
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+</style>

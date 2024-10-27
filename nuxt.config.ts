@@ -7,11 +7,12 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     ssr: false,
     modules: [
-        "@primevue/nuxt-module",
-        "@nuxtjs/tailwindcss",
-        "@vee-validate/nuxt",
-        "@pinia/nuxt",
-        "nuxt-vuefire",
+      "@primevue/nuxt-module",
+      "@nuxtjs/tailwindcss",
+      "@vee-validate/nuxt",
+      "@pinia/nuxt",
+      "nuxt-vuefire",
+      "@nuxt/fonts",
     ],
     vuefire: {
         auth: {
