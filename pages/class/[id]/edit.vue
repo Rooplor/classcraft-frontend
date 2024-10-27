@@ -66,6 +66,7 @@ if (id) {
                                 <InputText
                                     :value="currentUrl"
                                     readonly
+                                    disabled
                                     class="w-[25rem]"
                                 ></InputText>
                                 <Button
