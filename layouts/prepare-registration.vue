@@ -24,8 +24,9 @@ interface Question {
 }
 
 const questions: Ref<Question[]> = ref([]);
-
 const editingQuestion = ref<Question | null>(null);
+const confirm = useConfirm();
+const toast = useToast();
 
 const onSubmit = (e: Event) => {
     e.preventDefault();
@@ -50,6 +51,31 @@ const addQuestion = () => {
 const removeQuestion = (id: number) => {
     questions.value = questions.value.filter((question) => question.id !== id);
 };
+
+const confirmDelete = (question: Question) => {
+    confirm.require({
+        message: `Are you sure you want to delete this question: ${question.question}?`,
+        header: "Delete Confirmation",
+        icon: "pi pi-exclamation-triangle",
+        rejectProps: {
+            label: "Cancel",
+        },
+        acceptProps: {
+            label: "Delete",
+            text: true,
+        },
+        accept: () => {
+            removeQuestion(question.id);
+            toast.add({
+                severity: "error",
+                summary: "Deleted",
+                detail: `Your question has been deleted`,
+                group: "tc",
+                life: 3000,
+            });
+        },
+    });
+};
 </script>
 
 <template>
@@ -61,7 +87,9 @@ const removeQuestion = (id: number) => {
             <h3 class="text-xl font-bold">Registration questions</h3>
             <div class="space-y-8">
                 <div class="space-y-2">
-                    <p class="inline-flex items-center gap-1 text-gray-500">
+                    <p
+                        class="inline-flex items-center gap-1 text-gray-500 mb-1"
+                    >
                         <i class="pi pi-id-card" /> Personal Information
                     </p>
                     <div class="flex gap-2">
@@ -90,7 +118,9 @@ const removeQuestion = (id: number) => {
                     </div>
                 </div>
                 <div class="space-y-2">
-                    <p class="inline-flex items-center gap-1 text-gray-500">
+                    <p
+                        class="inline-flex items-center gap-1 text-gray-500 mb-1"
+                    >
                         <i class="pi pi-question-circle" />Custom Questions
                     </p>
                     <div v-for="question in questions" :key="question.id">
@@ -120,7 +150,7 @@ const removeQuestion = (id: number) => {
                                     severity="danger"
                                     rounded
                                     text
-                                    @click="removeQuestion(question.id)"
+                                    @click="confirmDelete(question)"
                                 />
                             </div>
                         </div>
