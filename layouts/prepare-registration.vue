@@ -23,20 +23,7 @@ interface Question {
     question: string;
 }
 
-const questions: Ref<Question[]> = ref([
-    {
-        id: 1,
-        question: "What is your name?",
-    },
-    {
-        id: 2,
-        question: "What is your age?",
-    },
-    {
-        id: 3,
-        question: "Why are you gay?",
-    },
-]);
+const questions: Ref<Question[]> = ref([]);
 
 const editingQuestion = ref<Question | null>(null);
 
@@ -72,81 +59,114 @@ const removeQuestion = (id: number) => {
             class="p-6 bg-white border rounded-3xl space-y-4"
         >
             <h3 class="text-xl font-bold">Registration questions</h3>
-            <div class="flex flex-col gap-2">
-                <div v-for="question in questions" :key="question.id">
-                    <div
-                        v-if="editingQuestion?.id !== question.id"
-                        class="flex justify-between items-center p-5 bg-gray-100 hover:bg-gray-200 duration-150 rounded-2xl"
-                    >
-                        <div class="inline-flex flex-col gap-1">
-                            <p class="text-sm text-gray-400">
-                                <i class="pi pi-pen-to-square text-xs" />
-                                Text
-                            </p>
-                            <p class="text-lg">{{ question.question }}</p>
+            <div class="space-y-8">
+                <div class="space-y-2">
+                    <p class="inline-flex items-center gap-1 text-gray-500">
+                        <i class="pi pi-id-card" /> Personal Information
+                    </p>
+                    <div class="flex gap-2">
+                        <div
+                            class="w-[8rem] p-4 bg-gray-100 hover:bg-gray-200 duration-150 rounded-2xl"
+                        >
+                            <div class="inline-flex flex-col gap-1">
+                                <p class="text-sm text-gray-400">Required</p>
+                                <p>
+                                    <i class="pi pi-user" />&nbsp;
+                                    <span class="text-lg">Name</span>
+                                </p>
+                            </div>
                         </div>
-                        <div>
-                            <Button
-                                icon="pi pi-pencil"
-                                aria-label="Edit"
-                                severity="secondary"
-                                rounded
-                                text
-                                @click="editingQuestion = question"
-                            />
-                            <Button
-                                icon="pi pi-times"
-                                aria-label="Delete"
-                                severity="danger"
-                                rounded
-                                text
-                                @click="removeQuestion(question.id)"
-                            />
-                        </div>
-                    </div>
-                    <div
-                        v-else
-                        class="flex justify-between items-center p-5 bg-gray-200 hover:bg-gray-200 border border-primary duration-150 rounded-2xl"
-                    >
-                        <div class="w-full inline-flex flex-col gap-1">
-                            <p class="text-sm text-gray-400">
-                                <i class="pi pi-pen-to-square text-xs" />
-                                Text
-                            </p>
-                            <InputText
-                                v-model="editingQuestion.question"
-                                required
-                                unstyled
-                                placeholder="Enter question"
-                                class="bg-transparent border-none outline-none text-lg"
-                            />
-                        </div>
-
-                        <div class="flex justify-end gap-2">
-                            <Button
-                                label="Save"
-                                icon="pi pi-check"
-                                @click="onSaveQuestion(editingQuestion)"
-                            />
-                            <Button
-                                label="Cancel"
-                                icon="pi pi-times"
-                                severity="secondary"
-                                @click="editingQuestion = null"
-                            />
+                        <div
+                            class="w-[8rem] p-4 bg-gray-100 hover:bg-gray-200 duration-150 rounded-2xl"
+                        >
+                            <div class="inline-flex flex-col gap-1">
+                                <p class="text-sm text-gray-400">Required</p>
+                                <p>
+                                    <i class="pi pi-at" />&nbsp;
+                                    <span class="text-lg">Email</span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <button
-                        @click="addQuestion"
-                        class="w-full p-6 text-primary bg-primary-50 border border-primary rounded-2xl duration-150 hover:bg-primary-100"
-                    >
-                        <i class="pi pi-plus" /> Add new question
-                    </button>
+                <div class="space-y-2">
+                    <p class="inline-flex items-center gap-1 text-gray-500">
+                        <i class="pi pi-question-circle" />Custom Questions
+                    </p>
+                    <div v-for="question in questions" :key="question.id">
+                        <div
+                            v-if="editingQuestion?.id !== question.id"
+                            class="flex justify-between items-center p-5 bg-gray-100 hover:bg-gray-200 duration-150 rounded-2xl"
+                        >
+                            <div class="inline-flex flex-col gap-1">
+                                <p class="text-sm text-gray-400">
+                                    <i class="pi pi-pen-to-square text-xs" />
+                                    Text
+                                </p>
+                                <p class="text-lg">{{ question.question }}</p>
+                            </div>
+                            <div>
+                                <Button
+                                    icon="pi pi-pencil"
+                                    aria-label="Edit"
+                                    severity="secondary"
+                                    rounded
+                                    text
+                                    @click="editingQuestion = question"
+                                />
+                                <Button
+                                    icon="pi pi-times"
+                                    aria-label="Delete"
+                                    severity="danger"
+                                    rounded
+                                    text
+                                    @click="removeQuestion(question.id)"
+                                />
+                            </div>
+                        </div>
+                        <div
+                            v-else
+                            class="flex justify-between items-center p-5 bg-gray-200 hover:bg-gray-200 border border-primary duration-150 rounded-2xl"
+                        >
+                            <div class="w-full inline-flex flex-col gap-1">
+                                <p class="text-sm text-gray-400">
+                                    <i class="pi pi-pen-to-square text-xs" />
+                                    Text
+                                </p>
+                                <InputText
+                                    v-model="editingQuestion.question"
+                                    required
+                                    unstyled
+                                    placeholder="Enter question"
+                                    class="bg-transparent border-none outline-none text-lg"
+                                />
+                            </div>
+
+                            <div class="flex justify-end gap-2">
+                                <Button
+                                    label="Save"
+                                    icon="pi pi-check"
+                                    @click="onSaveQuestion(editingQuestion)"
+                                />
+                                <Button
+                                    label="Cancel"
+                                    icon="pi pi-times"
+                                    severity="secondary"
+                                    @click="editingQuestion = null"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button
+                            @click="addQuestion"
+                            class="w-full p-6 text-primary bg-primary-50 border border-primary rounded-2xl duration-150 hover:bg-primary-100"
+                        >
+                            <i class="pi pi-plus" /> Add new question
+                        </button>
+                    </div>
                 </div>
             </div>
-
             <div class="flex justify-end w-full gap-2">
                 <Button label="Save" icon="pi pi-check" type="submit" />
                 <Button
