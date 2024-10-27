@@ -63,7 +63,13 @@ mockVenues.forEach((venue) => {
                 <i class="pi pi-external-link" />
             </p>
         </nuxt-link>
-        <div class="p-4 bg-white border rounded-lg">
+        <div
+            v-if="
+                editingClassroom?.format === 'MIXED' ||
+                editingClassroom?.format === 'ONSITE'
+            "
+            class="p-6 bg-white border rounded-3xl"
+        >
             <div class="space-y-4">
                 <div class="flex flex-col gap-16">
                     <div
@@ -180,14 +186,25 @@ mockVenues.forEach((venue) => {
                 </div>
             </div>
         </div>
-        <div class="p-4 bg-white border rounded-lg">
-            <h3>Online platform</h3>
-            <div class="flex flex-col gap-2">
-                <label for="meetingUrl">Meeting url</label>
-                <div class="flex">
-                    <InputText id="meetingUrl" v-model="meetingUrl" />
-                    <Button label="Save" icon="pi pi-check" @click="" />
-                </div>
+        <div
+            v-if="
+                editingClassroom?.format === 'MIXED' ||
+                editingClassroom?.format === 'ONLINE'
+            "
+            class="p-6 bg-white border rounded-3xl space-y-4"
+        >
+            <h3 class="text-lg">Online platform</h3>
+            <div class="flex gap-1">
+                <InputGroup>
+                    <InputGroupAddon>
+                        <i class="pi pi-link" />
+                    </InputGroupAddon>
+                    <InputText
+                        id="meeting-url"
+                        placeholder="eg. Zoom, Discord or Google Meet url"
+                    />
+                </InputGroup>
+                <Button label="Save" icon="pi pi-check" @click="" />
             </div>
         </div>
     </div>

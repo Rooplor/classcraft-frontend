@@ -1,36 +1,46 @@
-<script setup lang="ts"></script>
-
+<script setup lang="ts">
+const mockContent = [
+    {
+        title: "Introduction to Astro",
+        content: "This is the content of the class",
+        activityGuide: [
+            "1. This is the #1 activity guide",
+            "2. This is the #2 activity guide",
+        ],
+        presentationGuide: ["Guide #1", "Guide #2 xxx"],
+    },
+    {
+        title: "Introduction to Astro",
+        content: "This is the content of the class",
+        activityGuide: [
+            "1. This is the #1 activity guide",
+            "2. This is the #2 activity guide",
+        ],
+        presentationGuide: ["Guide #1", "Guide #2"],
+    },
+    {
+        title: "Introduction to Astro",
+        content: "This is the content of the class",
+        activityGuide: [
+            "1. This is the #1 activity guide",
+            "2. This is the #2 activity guide",
+        ],
+        presentationGuide: ["Guide #1", "Guide #2"],
+    },
+];
+</script>
 <template>
     <div>
-        <h2>Craft your content</h2>
         <div>
-            <div class="flex flex-col gap-2">
-                <Panel header="Header" toggleable>
-                    <p class="m-0">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate velit esse cillum dolore eu
-                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                        non proident, sunt in culpa qui officia deserunt mollit
-                        anim id est laborum.
-                    </p>
-                </Panel>
-                <Panel header="Header" toggleable>
-                    <p class="m-0">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate velit esse cillum dolore eu
-                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                        non proident, sunt in culpa qui officia deserunt mollit
-                        anim id est laborum.
-                    </p>
-                </Panel>
+            <div class="flex flex-col gap-4">
+                <ContentCard
+                    v-for="(content, index) in mockContent"
+                    :key="index"
+                    :title="content.title"
+                    :content="content.content"
+                    :activityGuides="content.activityGuide"
+                    :presentationGuide="content.presentationGuide"
+                />
             </div>
         </div>
     </div>
