@@ -36,16 +36,16 @@ const handleEdit = () => {
     op.value.hide();
 };
 
-const confirmDelete = () => {
+const confirmDelete = (name: string) => {
     confirm.require({
-        message: "Are you sure you want to delete this classroom?",
+        message: `Are you sure you want to delete "${name}" classroom?`,
         header: "Delete Confirmation",
         icon: "pi pi-exclamation-triangle",
         rejectProps: {
             label: "Cancel",
         },
         acceptProps: {
-            label: "Save",
+            label: "Delete",
             text: true,
         },
         accept: () => {
@@ -53,7 +53,7 @@ const confirmDelete = () => {
             toast.add({
                 severity: "error",
                 summary: "Deleted",
-                detail: "Your classroom has been deleted",
+                detail: `Your classroom has been deleted`,
                 group: "tc",
                 life: 3000,
             });
@@ -109,7 +109,7 @@ watch(router.currentRoute, () => {
                     icon="pi pi-trash"
                     severity="danger"
                     text
-                    @click="confirmDelete"
+                    @click="confirmDelete(name)"
                 />
             </div>
         </Popover>
