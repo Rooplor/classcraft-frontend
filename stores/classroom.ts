@@ -2,30 +2,34 @@ import { defineStore } from "pinia";
 
 export const useClassroomStore = defineStore("classroom", {
     state: () => ({
-        classrooms: [],
+        feedClassrooms: [],
+        myClassrooms: [],
         editingClassroom: null,
     }),
     actions: {
-        setClassrooms(classrooms: any) {
-            this.classrooms = classrooms;
+        setMyClassrooms(classrooms: any) {
+            this.myClassrooms = classrooms;
+        },
+        setFeedClassrooms(classrooms: any) {
+            this.feedClassrooms = classrooms;
+        },
+        addClassroom(classroom: any) {
+            this.myClassrooms = [...this.myClassrooms, classroom];
+        },
+        updateClassroom(classroom: any) {
+            const index = this.myClassrooms.findIndex(
+                (c) => c.id === classroom.id
+            );
+            this.myClassrooms[index] = classroom;
+        },
+        removeClassroomById(id: string) {
+            this.myClassrooms = this.myClassrooms.filter((c) => c.id !== id);
         },
         setEditingClassroom(classroom: any) {
             this.editingClassroom = classroom;
         },
         clearEditingClassroom() {
             this.editingClassroom = null;
-        },
-        addClassroom(classroom: any) {
-            this.classrooms = [...this.classrooms, classroom];
-        },
-        updateClassroom(classroom: any) {
-            const index = this.classrooms.findIndex(
-                (c) => c.id === classroom.id
-            );
-            this.classrooms[index] = classroom;
-        },
-        removeClassroomById(id: string) {
-            this.classrooms = this.classrooms.filter((c) => c.id !== id);
         },
     },
 });

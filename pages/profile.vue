@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const classroomStore = useClassroomStore();
-const { classrooms } = storeToRefs(classroomStore);
+const { myClassrooms } = storeToRefs(classroomStore);
 
 const user = useCurrentUser();
 </script>
@@ -39,7 +39,7 @@ const user = useCurrentUser();
             <h2 class="text-xl font-bold">Hosted classes</h2>
             <div class="space-y-[10px]">
                 <ClassroomItem
-                    v-for="(classroom, index) in classrooms"
+                    v-for="(classroom, index) in myClassrooms"
                     :key="index"
                     :classroom="classroom"
                     class="border-none"

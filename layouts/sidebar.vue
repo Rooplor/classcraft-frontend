@@ -2,7 +2,7 @@
 import { storeToRefs } from "pinia";
 
 const classroomStore = useClassroomStore();
-const { classrooms } = storeToRefs(classroomStore);
+const { myClassrooms } = storeToRefs(classroomStore);
 </script>
 
 <template>
@@ -34,7 +34,7 @@ const { classrooms } = storeToRefs(classroomStore);
                         </nuxt-link>
                     </div>
                     <SidebarTab
-                        v-for="classroom in classrooms"
+                        v-for="classroom in myClassrooms"
                         :key="classroom.id"
                         :id="classroom.id"
                         :to="`/class/${classroom.id}/edit`"

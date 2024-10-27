@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const classroomStore = useClassroomStore();
-const { classrooms } = storeToRefs(classroomStore);
+const { feedClassrooms } = storeToRefs(classroomStore);
 
 const value = ref("Upcoming");
 const options = ref(["Upcoming", "Past"]);
@@ -24,7 +24,7 @@ const options = ref(["Upcoming", "Past"]);
             </div>
             <div class="space-y-[10px]">
                 <ClassroomItem
-                    v-for="(classroom, index) in classrooms"
+                    v-for="(classroom, index) in feedClassrooms"
                     :key="index"
                     :classroom="classroom"
                 />
