@@ -1,15 +1,15 @@
-import type { IHttpResponse } from "../types/HttpResponse";
+import type { IResponse } from "../types/Response";
 
 const useAuth = () => {
     const config = useRuntimeConfig();
-    const login = (idToken: string): Promise<IHttpResponse> => {
+    const login = (idToken: string): Promise<IResponse> => {
         return $fetch(`${config.public.baseUrl}/api/auth/login`, {
             body: JSON.stringify({ idToken }),
             method: "POST",
         });
     };
 
-    const logout = (): Promise<IHttpResponse> => {
+    const logout = (): Promise<IResponse> => {
         return $fetch(`${config.public.baseUrl}/api/logout`, {
             method: "GET",
         });

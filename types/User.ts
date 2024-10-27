@@ -1,4 +1,4 @@
-import type { IHttpResponse } from "./HttpResponse";
+import type { IResponse } from "./Response";
 
 export interface IUser {
     id: string;
@@ -7,7 +7,7 @@ export interface IUser {
     profilePicture?: string;
 }
 
-export interface IListUserResponse extends IHttpResponse {
+export interface IListUserResponse extends IResponse {
     result: IUser[];
 }
 

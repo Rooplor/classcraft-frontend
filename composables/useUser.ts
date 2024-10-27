@@ -1,4 +1,4 @@
-import type { IHttpResponse } from "../types/HttpResponse";
+import type { IResponse } from "../types/Response";
 import type { IListUserResponse, IResponseUser, IUser } from "../types/User";
 
 const useUser = () => {
@@ -23,7 +23,7 @@ const useUser = () => {
         });
     };
 
-    const deleteUser = (id: string): Promise<IHttpResponse> => {
+    const deleteUser = (id: string): Promise<IResponse> => {
         return $fetch(`${config.public.baseUrl}/api/user/${id}`, {
             method: "DELETE",
         });

@@ -1,5 +1,5 @@
 import type { IAddClassroomDTO, IClassroom } from "../types/Classroom";
-import type { IHttpResponse } from "../types/HttpResponse";
+import type { IResponse } from "../types/Response";
 
 const useClassroom = () => {
     const config = useRuntimeConfig();
@@ -45,7 +45,7 @@ const useClassroom = () => {
         });
     };
 
-    const deleteClassroom = (id: string): Promise<IHttpResponse> => {
+    const deleteClassroom = (id: string): Promise<IResponse> => {
         return $fetch(`${config.public.baseUrl}/api/class/${id}`, {
             method: "DELETE",
         });
