@@ -9,6 +9,8 @@ const router = useRouter();
 const classroomStore = useClassroomStore();
 const { editingClassroom } = storeToRefs(classroomStore);
 
+const { uploadFile } = useFileUpload();
+
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
 
@@ -22,7 +24,7 @@ const schema = yup.object({
     type: yup.string().required(),
     format: yup.string().required(),
     capacity: yup.number().required(),
-    date: yup.array().of(yup.date().required()),    
+    date: yup.array().of(yup.date().required()),
     // dates: yup.array().of(
     //     yup
     //         .object({
@@ -36,7 +38,7 @@ const schema = yup.object({
     instructorBio: yup.string().required(),
     instructorAvatar: yup.string(),
     instructorFamiliarity: yup.string(),
-    // imageUrl: yup.string(),
+    coverImage: yup.string(),
 });
 
 const initialValues = editingClassroom.value && {
@@ -57,7 +59,7 @@ const initialValues = editingClassroom.value && {
     instructorBio: editingClassroom.value.instructorBio,
     instructorAvatar: editingClassroom.value.instructorAvatar,
     instructorFamiliarity: editingClassroom.value.instructorFamiliarity,
-    // imageUrl: editingClassroom.value.imageUrl,
+    coverImage: editingClassroom.value.coverImage,
 };
 
 const { defineField, handleSubmit, resetForm, errors } = useForm({
@@ -77,8 +79,7 @@ const [instructorName] = defineField("instructorName");
 const [instructorBio] = defineField("instructorBio");
 const [instructorAvatar] = defineField("instructorAvatar");
 const [instructorFamiliarity] = defineField("instructorFamiliarity");
-// const [imageUrl] = defineField("imageUrl");
-const imageUrl = ref<string | null>(null);
+const [coverImage] = defineField("coverImage");
 
 const selfInstructored = ref(false);
 
@@ -125,19 +126,48 @@ const onSubmit = handleSubmit((values: any) => {
     resetForm();
 });
 
-const onFileChange = (event: any) => {
+const onCoverImageChange = async (event: any) => {
     const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-            imageUrl.value = e.target.result;
-        };
-        reader.readAsDataURL(file);
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("classId", editingClassroom.value.id);
+
+    try {
+        const res = await uploadFile(formData);
+        if (res) {
+            coverImage.value = res.result.url;
+        }
+    } catch (error) {
+        console.error("Error uploading file:", error);
     }
 };
 
-const removeImage = () => {
-    imageUrl.value = null;
+const removeCoverImage = () => {
+    coverImage.value = null;
+};
+
+const onInstructorAvatarChange = async (event: any) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("classId", editingClassroom.value.id);
+
+    try {
+        const res = await uploadFile(formData);
+        if (res) {
+            instructorAvatar.value = res.result.url;
+        }
+    } catch (error) {
+        console.error("Error uploading file:", error);
+    }
+};
+
+const removeInstructorAvatar = () => {
+    instructorAvatar.value = null;
 };
 
 function initEditorValue({ instance }) {
@@ -172,8 +202,8 @@ watch(selfInstructored, (value) => {
                         class="w-[32rem] h-[32rem] aspect-square bg-clip-border relative"
                     >
                         <img
-                            v-if="imageUrl"
-                            :src="imageUrl"
+                            v-if="coverImage"
+                            :src="coverImage"
                             alt="Uploaded Image"
                             class="object-cover w-full h-full"
                         />
@@ -189,17 +219,17 @@ watch(selfInstructored, (value) => {
                             type="file"
                             accept="image/*"
                             class="absolute inset-0 opacity-0 cursor-pointer"
-                            @change="onFileChange"
+                            @change="onCoverImageChange"
                         />
                         <div class="absolute top-2 right-2">
                             <Button
-                                v-if="imageUrl"
+                                v-if="coverImage"
                                 icon="pi pi-times"
                                 severity="danger"
                                 text
                                 rounded
                                 aria-label="Cancel"
-                                @click="removeImage"
+                                @click="removeCoverImage"
                             />
                         </div>
                     </div>
@@ -443,17 +473,17 @@ watch(selfInstructored, (value) => {
                                         type="file"
                                         accept="image/*"
                                         class="absolute inset-0 opacity-0 cursor-pointer"
-                                        @change="onFileChange"
+                                        @change="onInstructorAvatarChange"
                                     />
                                     <div class="absolute top-2 right-2">
                                         <Button
-                                            v-if="imageUrl"
+                                            v-if="instructorAvatar"
                                             icon="pi pi-times"
                                             severity="danger"
                                             text
                                             rounded
                                             aria-label="Cancel"
-                                            @click="removeImage"
+                                            @click="removeInstructorAvatar"
                                         />
                                     </div>
                                 </div>
