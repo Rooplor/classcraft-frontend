@@ -1,23 +1,4 @@
 <script setup lang="ts">
-// import { useForm } from "vee-validate";
-// import type { InputTypeHTMLAttribute } from "vue";
-// import * as yup from "yup";
-
-// const schema = yup.object({
-//     registrationUrl: yup.string().required(),
-// });
-
-// const { defineField, handleSubmit, resetForm, errors } = useForm({
-//     validationSchema: schema,
-// });
-
-// const [registrationUrl] = defineField("registrationUrl");
-
-// const onSubmit = handleSubmit((values: any) => {
-//     // TODO: send data to backend
-//     console.table("values: ", values);
-// });
-
 interface Question {
     id: number;
     question: string;
