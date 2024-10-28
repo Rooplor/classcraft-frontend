@@ -16,12 +16,19 @@ try {
 <template>
     <div class="w-full px-[10px] flex flex-col gap-[10px]">
         <Feedbar />
-        <div class="flex gap-[10px]">
+        <div class="flex gap-2">
             <img
-                :src="classroom.imageUrl"
+                v-if="classroom.coverImage"
+                :src="classroom.coverImage"
                 :alt="`${classroom.title} class cover image`"
-                class="w-[32rem] h-[32rem] aspect-square bg-gray-200 border rounded-3xl"
+                class="w-[32rem] h-[32rem] aspect-square bg-gray-200 border rounded-3xl object-cover"
             />
+            <div
+                v-else
+                class="w-[32rem] h-[32rem] aspect-square bg-gray-200 border rounded-3xl flex justify-center items-center"
+            >
+                <i class="pi pi-image text-[4rem] text-gray-400" />
+            </div>
             <div
                 class="w-full bg-white px-6 py-8 border rounded-3xl flex flex-col gap-10"
             >

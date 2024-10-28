@@ -12,12 +12,13 @@ const props = defineProps<{
     >
         <div
             alt="class image"
-            class="flex justify-center items-center aspect-square w-64 h-64 bg-gray-200 rounded-2xl"
+            class="flex justify-center items-center aspect-square w-64 h-64 bg-gray-200 rounded-2xl overflow-clip"
         >
             <img
-                :src="props.classroom.imageUrl"
+                v-if="props.classroom.coverImage"
+                :src="props.classroom.coverImage"
                 alt="class image"
-                v-if="props.classroom.imageUrl"
+                class="w-full h-full object-cover"
             />
             <span class="text-gray-400" v-else>
                 <i class="pi pi-image text-[4rem]" />
@@ -70,10 +71,22 @@ const props = defineProps<{
             <div class="flex justify-between">
                 <div class="flex items-center gap-2">
                     <AvatarGroup>
-                        <Avatar image="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436190.jpg?size=338&ext=jpg&ga=GA1.1.1880011253.1728777600&semt=ais_hybrid-rr-similar" shape="circle" />
-                        <Avatar image="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436190.jpg?size=338&ext=jpg&ga=GA1.1.1880011253.1728777600&semt=ais_hybrid-rr-similar" shape="circle" />
-                        <Avatar image="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436190.jpg?size=338&ext=jpg&ga=GA1.1.1880011253.1728777600&semt=ais_hybrid-rr-similar" shape="circle" />
-                        <Avatar image="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436190.jpg?size=338&ext=jpg&ga=GA1.1.1880011253.1728777600&semt=ais_hybrid-rr-similar" shape="circle" />
+                        <Avatar
+                            image="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436190.jpg?size=338&ext=jpg&ga=GA1.1.1880011253.1728777600&semt=ais_hybrid-rr-similar"
+                            shape="circle"
+                        />
+                        <Avatar
+                            image="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436190.jpg?size=338&ext=jpg&ga=GA1.1.1880011253.1728777600&semt=ais_hybrid-rr-similar"
+                            shape="circle"
+                        />
+                        <Avatar
+                            image="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436190.jpg?size=338&ext=jpg&ga=GA1.1.1880011253.1728777600&semt=ais_hybrid-rr-similar"
+                            shape="circle"
+                        />
+                        <Avatar
+                            image="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436190.jpg?size=338&ext=jpg&ga=GA1.1.1880011253.1728777600&semt=ais_hybrid-rr-similar"
+                            shape="circle"
+                        />
                         <Avatar label="+10" shape="circle" />
                     </AvatarGroup>
                     <p class="font-bold">14 people registered</p>
@@ -94,7 +107,7 @@ const props = defineProps<{
                                 '_blank'
                             )
                         "
-                        v-if="props.classroom.registrationUrl"
+                        v-if="props.classroom.registrationStatus"
                     >
                         Register
                     </Button>
