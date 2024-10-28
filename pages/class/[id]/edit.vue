@@ -209,6 +209,7 @@ if (id) {
                         </div>
                     </StepPanel>
                     <StepPanel v-slot="{ activateCallback }" value="4">
+                        <NuxtLayout name="prepare-registration" />
                         <div class="flex justify-between pt-6 gap-2 h-36">
                             <Button
                                 label="Reserve venue"
