@@ -31,7 +31,7 @@ const { classrooms } = storeToRefs(classroomStore);
                             + Add
                         </nuxt-link>
                     </div>
-                    <div v-if="classrooms.length < 0">
+                    <div v-if="classrooms.length > 0">
                         <SidebarTab
                             v-for="classroom in classrooms"
                             :key="classroom?.id"
