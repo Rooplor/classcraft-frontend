@@ -34,10 +34,10 @@ const { classrooms } = storeToRefs(classroomStore);
                     <div v-if="classrooms.length < 0">
                         <SidebarTab
                             v-for="classroom in classrooms"
-                            :key="classroom.id"
-                            :id="classroom.id"
-                            :to="`/class/${classroom.id}/edit`"
-                            :name="classroom.title"
+                            :key="classroom?.id"
+                            :id="classroom?.id"
+                            :to="`/class/${classroom?.id}/edit`"
+                            :name="classroom?.title"
                         />
                     </div>
                 </div>
