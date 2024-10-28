@@ -79,7 +79,7 @@ watch(router.currentRoute, () => {
         "
         class="flex items-center p-3 py-4 duration-100 rounded-lg hover:bg-gray-100"
     >
-        <div class="flex w-full gap-2">
+        <div class="flex items-center w-full gap-2">
             <img
                 :src="classroom?.coverImage"
                 :alt="classroom?.title"
