@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-
 const classroomStore = useClassroomStore();
 const { classrooms } = storeToRefs(classroomStore);
 </script>
@@ -33,13 +31,15 @@ const { classrooms } = storeToRefs(classroomStore);
                             + Add
                         </nuxt-link>
                     </div>
-                    <SidebarTab
-                        v-for="classroom in classrooms"
-                        :key="classroom.id"
-                        :id="classroom.id"
-                        :to="`/class/${classroom.id}/edit`"
-                        :name="classroom.title"
-                    />
+                    <div v-if="classrooms.length < 0">
+                        <SidebarTab
+                            v-for="classroom in classrooms"
+                            :key="classroom.id"
+                            :id="classroom.id"
+                            :to="`/class/${classroom.id}/edit`"
+                            :name="classroom.title"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
