@@ -18,7 +18,11 @@ export interface IClassroom {
     venueStatus: EVenueRequestStatus;
     venue: IVenue;
     published: boolean;
-    imageUrl: string;
+    instructorName: string;
+    instructorBio: string;
+    instructorAvatar: string;
+    instructorFamiliarity: string;
+    coverImage: string;
 }
 
 export interface IAddClassroomDTO {
