@@ -2,9 +2,20 @@
 const user = useCurrentUser();
 const router = useRouter();
 const classroomStore = useClassroomStore();
-const { getAllClassroom } = useClassroom();
+const { getAllClassroom, getClassroomByUserId } = useClassroom();
+const { getProfile } = useUser();
 
-classroomStore.setClassrooms(await getAllClassroom());
+let resProfile = await getProfile();
+console.log(resProfile);
+
+// let resClassroom = await getClassroomByUserId(resProfile.result);
+
+
+// classroomStore.setMyClassrooms(
+//     await getClassroomByUserId(await getProfile().result).result
+// );
+classroomStore.setFeedClassrooms(await getAllClassroom());
+classroomStore.setMyClassrooms(await getAllClassroom());
 
 watch(user, (currentUser, prevUser) => {
     if (prevUser !== currentUser) {
