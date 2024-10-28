@@ -93,7 +93,7 @@ watch(router.currentRoute, () => {
                 <i class="pi pi-image" />
             </div>
             <i v-else :class="icon" />
-            <div class="space-y-1 w-1/2 overflow-hidden">
+            <div class="space-y-1 w-3/4 overflow-hidden">
                 <Badge
                     v-if="!label"
                     :value="classroom?.published ? 'Published' : 'Draft'"

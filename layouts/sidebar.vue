@@ -6,7 +6,7 @@ const { classrooms } = storeToRefs(classroomStore);
 <template>
     <div class="sticky top-[10px] h-[calc(100vh-20px)]">
         <div
-            class="flex flex-col overflow-y-auto justify-between h-full screen py-6 px-3 pb-0 bg-white border basis-64 w-64 rounded-3xl"
+            class="flex flex-col overflow-y-auto justify-between h-full screen py-6 px-3 pb-0 bg-white border basis-64 w-72 rounded-3xl"
         >
             <div class="flex flex-col gap-9">
                 <h1 class="inline-flex items-center text-xl">
