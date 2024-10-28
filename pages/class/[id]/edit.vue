@@ -33,7 +33,7 @@ const copyLink = () => {
 };
 
 const onPublish = async () => {
-    togglePublishStatus(id.toString()).then((res) => {
+    togglePublishStatus(editingClassroom.value.id).then((res) => {
         classroomStore.setEditingClassroom(res);
         if (editingClassroom.value.published) {
             toast.add({
@@ -54,7 +54,7 @@ const onPublish = async () => {
 };
 
 const onPreviewClassroom = () => {
-    router.push(`/class/${id}`);
+    router.push(`/class/${editingClassroom.value.id}`);
 };
 
 classroomStore.clearEditingClassroom();
@@ -224,7 +224,9 @@ if (id) {
                                 icon=""
                                 iconPos="right"
                                 class="w-full"
-                                @click="router.push(`/class/${id}`)"
+                                @click="
+                                    router.push(`/class/${editingClassroom.id}`)
+                                "
                             />
                         </div>
                     </StepPanel>
