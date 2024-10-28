@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const toast = useToast();
 const router = useRouter();
+const id = router.currentRoute.value.params.id;
 const classroomStore = useClassroomStore();
 const { editingClassroom } = storeToRefs(classroomStore);
 const { getClassroomById, togglePublishStatus } = useClassroom();
@@ -32,7 +33,7 @@ const copyLink = () => {
 };
 
 const onPublish = async () => {
-    togglePublishStatus(editingClassroom.id.toString()).then((res) => {
+    togglePublishStatus(id.toString()).then((res) => {
         classroomStore.setEditingClassroom(res);
         if (editingClassroom.value.published) {
             toast.add({
@@ -53,15 +54,15 @@ const onPublish = async () => {
 };
 
 const onPreviewClassroom = () => {
-    router.push(`/class/${editingClassroom.id}`);
+    router.push(`/class/${id}`);
 };
 
 classroomStore.clearEditingClassroom();
 
-if (editingClassroom.id) {
+if (id) {
     try {
         classroomStore.setEditingClassroom(
-            await getClassroomById(editingClassroom.id)
+            await getClassroomById(id.toString())
         );
     } catch (error) {
         router.replace("/404");
@@ -223,9 +224,7 @@ if (editingClassroom.id) {
                                 icon=""
                                 iconPos="right"
                                 class="w-full"
-                                @click="
-                                    router.push(`/class/${editingClassroom.id}`)
-                                "
+                                @click="router.push(`/class/${id}`)"
                             />
                         </div>
                     </StepPanel>
