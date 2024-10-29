@@ -4,16 +4,15 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    id: {
-        type: String,
+    classroom: {
+        type: Object,
     },
-    name: {
+    label: {
         type: String,
-        required: true,
+        default: "",
     },
-    hasAction: {
-        type: Boolean,
-        default: true,
+    icon: {
+        type: String,
     },
 });
 const router = useRouter();
@@ -60,9 +59,9 @@ const confirmDelete = (name: string) => {
 };
 
 const handleDelete = () => {
-    if (!props.id) return;
-    deleteClassroom(props.id);
-    classroomStore.removeClassroomById(props.id);
+    if (props.label) return;
+    deleteClassroom(props.classroom?.id);
+    classroomStore.removeClassroomById(props.classroom?.id);
     op.value.hide();
 };
 
@@ -78,21 +77,40 @@ watch(router.currentRoute, () => {
                 ? 'text-blue-500 bg-blue-100 hover:!bg-blue-100'
                 : ''
         "
-        class="flex justify-between items-center p-3 py-4 duration-100 rounded-lg hover:bg-gray-100"
+        class="flex items-center p-3 py-4 duration-100 rounded-lg hover:bg-gray-100"
     >
-        <div class="flex gap-2">
-            <!-- TODO: Change to class image -->
-            <div class="h-6 bg-blue-500 rounded-md aspect-square" />
-            <p>{{ name }}</p>
+        <div class="flex items-center w-full gap-2">
+            <img
+                :src="classroom?.coverImage"
+                :alt="classroom?.title"
+                v-if="classroom?.coverImage"
+                class="h-12 w-12 rounded-lg aspect-square object-cover"
+            />
+            <div
+                v-else-if="!label"
+                class="h-12 flex justify-center items-center bg-gray-200 text-gray-400 rounded-lg aspect-square"
+            >
+                <i class="pi pi-image" />
+            </div>
+            <i v-else :class="icon" />
+            <div class="space-y-1 w-3/4 overflow-hidden">
+                <Badge
+                    v-if="!label"
+                    :value="classroom?.published ? 'Published' : 'Draft'"
+                    severity="secondary"
+                    size="small"
+                />
+                <p class="w-full truncate">{{ classroom?.title || label }}</p>
+            </div>
         </div>
         <Button
-            @click.prevent="toggle"
-            icon="pi pi-ellipsis-v"
-            rounded
+            v-if="!label"
             severity="secondary"
-            text
+            icon="pi pi-ellipsis-v"
             aria-label="More"
-            v-if="hasAction"
+            rounded
+            text
+            @click.prevent="toggle"
         />
         <Popover ref="op">
             <div class="flex flex-col gap-1">
@@ -107,7 +125,7 @@ watch(router.currentRoute, () => {
                     icon="pi pi-trash"
                     severity="danger"
                     text
-                    @click="confirmDelete(name)"
+                    @click="confirmDelete(classroom?.title)"
                 />
             </div>
         </Popover>
