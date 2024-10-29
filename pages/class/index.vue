@@ -17,7 +17,7 @@ const options = ref(["Upcoming", "Past"]);
                     aria-labelledby="basic"
                 />
                 <nuxt-link to="class/new">
-                    <Button severity="info">
+                    <Button>
                         <p><i class="pi pi-plus" /> Add class</p>
                     </Button>
                 </nuxt-link>
