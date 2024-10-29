@@ -7,6 +7,10 @@ const questions: Ref<Question[]> = ref([]);
 const editingQuestion = ref<Question | null>(null);
 const confirm = useConfirm();
 const toast = useToast();
+const { toggleRegistrationStatus } = useClassroom();
+const classroomStore = useClassroomStore();
+const { editingClassroom } = storeToRefs(classroomStore);
+
 const onSubmit = (e: Event) => {
     e.preventDefault();
 };
@@ -26,6 +30,28 @@ const addQuestion = () => {
 const removeQuestion = (id: number) => {
     questions.value = questions.value.filter((question) => question.id !== id);
 };
+
+const onToggleRegistrationStatus = () => {
+    toggleRegistrationStatus(editingClassroom.value.id).then((res) => {
+        classroomStore.setEditingClassroom(res);
+        if (editingClassroom.value.registrationStatus) {
+            toast.add({
+                severity: "success",
+                summary: "Classroom is open for registration",
+                group: "tc",
+                life: 1000,
+            });
+        } else {
+            toast.add({
+                severity: "info",
+                summary: "Classroom is closed for registration",
+                group: "tc",
+                life: 1000,
+            });
+        }
+    });
+};
+
 const confirmDelete = (question: Question) => {
     confirm.require({
         message: `Are you sure you want to delete this question: ${question.question}?`,
@@ -174,10 +200,22 @@ const confirmDelete = (question: Question) => {
             <div class="flex justify-end w-full gap-2">
                 <Button label="Save" icon="pi pi-check" type="submit" />
                 <Button
-                    label="Open for registration"
-                    icon="pi pi-lock-open"
-                    severity="contrast"
-                    @click=""
+                    :label="
+                        editingClassroom.registrationStatus
+                            ? 'Close registration'
+                            : 'Open registration'
+                    "
+                    :icon="
+                        editingClassroom.registrationStatus
+                            ? 'pi pi-lock'
+                            : 'pi pi-lock-open'
+                    "
+                    :severity="
+                        editingClassroom.registrationStatus
+                            ? 'secondary'
+                            : 'contrast'
+                    "
+                    @click="onToggleRegistrationStatus"
                 />
             </div>
         </form>
