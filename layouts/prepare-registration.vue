@@ -201,17 +201,17 @@ const confirmDelete = (question: Question) => {
                 <Button label="Save" icon="pi pi-check" type="submit" />
                 <Button
                     :label="
-                        editingClassroom.registrationStatus
+                        editingClassroom?.registrationStatus
                             ? 'Close registration'
                             : 'Open registration'
                     "
                     :icon="
-                        editingClassroom.registrationStatus
+                        editingClassroom?.registrationStatus
                             ? 'pi pi-lock'
                             : 'pi pi-lock-open'
                     "
                     :severity="
-                        editingClassroom.registrationStatus
+                        editingClassroom?.registrationStatus
                             ? 'secondary'
                             : 'contrast'
                     "
