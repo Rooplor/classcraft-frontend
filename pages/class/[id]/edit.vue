@@ -33,7 +33,7 @@ const copyLink = () => {
 };
 
 const onPublish = async () => {
-    togglePublishStatus(id.toString()).then((res) => {
+    togglePublishStatus(editingClassroom.value.id).then((res) => {
         classroomStore.setEditingClassroom(res);
         if (editingClassroom.value.published) {
             toast.add({
@@ -54,7 +54,7 @@ const onPublish = async () => {
 };
 
 const onPreviewClassroom = () => {
-    router.push(`/class/${id}`);
+    router.push(`/class/${editingClassroom.value.id}`);
 };
 
 classroomStore.clearEditingClassroom();
@@ -79,7 +79,15 @@ if (id) {
                 >
                     <i class="pi pi-star-fill" />&nbsp;14 People interested
                 </div>
-                <Button label="Share" icon="pi pi-share-alt" @click="toggle" />
+                <Button
+                    label="Share"
+                    :severity="
+                        editingClassroom?.published ? 'secondary' : 'primary'
+                    "
+                    icon="pi pi-share-alt"
+                    :disabled="!editingClassroom"
+                    @click="toggle"
+                />
                 <Popover ref="op">
                     <div class="flex flex-col gap-4 w-[25rem]">
                         <div>
@@ -103,17 +111,17 @@ if (id) {
                         <div class="flex justify-end gap-2">
                             <Button
                                 :label="
-                                    editingClassroom.published
+                                    editingClassroom?.published
                                         ? 'Unpublish'
                                         : 'Publish'
                                 "
                                 :icon="
-                                    editingClassroom.published
+                                    editingClassroom?.published
                                         ? 'pi pi-lock-open'
                                         : 'pi pi-lock'
                                 "
                                 :severity="
-                                    editingClassroom.published
+                                    editingClassroom?.published
                                         ? 'secondary'
                                         : 'primary'
                                 "
@@ -123,7 +131,7 @@ if (id) {
                             <Button
                                 label="Preview"
                                 :severity="
-                                    editingClassroom.published
+                                    editingClassroom?.published
                                         ? 'primary'
                                         : 'secondary'
                                 "
@@ -224,7 +232,9 @@ if (id) {
                                 icon=""
                                 iconPos="right"
                                 class="w-full"
-                                @click="router.push(`/class/${id}`)"
+                                @click="
+                                    router.push(`/class/${editingClassroom.id}`)
+                                "
                             />
                         </div>
                     </StepPanel>
