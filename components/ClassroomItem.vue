@@ -27,7 +27,7 @@ const props = defineProps<{
         <div class="w-full flex flex-col gap-8">
             <div class="flex flex-col gap-4">
                 <h1 class="font-bold text-xl">{{ props.classroom.title }}</h1>
-                <div class="flex flex-col gap-2 text-blue-500">
+                <div class="flex flex-col gap-2 text-primary-500">
                     <p>
                         <i class="pi pi-calendar" />
                         {{
@@ -38,7 +38,7 @@ const props = defineProps<{
                     </p>
                     <p>
                         <i class="pi pi-map-marker" />
-                        {{ props.classroom.venue?.name || "TBA" }}
+                        {{ props.classroom.venue?.room || "TBA" }}
                     </p>
                 </div>
                 <p class="text-gray-500 line-clamp-2">
@@ -94,7 +94,6 @@ const props = defineProps<{
                 <div class="flex gap-2">
                     <Button
                         icon="pi pi-arrow-up"
-                        severity="info"
                         rounded
                         outlined
                         label="88"

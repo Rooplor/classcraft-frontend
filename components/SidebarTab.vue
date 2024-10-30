@@ -74,7 +74,7 @@ watch(router.currentRoute, () => {
         :to="to"
         :class="
             path.includes(to)
-                ? 'text-blue-500 bg-blue-100 hover:!bg-blue-100'
+                ? 'text-primary-500 bg-primary-100 hover:!bg-primary-100'
                 : ''
         "
         class="flex items-center p-3 py-4 duration-100 rounded-lg hover:bg-gray-100"
@@ -88,7 +88,7 @@ watch(router.currentRoute, () => {
             />
             <div
                 v-else-if="!label"
-                class="h-12 flex justify-center items-center bg-gray-200 text-gray-400 rounded-lg aspect-square"
+                class="h-12 flex justify-center items-center bg-gray-200 border border-gray-300 text-gray-400 rounded-lg aspect-square"
             >
                 <i class="pi pi-image" />
             </div>

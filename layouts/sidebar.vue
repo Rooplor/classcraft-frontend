@@ -28,7 +28,7 @@ const { classrooms } = storeToRefs(classroomStore);
                 <div>
                     <div class="flex justify-between mb-5">
                         <p class="text-gray-500">Your classes</p>
-                        <nuxt-link to="/class/new/edit" class="text-blue-500">
+                        <nuxt-link to="/class/new/edit" class="text-primary-500">
                             + Add
                         </nuxt-link>
                     </div>
