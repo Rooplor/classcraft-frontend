@@ -1,35 +1,35 @@
 import type { IResponse } from "../types/Response";
-import type { IListUserResponse, IResponseUser, IUser } from "../types/User";
+import type { IUser } from "../types/User";
 
 const useUser = () => {
     const config = useRuntimeConfig();
 
-    const getAllUser = (): Promise<IListUserResponse> => {
+    const getAllUser = (): Promise<IResponse<IUser>> => {
         return $fetch(`${config.public.baseUrl}/api/user`, {
             method: "GET",
         });
     };
 
-    const getUserById = (id: string): Promise<IResponseUser> => {
+    const getUserById = (id: string): Promise<IResponse<IUser>> => {
         return $fetch(`${config.public.baseUrl}/api/user/${id}`, {
             method: "GET",
         });
     };
 
-    const updateUser = (id: string, user: IUser): Promise<IResponseUser> => {
+    const updateUser = (id: string, user: IUser): Promise<IResponse<IUser>> => {
         return $fetch(`${config.public.baseUrl}/api/user/${id}`, {
             body: JSON.stringify(user),
             method: "GET",
         });
     };
 
-    const deleteUser = (id: string): Promise<IResponse> => {
+    const deleteUser = (id: string): Promise<IResponse<string>> => {
         return $fetch(`${config.public.baseUrl}/api/user/${id}`, {
             method: "DELETE",
         });
     };
 
-    const addNewUser = (user: IUser): Promise<IResponseUser> => {
+    const addNewUser = (user: IUser): Promise<IResponse<IUser>> => {
         return $fetch(`${config.public.baseUrl}/api/user`, {
             body: JSON.stringify(user),
             method: "POST",

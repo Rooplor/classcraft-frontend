@@ -62,7 +62,7 @@ classroomStore.clearEditingClassroom();
 if (id) {
     try {
         classroomStore.setEditingClassroom(
-            await getClassroomById(id.toString())
+            (await getClassroomById(id.toString())).result
         );
     } catch (error) {
         router.replace("/404");

@@ -4,7 +4,7 @@ import type { IResponse } from "../types/Response";
 const useClassroom = () => {
     const config = useRuntimeConfig();
 
-    const getAllClassroom = (): Promise<IClassroom[]> => {
+    const getAllClassroom = (): Promise<IResponse<IClassroom[]>> => {
         return $fetch(`${config.public.baseUrl}/api/class`, {
             params: {
                 registrationStatus: false,
@@ -13,13 +13,15 @@ const useClassroom = () => {
         });
     };
 
-    const getClassroomById = (id: string): Promise<IClassroom> => {
+    const getClassroomById = (id: string): Promise<IResponse<IClassroom>> => {
         return $fetch(`${config.public.baseUrl}/api/class/${id}`, {
             method: "GET",
         });
     };
 
-    const getClassroomByUserId = (userId: string[]): Promise<IClassroom[]> => {
+    const getClassroomByUserId = (
+        userId: string[]
+    ): Promise<IResponse<IClassroom[]>> => {
         return $fetch(`${config.public.baseUrl}/api/class/owners`, {
             params: {
                 owners: userId.join(","),
@@ -28,7 +30,9 @@ const useClassroom = () => {
         });
     };
 
-    const addClassroom = (classroom: IAddClassroomDTO): Promise<IClassroom> => {
+    const addClassroom = (
+        classroom: IAddClassroomDTO
+    ): Promise<IResponse<IClassroom>> => {
         return $fetch(`${config.public.baseUrl}/api/class`, {
             method: "POST",
             body: JSON.stringify(classroom),
@@ -38,20 +42,23 @@ const useClassroom = () => {
     const updateClassroom = (
         id: string,
         classroom: IAddClassroomDTO
-    ): Promise<IClassroom> => {
+    ): Promise<IResponse<IClassroom>> => {
         return $fetch(`${config.public.baseUrl}/api/class/${id}`, {
             method: "PUT",
             body: JSON.stringify(classroom),
         });
     };
 
-    const deleteClassroom = (id: string): Promise<IResponse> => {
+    const deleteClassroom = (id: string) => {
         return $fetch(`${config.public.baseUrl}/api/class/${id}`, {
             method: "DELETE",
         });
     };
 
-    const updateVenue = (id: string, venue: string): Promise<IClassroom> => {
+    const updateVenue = (
+        id: string,
+        venue: string
+    ): Promise<IResponse<IClassroom>> => {
         return $fetch(
             `${config.public.baseUrl}/api/class/${id}/venue/${venue}`,
             {
@@ -60,7 +67,9 @@ const useClassroom = () => {
         );
     };
 
-    const toggleRegistrationStatus = (id: string): Promise<IClassroom> => {
+    const toggleRegistrationStatus = (
+        id: string
+    ): Promise<IResponse<IClassroom>> => {
         return $fetch(
             `${config.public.baseUrl}/api/class/${id}/toggle-registration-status`,
             {
@@ -69,7 +78,9 @@ const useClassroom = () => {
         );
     };
 
-    const togglePublishStatus = (id: string): Promise<IClassroom> => {
+    const togglePublishStatus = (
+        id: string
+    ): Promise<IResponse<IClassroom>> => {
         return $fetch(
             `${config.public.baseUrl}/api/class/${id}/toggle-publish-status`,
             {
@@ -81,7 +92,7 @@ const useClassroom = () => {
     const updateRegistrationUrl = (
         id: string,
         registrationUrl: string
-    ): Promise<IClassroom> => {
+    ): Promise<IResponse<IClassroom>> => {
         return $fetch(
             `${config.public.baseUrl}/api/class/${id}/registration-url`,
             {
@@ -94,7 +105,7 @@ const useClassroom = () => {
     const updateMeetingUrl = (
         id: string,
         meetingUrl: string
-    ): Promise<IClassroom> => {
+    ): Promise<IResponse<IClassroom>> => {
         return $fetch(`${config.public.baseUrl}/api/class/${id}/meeting-url`, {
             body: meetingUrl,
             method: "PATCH",
@@ -104,7 +115,7 @@ const useClassroom = () => {
     const updateContent = (
         id: string,
         content: string
-    ): Promise<IClassroom> => {
+    ): Promise<IResponse<IClassroom>> => {
         return $fetch(`${config.public.baseUrl}/api/class/${id}/content`, {
             body: content,
             method: "PATCH",
