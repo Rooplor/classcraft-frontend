@@ -4,7 +4,7 @@ const router = useRouter();
 const classroomStore = useClassroomStore();
 const { getAllClassroom } = useClassroom();
 
-classroomStore.setClassrooms(await getAllClassroom());
+classroomStore.setClassrooms((await getAllClassroom()).result);
 
 watch(user, (currentUser, prevUser) => {
     if (prevUser !== currentUser) {
