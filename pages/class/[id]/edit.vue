@@ -34,21 +34,23 @@ const copyLink = () => {
 
 const onPublish = async () => {
     togglePublishStatus(editingClassroom.value.id).then((res) => {
-        classroomStore.setEditingClassroom(res);
-        if (editingClassroom.value.published) {
-            toast.add({
-                severity: "success",
-                summary: "Classroom is published",
-                group: "tc",
-                life: 1000,
-            });
-        } else {
-            toast.add({
-                severity: "info",
-                summary: "Classroom is unpublished",
-                group: "tc",
-                life: 1000,
-            });
+        if (res.success) {
+            classroomStore.setEditingClassroom(res.result);
+            if (editingClassroom.value.published) {
+                toast.add({
+                    severity: "success",
+                    summary: "Classroom is published",
+                    group: "tc",
+                    life: 1000,
+                });
+            } else {
+                toast.add({
+                    severity: "info",
+                    summary: "Classroom is unpublished",
+                    group: "tc",
+                    life: 1000,
+                });
+            }
         }
     });
 };

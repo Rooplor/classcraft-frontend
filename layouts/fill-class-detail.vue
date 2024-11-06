@@ -96,9 +96,9 @@ const onSubmit = handleSubmit((values: any) => {
     values.date = values.date.map((date: Date) => date.toISOString());
     if (editingClassroom.value) {
         updateClassroom(editingClassroom.value.id, values).then((res) => {
-            if (res) {
-                classroomStore.updateClassroom(res);
-                classroomStore.setEditingClassroom(res);
+            if (res.success) {
+                classroomStore.updateClassroom(res.result);
+                classroomStore.setEditingClassroom(res.result);
                 toast.add({
                     severity: "success",
                     summary: "Class updated",
@@ -110,9 +110,9 @@ const onSubmit = handleSubmit((values: any) => {
         return;
     }
     addClassroom(values).then((res) => {
-        if (res) {
-            router.push(`/class/${res.id}/edit`);
-            classroomStore.addClassroom(res);
+        if (res.success) {
+            router.push(`/class/${res.result.id}/edit`);
+            classroomStore.addClassroom(res.result);
             toast.add({
                 severity: "success",
                 summary: "Class created",
@@ -134,7 +134,7 @@ const onCoverImageChange = async (event: any) => {
 
     try {
         const res = await uploadFile(formData);
-        if (res) {
+        if (res.success) {
             coverImage.value = res.result.url;
         }
     } catch (error) {
@@ -156,7 +156,7 @@ const onInstructorAvatarChange = async (event: any) => {
 
     try {
         const res = await uploadFile(formData);
-        if (res) {
+        if (res.success) {
             instructorAvatar.value = res.result.url;
         }
     } catch (error) {

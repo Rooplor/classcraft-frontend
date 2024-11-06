@@ -33,21 +33,23 @@ const removeQuestion = (id: number) => {
 
 const onToggleRegistrationStatus = () => {
     toggleRegistrationStatus(editingClassroom.value.id).then((res) => {
-        classroomStore.setEditingClassroom(res);
-        if (editingClassroom.value.registrationStatus) {
-            toast.add({
-                severity: "success",
-                summary: "Classroom is open for registration",
-                group: "tc",
-                life: 1000,
-            });
-        } else {
-            toast.add({
-                severity: "info",
-                summary: "Classroom is closed for registration",
-                group: "tc",
-                life: 1000,
-            });
+        if (res.success) {
+            classroomStore.setEditingClassroom(res.result);
+            if (editingClassroom.value.registrationStatus) {
+                toast.add({
+                    severity: "success",
+                    summary: "Classroom is open for registration",
+                    group: "tc",
+                    life: 1000,
+                });
+            } else {
+                toast.add({
+                    severity: "info",
+                    summary: "Classroom is closed for registration",
+                    group: "tc",
+                    life: 1000,
+                });
+            }
         }
     });
 };
