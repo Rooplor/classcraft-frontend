@@ -36,6 +36,7 @@ const onPublish = async () => {
     togglePublishStatus(editingClassroom.value.id).then((res) => {
         if (res.success) {
             classroomStore.setEditingClassroom(res.result);
+            classroomStore.updateClassroom(res.result);
             if (editingClassroom.value.published) {
                 toast.add({
                     severity: "success",
