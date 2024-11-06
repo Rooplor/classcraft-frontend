@@ -36,12 +36,18 @@ const useUser = () => {
         });
     };
 
+    const getUserProfile = (): Promise<IResponse<IUser>> => {
+        return $fetch(`${config.public.baseUrl}/api/user/profile`, {
+            method: "GET",
+        });
+    };
     return {
         getAllUser,
         getUserById,
         updateUser,
         deleteUser,
         addNewUser,
+        getUserProfile,
     };
 };
 

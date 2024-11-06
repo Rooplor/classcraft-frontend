@@ -4,10 +4,12 @@ import type { IResponse } from "../types/Response";
 const useClassroom = () => {
     const config = useRuntimeConfig();
 
-    const getAllClassroom = (): Promise<IResponse<IClassroom[]>> => {
+    const getAllClassroom = (
+        registrationStatus?: boolean
+    ): Promise<IResponse<IClassroom[]>> => {
         return $fetch(`${config.public.baseUrl}/api/class`, {
             params: {
-                registrationStatus: false,
+                registrationStatus: registrationStatus,
             },
             method: "GET",
         });
@@ -22,9 +24,9 @@ const useClassroom = () => {
     const getClassroomByUserId = (
         userId: string[]
     ): Promise<IResponse<IClassroom[]>> => {
-        return $fetch(`${config.public.baseUrl}/api/class/owners`, {
+        return $fetch(`${config.public.baseUrl}/api/class`, {
             params: {
-                owners: userId.join(","),
+                userId: userId.join(","),
             },
             method: "GET",
         });
