@@ -2,9 +2,12 @@
 const user = useCurrentUser();
 const router = useRouter();
 const classroomStore = useClassroomStore();
-const { getAllClassroom } = useClassroom();
+const { getClassroomByUserId } = useClassroom();
+const { getUserProfile } = useUser();
 
-classroomStore.setClassrooms((await getAllClassroom()).result);
+const userID = (await getUserProfile()).result.id;
+
+classroomStore.setClassrooms((await getClassroomByUserId([userID])).result);
 
 watch(user, (currentUser, prevUser) => {
     if (prevUser !== currentUser) {
