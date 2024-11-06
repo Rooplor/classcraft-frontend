@@ -111,17 +111,14 @@ const formatDateRange = (dates: Date[]): string => {
                     <p class="font-bold">14 people registered</p>
                 </div>
                 <div class="flex gap-2">
-                    <Button icon="pi pi-arrow-up" rounded outlined label="88" />
                     <Button
-                        @click.prevent="
-                            // open registration url in new tab
-                            window.open(
-                                props.classroom.registrationUrl,
-                                '_blank'
-                            )
-                        "
-                        v-if="props.classroom.registrationStatus"
-                    >
+                        v-if="!props.classroom.registrationStatus"
+                        icon="pi pi-arrow-up"
+                        rounded
+                        outlined
+                        label="88"
+                    />
+                    <Button v-if="props.classroom.registrationStatus">
                         Register
                     </Button>
                 </div>

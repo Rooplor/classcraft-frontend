@@ -51,8 +51,8 @@ try {
                 >
                     <i class="pi pi-image text-[4rem] text-gray-400" />
                 </div>
-                <div class="space-y-4 mt-6">
-                    <p class="text-gray-500">Hosted by</p>
+                <div class="group space-y-4 mt-6">
+                    <p class="text-slate-500">Hosted by</p>
                     <nuxt-link
                         :to="`/user/${owner.id}`"
                         class="flex items-center gap-2"
@@ -62,7 +62,9 @@ try {
                             :alt="`${owner.username} profile picture`"
                             class="w-8 h-8 rounded-full"
                         />
-                        <p>{{ owner.username }}</p>
+                        <p class="group-hover:text-gray-500 duration-150">
+                            {{ owner.username }}
+                        </p>
                     </nuxt-link>
                 </div>
             </div>
@@ -161,15 +163,19 @@ try {
                     </div>
                     <div class="flex justify-end gap-2">
                         <Button
+                            v-if="!classroom.registrationStatus"
                             icon="pi pi-arrow-up"
                             severity="info"
                             rounded
                             outlined
                             label="88"
                         />
-                        <Button v-if="classroom.registrationUrl"
-                            >Register</Button
+                        <Button
+                            v-if="classroom.registrationStatus"
+                            class="w-full"
                         >
+                            Register
+                        </Button>
                     </div>
                 </div>
                 <div>
