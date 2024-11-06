@@ -22,6 +22,8 @@ export interface IClassroom {
     instructorBio: string;
     instructorAvatar: string;
     instructorFamiliarity: string;
+    owner: string;
+    coOwners: string[];
     coverImage: string;
 }
 
