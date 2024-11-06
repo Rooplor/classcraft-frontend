@@ -1,9 +1,36 @@
 <script setup lang="ts">
-const classroomStore = useClassroomStore();
-const { classrooms } = storeToRefs(classroomStore);
+const { getAllClassroom } = useClassroom();
+const { classroomFeedDisplay } = storeToRefs(useFeedDisplayStore());
+let classrooms = ref();
+
+const getClassroomFeed = async (feed: ClassroomFeedDisplay) => {
+    switch (feed) {
+        case ClassroomFeedDisplay.FOLLOWING:
+            classrooms.value = (await getAllClassroom(true)).result;
+            break;
+        case ClassroomFeedDisplay.VOTING:
+            classrooms.value = (await getAllClassroom(false)).result;
+            break;
+        case ClassroomFeedDisplay.EXPLORE:
+            classrooms.value = (await getAllClassroom()).result;
+            break;
+    }
+};
 
 const value = ref("Upcoming");
 const options = ref(["Upcoming", "Past"]);
+
+getClassroomFeed(classroomFeedDisplay.value);
+
+watch(
+    classroomFeedDisplay,
+    async (current, prev) => {
+        if (prev !== current) {
+            getClassroomFeed(current);
+        }
+    },
+    { deep: true }
+);
 </script>
 
 <template>
