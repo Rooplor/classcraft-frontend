@@ -77,14 +77,14 @@ watch(router.currentRoute, () => {
                 ? 'text-primary-500 bg-primary-100 hover:!bg-primary-100'
                 : ''
         "
-        class="flex items-center p-3 py-4 duration-100 rounded-lg hover:bg-gray-100"
+        class="flex items-center p-3 py-3 duration-100 rounded-lg hover:bg-gray-100"
     >
         <div class="flex items-center w-full gap-2">
             <img
                 :src="classroom?.coverImage"
                 :alt="classroom?.title"
                 v-if="classroom?.coverImage"
-                class="h-12 w-12 rounded-lg aspect-square object-cover"
+                class="h-12 w-12 rounded-md aspect-square object-cover"
             />
             <div
                 v-else-if="!label"
@@ -97,7 +97,7 @@ watch(router.currentRoute, () => {
                 <Badge
                     v-if="!label"
                     :value="classroom?.published ? 'Published' : 'Draft'"
-                    severity="secondary"
+                    :severity="classroom?.published ? 'success' : 'secondary'"
                     size="small"
                 />
                 <p class="w-full truncate">{{ classroom?.title || label }}</p>
