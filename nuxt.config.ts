@@ -26,7 +26,7 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     ssr: false,
     app: {
-        baseURL: '/kp2'
+        baseURL: process.env.NUXT_BASE_URL
     },
     modules: [
         "@primevue/nuxt-module",
