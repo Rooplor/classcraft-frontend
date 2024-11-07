@@ -25,6 +25,9 @@ export default defineNuxtConfig({
     compatibilityDate: "2024-04-03",
     devtools: { enabled: true },
     ssr: false,
+    app: {
+        baseURL: process.env.NUXT_BASE_URL
+    },
     modules: [
         "@primevue/nuxt-module",
         "@nuxtjs/tailwindcss",
