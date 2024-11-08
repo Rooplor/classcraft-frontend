@@ -147,13 +147,17 @@ if (id) {
             </div>
         </div>
         <div class="flex justify-center">
-            <Stepper value="1" linear class="basis-full">
+            <Stepper value="1" class="basis-full">
                 <div class="mb-5">
                     <StepList>
                         <Step
                             v-for="step in steps"
                             :key="step.value"
                             :value="step.value"
+                            :disabled="
+                                !editingClassroom ||
+                                editingClassroom?.stepperStatus < step.value
+                            "
                         >
                             {{ step.label }}
                         </Step>
@@ -163,6 +167,15 @@ if (id) {
                     <StepPanel v-slot="{ activateCallback }" value="1">
                         <div class="bg-gray-50">
                             <NuxtLayout name="fill-class-detail" />
+                            <div
+                                @vue:mounted="
+                                    activateCallback(
+                                        `${
+                                            editingClassroom?.stepperStatus || 1
+                                        }`
+                                    )
+                                "
+                            />
                             <div class="flex justify-end pt-6 gap-2 h-36">
                                 <Button
                                     label="Reserve venue"
@@ -170,6 +183,7 @@ if (id) {
                                     icon="pi pi-arrow-right"
                                     iconPos="right"
                                     @click="activateCallback('2')"
+                                    :disabled="!editingClassroom"
                                     class="w-1/2"
                                 />
                             </div>
@@ -191,6 +205,9 @@ if (id) {
                                     severity="secondary"
                                     icon="pi pi-arrow-right"
                                     iconPos="right"
+                                    :disabled="
+                                        editingClassroom?.stepperStatus <= 2
+                                    "
                                     @click="activateCallback('3')"
                                     class="w-full"
                                 />
@@ -213,6 +230,9 @@ if (id) {
                                     severity="secondary"
                                     icon="pi pi-arrow-right"
                                     iconPos="right"
+                                    :disabled="
+                                        editingClassroom?.stepperStatus <= 3
+                                    "
                                     @click="activateCallback('4')"
                                     class="w-full"
                                 />
