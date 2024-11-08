@@ -124,6 +124,21 @@ const useClassroom = () => {
         });
     };
 
+    const updateClassroomStatus = (
+        id: string,
+        status: string
+    ): Promise<IResponse<IClassroom>> => {
+        return $fetch(
+            `${config.public.baseUrl}/api/class/${id}/stepper-status`,
+            {
+                query: {
+                    status,
+                },
+                method: "PATCH",
+            }
+        );
+    };
+
     return {
         getAllClassroom,
         getClassroomById,
@@ -137,6 +152,7 @@ const useClassroom = () => {
         updateRegistrationUrl,
         updateMeetingUrl,
         updateContent,
+        updateClassroomStatus,
     };
 };
 
