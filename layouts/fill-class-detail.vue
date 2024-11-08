@@ -193,46 +193,48 @@ watch(selfInstructored, (value) => {
     <div>
         <div>
             <form @submit="onSubmit" class="flex gap-2">
-                <div
-                    class="w-[32rem] h-[32rem] border aspect-square rounded-3xl overflow-clip sticky top-[10px]"
-                >
+                <div class="w-1/2">
                     <div
-                        class="w-[32rem] h-[32rem] aspect-square bg-clip-border relative"
+                        class="border aspect-square rounded-3xl overflow-clip sticky top-[10px]"
                     >
-                        <img
-                            v-if="coverImage"
-                            :src="coverImage"
-                            alt="Uploaded Image"
-                            class="object-cover w-full h-full"
-                        />
-                        <button
-                            v-else
-                            class="flex items-center justify-center w-full h-full bg-gray-200"
+                        <div
+                            class="w-full aspect-square bg-clip-border relative"
                         >
-                            <span class="text-gray-400">
-                                <i class="pi pi-image text-[4rem]" />
-                            </span>
-                        </button>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            class="absolute inset-0 opacity-0 cursor-pointer"
-                            @change="onCoverImageChange"
-                        />
-                        <div class="absolute top-2 right-2">
-                            <Button
+                            <img
                                 v-if="coverImage"
-                                icon="pi pi-times"
-                                severity="danger"
-                                text
-                                rounded
-                                aria-label="Cancel"
-                                @click="removeCoverImage"
+                                :src="coverImage"
+                                alt="Uploaded Image"
+                                class="object-cover w-full h-full"
                             />
+                            <button
+                                v-else
+                                class="flex items-center justify-center w-full h-full bg-gray-200"
+                            >
+                                <span class="text-gray-400">
+                                    <i class="pi pi-image text-[4rem]" />
+                                </span>
+                            </button>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                class="absolute inset-0 opacity-0 cursor-pointer"
+                                @change="onCoverImageChange"
+                            />
+                            <div class="absolute top-2 right-2">
+                                <Button
+                                    v-if="coverImage"
+                                    icon="pi pi-times"
+                                    severity="danger"
+                                    text
+                                    rounded
+                                    aria-label="Cancel"
+                                    @click="removeCoverImage"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-col gap-2">
+                <div class="relative w-1/2 flex flex-col gap-2">
                     <div
                         class="flex flex-col w-full gap-8 px-6 py-8 bg-white border rounded-3xl"
                     >
@@ -555,8 +557,16 @@ watch(selfInstructored, (value) => {
                             </div>
                         </div>
                     </div>
-                    <div class="flex justify-end">
-                        <Button label="Save" icon="pi pi-check" type="submit" />
+                    <div
+                        class="sticky bottom-0 left-0 py-3 justify-end w-full z-40"
+                    >
+                        <Button
+                            label="Save"
+                            icon="pi pi-check"
+                            type="submit"
+                            size="large"
+                            class="w-full"
+                        />
                     </div>
                 </div>
             </form>

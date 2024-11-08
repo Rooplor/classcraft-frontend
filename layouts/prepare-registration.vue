@@ -92,7 +92,8 @@ const confirmDelete = (question: Question) => {
                     <p
                         class="inline-flex items-center gap-1 text-gray-500 mb-1"
                     >
-                        <i class="pi pi-id-card" /> Personal Information
+                        <i class="pi pi-id-card" />
+                        Personal Information
                     </p>
                     <div class="flex gap-2">
                         <div
@@ -101,7 +102,7 @@ const confirmDelete = (question: Question) => {
                             <div class="inline-flex flex-col gap-1">
                                 <p class="text-sm text-gray-400">Required</p>
                                 <p>
-                                    <i class="pi pi-user" />&nbsp;
+                                    <i class="pi pi-user text-primary" />&nbsp;
                                     <span class="text-lg">Name</span>
                                 </p>
                             </div>
@@ -112,7 +113,7 @@ const confirmDelete = (question: Question) => {
                             <div class="inline-flex flex-col gap-1">
                                 <p class="text-sm text-gray-400">Required</p>
                                 <p>
-                                    <i class="pi pi-at" />&nbsp;
+                                    <i class="pi pi-at text-primary" />&nbsp;
                                     <span class="text-lg">Email</span>
                                 </p>
                             </div>

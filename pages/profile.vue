@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { IClassroom } from "../types/Classroom";
+
 const classroomStore = useClassroomStore();
 const { classrooms } = storeToRefs(classroomStore);
 
@@ -7,6 +9,13 @@ const bio = ref(
 );
 const user = useCurrentUser();
 const isEditing = ref(false);
+
+const hostedClassrooms = computed(() =>
+    classrooms.value.filter(
+        (classroom: IClassroom) =>
+            classroom.published && classroom.registrationStatus
+    )
+);
 
 const handleEdit = () => {
     isEditing.value = true;
@@ -68,9 +77,9 @@ const handleSave = () => {
         </div>
         <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border">
             <h2 class="text-xl font-bold">Hosted classes</h2>
-            <div v-if="classrooms?.length >= 0" class="space-y-[10px]">
+            <div v-if="hostedClassrooms?.length >= 0" class="space-y-[10px]">
                 <ClassroomItem
-                    v-for="(classroom, index) in classrooms"
+                    v-for="(classroom, index) in hostedClassrooms"
                     :key="index"
                     :classroom="classroom"
                     class="border-none"
