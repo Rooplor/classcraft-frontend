@@ -56,7 +56,7 @@ mockVenues.forEach((venue) => {
         <nuxt-link
             :href="SIT_BOOKING_WEBSITE"
             target="_blank"
-            class="block bg-gradient-to-l from-blue-200 to-teal-200 text-blue-500 text-xl font-medium p-6 rounded-xl border border-blue-500 duration-150 hover:text-blue-700 hover:border-blue-700 animate-scalein"
+            class="block bg-gradient-to-l from-primary-200 to-teal-200 text-primary-500 text-xl font-medium p-6 rounded-xl border border-primary-500 duration-150 hover:text-primary-700 hover:border-primary-700 animate-scalein"
         >
             <p>
                 Check available room at SIT Booking System
@@ -104,7 +104,7 @@ mockVenues.forEach((venue) => {
                                         class="cursor-pointer duration-100 hover:bg-gray-100 border"
                                         :class="
                                             selectedVenues.includes(venue.id)
-                                                ? '!bg-blue-100 border-blue-500'
+                                                ? '!bg-primary-100 border-primary-500'
                                                 : 'bg-white'
                                         "
                                     >

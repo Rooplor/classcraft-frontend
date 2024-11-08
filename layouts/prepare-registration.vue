@@ -33,21 +33,23 @@ const removeQuestion = (id: number) => {
 
 const onToggleRegistrationStatus = () => {
     toggleRegistrationStatus(editingClassroom.value.id).then((res) => {
-        classroomStore.setEditingClassroom(res);
-        if (editingClassroom.value.registrationStatus) {
-            toast.add({
-                severity: "success",
-                summary: "Classroom is open for registration",
-                group: "tc",
-                life: 1000,
-            });
-        } else {
-            toast.add({
-                severity: "info",
-                summary: "Classroom is closed for registration",
-                group: "tc",
-                life: 1000,
-            });
+        if (res.success) {
+            classroomStore.setEditingClassroom(res.result);
+            if (editingClassroom.value.registrationStatus) {
+                toast.add({
+                    severity: "success",
+                    summary: "Classroom is open for registration",
+                    group: "tc",
+                    life: 1000,
+                });
+            } else {
+                toast.add({
+                    severity: "info",
+                    summary: "Classroom is closed for registration",
+                    group: "tc",
+                    life: 1000,
+                });
+            }
         }
     });
 };
@@ -201,17 +203,17 @@ const confirmDelete = (question: Question) => {
                 <Button label="Save" icon="pi pi-check" type="submit" />
                 <Button
                     :label="
-                        editingClassroom.registrationStatus
+                        editingClassroom?.registrationStatus
                             ? 'Close registration'
                             : 'Open registration'
                     "
                     :icon="
-                        editingClassroom.registrationStatus
+                        editingClassroom?.registrationStatus
                             ? 'pi pi-lock'
                             : 'pi pi-lock-open'
                     "
                     :severity="
-                        editingClassroom.registrationStatus
+                        editingClassroom?.registrationStatus
                             ? 'secondary'
                             : 'contrast'
                     "

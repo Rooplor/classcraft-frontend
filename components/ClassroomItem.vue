@@ -4,6 +4,21 @@ import type { IClassroom } from "../types/Classroom";
 const props = defineProps<{
     classroom: IClassroom;
 }>();
+
+const formatDateRange = (dates: Date[]): string => {
+    const formattedDates = dates
+        .map((date) =>
+            new Date(date).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+            })
+        )
+        .sort();
+    return `${formattedDates[0]} - ${
+        formattedDates[formattedDates.length - 1]
+    }`;
+};
 </script>
 <template>
     <nuxt-link
@@ -26,47 +41,51 @@ const props = defineProps<{
         </div>
         <div class="w-full flex flex-col gap-8">
             <div class="flex flex-col gap-4">
-                <h1 class="font-bold text-xl">{{ props.classroom.title }}</h1>
-                <div class="flex flex-col gap-2 text-blue-500">
+                <div>
+                    <h1 class="font-bold text-xl mb-2">
+                        {{ props.classroom.title }}
+                    </h1>
+                    <div class="flex gap-2">
+                        <Tag
+                            icon="pi pi-comment"
+                            severity="secondary"
+                            :value="props.classroom.type"
+                            rounded
+                            class="border"
+                        />
+                        <Tag
+                            icon="pi pi-desktop"
+                            severity="secondary"
+                            :value="props.classroom.format"
+                            rounded
+                            class="border"
+                        />
+                        <Tag
+                            icon="pi pi-users"
+                            severity="secondary"
+                            :value="props.classroom.capacity.toString()"
+                            rounded
+                            class="border"
+                        />
+                    </div>
+                </div>
+                <div class="flex flex-col gap-2 text-slate-500">
                     <p>
-                        <i class="pi pi-calendar" />
-                        {{
-                            props.classroom.date
-                                .map((date) => new Date(date).toDateString())
-                                .join(", ")
-                        }}
+                        <i
+                            class="pi pi-calendar p-2 rounded-lg border bg-slate-100"
+                        />
+                        {{ formatDateRange(classroom?.date) }}
                     </p>
                     <p>
-                        <i class="pi pi-map-marker" />
-                        {{ props.classroom.venue?.name || "TBA" }}
+                        <i
+                            class="pi pi-map-marker p-2 rounded-lg border bg-slate-100"
+                        />
+                        {{ props.classroom.venue?.room || "TBA" }}
                     </p>
                 </div>
                 <p class="text-gray-500 line-clamp-2">
                     <span v-html="props.classroom.details"></span>
                 </p>
-                <div class="flex gap-2">
-                    <Tag
-                        icon="pi pi-comment"
-                        severity="secondary"
-                        :value="props.classroom.type"
-                        rounded
-                        class="border"
-                    />
-                    <Tag
-                        icon="pi pi-desktop"
-                        severity="secondary"
-                        :value="props.classroom.format"
-                        rounded
-                        class="border"
-                    />
-                    <Tag
-                        icon="pi pi-users"
-                        severity="secondary"
-                        :value="props.classroom.capacity.toString()"
-                        rounded
-                        class="border"
-                    />
-                </div>
             </div>
             <div class="flex justify-between">
                 <div class="flex items-center gap-2">
@@ -92,13 +111,7 @@ const props = defineProps<{
                     <p class="font-bold">14 people registered</p>
                 </div>
                 <div class="flex gap-2">
-                    <Button
-                        icon="pi pi-arrow-up"
-                        severity="info"
-                        rounded
-                        outlined
-                        label="88"
-                    />
+                    <Button icon="pi pi-arrow-up" rounded outlined label="88" />
                     <Button
                         @click.prevent="
                             // open registration url in new tab

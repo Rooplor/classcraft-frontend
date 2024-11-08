@@ -37,7 +37,7 @@ const handleFeedTab = (display: number) => {
         :class="
             (path.includes('/class') && classroomFeedDisplay === display) ||
             (path.includes('/discussion') && discussionFeedDisplay === display)
-                ? 'border-blue-500 text-blue-500 hover:!border-blue-500'
+                ? 'border-primary-500 text-primary-500 hover:!border-primary-500'
                 : 'border-white'
         "
     >

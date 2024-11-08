@@ -1,18 +1,40 @@
+import { definePreset } from "@primevue/themes";
 import Aura from "@primevue/themes/aura";
 import { resolve } from "path";
+
+const preset = definePreset(Aura, {
+    semantic: {
+        primary: {
+            50: "{indigo.50}",
+            100: "{indigo.100}",
+            200: "{indigo.200}",
+            300: "{indigo.300}",
+            400: "{indigo.400}",
+            500: "{indigo.500}",
+            600: "{indigo.600}",
+            700: "{indigo.700}",
+            800: "{indigo.800}",
+            900: "{indigo.900}",
+            950: "{indigo.950}",
+        },
+    },
+});
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     compatibilityDate: "2024-04-03",
     devtools: { enabled: true },
     ssr: false,
+    app: {
+        baseURL: process.env.NUXT_BASE_URL
+    },
     modules: [
-      "@primevue/nuxt-module",
-      "@nuxtjs/tailwindcss",
-      "@vee-validate/nuxt",
-      "@pinia/nuxt",
-      "nuxt-vuefire",
-      "@nuxt/fonts",
+        "@primevue/nuxt-module",
+        "@nuxtjs/tailwindcss",
+        "@vee-validate/nuxt",
+        "@pinia/nuxt",
+        "nuxt-vuefire",
+        "@nuxt/fonts",
     ],
     vuefire: {
         auth: {
@@ -43,7 +65,7 @@ export default defineNuxtConfig({
     primevue: {
         options: {
             theme: {
-                preset: Aura,
+                preset: preset,
                 options: {
                     darkModeSelector: ".app-dark",
                 },

@@ -34,21 +34,24 @@ const copyLink = () => {
 
 const onPublish = async () => {
     togglePublishStatus(editingClassroom.value.id).then((res) => {
-        classroomStore.setEditingClassroom(res);
-        if (editingClassroom.value.published) {
-            toast.add({
-                severity: "success",
-                summary: "Classroom is published",
-                group: "tc",
-                life: 1000,
-            });
-        } else {
-            toast.add({
-                severity: "info",
-                summary: "Classroom is unpublished",
-                group: "tc",
-                life: 1000,
-            });
+        if (res.success) {
+            classroomStore.setEditingClassroom(res.result);
+            classroomStore.updateClassroom(res.result);
+            if (editingClassroom.value.published) {
+                toast.add({
+                    severity: "success",
+                    summary: "Classroom is published",
+                    group: "tc",
+                    life: 1000,
+                });
+            } else {
+                toast.add({
+                    severity: "info",
+                    summary: "Classroom is unpublished",
+                    group: "tc",
+                    life: 1000,
+                });
+            }
         }
     });
 };
@@ -62,7 +65,7 @@ classroomStore.clearEditingClassroom();
 if (id) {
     try {
         classroomStore.setEditingClassroom(
-            await getClassroomById(id.toString())
+            (await getClassroomById(id.toString())).result
         );
     } catch (error) {
         router.replace("/404");
@@ -81,9 +84,12 @@ if (id) {
                 </div>
                 <Button
                     label="Share"
+                    :severity="
+                        editingClassroom?.published ? 'secondary' : 'primary'
+                    "
                     icon="pi pi-share-alt"
-                    @click="toggle"
                     :disabled="!editingClassroom"
+                    @click="toggle"
                 />
                 <Popover ref="op">
                     <div class="flex flex-col gap-4 w-[25rem]">
@@ -108,17 +114,17 @@ if (id) {
                         <div class="flex justify-end gap-2">
                             <Button
                                 :label="
-                                    editingClassroom.published
+                                    editingClassroom?.published
                                         ? 'Unpublish'
                                         : 'Publish'
                                 "
                                 :icon="
-                                    editingClassroom.published
+                                    editingClassroom?.published
                                         ? 'pi pi-lock-open'
                                         : 'pi pi-lock'
                                 "
                                 :severity="
-                                    editingClassroom.published
+                                    editingClassroom?.published
                                         ? 'secondary'
                                         : 'primary'
                                 "
@@ -128,7 +134,7 @@ if (id) {
                             <Button
                                 label="Preview"
                                 :severity="
-                                    editingClassroom.published
+                                    editingClassroom?.published
                                         ? 'primary'
                                         : 'secondary'
                                 "
