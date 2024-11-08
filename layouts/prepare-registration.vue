@@ -7,9 +7,11 @@ const questions: Ref<Question[]> = ref([]);
 const editingQuestion = ref<Question | null>(null);
 const confirm = useConfirm();
 const toast = useToast();
-const { toggleRegistrationStatus } = useClassroom();
+const { toggleRegistrationStatus, updateRegistrationUrl } = useClassroom();
 const classroomStore = useClassroomStore();
 const { editingClassroom } = storeToRefs(classroomStore);
+const hasUrl = ref(editingClassroom.value.registrationUrl ? true : false);
+const registrationUrl = ref(editingClassroom.value.registrationUrl || "");
 
 const onSubmit = (e: Event) => {
     e.preventDefault();
@@ -33,6 +35,8 @@ const removeQuestion = (id: number) => {
 
 const onToggleRegistrationStatus = () => {
     toggleRegistrationStatus(editingClassroom.value.id).then((res) => {
+        classroomStore.setEditingClassroom(res.result);
+        classroomStore.updateClassroom(res.result);
         if (res.success) {
             classroomStore.setEditingClassroom(res.result);
             if (editingClassroom.value.registrationStatus) {
@@ -78,6 +82,27 @@ const confirmDelete = (question: Question) => {
         },
     });
 };
+
+const toggleHasRegistrationUrl = () => {
+    hasUrl.value = !hasUrl.value;
+};
+
+const handleUpdateRegistrationUrl = () => {
+    updateRegistrationUrl(
+        editingClassroom.value.id,
+        registrationUrl.value
+    ).then((res) => {
+        if (res.success) {
+            classroomStore.setEditingClassroom(res.result);
+            toast.add({
+                severity: "success",
+                summary: "Registration URL updated",
+                group: "tc",
+                life: 1000,
+            });
+        }
+    });
+};
 </script>
 
 <template>
@@ -86,8 +111,39 @@ const confirmDelete = (question: Question) => {
             @submit="onSubmit"
             class="p-6 bg-white border rounded-3xl space-y-4"
         >
-            <h3 class="text-xl font-bold">Registration questions</h3>
-            <div class="space-y-8">
+            <div class="flex justify-between">
+                <h3 class="text-xl font-bold">Registration questions</h3>
+                <button
+                    class="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-lg duration-150 hover:bg-slate-200"
+                    @click="toggleHasRegistrationUrl"
+                >
+                    {{
+                        hasUrl
+                            ? "Use ClassCraft registration"
+                            : "I have my registration form"
+                    }}
+                </button>
+            </div>
+
+            <div v-if="hasUrl">
+                <label for="capacity">Registration Url</label>
+                <div class="flex gap-2">
+                    <InputText
+                        v-model="registrationUrl"
+                        placeholder="Enter registration URL"
+                        class="w-full"
+                    />
+                    <Button
+                        label="Save"
+                        icon="pi pi-check"
+                        type="submit"
+                        @click="handleUpdateRegistrationUrl"
+                    />
+                </div>
+                <VeeErrorMessage name="capacity" class="text-red-500" />
+            </div>
+
+            <div v-else class="space-y-8">
                 <div class="space-y-2">
                     <p
                         class="inline-flex items-center gap-1 text-gray-500 mb-1"
@@ -201,7 +257,6 @@ const confirmDelete = (question: Question) => {
                 </div>
             </div>
             <div class="flex justify-end w-full gap-2">
-                <Button label="Save" icon="pi pi-check" type="submit" />
                 <Button
                     :label="
                         editingClassroom?.registrationStatus
