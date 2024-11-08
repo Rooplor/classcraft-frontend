@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IClassroom } from '../types/Classroom';
+import type { IClassroom } from "../types/Classroom";
 
 const classroomStore = useClassroomStore();
 const { classrooms } = storeToRefs(classroomStore);
@@ -13,7 +13,7 @@ const isEditing = ref(false);
 const hostedClassrooms = computed(() =>
     classrooms.value.filter(
         (classroom: IClassroom) =>
-            classroom.published == true && classroom.registrationStatus == true
+            classroom.published && classroom.registrationStatus
     )
 );
 
