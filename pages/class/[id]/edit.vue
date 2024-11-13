@@ -197,7 +197,7 @@ if (id) {
                             : 'contrast'
                     "
                     :disabled="
-                        !editingClassroom || editingClassroom?.stepperStatus < 4
+                        !editingClassroom || !editingClassroom?.registrationUrl
                     "
                     @click="onToggleRegistrationStatus"
                 />
