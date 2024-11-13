@@ -7,11 +7,11 @@ const questions: Ref<Question[]> = ref([]);
 const editingQuestion = ref<Question | null>(null);
 const confirm = useConfirm();
 const toast = useToast();
-const { toggleRegistrationStatus, updateRegistrationUrl } = useClassroom();
+const { updateRegistrationUrl } = useClassroom();
 const classroomStore = useClassroomStore();
 const { editingClassroom } = storeToRefs(classroomStore);
-const hasUrl = ref(editingClassroom.value.registrationUrl ? true : false);
-const registrationUrl = ref(editingClassroom.value.registrationUrl || "");
+const hasUrl = ref(editingClassroom?.value?.registrationUrl ? true : false);
+const registrationUrl = ref(editingClassroom.value?.registrationUrl || "");
 
 const onSubmit = (e: Event) => {
     e.preventDefault();
@@ -31,31 +31,6 @@ const addQuestion = () => {
 };
 const removeQuestion = (id: number) => {
     questions.value = questions.value.filter((question) => question.id !== id);
-};
-
-const onToggleRegistrationStatus = () => {
-    toggleRegistrationStatus(editingClassroom.value.id).then((res) => {
-        classroomStore.setEditingClassroom(res.result);
-        classroomStore.updateClassroom(res.result);
-        if (res.success) {
-            classroomStore.setEditingClassroom(res.result);
-            if (editingClassroom.value.registrationStatus) {
-                toast.add({
-                    severity: "success",
-                    summary: "Classroom is open for registration",
-                    group: "tc",
-                    life: 1000,
-                });
-            } else {
-                toast.add({
-                    severity: "info",
-                    summary: "Classroom is closed for registration",
-                    group: "tc",
-                    life: 1000,
-                });
-            }
-        }
-    });
 };
 
 const confirmDelete = (question: Question) => {
@@ -112,7 +87,9 @@ const handleUpdateRegistrationUrl = () => {
             class="p-6 bg-white border rounded-3xl space-y-4"
         >
             <div class="flex justify-between">
-                <h3 class="text-xl font-bold">Registration questions</h3>
+                <h3 class="text-xl font-bold">
+                    {{ hasUrl ? "Registration Url" : "Registration Questions" }}
+                </h3>
                 <button
                     class="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-lg duration-150 hover:bg-slate-200"
                     @click="toggleHasRegistrationUrl"
@@ -125,8 +102,8 @@ const handleUpdateRegistrationUrl = () => {
                 </button>
             </div>
 
-            <div v-if="hasUrl">
-                <label for="capacity">Registration Url</label>
+            <div v-if="hasUrl" class="space-y-2">
+                <label for="capacity">Add registration form url</label>
                 <div class="flex gap-2">
                     <InputText
                         v-model="registrationUrl"
@@ -256,26 +233,7 @@ const handleUpdateRegistrationUrl = () => {
                     </div>
                 </div>
             </div>
-            <div class="flex justify-end w-full gap-2">
-                <Button
-                    :label="
-                        editingClassroom?.registrationStatus
-                            ? 'Close registration'
-                            : 'Open registration'
-                    "
-                    :icon="
-                        editingClassroom?.registrationStatus
-                            ? 'pi pi-lock'
-                            : 'pi pi-lock-open'
-                    "
-                    :severity="
-                        editingClassroom?.registrationStatus
-                            ? 'secondary'
-                            : 'contrast'
-                    "
-                    @click="onToggleRegistrationStatus"
-                />
-            </div>
+            <div class="flex justify-end w-full gap-2"></div>
         </form>
     </div>
 </template>
