@@ -118,9 +118,6 @@ const formatDateRange = (dates: Date[]): string => {
                         outlined
                         label="88"
                     />
-                    <Button v-if="props.classroom.registrationStatus">
-                        Register
-                    </Button>
                 </div>
             </div>
         </div>
