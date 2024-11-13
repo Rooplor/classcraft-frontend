@@ -171,13 +171,16 @@ try {
                             label="88"
                         />
                         <NuxtLink
-                            v-if="classroom.registrationStatus"
+                            v-if="classroom?.registrationUrl"
                             target="blank"
                             :to="classroom?.registrationUrl"
                             class="w-full"
                         >
-                            <Button class="w-full"> Register </Button></NuxtLink
-                        >
+                            <Button size="large" class="w-full">
+                                Join this class
+                                <i class="pi pi-arrow-up-right" />
+                            </Button>
+                        </NuxtLink>
                     </div>
                 </div>
                 <div>
