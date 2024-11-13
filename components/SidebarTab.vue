@@ -102,12 +102,14 @@ watch(router.currentRoute, () => {
                         "
                         size="small"
                     />
-                    <Badge
+                    <div
                         v-if="classroom?.registrationStatus"
-                        value="Live"
-                        severity="danger"
-                        size="small"
-                    />
+                        class="text-[0.6rem] flex items-center text-white bg-orange-500 rounded-full px-0.5"
+                    >
+                        <i
+                            class="pi pi-stop-circle aspect-square animate-fadeout animate-alternate-reverse animate-infinite animate-duration-700"
+                        />
+                    </div>
                 </div>
                 <p class="w-full truncate">{{ classroom?.title || label }}</p>
             </div>
