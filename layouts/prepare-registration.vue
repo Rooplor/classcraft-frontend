@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useForm } from "vee-validate";
+import * as yup from "yup";
+
 interface Question {
     id: number;
     question: string;
@@ -11,11 +14,28 @@ const { updateRegistrationUrl } = useClassroom();
 const classroomStore = useClassroomStore();
 const { editingClassroom } = storeToRefs(classroomStore);
 const hasUrl = ref(editingClassroom?.value?.registrationUrl ? true : false);
-const registrationUrl = ref(editingClassroom.value?.registrationUrl || "");
 
-const onSubmit = (e: Event) => {
-    e.preventDefault();
+const initialValues = editingClassroom.value && {
+    registrationUrl: editingClassroom.value.registrationUrl,
 };
+
+const schema = yup.object({
+    registrationUrl: yup
+        .string()
+        .required("Registration URL is required")
+        .matches(
+            /^https?:\/\/[\w-]+(\.[\w-]+)+([\w-.,@?^=%&:/~+#]*[\w-@?^=%&/~+#])?$/,
+            "Invalid URL"
+        ),
+});
+
+const { defineField, handleSubmit, resetForm, errors } = useForm({
+    initialValues,
+    validationSchema: schema,
+});
+
+const [registrationUrl] = defineField("registrationUrl");
+
 const onSaveQuestion = (question: Question) => {
     const index = questions.value.findIndex((q) => q.id === question.id);
     questions.value[index] = question;
@@ -62,6 +82,12 @@ const toggleHasRegistrationUrl = () => {
     hasUrl.value = !hasUrl.value;
 };
 
+const onSubmit = handleSubmit((values: any) => {
+    if (!errors.registrationUrl) {
+        handleUpdateRegistrationUrl();
+    }
+});
+
 const handleUpdateRegistrationUrl = () => {
     updateRegistrationUrl(
         editingClassroom.value.id,
@@ -91,31 +117,41 @@ const handleUpdateRegistrationUrl = () => {
                     {{ hasUrl ? "Registration Url" : "Registration Questions" }}
                 </h3>
                 <button
+                    type="button"
                     class="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-lg duration-150 hover:bg-slate-200"
                     @click="toggleHasRegistrationUrl"
                 >
-                    {{
-                        hasUrl
-                            ? "Use ClassCraft registration"
-                            : "I have my registration form"
-                    }}
+                    <span v-if="hasUrl" class="flex items-center gap-2">
+                        <i class="pi pi-list-check" />
+                        Use ClassCraft registration
+                    </span>
+                    <span v-else class="flex items-center gap-2">
+                        <i class="pi pi-link" />
+                        I have my registration form
+                    </span>
                 </button>
             </div>
 
-            <div v-if="hasUrl" class="space-y-2">
+            <div v-if="hasUrl" class="w-full space-y-2">
                 <label for="capacity">Add registration form url</label>
-                <div class="flex gap-2">
-                    <InputText
-                        v-model="registrationUrl"
-                        placeholder="Enter registration URL"
-                        class="w-full"
-                    />
-                    <Button
-                        label="Save"
-                        icon="pi pi-check"
-                        type="submit"
-                        @click="handleUpdateRegistrationUrl"
-                    />
+                <div class="w-full flex gap-2">
+                    <div class="flex w-full flex-col gap-2">
+                        <InputText
+                            id="registrationUrl"
+                            v-model="registrationUrl"
+                            aria-describedby="registrationUrl-help"
+                            placeholder="Enter registration URL"
+                            :class="errors.registrationUrl && 'p-invalid'"
+                            class="w-full"
+                        />
+                        <VeeErrorMessage
+                            name="registrationUrl"
+                            class="text-red-500"
+                        />
+                    </div>
+                    <div>
+                        <Button label="Save" icon="pi pi-check" type="submit" />
+                    </div>
                 </div>
                 <VeeErrorMessage name="capacity" class="text-red-500" />
             </div>
@@ -226,14 +262,13 @@ const handleUpdateRegistrationUrl = () => {
                     <div>
                         <button
                             @click="addQuestion"
-                            class="w-full p-6 text-primary bg-primary-50 border border-primary rounded-2xl duration-150 hover:bg-primary-100"
+                            class="w-full p-6 text-primary bg-primary-50 border border-primary rounded-xl duration-150 hover:bg-primary-100"
                         >
                             <i class="pi pi-plus" /> Add new question
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="flex justify-end w-full gap-2"></div>
         </form>
     </div>
 </template>
