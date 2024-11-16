@@ -94,12 +94,23 @@ watch(router.currentRoute, () => {
             </div>
             <i v-else :class="icon" />
             <div class="space-y-1 w-3/4 overflow-hidden">
-                <Badge
-                    v-if="!label"
-                    :value="classroom?.published ? 'Published' : 'Draft'"
-                    :severity="classroom?.published ? 'success' : 'secondary'"
-                    size="small"
-                />
+                <div v-if="!label" class="flex gap-1">
+                    <Badge
+                        :value="classroom?.published ? 'Published' : 'Draft'"
+                        :severity="
+                            classroom?.published ? 'success' : 'secondary'
+                        "
+                        size="small"
+                    />
+                    <div
+                        v-if="classroom?.registrationStatus"
+                        class="text-[0.6rem] flex items-center text-white bg-orange-500 rounded-full px-0.5"
+                    >
+                        <i
+                            class="pi pi-stop-circle aspect-square animate-fadeout animate-alternate-reverse animate-infinite animate-duration-700"
+                        />
+                    </div>
+                </div>
                 <p class="w-full truncate">{{ classroom?.title || label }}</p>
             </div>
         </div>

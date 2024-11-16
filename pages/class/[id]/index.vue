@@ -170,12 +170,17 @@ try {
                             outlined
                             label="88"
                         />
-                        <Button
-                            v-if="classroom.registrationStatus"
+                        <NuxtLink
+                            v-if="classroom?.registrationUrl"
+                            target="blank"
+                            :to="classroom?.registrationUrl"
                             class="w-full"
                         >
-                            Register
-                        </Button>
+                            <Button size="large" class="w-full">
+                                Join this class
+                                <i class="pi pi-arrow-up-right" />
+                            </Button>
+                        </NuxtLink>
                     </div>
                 </div>
                 <div>

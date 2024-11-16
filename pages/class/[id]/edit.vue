@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import type { IClassroom } from "../../../types/Classroom";
+
 const toast = useToast();
 const router = useRouter();
 const id = router.currentRoute.value.params.id;
 const classroomStore = useClassroomStore();
 const { editingClassroom } = storeToRefs(classroomStore);
-const { getClassroomById, togglePublishStatus } = useClassroom();
+const { getClassroomById, toggleRegistrationStatus, togglePublishStatus } =
+    useClassroom();
 const op = ref();
 const currentUrl = window?.location?.href.replace(/\/edit$/, "");
 const steps = [
@@ -60,6 +63,45 @@ const onPreviewClassroom = () => {
     router.push(`/class/${editingClassroom.value.id}`);
 };
 
+const showRegistrationToast = (registrationStatus: boolean) => {
+    toast.add({
+        severity: registrationStatus ? "success" : "info",
+        summary: registrationStatus
+            ? "Classroom is open for registration"
+            : "Classroom is closed for registration",
+        group: "tc",
+        life: 1000,
+    });
+};
+
+const updateClassroomStore = (classroom: IClassroom) => {
+    classroomStore.setEditingClassroom(classroom);
+    classroomStore.updateClassroom(classroom);
+};
+
+const onToggleRegistrationStatus = () => {
+    toggleRegistrationStatus(editingClassroom.value.id).then((res) => {
+        if (res.success) {
+            const { result: classroom } = res;
+            if (classroom.registrationStatus && !classroom.published) {
+                togglePublishStatus(editingClassroom.value.id).then((res) => {
+                    if (res.success) {
+                        let { result: updatedClassroom } = res;
+                        updateClassroomStore(updatedClassroom);
+
+                        showRegistrationToast(
+                            editingClassroom.value.registrationStatus
+                        );
+                    }
+                });
+                return;
+            }
+            updateClassroomStore(classroom);
+            showRegistrationToast(editingClassroom.value.registrationStatus);
+        }
+    });
+};
+
 classroomStore.clearEditingClassroom();
 
 if (id) {
@@ -76,12 +118,7 @@ if (id) {
 <template>
     <div class="w-full py-9 px-[10px]">
         <div class="flex justify-end mb-10">
-            <div class="flex items-center gap-2">
-                <div
-                    class="h-full p-2 px-3 text-green-700 bg-green-200 rounded-md"
-                >
-                    <i class="pi pi-star-fill" />&nbsp;14 People interested
-                </div>
+            <div class="flex w-full justify-end items-center gap-2">
                 <Button
                     label="Share"
                     :severity="
@@ -144,6 +181,27 @@ if (id) {
                         </div>
                     </div>
                 </Popover>
+                <Button
+                    :label="
+                        editingClassroom?.registrationStatus
+                            ? 'Close registration'
+                            : 'Open registration'
+                    "
+                    :icon="
+                        editingClassroom?.registrationStatus
+                            ? 'pi pi-lock'
+                            : 'pi pi-lock-open'
+                    "
+                    :severity="
+                        editingClassroom?.registrationStatus
+                            ? 'secondary'
+                            : 'contrast'
+                    "
+                    :disabled="
+                        !editingClassroom || !editingClassroom?.registrationUrl
+                    "
+                    @click="onToggleRegistrationStatus"
+                />
             </div>
         </div>
         <div class="flex justify-center">
@@ -252,7 +310,7 @@ if (id) {
                             <Button
                                 label="Go to the classroom"
                                 severity="secondary"
-                                icon=""
+                                icon="pi pi-arrow-up-right"
                                 iconPos="right"
                                 class="w-full"
                                 @click="
