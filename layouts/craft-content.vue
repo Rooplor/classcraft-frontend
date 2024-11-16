@@ -47,6 +47,18 @@ const addContent = () => {
 
 const removeContent = (id: number) => {
     content.value = content.value.filter((c) => c.id !== id);
+    updateContent(editingClassroom.value.id, content.value).then((res) => {
+        if (res.success) {
+            toast.add({
+                severity: "error",
+                summary: "Deleted",
+                detail: `Content has been removed`,
+                group: "tc",
+                life: 3000,
+            });
+            editingContent.value = null;
+        }
+    });
 };
 
 const addActivityGuide = () => {
@@ -112,14 +124,6 @@ const confirmDelete = (content: IContent) => {
         },
         accept: () => {
             removeContent(content.id);
-            editingContent.value = null;
-            toast.add({
-                severity: "error",
-                summary: "Deleted",
-                detail: `Your question has been deleted`,
-                group: "tc",
-                life: 3000,
-            });
         },
     });
 };
@@ -238,9 +242,9 @@ const confirmDelete = (content: IContent) => {
                                             />
                                         </div>
                                         <p v-else>
-                                            <span v-if="guide.activityGuide"
-                                                >guide.activityGuide</span
-                                            >
+                                            <span v-if="guide.activityGuide">{{
+                                                guide.activityGuide
+                                            }}</span>
                                             <span v-else class="text-slate-300"
                                                 >No Activity Guide</span
                                             >
