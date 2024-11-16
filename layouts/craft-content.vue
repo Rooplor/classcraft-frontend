@@ -131,12 +131,12 @@ const confirmDelete = (content: IContent) => {
 <template>
     <div class="space-y-4">
         <div v-for="(c, index) in content" :key="index">
-            <div class="border rounded-3xl bg-white overflow-clip divide-y">
+            <div
+                v-if="c.id === editingContent?.id"
+                class="border rounded-3xl bg-white overflow-clip divide-y"
+            >
                 <div class="p-4">
-                    <div
-                        v-if="c.id === editingContent?.id"
-                        class="flex justify-between items-center gap-2"
-                    >
+                    <div class="flex justify-between items-center gap-2">
                         <InputText
                             v-model="editingContent.title"
                             placeholder="Enter Title"
@@ -145,67 +145,27 @@ const confirmDelete = (content: IContent) => {
                             class="w-full text-xl border p-2 bg-slate-50 font-bold rounded-lg outline-none"
                         />
                     </div>
-                    <div v-else class="flex justify-between items-center">
-                        <p
-                            class="text-xl font-bold"
-                            :class="
-                                c.id === editingContent?.id ? 'border-b' : ''
-                            "
-                        >
-                            <span v-if="c.title">{{ c.title }}</span>
-                            <span v-else class="text-slate-300">No Title</span>
-                        </p>
-                        <Button
-                            severity="secondary"
-                            icon="pi pi-pencil"
-                            label="Edit"
-                            @click="
-                                () => {
-                                    editingContent = { init: c, ...c };
-                                }
-                            "
-                        />
-                    </div>
                 </div>
                 <div class="p-4 space-y-8">
                     <Textarea
                         v-model="editingContent.content"
-                        v-if="c.id === editingContent?.id"
                         placeholder="Content"
                         unstyled
                         rows="5"
                         class="w-full p-2 border bg-slate-50 outline-none resize-none rounded-lg"
                     />
-                    <p class="whitespace-pre" v-else>
-                        <span v-if="c.content">{{ c.content }}</span>
-                        <span v-else class="text-slate-300">No Content</span>
-                    </p>
                     <div class="space-y-2">
                         <small class="text-slate-400">Activity Guides</small>
                         <div class="space-y-2">
-                            <p
-                                v-if="
-                                    c.activityGuides.length === 0 &&
-                                    !editingContent
-                                "
-                                class="text-slate-300"
-                            >
-                                No Activity Guide
-                            </p>
                             <div
-                                v-else
                                 v-for="(
                                     guide, index
-                                ) in editingContent?.activityGuides ||
-                                c.activityGuides"
+                                ) in editingContent.activityGuides"
                                 :key="index"
                                 class="p-4 bg-slate-100 text-slate-500 rounded-xl flex gap-2 items-center duration-150 hover:bg-slate-200"
                             >
                                 <p class="text-slate-400">{{ index + 1 }}.</p>
-                                <div
-                                    v-if="editingContent?.id === c.id"
-                                    class="w-full flex justify-end gap-2"
-                                >
+                                <div class="w-full flex justify-end gap-2">
                                     <InputText
                                         v-model="guide.activityGuide"
                                         placeholder="Enter Activity Guide"
@@ -220,17 +180,8 @@ const confirmDelete = (content: IContent) => {
                                         @click="removeActivityGuide(guide.id)"
                                     />
                                 </div>
-                                <p v-else>
-                                    <span v-if="guide.activityGuide">{{
-                                        guide.activityGuide
-                                    }}</span>
-                                    <span v-else class="text-slate-300"
-                                        >No Activity Guide</span
-                                    >
-                                </p>
                             </div>
                             <Button
-                                v-if="c.id === editingContent?.id"
                                 @click="addActivityGuide"
                                 unstyled
                                 class="w-full p-4 border rounded-xl text-primary bg-primary-50 border-primary hover:bg-primary-100 duration-150"
@@ -245,28 +196,14 @@ const confirmDelete = (content: IContent) => {
                             Presentation Guides
                         </small>
                         <div class="grid grid-cols-2 gap-2">
-                            <p
-                                v-if="
-                                    c.presentationGuides.length === 0 &&
-                                    !editingContent
-                                "
-                                class="text-slate-300"
-                            >
-                                No Presentation Guide
-                            </p>
                             <div
-                                v-else
                                 v-for="(
                                     guide, index
-                                ) in editingContent?.presentationGuides ||
-                                c.presentationGuides"
+                                ) in editingContent.presentationGuides"
                                 :key="index"
                                 class="aspect-video bg-slate-100 text-slate-500 rounded-xl p-4 duration-150 hover:bg-slate-200"
                             >
-                                <div
-                                    v-if="editingContent?.id === c.id"
-                                    class="relative"
-                                >
+                                <div class="relative">
                                     <Textarea
                                         v-model="guide.presentationGuide"
                                         placeholder="Presentation Guide"
@@ -288,21 +225,8 @@ const confirmDelete = (content: IContent) => {
                                         />
                                     </div>
                                 </div>
-                                <p
-                                    v-else
-                                    class="whitespace-pre flex justify-between"
-                                >
-                                    <span v-if="guide.presentationGuide">{{
-                                        guide.presentationGuide
-                                    }}</span>
-                                    <span v-else class="text-slate-300"
-                                        >No Presentation Guide</span
-                                    >
-                                </p>
                             </div>
-
                             <Button
-                                v-if="c.id === editingContent?.id"
                                 @click="addPresentationGuide"
                                 label="Add"
                                 fluid
@@ -315,10 +239,7 @@ const confirmDelete = (content: IContent) => {
                         </div>
                     </div>
                 </div>
-                <div
-                    v-if="editingContent?.id === c.id"
-                    class="p-4 flex gap-2 justify-between"
-                >
+                <div class="p-4 flex gap-2 justify-between">
                     <Button
                         severity="danger"
                         text
@@ -343,6 +264,90 @@ const confirmDelete = (content: IContent) => {
                             :disabled="isContentEmpty(editingContent)"
                             @click="onSaveContent(editingContent)"
                         />
+                    </div>
+                </div>
+            </div>
+            <div
+                v-else
+                class="border rounded-3xl bg-white overflow-clip divide-y"
+            >
+                <div class="p-4">
+                    <div class="flex justify-between items-center">
+                        <p class="text-xl font-bold">
+                            <span v-if="c.title">{{ c.title }}</span>
+                            <span v-else class="text-slate-300">No Title</span>
+                        </p>
+                        <Button
+                            severity="secondary"
+                            icon="pi pi-pencil"
+                            label="Edit"
+                            @click="
+                                () => {
+                                    editingContent = { init: c, ...c };
+                                }
+                            "
+                        />
+                    </div>
+                </div>
+                <div class="p-4 space-y-8">
+                    <p class="whitespace-pre">
+                        <span v-if="c.content">{{ c.content }}</span>
+                        <span v-else class="text-slate-300">No Content</span>
+                    </p>
+                    <div class="space-y-2">
+                        <small class="text-slate-400">Activity Guides</small>
+                        <div class="space-y-2">
+                            <p
+                                v-if="c.activityGuides.length === 0"
+                                class="text-slate-300"
+                            >
+                                No Activity Guide
+                            </p>
+                            <div
+                                v-else
+                                v-for="(guide, index) in c.activityGuides"
+                                :key="index"
+                                class="p-4 bg-slate-100 text-slate-500 rounded-xl flex gap-2 items-center duration-150 hover:bg-slate-200"
+                            >
+                                <p class="text-slate-400">{{ index + 1 }}.</p>
+                                <p>
+                                    <span v-if="guide.activityGuide">{{
+                                        guide.activityGuide
+                                    }}</span>
+                                    <span v-else class="text-slate-300"
+                                        >No Activity Guide</span
+                                    >
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <small class="text-slate-400">
+                            Presentation Guides
+                        </small>
+                        <div class="grid grid-cols-2 gap-2">
+                            <p
+                                v-if="c.presentationGuides.length === 0"
+                                class="text-slate-300"
+                            >
+                                No Presentation Guide
+                            </p>
+                            <div
+                                v-else
+                                v-for="(guide, index) in c.presentationGuides"
+                                :key="index"
+                                class="aspect-video bg-slate-100 text-slate-500 rounded-xl p-4 duration-150 hover:bg-slate-200"
+                            >
+                                <p class="whitespace-pre flex justify-between">
+                                    <span v-if="guide.presentationGuide">{{
+                                        guide.presentationGuide
+                                    }}</span>
+                                    <span v-else class="text-slate-300"
+                                        >No Presentation Guide</span
+                                    >
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
