@@ -3,9 +3,11 @@ import { useForm } from "vee-validate";
 import * as yup from "yup";
 
 interface Question {
+    init?: Question;
     id: number;
     question: string;
 }
+
 const questions: Ref<Question[]> = ref([]);
 const editingQuestion = ref<Question | null>(null);
 const confirm = useConfirm();
@@ -29,7 +31,7 @@ const schema = yup.object({
         ),
 });
 
-const { defineField, handleSubmit, resetForm, errors } = useForm({
+const { defineField, handleSubmit, errors } = useForm({
     initialValues,
     validationSchema: schema,
 });
@@ -37,8 +39,8 @@ const { defineField, handleSubmit, resetForm, errors } = useForm({
 const [registrationUrl] = defineField("registrationUrl");
 
 const onSaveQuestion = (question: Question) => {
-    const index = questions.value.findIndex((q) => q.id === question.id);
-    questions.value[index] = question;
+    const index = questions.value.findIndex((q) => q.id === question.init?.id);
+    questions.value[index].question = question.question;
     editingQuestion.value = null;
 };
 const addQuestion = () => {
@@ -47,7 +49,7 @@ const addQuestion = () => {
         question: "",
     };
     questions.value.push(newQuestion);
-    editingQuestion.value = newQuestion;
+    onEdit(newQuestion);
 };
 const removeQuestion = (id: number) => {
     questions.value = questions.value.filter((question) => question.id !== id);
@@ -67,6 +69,7 @@ const confirmDelete = (question: Question) => {
         },
         accept: () => {
             removeQuestion(question.id);
+            editingQuestion.value = null;
             toast.add({
                 severity: "error",
                 summary: "Deleted",
@@ -104,6 +107,13 @@ const handleUpdateRegistrationUrl = () => {
         }
     });
 };
+
+const onEdit = (question: Question) => {
+    editingQuestion.value = {
+        init: question,
+        ...question,
+    };
+};
 </script>
 
 <template>
@@ -133,7 +143,13 @@ const handleUpdateRegistrationUrl = () => {
             </div>
 
             <div v-if="hasUrl" class="w-full space-y-2">
-                <label for="capacity">Add registration form url</label>
+                <label for="capacity">
+                    <p
+                        class="inline-flex items-center gap-1 text-gray-400 mb-1"
+                    >
+                        <i class="pi pi-link" />Enter your registration form URL
+                    </p></label
+                >
                 <div class="w-full flex gap-2">
                     <div class="flex w-full flex-col gap-2">
                         <InputText
@@ -159,7 +175,7 @@ const handleUpdateRegistrationUrl = () => {
             <div v-else class="space-y-8">
                 <div class="space-y-2">
                     <p
-                        class="inline-flex items-center gap-1 text-gray-500 mb-1"
+                        class="inline-flex items-center gap-1 text-gray-400 mb-1"
                     >
                         <i class="pi pi-id-card" />
                         Personal Information
@@ -191,13 +207,13 @@ const handleUpdateRegistrationUrl = () => {
                 </div>
                 <div class="space-y-2">
                     <p
-                        class="inline-flex items-center gap-1 text-gray-500 mb-1"
+                        class="inline-flex items-center gap-1 text-gray-400 mb-1"
                     >
                         <i class="pi pi-question-circle" />Custom Questions
                     </p>
                     <div v-for="question in questions" :key="question.id">
                         <div
-                            v-if="editingQuestion?.id !== question.id"
+                            v-if="editingQuestion?.init?.id !== question.id"
                             class="flex justify-between items-center p-5 bg-gray-100 hover:bg-gray-200 duration-150 rounded-2xl"
                         >
                             <div class="inline-flex flex-col gap-1">
@@ -207,14 +223,14 @@ const handleUpdateRegistrationUrl = () => {
                                 </p>
                                 <p class="text-lg">{{ question.question }}</p>
                             </div>
-                            <div>
+                            <div v-if="editingQuestion === null">
                                 <Button
                                     icon="pi pi-pencil"
                                     aria-label="Edit"
                                     severity="secondary"
                                     rounded
                                     text
-                                    @click="editingQuestion = question"
+                                    @click="onEdit(question)"
                                 />
                                 <Button
                                     icon="pi pi-times"
@@ -231,13 +247,16 @@ const handleUpdateRegistrationUrl = () => {
                             class="flex justify-between items-center p-5 bg-gray-200 hover:bg-gray-200 border border-primary duration-150 rounded-2xl"
                         >
                             <div class="w-full inline-flex flex-col gap-1">
-                                <p class="text-sm text-gray-400">
+                                <label
+                                    :for="`question-${question.id}`"
+                                    class="text-sm text-gray-400"
+                                >
                                     <i class="pi pi-pen-to-square text-xs" />
                                     Text
-                                </p>
+                                </label>
                                 <InputText
+                                    :id="`question-${question.id}`"
                                     v-model="editingQuestion.question"
-                                    required
                                     unstyled
                                     placeholder="Enter question"
                                     class="bg-transparent border-none outline-none text-lg"
@@ -248,23 +267,35 @@ const handleUpdateRegistrationUrl = () => {
                                 <Button
                                     label="Save"
                                     icon="pi pi-check"
+                                    :disabled="!editingQuestion.question"
                                     @click="onSaveQuestion(editingQuestion)"
                                 />
                                 <Button
                                     label="Cancel"
-                                    icon="pi pi-times"
                                     severity="secondary"
-                                    @click="editingQuestion = null"
+                                    @click="
+                                        editingQuestion?.init?.question === ''
+                                            ? confirmDelete(question)
+                                            : (editingQuestion = null)
+                                    "
                                 />
                             </div>
                         </div>
                     </div>
                     <div>
                         <button
+                            :disabled="
+                                editingQuestion !== null && questions.length > 0
+                            "
                             @click="addQuestion"
-                            class="w-full p-6 text-primary bg-primary-50 border border-primary rounded-xl duration-150 hover:bg-primary-100"
+                            class="w-full p-6 border rounded-2xl duration-150"
+                            :class="
+                                editingQuestion !== null && questions.length > 0
+                                    ? 'cursor-not-allowed text-gray-400 bg-gray-100 border-gray-100'
+                                    : 'text-primary bg-primary-50 border-primary hover:bg-primary-100'
+                            "
                         >
-                            <i class="pi pi-plus" /> Add new question
+                            <i class="pi pi-plus" />&nbsp; Add New Question
                         </button>
                     </div>
                 </div>
