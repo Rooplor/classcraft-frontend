@@ -81,21 +81,22 @@ const updateClassroomStore = (classroom: IClassroom) => {
 
 const onToggleRegistrationStatus = () => {
     toggleRegistrationStatus(editingClassroom.value.id).then((res) => {
-        const { result: classroom } = res;
-        if (classroom.registrationStatus && !classroom.published) {
-            togglePublishStatus(editingClassroom.value.id).then((res) => {
-                const { result: updatedClassroom } = res;
-                updateClassroomStore(updatedClassroom);
-                if (res.success) {
-                    showRegistrationToast(
-                        editingClassroom.value.registrationStatus
-                    );
-                }
-            });
-            return;
-        }
-        updateClassroomStore(classroom);
         if (res.success) {
+            const { result: classroom } = res;
+            if (classroom.registrationStatus && !classroom.published) {
+                togglePublishStatus(editingClassroom.value.id).then((res) => {
+                    if (res.success) {
+                        let { result: updatedClassroom } = res;
+                        updateClassroomStore(updatedClassroom);
+
+                        showRegistrationToast(
+                            editingClassroom.value.registrationStatus
+                        );
+                    }
+                });
+                return;
+            }
+            updateClassroomStore(classroom);
             showRegistrationToast(editingClassroom.value.registrationStatus);
         }
     });
