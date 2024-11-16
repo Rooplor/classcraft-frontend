@@ -179,7 +179,7 @@ mockVenues.forEach((venue) => {
                 </div>
                 <div class="flex justify-end gap-4 mt-1">
                     <Button
-                        label="Send request"
+                        label="Request to reserve"
                         icon="pi pi-send"
                         @click="handleSendRequest"
                     />
