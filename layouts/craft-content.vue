@@ -1,19 +1,12 @@
 <script setup lang="ts">
-interface Content {
-    init?: Content;
-    id: number;
-    title: string;
-    content: string;
-    activityGuides: { id: string; activityGuide: string }[];
-    presentationGuides: { id: string; presentationGuide: string }[];
-}
+import type { IContent } from "../types/Content";
 
-const content = ref<Content[]>([]);
-const editingContent = ref<Content | null>(null);
+const content = ref<IContent[]>([]);
+const editingContent = ref<IContent | null>(null);
 const confirm = useConfirm();
 const toast = useToast();
 
-const onSaveContent = (newContent: Content) => {
+const onSaveContent = (newContent: IContent) => {
     delete newContent.init;
     const index = content.value.findIndex((c) => c.id === newContent.id);
     content.value[index] = newContent;
@@ -21,7 +14,7 @@ const onSaveContent = (newContent: Content) => {
 };
 
 const addContent = () => {
-    let newContent: Content = {
+    let newContent: IContent = {
         id: content.value.length + 1,
         title: "",
         content: "",
@@ -77,7 +70,7 @@ const removePresentationGuide = (id: string) => {
     }
 };
 
-const isContentEmpty = (content: Content | undefined) => {
+const isContentEmpty = (content: IContent | undefined) => {
     if (content) {
         return (
             content.title === "" &&
@@ -88,7 +81,7 @@ const isContentEmpty = (content: Content | undefined) => {
     }
     return false;
 };
-const confirmDelete = (content: Content) => {
+const confirmDelete = (content: IContent) => {
     confirm.require({
         message: `Are you sure you want to delete this question: ${content.title}?`,
         header: "Delete Confirmation",
@@ -168,7 +161,7 @@ const confirmDelete = (content: Content) => {
                             <Textarea
                                 v-model="editingContent.content"
                                 v-if="c.id === editingContent?.id"
-                                placeholder="Content"
+                                placeholder="IContent"
                                 unstyled
                                 rows="5"
                                 class="w-full p-2 border bg-slate-50 outline-none resize-none rounded-lg"
@@ -176,7 +169,7 @@ const confirmDelete = (content: Content) => {
                             <p class="whitespace-pre" v-else>
                                 <span v-if="c.content">{{ c.content }}</span>
                                 <span v-else class="text-slate-300"
-                                    >No Content</span
+                                    >No IContent</span
                                 >
                             </p>
                             <div class="space-y-2">
@@ -342,7 +335,7 @@ const confirmDelete = (content: Content) => {
                                     severity="secondary"
                                     label="Cancel"
                                     @click="
-                                        () => {isContentEmpty(editingContent?.init) && confirmDelete(editingContent?.init as Content)
+                                        () => {isContentEmpty(editingContent?.init) && confirmDelete(editingContent?.init as IContent)
                                         }
                                     "
                                 />
@@ -367,7 +360,7 @@ const confirmDelete = (content: Content) => {
                             : 'text-primary bg-primary-50 border-primary hover:bg-primary-100'
                     "
                 >
-                    <i class="pi pi-plus" />&nbsp; Add Content
+                    <i class="pi pi-plus" />&nbsp; Add IContent
                 </Button>
             </div>
         </div>
