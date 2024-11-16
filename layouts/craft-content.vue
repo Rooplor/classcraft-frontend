@@ -1,16 +1,33 @@
 <script setup lang="ts">
 import type { IContent } from "../types/Content";
 
-const content = ref<IContent[]>([]);
+const classroomStore = useClassroomStore();
+const { editingClassroom } = storeToRefs(classroomStore);
+
+const content = ref<IContent[]>(
+    JSON.parse(editingClassroom.value?.content as string)
+);
 const editingContent = ref<IContent | null>(null);
 const confirm = useConfirm();
 const toast = useToast();
+const { updateContent } = useClassroom();
 
 const onSaveContent = (newContent: IContent) => {
     delete newContent.init;
     const index = content.value.findIndex((c) => c.id === newContent.id);
     content.value[index] = newContent;
-    editingContent.value = null;
+    updateContent(editingClassroom.value.id, content.value).then((res) => {
+        if (res.success) {
+            toast.add({
+                severity: "success",
+                summary: "Saved",
+                detail: `Content has been saved`,
+                group: "tc",
+                life: 3000,
+            });
+            editingContent.value = null;
+        }
+    });
 };
 
 const addContent = () => {
@@ -161,7 +178,7 @@ const confirmDelete = (content: IContent) => {
                             <Textarea
                                 v-model="editingContent.content"
                                 v-if="c.id === editingContent?.id"
-                                placeholder="IContent"
+                                placeholder="Content"
                                 unstyled
                                 rows="5"
                                 class="w-full p-2 border bg-slate-50 outline-none resize-none rounded-lg"
@@ -169,7 +186,7 @@ const confirmDelete = (content: IContent) => {
                             <p class="whitespace-pre" v-else>
                                 <span v-if="c.content">{{ c.content }}</span>
                                 <span v-else class="text-slate-300"
-                                    >No IContent</span
+                                    >No Content</span
                                 >
                             </p>
                             <div class="space-y-2">
@@ -335,7 +352,10 @@ const confirmDelete = (content: IContent) => {
                                     severity="secondary"
                                     label="Cancel"
                                     @click="
-                                        () => {isContentEmpty(editingContent?.init) && confirmDelete(editingContent?.init as IContent)
+                                        () => {
+                                            isContentEmpty(editingContent?.init) 
+                                            ? confirmDelete(editingContent?.init as IContent)
+                                            : editingContent = null
                                         }
                                     "
                                 />
@@ -360,7 +380,7 @@ const confirmDelete = (content: IContent) => {
                             : 'text-primary bg-primary-50 border-primary hover:bg-primary-100'
                     "
                 >
-                    <i class="pi pi-plus" />&nbsp; Add IContent
+                    <i class="pi pi-plus" />&nbsp; Add Content
                 </Button>
             </div>
         </div>
