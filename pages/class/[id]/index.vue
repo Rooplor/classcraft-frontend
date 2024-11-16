@@ -18,7 +18,7 @@ try {
 }
 </script>
 <template>
-    <div class="w-full px-[10px] flex flex-col gap-[10px]">
+    <div class="w-full max-w-screen-lg mx-auto px-2 flex flex-col gap-2">
         <Feedbar />
         <div class="flex gap-2 mb-3">
             <div>
