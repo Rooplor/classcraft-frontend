@@ -1,4 +1,5 @@
 import type { IAddClassroomDTO, IClassroom } from "../types/Classroom";
+import type { IContent } from "../types/Content";
 import type { IResponse } from "../types/Response";
 
 const useClassroom = () => {
@@ -116,10 +117,10 @@ const useClassroom = () => {
 
     const updateContent = (
         id: string,
-        content: string
+        content: IContent[]
     ): Promise<IResponse<IClassroom>> => {
         return $fetch(`${config.public.baseUrl}/api/class/${id}/content`, {
-            body: content,
+            body: JSON.stringify(content),
             method: "PATCH",
         });
     };
