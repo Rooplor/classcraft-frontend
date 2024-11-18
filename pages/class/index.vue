@@ -34,7 +34,7 @@ watch(
 </script>
 
 <template>
-    <div class="w-full px-[10px]">
+    <div class="w-full max-w-screen-lg mx-auto px-2">
         <Feedbar />
         <div class="flex flex-col gap-4 pt-6 pb-[10px]">
             <div class="flex justify-between">

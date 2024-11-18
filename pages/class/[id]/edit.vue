@@ -116,9 +116,16 @@ if (id) {
 </script>
 
 <template>
-    <div class="w-full py-9 px-[10px]">
-        <div class="flex justify-end mb-10">
-            <div class="flex w-full justify-end items-center gap-2">
+    <div class="w-full pb-9 pr-2">
+        <div
+            class="w-full p-2 mb-16 sticky top-[10px] flex justify-between items-center gap-2 bg-white border rounded-xl z-10"
+        >
+            <div
+                class="h-full text-sm p-2 px-3 text-green-700 bg-green-200 rounded-md"
+            >
+                <i class="pi pi-star-fill" />&nbsp;14 People interested
+            </div>
+            <div class="flex gap-2">
                 <Button
                     label="Share"
                     :severity="
@@ -126,6 +133,7 @@ if (id) {
                     "
                     icon="pi pi-share-alt"
                     :disabled="!editingClassroom"
+                    size="small"
                     @click="toggle"
                 />
                 <Popover ref="op">
@@ -200,12 +208,13 @@ if (id) {
                     :disabled="
                         !editingClassroom || !editingClassroom?.registrationUrl
                     "
+                    size="small"
                     @click="onToggleRegistrationStatus"
                 />
             </div>
         </div>
         <div class="flex justify-center">
-            <Stepper value="1" class="basis-full">
+            <Stepper value="1" class="basis-full max-w-screen-lg m-auto">
                 <div class="mb-5">
                     <StepList>
                         <Step
@@ -221,7 +230,7 @@ if (id) {
                         </Step>
                     </StepList>
                 </div>
-                <StepPanels class="!p-0">
+                <StepPanels class="!p-0 max-w-screen-lg m-auto">
                     <StepPanel v-slot="{ activateCallback }" value="1">
                         <div class="bg-gray-50">
                             <NuxtLayout name="fill-class-detail" />
