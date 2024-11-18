@@ -70,7 +70,7 @@ watch(router.currentRoute, () => {
 });
 </script>
 <template>
-    <div v-ripple>
+    <div v-ripple class="duration-100 rounded-lg hover:bg-gray-100">
         <nuxt-link
             :to="to"
             :class="
@@ -78,7 +78,7 @@ watch(router.currentRoute, () => {
                     ? 'text-primary-500 bg-primary-100 hover:!bg-primary-100'
                     : ''
             "
-            class="flex items-center p-3 py-3 duration-100 rounded-lg hover:bg-gray-100"
+            class="flex items-center p-3"
         >
             <div class="flex items-center w-full gap-2">
                 <img
