@@ -70,75 +70,81 @@ watch(router.currentRoute, () => {
 });
 </script>
 <template>
-    <nuxt-link
-        :to="to"
-        :class="
-            path.includes(to)
-                ? 'text-primary-500 bg-primary-100 hover:!bg-primary-100'
-                : ''
-        "
-        class="flex items-center p-3 py-3 duration-100 rounded-lg hover:bg-gray-100"
-    >
-        <div class="flex items-center w-full gap-2">
-            <img
-                :src="classroom?.coverImage"
-                :alt="classroom?.title"
-                v-if="classroom?.coverImage"
-                class="h-12 w-12 rounded-md aspect-square object-cover"
-            />
-            <div
-                v-else-if="!label"
-                class="h-12 flex justify-center items-center bg-gray-200 border border-gray-300 text-gray-400 rounded-lg aspect-square"
-            >
-                <i class="pi pi-image" />
-            </div>
-            <i v-else :class="icon" />
-            <div class="space-y-1 w-3/4 overflow-hidden">
-                <div v-if="!label" class="flex gap-1">
-                    <Badge
-                        :value="classroom?.published ? 'Published' : 'Draft'"
-                        :severity="
-                            classroom?.published ? 'success' : 'secondary'
-                        "
-                        size="small"
-                    />
-                    <div
-                        v-if="classroom?.registrationStatus"
-                        class="text-[0.6rem] flex items-center text-white bg-orange-500 rounded-full px-0.5"
-                    >
-                        <i
-                            class="pi pi-stop-circle aspect-square animate-fadeout animate-alternate-reverse animate-infinite animate-duration-700"
-                        />
-                    </div>
+    <div v-ripple class="duration-100 rounded-lg hover:bg-gray-100">
+        <nuxt-link
+            :to="to"
+            :class="
+                path.includes(to)
+                    ? 'text-primary-500 bg-primary-100 hover:!bg-primary-100'
+                    : ''
+            "
+            class="flex items-center p-3"
+        >
+            <div class="flex items-center w-full gap-2">
+                <img
+                    :src="classroom?.coverImage"
+                    :alt="classroom?.title"
+                    v-if="classroom?.coverImage"
+                    class="h-12 w-12 rounded-md aspect-square object-cover"
+                />
+                <div
+                    v-else-if="!label"
+                    class="h-12 flex justify-center items-center bg-gray-200 border border-gray-300 text-gray-400 rounded-lg aspect-square"
+                >
+                    <i class="pi pi-image" />
                 </div>
-                <p class="w-full truncate">{{ classroom?.title || label }}</p>
+                <i v-else :class="icon" />
+                <div class="space-y-1 w-3/4 overflow-hidden">
+                    <div v-if="!label" class="flex gap-1">
+                        <Badge
+                            :value="
+                                classroom?.published ? 'Published' : 'Draft'
+                            "
+                            :severity="
+                                classroom?.published ? 'success' : 'secondary'
+                            "
+                            size="small"
+                        />
+                        <div
+                            v-if="classroom?.registrationStatus"
+                            class="text-[0.6rem] flex items-center text-white bg-orange-500 rounded-full px-0.5"
+                        >
+                            <i
+                                class="pi pi-stop-circle aspect-square animate-fadeout animate-alternate-reverse animate-infinite animate-duration-700"
+                            />
+                        </div>
+                    </div>
+                    <p class="w-full truncate">
+                        {{ classroom?.title || label }}
+                    </p>
+                </div>
             </div>
-        </div>
-        <Button
-            v-if="!label"
-            severity="secondary"
-            icon="pi pi-ellipsis-v"
-            aria-label="More"
-            rounded
-            text
-            @click.prevent="toggle"
-        />
-        <Popover ref="op">
-            <div class="flex flex-col gap-1">
-                <Button
-                    label="Edit"
-                    icon="pi pi-pencil"
-                    severity="secondary"
-                    @click="handleEdit"
-                />
-                <Button
-                    label="Delete"
-                    icon="pi pi-trash"
-                    severity="danger"
-                    text
-                    @click="confirmDelete(classroom?.title)"
-                />
-            </div>
-        </Popover>
-    </nuxt-link>
+            <Button
+                v-if="!label"
+                severity="secondary"
+                icon="pi pi-ellipsis-v"
+                aria-label="More"
+                rounded
+                text
+                @click.prevent="toggle"
+            />
+            <Popover ref="op">
+                <div class="flex flex-col gap-1">
+                    <Button
+                        label="Edit"
+                        icon="pi pi-pencil"
+                        severity="secondary"
+                        @click="handleEdit"
+                    />
+                    <Button
+                        label="Delete"
+                        icon="pi pi-trash"
+                        severity="danger"
+                        text
+                        @click="confirmDelete(classroom?.title)"
+                    />
+                </div>
+            </Popover>
+        </nuxt-link>
+    </div>
 </template>
