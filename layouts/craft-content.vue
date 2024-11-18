@@ -5,7 +5,7 @@ const classroomStore = useClassroomStore();
 const { editingClassroom } = storeToRefs(classroomStore);
 
 const content = ref<IContent[]>(
-    JSON.parse(editingClassroom.value?.content as string)
+    JSON.parse(editingClassroom?.value?.content || null)
 );
 const editingContent = ref<IContent | null>(null);
 const confirm = useConfirm();
