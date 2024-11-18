@@ -23,7 +23,11 @@ const formatDateRange = (dates: Date[]): string => {
 <template>
     <nuxt-link
         :to="'/class/' + classroom.id"
+        v-animateonscroll="{
+            enterClass: 'animate-fadein',
+        }"
         class="flex gap-6 bg-white border rounded-3xl p-3 duration-150 hover:bg-gray-100 hover:drop-shadow-sm"
+        v-ripple
     >
         <div
             alt="class image"

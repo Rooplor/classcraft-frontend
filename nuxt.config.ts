@@ -70,6 +70,7 @@ export default defineNuxtConfig({
                     darkModeSelector: ".app-dark",
                 },
             },
+            ripple: true,
         },
     },
     pinia: {
