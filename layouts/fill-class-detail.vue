@@ -190,170 +190,146 @@ watch(selfInstructored, (value) => {
 </script>
 
 <template>
-    <div>
-        <div>
-            <form @submit="onSubmit" class="flex gap-2">
-                <div class="w-1/2">
-                    <div
-                        class="border aspect-square rounded-3xl overflow-clip sticky top-[10px]"
+    <form @submit="onSubmit" class="flex gap-2">
+        <div class="w-1/2">
+            <div
+                class="border aspect-square rounded-3xl overflow-clip sticky top-[10px]"
+            >
+                <div class="w-full aspect-square bg-clip-border relative">
+                    <img
+                        v-if="coverImage"
+                        :src="coverImage"
+                        alt="Uploaded Image"
+                        class="object-cover w-full h-full"
+                    />
+                    <button
+                        v-else
+                        class="flex items-center justify-center w-full h-full bg-gray-200"
                     >
-                        <div
-                            class="w-full aspect-square bg-clip-border relative"
-                        >
-                            <img
-                                v-if="coverImage"
-                                :src="coverImage"
-                                alt="Uploaded Image"
-                                class="object-cover w-full h-full"
-                            />
-                            <button
-                                v-else
-                                class="flex items-center justify-center w-full h-full bg-gray-200"
-                            >
-                                <span class="text-gray-400">
-                                    <i class="pi pi-image text-[4rem]" />
-                                </span>
-                            </button>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                class="absolute inset-0 opacity-0 cursor-pointer"
-                                @change="onCoverImageChange"
-                            />
-                            <div class="absolute top-2 right-2">
-                                <Button
-                                    v-if="coverImage"
-                                    icon="pi pi-times"
-                                    severity="danger"
-                                    text
-                                    rounded
-                                    aria-label="Cancel"
-                                    @click="removeCoverImage"
-                                />
-                            </div>
-                        </div>
+                        <span class="text-gray-400">
+                            <i class="pi pi-image text-[4rem]" />
+                        </span>
+                    </button>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        class="absolute inset-0 opacity-0 cursor-pointer"
+                        @change="onCoverImageChange"
+                    />
+                    <div class="absolute top-2 right-2">
+                        <Button
+                            v-if="coverImage"
+                            icon="pi pi-times"
+                            severity="danger"
+                            text
+                            rounded
+                            aria-label="Cancel"
+                            @click="removeCoverImage"
+                        />
                     </div>
                 </div>
-                <div class="relative w-1/2 flex flex-col gap-2">
-                    <div
-                        class="flex flex-col w-full gap-8 px-6 py-8 bg-white border rounded-3xl"
-                    >
-                        <div class="flex flex-col gap-2">
-                            <InputText
-                                id="title"
-                                v-model="title"
-                                aria-describedby="title-help"
-                                :class="errors.title && 'p-invalid'"
-                                placeholder="Class title"
-                                class="!text-4xl font-bold outline-none"
-                                unstyled
-                            />
-                            <VeeErrorMessage
-                                name="title"
-                                class="text-red-500"
-                            />
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <Editor
-                                id="details"
-                                v-model="details"
-                                @load="initEditorValue"
-                                editorStyle="height: 320px"
-                                :class="errors.details && 'p-invalid'"
-                                placeholder="Enter class details"
-                            />
-                            <VeeErrorMessage
-                                name="details"
-                                class="text-red-500"
-                            />
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="target">Target audience</label>
-                            <Textarea
-                                id="target"
-                                v-model="target"
-                                aria-describedby="target-help"
-                                :class="errors.target && 'p-invalid'"
-                                placeholder="Who should attend this class?"
-                                rows="3"
-                                style="resize: none"
-                            />
-                            <VeeErrorMessage
-                                name="target"
-                                class="text-red-500"
-                            />
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="prerequisite"
-                                >Prerequisites (Optional)
-                            </label>
-                            <Textarea
-                                id="prerequisite"
-                                v-model="prerequisite"
-                                aria-describedby="prerequisite-help"
-                                placeholder="What should attendees know beforehand?"
-                                rows="3"
-                                style="resize: none"
-                            />
-                            <VeeErrorMessage
-                                name="prerequisite"
-                                class="text-red-500"
-                            />
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="type">Class type</label>
-                            <SelectButton
-                                v-model="type"
-                                :options="typeOption"
-                                optionLabel="name"
-                                optionValue="value"
-                                :invalid="errors.type"
-                            />
-                            <VeeErrorMessage name="type" class="text-red-500" />
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="format">Class format</label>
-                            <SelectButton
-                                v-model="format"
-                                :options="formatOption"
-                                optionLabel="name"
-                                optionValue="value"
-                                :invalid="errors.format"
-                            />
-                            <VeeErrorMessage
-                                name="format"
-                                class="text-red-500"
-                            />
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="capacity">Available seats</label>
-                            <InputNumber
-                                v-model="capacity"
-                                inputId="capacity"
-                                :invalid="errors.capacity"
-                                :min="1"
-                                placeholder="How many people can attend?"
-                            />
-                            <VeeErrorMessage
-                                name="capacity"
-                                class="text-red-500"
-                            />
-                        </div>
-                        <div class="space-y-2">
-                            <DatePicker
-                                v-model="date"
-                                selectionMode="multiple"
-                                :invalid="errors.date"
-                                showIcon
-                                iconDisplay="input"
-                                fluid
-                                showTime
-                                hourFormat="24"
-                                date-format="D d M yy"
-                                showButtonBar
-                                placeholder="Select date eg. Tue 22 Oct 2024"
-                            />
-                            <!-- <div
+            </div>
+        </div>
+        <div class="relative w-1/2 flex flex-col gap-2">
+            <div
+                class="flex flex-col w-full gap-8 px-6 py-8 bg-white border rounded-3xl"
+            >
+                <div class="flex flex-col gap-2">
+                    <InputText
+                        id="title"
+                        v-model="title"
+                        aria-describedby="title-help"
+                        :class="errors.title && 'p-invalid'"
+                        placeholder="Class title"
+                        class="!text-4xl font-bold outline-none"
+                        unstyled
+                    />
+                    <VeeErrorMessage name="title" class="text-red-500" />
+                </div>
+                <div class="flex flex-col gap-2">
+                    <Editor
+                        id="details"
+                        v-model="details"
+                        @load="initEditorValue"
+                        editorStyle="height: 320px"
+                        :class="errors.details && 'p-invalid'"
+                        placeholder="Enter class details"
+                    />
+                    <VeeErrorMessage name="details" class="text-red-500" />
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="target">Target audience</label>
+                    <Textarea
+                        id="target"
+                        v-model="target"
+                        aria-describedby="target-help"
+                        :class="errors.target && 'p-invalid'"
+                        placeholder="Who should attend this class?"
+                        rows="3"
+                        style="resize: none"
+                    />
+                    <VeeErrorMessage name="target" class="text-red-500" />
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="prerequisite">Prerequisites (Optional) </label>
+                    <Textarea
+                        id="prerequisite"
+                        v-model="prerequisite"
+                        aria-describedby="prerequisite-help"
+                        placeholder="What should attendees know beforehand?"
+                        rows="3"
+                        style="resize: none"
+                    />
+                    <VeeErrorMessage name="prerequisite" class="text-red-500" />
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="type">Class type</label>
+                    <SelectButton
+                        v-model="type"
+                        :options="typeOption"
+                        optionLabel="name"
+                        optionValue="value"
+                        :invalid="errors.type"
+                    />
+                    <VeeErrorMessage name="type" class="text-red-500" />
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="format">Class format</label>
+                    <SelectButton
+                        v-model="format"
+                        :options="formatOption"
+                        optionLabel="name"
+                        optionValue="value"
+                        :invalid="errors.format"
+                    />
+                    <VeeErrorMessage name="format" class="text-red-500" />
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="capacity">Available seats</label>
+                    <InputNumber
+                        v-model="capacity"
+                        inputId="capacity"
+                        :invalid="errors.capacity"
+                        :min="1"
+                        placeholder="How many people can attend?"
+                    />
+                    <VeeErrorMessage name="capacity" class="text-red-500" />
+                </div>
+                <div class="space-y-2">
+                    <DatePicker
+                        v-model="date"
+                        selectionMode="multiple"
+                        :invalid="errors.date"
+                        showIcon
+                        iconDisplay="input"
+                        fluid
+                        showTime
+                        hourFormat="24"
+                        date-format="D d M yy"
+                        showButtonBar
+                        placeholder="Select date eg. Tue 22 Oct 2024"
+                    />
+                    <!-- <div
                                 class="flex flex-col gap-6 border p-6 rounded-xl bg-gray-50"
                             >
                                 <div class="flex flex-col gap-2">
@@ -431,145 +407,128 @@ watch(selfInstructored, (value) => {
                                     </div>
                                 </div>
                             </div> -->
-                        </div>
-                    </div>
+                </div>
+            </div>
 
-                    <div
-                        class="flex flex-col w-full bg-white border rounded-3xl"
-                    >
+            <div class="flex flex-col w-full bg-white border rounded-3xl">
+                <div
+                    class="flex items-center gap-2 p-4 rounded-t-3xl border-b"
+                    :class="selfInstructored && 'bg-gray-200'"
+                >
+                    <Checkbox
+                        inputId="selfInstructored"
+                        v-model="selfInstructored"
+                        binary
+                    />
+                    <label for="selfInstructored"> I'm the instructor </label>
+                </div>
+                <div class="flex flex-col gap-8 px-6 py-8">
+                    <div class="flex gap-6">
                         <div
-                            class="flex items-center gap-2 p-4 rounded-t-3xl border-b"
-                            :class="selfInstructored && 'bg-gray-200'"
+                            class="w-52 h-52 border aspect-square rounded-full overflow-clip relative"
                         >
-                            <Checkbox
-                                inputId="selfInstructored"
-                                v-model="selfInstructored"
-                                binary
-                            />
-                            <label for="selfInstructored">
-                                I'm the instructor
-                            </label>
-                        </div>
-                        <div class="flex flex-col gap-8 px-6 py-8">
-                            <div class="flex gap-6">
-                                <div
-                                    class="w-52 h-52 border aspect-square rounded-full overflow-clip relative"
+                            <div
+                                class="w-52 h-52 aspect-square bg-clip-border relative"
+                            >
+                                <img
+                                    v-if="instructorAvatar"
+                                    :src="instructorAvatar"
+                                    alt="Uploaded Image"
+                                    class="object-cover w-full h-full"
+                                />
+                                <button
+                                    v-else
+                                    class="flex items-center justify-center w-full h-full bg-gray-200"
                                 >
-                                    <div
-                                        class="w-52 h-52 aspect-square bg-clip-border relative"
-                                    >
-                                        <img
-                                            v-if="instructorAvatar"
-                                            :src="instructorAvatar"
-                                            alt="Uploaded Image"
-                                            class="object-cover w-full h-full"
-                                        />
-                                        <button
-                                            v-else
-                                            class="flex items-center justify-center w-full h-full bg-gray-200"
-                                        >
-                                            <span class="text-gray-400">
-                                                <i
-                                                    class="pi pi-image text-[3rem]"
-                                                />
-                                            </span>
-                                        </button>
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            class="absolute inset-0 opacity-0 cursor-pointer"
-                                            @change="onInstructorAvatarChange"
-                                        />
-                                        <div class="absolute top-2 right-2">
-                                            <Button
-                                                v-if="instructorAvatar"
-                                                icon="pi pi-times"
-                                                severity="danger"
-                                                text
-                                                rounded
-                                                aria-label="Cancel"
-                                                @click="removeInstructorAvatar"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="space-y-4 w-full">
-                                    <div class="flex flex-col gap-2">
-                                        <InputText
-                                            id="instructorName"
-                                            v-model="instructorName"
-                                            aria-describedby="instructorName-help"
-                                            :class="
-                                                errors.instructorName &&
-                                                'p-invalid'
-                                            "
-                                            placeholder="Instructor name"
-                                            :disabled="selfInstructored"
-                                            class="!text-2xl font-bold outline-none"
-                                            unstyled
-                                        />
-                                        <VeeErrorMessage
-                                            name="instructorName"
-                                            class="text-red-500"
-                                        />
-                                    </div>
-                                    <div class="flex flex-col gap-2">
-                                        <Textarea
-                                            id="instructorBio"
-                                            v-model="instructorBio"
-                                            aria-describedby="instructorBio-help"
-                                            :class="
-                                                errors.instructorBio &&
-                                                'p-invalid'
-                                            "
-                                            rows="5"
-                                            style="resize: none"
-                                            placeholder="Tell us about the instructor"
-                                            :disabled="selfInstructored"
-                                        />
-                                        <VeeErrorMessage
-                                            name="instructorBio"
-                                            class="text-red-500"
-                                        />
-                                    </div>
+                                    <span class="text-gray-400">
+                                        <i class="pi pi-image text-[3rem]" />
+                                    </span>
+                                </button>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    class="absolute inset-0 opacity-0 cursor-pointer"
+                                    @change="onInstructorAvatarChange"
+                                />
+                                <div class="absolute top-2 right-2">
+                                    <Button
+                                        v-if="instructorAvatar"
+                                        icon="pi pi-times"
+                                        severity="danger"
+                                        text
+                                        rounded
+                                        aria-label="Cancel"
+                                        @click="removeInstructorAvatar"
+                                    />
                                 </div>
                             </div>
+                        </div>
+                        <div class="space-y-4 w-full">
                             <div class="flex flex-col gap-2">
-                                <label for="instructorFamiliarity"
-                                    >Familiarity to the topic</label
-                                >
-                                <Textarea
-                                    id="instructorFamiliarity"
-                                    v-model="instructorFamiliarity"
-                                    aria-describedby="instructorFamiliarity-help"
+                                <InputText
+                                    id="instructorName"
+                                    v-model="instructorName"
+                                    aria-describedby="instructorName-help"
                                     :class="
-                                        errors.instructorFamiliarity &&
-                                        'p-invalid'
+                                        errors.instructorName && 'p-invalid'
                                     "
-                                    rows="5"
-                                    style="resize: none"
-                                    placeholder="How familiar is the instructor with the topic?"
+                                    placeholder="Instructor name"
+                                    :disabled="selfInstructored"
+                                    class="!text-2xl font-bold outline-none"
+                                    unstyled
                                 />
                                 <VeeErrorMessage
-                                    name="instructorFamiliarity"
+                                    name="instructorName"
+                                    class="text-red-500"
+                                />
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <Textarea
+                                    id="instructorBio"
+                                    v-model="instructorBio"
+                                    aria-describedby="instructorBio-help"
+                                    :class="errors.instructorBio && 'p-invalid'"
+                                    rows="5"
+                                    style="resize: none"
+                                    placeholder="Tell us about the instructor"
+                                    :disabled="selfInstructored"
+                                />
+                                <VeeErrorMessage
+                                    name="instructorBio"
                                     class="text-red-500"
                                 />
                             </div>
                         </div>
                     </div>
-                    <div
-                        class="sticky bottom-0 left-0 py-3 justify-end w-full z-40"
-                    >
-                        <Button
-                            label="Save"
-                            icon="pi pi-check"
-                            type="submit"
-                            size="large"
-                            class="w-full"
+                    <div class="flex flex-col gap-2">
+                        <label for="instructorFamiliarity"
+                            >Familiarity to the topic</label
+                        >
+                        <Textarea
+                            id="instructorFamiliarity"
+                            v-model="instructorFamiliarity"
+                            aria-describedby="instructorFamiliarity-help"
+                            :class="errors.instructorFamiliarity && 'p-invalid'"
+                            rows="5"
+                            style="resize: none"
+                            placeholder="How familiar is the instructor with the topic?"
+                        />
+                        <VeeErrorMessage
+                            name="instructorFamiliarity"
+                            class="text-red-500"
                         />
                     </div>
                 </div>
-            </form>
+            </div>
+            <div class="sticky bottom-0 left-0 py-3 justify-end w-full z-40">
+                <Button
+                    label="Save"
+                    icon="pi pi-check"
+                    type="submit"
+                    size="large"
+                    class="w-full"
+                />
+            </div>
         </div>
-    </div>
+    </form>
 </template>
