@@ -128,6 +128,7 @@ const onEdit = (question: Question) => {
                 </h3>
                 <button
                     type="button"
+                    v-ripple
                     class="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-lg duration-150 hover:bg-slate-200"
                     @click="toggleHasRegistrationUrl"
                 >
@@ -182,6 +183,7 @@ const onEdit = (question: Question) => {
                     </p>
                     <div class="flex gap-2">
                         <div
+                            v-ripple
                             class="w-[8rem] p-4 bg-gray-100 hover:bg-gray-200 duration-150 rounded-2xl"
                         >
                             <div class="inline-flex flex-col gap-1">
@@ -193,6 +195,7 @@ const onEdit = (question: Question) => {
                             </div>
                         </div>
                         <div
+                            v-ripple
                             class="w-[8rem] p-4 bg-gray-100 hover:bg-gray-200 duration-150 rounded-2xl"
                         >
                             <div class="inline-flex flex-col gap-1">
@@ -287,6 +290,7 @@ const onEdit = (question: Question) => {
                             :disabled="
                                 editingQuestion !== null && questions.length > 0
                             "
+                            v-ripple
                             @click="addQuestion"
                             class="w-full p-6 border rounded-2xl duration-150"
                             :class="

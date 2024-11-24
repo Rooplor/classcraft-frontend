@@ -42,7 +42,7 @@ const schema = yup.object({
     instructorName: yup.string().required(),
     instructorBio: yup.string().required(),
     instructorAvatar: yup.string(),
-    instructorFamiliarity: yup.string(),
+    instructorFamiliarity: yup.string().required(),
     coverImage: yup.string(),
 });
 
@@ -146,9 +146,9 @@ const onSubmit = handleSubmit((values: any) => {
                 group: "tc",
                 life: 3000,
             });
+            resetForm();
         }
     });
-    resetForm();
 });
 
 const onCoverImageChange = async (event: any) => {
@@ -562,7 +562,7 @@ watch(selfInstructored, (value) => {
                                     "
                                     placeholder="Instructor name"
                                     :disabled="selfInstructored"
-                                    class="!text-2xl font-bold outline-none"
+                                    class="!text-2xl font-bold outline-none w-full"
                                     unstyled
                                 />
                                 <VeeErrorMessage
