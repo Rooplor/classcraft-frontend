@@ -35,7 +35,7 @@ const schema = yup.object({
     instructorName: yup.string().required(),
     instructorBio: yup.string().required(),
     instructorAvatar: yup.string(),
-    instructorFamiliarity: yup.string(),
+    instructorFamiliarity: yup.string().required(),
     coverImage: yup.string(),
 });
 
@@ -119,9 +119,9 @@ const onSubmit = handleSubmit((values: any) => {
                 group: "tc",
                 life: 3000,
             });
+            resetForm();
         }
     });
-    resetForm();
 });
 
 const onCoverImageChange = async (event: any) => {
