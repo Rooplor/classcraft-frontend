@@ -22,16 +22,23 @@ const schema = yup.object({
     type: yup.string().required(),
     format: yup.string().required(),
     capacity: yup.number().required(),
-    date: yup.array().of(yup.date().required()),
-    // dates: yup.array().of(
-    //     yup
-    //         .object({
-    //             date: yup.date().required(),
-    //             startTime: yup.date().required(),
-    //             endTime: yup.date().required(),
-    //         })
-    //         .required()
-    // ),
+    dates: yup.array().of(
+        yup
+            .object({
+                dates: yup.object({
+                    startDateTime: yup.date().required("Fill the empty date"),
+                    endDateTime: yup
+                        .date()
+                        .required("End time is required")
+                        .min(
+                            yup.ref("startDateTime"),
+                            "End time must be after start time"
+                        ),
+                }),
+                venueId: yup.array().of(yup.string()),
+            })
+            .required()
+    ),
     instructorName: yup.string().required(),
     instructorBio: yup.string().required(),
     instructorAvatar: yup.string(),
@@ -39,25 +46,38 @@ const schema = yup.object({
     coverImage: yup.string(),
 });
 
-const initialValues = editingClassroom.value && {
-    title: editingClassroom.value.title,
-    details: editingClassroom.value.details,
-    target: editingClassroom.value.target,
-    prerequisite: editingClassroom.value.prerequisite,
-    type: editingClassroom.value.type,
-    format: editingClassroom.value.format,
-    capacity: editingClassroom.value.capacity,
-    date: editingClassroom.value.date.map((date: string) => new Date(date)), // dates: editingClassroom.value.dates.map((date) => ({
-    //     date: new Date(date.date),
-    //     startTime: new Date(date.startTime),
-    //     endTime: new Date(date.endTime),
-    // })),
-    instructorName: editingClassroom.value.instructorName,
-    instructorBio: editingClassroom.value.instructorBio,
-    instructorAvatar: editingClassroom.value.instructorAvatar,
-    instructorFamiliarity: editingClassroom.value.instructorFamiliarity,
-    coverImage: editingClassroom.value.coverImage,
-};
+const initialValues = editingClassroom.value
+    ? {
+          title: editingClassroom.value.title,
+          details: editingClassroom.value.details,
+          target: editingClassroom.value.target,
+          prerequisite: editingClassroom.value.prerequisite,
+          type: editingClassroom.value.type,
+          format: editingClassroom.value.format,
+          capacity: editingClassroom.value.capacity,
+          dates: editingClassroom.value.dates.map((date: any) => ({
+              dates: {
+                  startDateTime: isoToDateWithTimezone(
+                      date.dates.startDateTime
+                  ),
+                  endDateTime: isoToDateWithTimezone(date.dates.endDateTime),
+              },
+              venueId: date.venueId,
+          })),
+          instructorName: editingClassroom.value.instructorName,
+          instructorBio: editingClassroom.value.instructorBio,
+          instructorAvatar: editingClassroom.value.instructorAvatar,
+          instructorFamiliarity: editingClassroom.value.instructorFamiliarity,
+          coverImage: editingClassroom.value.coverImage,
+      }
+    : {
+          dates: [
+              {
+                  dates: { startDateTime: null, endDateTime: null },
+                  venueId: [],
+              },
+          ],
+      };
 
 const { defineField, handleSubmit, resetForm, errors } = useForm({
     initialValues,
@@ -71,7 +91,7 @@ const [prerequisite] = defineField("prerequisite");
 const [type] = defineField("type");
 const [format] = defineField("format");
 const [capacity] = defineField("capacity");
-const [date] = defineField("date");
+const [dates] = defineField("dates");
 const [instructorName] = defineField("instructorName");
 const [instructorBio] = defineField("instructorBio");
 const [instructorAvatar] = defineField("instructorAvatar");
@@ -93,7 +113,14 @@ const typeOption = ref([
 ]);
 
 const onSubmit = handleSubmit((values: any) => {
-    values.date = values.date.map((date: Date) => date.toISOString());
+    values.dates = values.dates.map((date: any) => ({
+        dates: {
+            startDateTime: date.dates.startDateTime.toISOString(),
+            endDateTime: date.dates.endDateTime.toISOString(),
+        },
+        venueId: date.venueId,
+    }));
+
     if (editingClassroom.value) {
         updateClassroom(editingClassroom.value.id, values).then((res) => {
             if (res.success) {
@@ -316,54 +343,79 @@ watch(selfInstructored, (value) => {
                     <VeeErrorMessage name="capacity" class="text-red-500" />
                 </div>
                 <div class="space-y-2">
-                    <DatePicker
-                        v-model="date"
-                        selectionMode="multiple"
-                        :invalid="errors.date"
-                        showIcon
-                        iconDisplay="input"
-                        fluid
-                        showTime
-                        hourFormat="24"
-                        date-format="D d M yy"
-                        showButtonBar
-                        placeholder="Select date eg. Tue 22 Oct 2024"
-                    />
-                    <!-- <div
-                                class="flex flex-col gap-6 border p-6 rounded-xl bg-gray-50"
+                    <label for="dates">Date and time</label>
+                    <div
+                        class="bg-gray-50 border rounded-2xl p-2 space-y-3"
+                        :class="errors.dates && 'border-red-500'"
+                    >
+                        <div
+                            v-for="(entry, index) in dates"
+                            :key="index"
+                            class="relative"
+                        >
+                            <div
+                                class="border bg-white p-4 rounded-xl space-y-2"
                             >
-                                <div class="flex flex-col gap-2">
-                                    <label for="dates">Date</label>
+                                <div class="space-y-2">
+                                    <label
+                                        for="date"
+                                        class="block text-sm font-medium text-gray-700 mb-1"
+                                    >
+                                        Day {{ index + 1 }}
+                                    </label>
                                     <DatePicker
-                                        v-model="xxx"
-                                        selectionMode="multiple"
-                                        :invalid="errors.dates"
+                                        id="date"
+                                        v-model="entry.dates.startDateTime"
+                                        :name="
+                                            'dates[' +
+                                            index +
+                                            '].date.startDateTime'
+                                        "
                                         showIcon
                                         iconDisplay="input"
                                         fluid
                                         hourFormat="24"
                                         date-format="D d M yy"
                                         showButtonBar
-                                        placeholder="Select date eg. Tue 22 Oct 2024"
-                                    />
-                                    <VeeErrorMessage
-                                        name="dates"
-                                        class="text-red-500"
+                                        placeholder="Select date"
+                                        v-on:date-select="
+                                            (event) => {
+                                                entry.dates.startDateTime =
+                                                    event;
+                                                entry.dates.endDateTime = event;
+                                            }
+                                        "
                                     />
                                 </div>
                                 <div class="flex gap-2">
-                                    <div class="flex flex-col gap-2">
-                                        <label for="startTime">From</label>
+                                    <div>
+                                        <label
+                                            for="date.startDateTime"
+                                            class="block text-sm font-medium text-gray-700 mb-1"
+                                        >
+                                            From
+                                        </label>
                                         <DatePicker
-                                            v-model="yyy"
-                                            selectionMode="single"
-                                            :invalid="errors.startTime"
-                                            timeOnly
+                                            id="date.startDateTime"
+                                            v-model="entry.dates.startDateTime"
+                                            :name="
+                                                'dates[' +
+                                                index +
+                                                '].date.startDateTime'
+                                            "
                                             showIcon
-                                            fluid
                                             iconDisplay="input"
+                                            fluid
+                                            timeOnly
                                             hourFormat="24"
+                                            date-format="D d M yy"
                                             placeholder="Select start time"
+                                            v-on:date-select="
+                                                (event) => {
+                                                    entry.dates.endDateTime =
+                                                        event;
+                                                }
+                                            "
                                         >
                                             <template #inputicon="slotProps">
                                                 <i
@@ -373,22 +425,31 @@ watch(selfInstructored, (value) => {
                                                     "
                                                 /> </template
                                         ></DatePicker>
-                                        <VeeErrorMessage
-                                            name="startTime"
-                                            class="text-red-500"
-                                        />
                                     </div>
-                                    <div class="flex flex-col gap-2">
-                                        <label for="endTime">To</label>
+                                    <div>
+                                        <label
+                                            for="date.endTime"
+                                            class="block text-sm font-medium text-gray-700 mb-1"
+                                        >
+                                            To
+                                        </label>
                                         <DatePicker
-                                            v-model="zzz"
-                                            selectionMode="single"
-                                            :invalid="errors.endTime"
-                                            timeOnly
+                                            id="date.endDateTime"
+                                            v-model="entry.dates.endDateTime"
+                                            :name="
+                                                'dates[' +
+                                                index +
+                                                '].date.endDateTime'
+                                            "
                                             showIcon
-                                            fluid
+                                            :min-date="
+                                                entry.dates.startDateTime
+                                            "
                                             iconDisplay="input"
+                                            fluid
+                                            timeOnly
                                             hourFormat="24"
+                                            date-format="D d M yy"
                                             placeholder="Select end time"
                                         >
                                             <template #inputicon="slotProps">
@@ -397,16 +458,43 @@ watch(selfInstructored, (value) => {
                                                     @click="
                                                         slotProps.clickCallback
                                                     "
-                                                />
-                                            </template>
-                                        </DatePicker>
-                                        <VeeErrorMessage
-                                            name="endTime"
-                                            class="text-red-500"
-                                        />
+                                                /> </template
+                                        ></DatePicker>
                                     </div>
                                 </div>
-                            </div> -->
+                                <div
+                                    :class="dates.length === 1 && 'hidden'"
+                                    class="absolute top-1 right-1 !m-0"
+                                >
+                                    <Button
+                                        icon="pi pi-times"
+                                        severity="danger"
+                                        text
+                                        size="small"
+                                        rounded
+                                        aria-label="Cancel"
+                                        @click="dates.splice(index, 1)"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <Button
+                            label="Add date"
+                            icon="pi pi-plus"
+                            class="w-full"
+                            @click="
+                                () =>
+                                    dates.push({
+                                        dates: {
+                                            startDateTime: null,
+                                            endDateTime: null,
+                                        },
+                                        venueId: [],
+                                    })
+                            "
+                        />
+                    </div>
+                    <VeeErrorMessage name="dates" class="text-red-500" />
                 </div>
             </div>
 
