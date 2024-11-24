@@ -1,23 +1,42 @@
 <script setup lang="ts">
-import type { IClassroom } from "../types/Classroom";
+import type { IClassroom, IReservationDateAndVenue } from "../types/Classroom";
 
 const props = defineProps<{
     classroom: IClassroom;
 }>();
 
-const formatDateRange = (dates: Date[]): string => {
-    const formattedDates = dates
-        .map((date) =>
-            new Date(date).toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-            })
-        )
-        .sort();
-    return `${formattedDates[0]} - ${
-        formattedDates[formattedDates.length - 1]
-    }`;
+const formatDateRange = (dates: IReservationDateAndVenue[]) => {
+    const locale = "en-GB";
+    const options: Intl.DateTimeFormatOptions = {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+    };
+
+    const sortedDates = dates.sort((a, b) => {
+        return (
+            new Date(a.dates.startDateTime).getTime() -
+            new Date(b.dates.startDateTime).getTime()
+        );
+    });
+
+    const firstDate = isoToDateWithTimezone(sortedDates[0].dates.startDateTime);
+    const lastDate = isoToDateWithTimezone(
+        sortedDates[sortedDates.length - 1].dates.endDateTime
+    );
+
+    if (firstDate.toDateString() === lastDate.toDateString()) {
+        return firstDate.toLocaleDateString(locale, {
+            weekday: "long",
+            month: "short",
+            day: "numeric",
+        });
+    }
+
+    return `${firstDate.toLocaleDateString(
+        locale,
+        options
+    )} - ${lastDate.toLocaleDateString(locale, options)}`;
 };
 </script>
 <template>
@@ -78,7 +97,7 @@ const formatDateRange = (dates: Date[]): string => {
                         <i
                             class="pi pi-calendar p-2 rounded-lg border bg-slate-100"
                         />
-                        {{ formatDateRange(classroom?.date) }}
+                        {{ formatDateRange(classroom.dates) }}
                     </p>
                     <p>
                         <i

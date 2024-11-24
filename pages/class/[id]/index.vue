@@ -112,30 +112,40 @@ try {
                             </div>
                             <div class="space-y-8">
                                 <div
-                                    v-for="(date, index) in classroom.date"
+                                    v-for="(date, index) in classroom.dates"
                                     :key="index"
                                 >
                                     <p>
                                         {{
-                                            new Date(date).toLocaleString(
-                                                "en-GB",
-                                                {
-                                                    weekday: "short",
-                                                    month: "long",
-                                                    day: "numeric",
-                                                }
-                                            )
+                                            isoToDateWithTimezone(
+                                                date.dates.startDateTime
+                                            ).toLocaleString("en-GB", {
+                                                weekday: "long",
+                                                month: "long",
+                                                day: "numeric",
+                                                year: "numeric",
+                                            })
                                         }}
                                     </p>
                                     <p class="text-sm text-slate-500">
                                         {{
-                                            new Date(date).toLocaleString(
-                                                "en-GB",
-                                                {
-                                                    hour: "numeric",
-                                                    minute: "numeric",
-                                                }
-                                            )
+                                            isoToDateWithTimezone(
+                                                date.dates.startDateTime
+                                            ).toLocaleString("en-GB", {
+                                                hour12: true,
+                                                hour: "numeric",
+                                                minute: "numeric",
+                                            })
+                                        }}
+                                        -
+                                        {{
+                                            isoToDateWithTimezone(
+                                                date.dates.endDateTime
+                                            ).toLocaleString("en-GB", {
+                                                hour12: true,
+                                                hour: "numeric",
+                                                minute: "numeric",
+                                            })
                                         }}
                                     </p>
                                 </div>
