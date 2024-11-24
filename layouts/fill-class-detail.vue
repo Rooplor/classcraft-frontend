@@ -474,7 +474,7 @@ watch(selfInstructored, (value) => {
                                     "
                                     placeholder="Instructor name"
                                     :disabled="selfInstructored"
-                                    class="!text-2xl font-bold outline-none"
+                                    class="!text-2xl font-bold outline-none w-full"
                                     unstyled
                                 />
                                 <VeeErrorMessage
