@@ -9,7 +9,7 @@ export interface IClassroom {
     type: EClassroomType;
     format: EClassroomFormat;
     capacity: number;
-    date: Date[];
+    dates: IReservationDateAndVenue[];
     stepperStatus: EStepperStatus;
     meetingUrl: string;
     content: string;
@@ -36,6 +36,14 @@ export interface IAddClassroomDTO {
     format: EClassroomFormat;
     capacity: number;
     date: Date;
+}
+
+export interface IReservationDateAndVenue {
+    dates: {
+        startDateTime: string;
+        endDateTime: string;
+    };
+    venueId: string[];
 }
 
 enum EClassroomType {
