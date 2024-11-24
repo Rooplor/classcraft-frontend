@@ -34,27 +34,29 @@ watch(
 </script>
 
 <template>
-    <div class="w-full max-w-screen-lg mx-auto px-2">
+    <div class="w-full">
         <Feedbar />
-        <div class="flex flex-col gap-4 pt-6 pb-[10px]">
-            <div class="flex justify-between">
-                <SelectButton
-                    v-model="value"
-                    :options="options"
-                    aria-labelledby="basic"
-                />
-                <nuxt-link to="class/new">
-                    <Button>
-                        <p><i class="pi pi-plus" /> Add class</p>
-                    </Button>
-                </nuxt-link>
-            </div>
-            <div class="space-y-[10px]">
-                <ClassroomItem
-                    v-for="(classroom, index) in classrooms"
-                    :key="index"
-                    :classroom="classroom"
-                />
+        <div class="w-full max-w-screen-lg mx-auto px-2">
+            <div class="flex flex-col gap-4 pt-6 pb-[10px]">
+                <div class="flex justify-between">
+                    <SelectButton
+                        v-model="value"
+                        :options="options"
+                        aria-labelledby="basic"
+                    />
+                    <nuxt-link to="class/new">
+                        <Button>
+                            <p><i class="pi pi-plus" /> Add class</p>
+                        </Button>
+                    </nuxt-link>
+                </div>
+                <div class="space-y-[10px]">
+                    <ClassroomItem
+                        v-for="(classroom, index) in classrooms"
+                        :key="index"
+                        :classroom="classroom"
+                    />
+                </div>
             </div>
         </div>
     </div>
