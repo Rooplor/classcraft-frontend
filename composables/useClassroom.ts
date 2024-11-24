@@ -1,4 +1,8 @@
-import type { IAddClassroomDTO, IClassroom } from "../types/Classroom";
+import type {
+    IAddClassroomDTO,
+    IClassroom,
+    IReservationDateAndVenue,
+} from "../types/Classroom";
 import type { IContent } from "../types/Content";
 import type { IResponse } from "../types/Response";
 
@@ -39,6 +43,16 @@ const useClassroom = () => {
         return $fetch(`${config.public.baseUrl}/api/class`, {
             method: "POST",
             body: JSON.stringify(classroom),
+        });
+    };
+
+    const reserveVenue = (
+        id: string,
+        v: IReservationDateAndVenue[]
+    ): Promise<IResponse<boolean>> => {
+        return $fetch(`${config.public.baseUrl}/api/class/${id}/reservation`, {
+            method: "POST",
+            body: JSON.stringify(v),
         });
     };
 
@@ -154,6 +168,7 @@ const useClassroom = () => {
         updateMeetingUrl,
         updateContent,
         updateClassroomStatus,
+        reserveVenue,
     };
 };
 
