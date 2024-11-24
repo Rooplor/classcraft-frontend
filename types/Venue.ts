@@ -1,5 +1,5 @@
 interface IVenue {
-    id: number;
+    id: string;
     room: string;
     location: {
         building: string;
@@ -12,7 +12,7 @@ interface IVenue {
 
 export const mockVenues: IVenue[] = [
     {
-        id: 1,
+        id: "1",
         room: "Train 3",
         location: {
             building: "SIT Building",
@@ -23,7 +23,7 @@ export const mockVenues: IVenue[] = [
         imageUrl: "https://picsum.photos/300",
     },
     {
-        id: 2,
+        id: "2",
         room: "Train 5",
         location: {
             building: "SIT Building",
@@ -34,7 +34,7 @@ export const mockVenues: IVenue[] = [
         imageUrl: "https://picsum.photos/300",
     },
     {
-        id: 3,
+        id: "3",
         room: "LX10 - 1",
         location: {
             building: "LX Building",
@@ -45,7 +45,7 @@ export const mockVenues: IVenue[] = [
         imageUrl: "https://picsum.photos/300",
     },
     {
-        id: 4,
+        id: "4",
         room: "LX10 - 2",
         location: {
             building: "LX Building",
@@ -56,7 +56,7 @@ export const mockVenues: IVenue[] = [
         imageUrl: "https://picsum.photos/300",
     },
     {
-        id: 5,
+        id: "5",
         room: "LX10 - 3",
         location: {
             building: "LX Building",
@@ -67,7 +67,7 @@ export const mockVenues: IVenue[] = [
         imageUrl: "https://picsum.photos/300",
     },
     {
-        id: 6,
+        id: "6",
         room: "LX11 - 3",
         location: {
             building: "LX Building",
