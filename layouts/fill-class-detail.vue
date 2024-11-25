@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
 import * as yup from "yup";
+import { EFileType } from "../types/File";
+import type { EditorLoadEvent } from "primevue/editor";
 
 const { addClassroom, updateClassroom } = useClassroom();
 const router = useRouter();
@@ -157,7 +159,7 @@ const onCoverImageChange = async (event: any) => {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("classId", editingClassroom.value.id);
+    formData.append("fileCategory", EFileType.CLASSROOM_COVER);
 
     try {
         const res = await uploadFile(formData);
@@ -179,7 +181,7 @@ const onInstructorAvatarChange = async (event: any) => {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("classId", editingClassroom.value.id);
+    formData.append("fileCategory", EFileType.INSTRUCTOR_AVATAR);
 
     try {
         const res = await uploadFile(formData);
@@ -195,7 +197,7 @@ const removeInstructorAvatar = () => {
     instructorAvatar.value = null;
 };
 
-function initEditorValue({ instance }) {
+function initEditorValue({ instance }: EditorLoadEvent) {
     instance.setContents(
         instance.clipboard.convert({
             html: editingClassroom.value?.details,
