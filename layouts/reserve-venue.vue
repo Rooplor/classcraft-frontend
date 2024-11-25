@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { SIT_BOOKING_WEBSITE } from "../constants/url";
-import type { IClassroom } from "../types/Classroom";
-import { mockVenues, type IVenue } from "../types/Venue";
+import { EVenueRequestStatus, type IClassroom } from "../types/Classroom";
+import { type IVenue } from "../types/Venue";
 
 const { reserveVenue } = useClassroom();
+const { getAllVenue } = useVenue();
 
 const classroomStore = useClassroomStore();
 const { editingClassroom } = storeToRefs(classroomStore) as {
@@ -12,10 +13,12 @@ const { editingClassroom } = storeToRefs(classroomStore) as {
 
 const meetingUrl = ref();
 const toast = useToast();
+const confirm = useConfirm();
 
 const selectingDate = ref<string>(
     editingClassroom.value.dates[0].dates.startDateTime
 );
+const venues = ref<IVenue[]>([]);
 
 const dialogVisible = ref<Record<string, boolean>>({});
 const isSameVenue = ref(true);
@@ -99,26 +102,115 @@ const groupVenues = (venues: IVenue[]) => {
     return grouped;
 };
 
-const groupedVenues = groupVenues(mockVenues);
+const confirmRequest = () => {
+    confirm.require({
+        message: `
+    ${editingClassroom.value.dates
+        .map((date) => {
+            return `
+            Date: ${new Date(date.dates.startDateTime).toLocaleDateString(
+                "en-SG",
+                {
+                    weekday: "short",
+                    month: "long",
+                    day: "numeric",
+                }
+            )}
+            \n
+            Time: ${isoToDateWithTimezone(
+                date.dates.startDateTime
+            ).toLocaleTimeString("en-SG", {
+                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                hour: "numeric",
+                minute: "numeric",
+            })} - ${isoToDateWithTimezone(
+                date.dates.endDateTime
+            ).toLocaleTimeString("en-SG", {
+                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                hour: "numeric",
+                minute: "numeric",
+            })}
+            \n
+            Venue: ${date.venueId
+                .map((id) => {
+                    return venues.value.find((venue) => venue.id === id)?.room;
+                })
+                .join(", ")}
+        `;
+        })
+        .join("")}
 
-mockVenues.forEach((venue) => {
+        `,
+        header: "Are you sure you want to send request to reserve these venue?",
+        icon: "pi pi-send",
+        rejectProps: {
+            label: "Cancel",
+            text: true,
+        },
+        acceptProps: {
+            label: "Send request",
+        },
+        accept: () => {
+            handleSendRequest();
+        },
+    });
+};
+
+getAllVenue().then((res) => {
+    if (res.success) {
+        venues.value = res.result;
+    }
+});
+
+const groupedVenues = computed(() => groupVenues(venues.value));
+
+venues.value.forEach((venue) => {
     dialogVisible.value[venue.id] = false;
 });
 </script>
 
 <template>
     <div class="space-y-8">
-        <nuxt-link
-            v-ripple
-            :href="SIT_BOOKING_WEBSITE"
-            target="_blank"
-            class="block bg-gradient-to-l from-primary-200 to-teal-200 text-primary-500 text-xl font-medium p-6 rounded-xl border border-primary-500 duration-150 hover:text-primary-700 hover:border-primary-700 animate-scalein"
-        >
-            <p>
-                Check available room at SIT Booking System
-                <i class="pi pi-external-link" />
-            </p>
-        </nuxt-link>
+        <div class="space-y-2">
+            <nuxt-link
+                v-ripple
+                :href="SIT_BOOKING_WEBSITE"
+                target="_blank"
+                class="block bg-gradient-to-l from-primary-200 to-teal-200 text-primary-500 text-xl font-medium p-6 rounded-xl border border-primary-500 duration-150 hover:text-primary-700 hover:border-primary-700 animate-scalein"
+            >
+                <p>
+                    Check available room at SIT Booking System
+                    <i class="pi pi-external-link" />
+                </p>
+            </nuxt-link>
+            <div
+                v-if="
+                    editingClassroom?.venueStatus ===
+                    EVenueRequestStatus.PENDING
+                "
+                class="block bg-yellow-200 text-yellow-600 text-xl font-medium p-6 rounded-xl border border-yellow-500 duration-150 hover:text-yellow-700 hover:border-yellow-700 animate-scalein"
+            >
+                <h3>Request sent</h3>
+                <div
+                    v-for="(date, index) in editingClassroom.dates"
+                    :key="index"
+                >
+                    {{
+                        new Date(date.dates.startDateTime).toLocaleDateString(
+                            "en-SG",
+                            {
+                                weekday: "short",
+                                month: "long",
+                                day: "numeric",
+                            }
+                        )
+                    }}
+                    <div v-for="(id, index) in date.venueId" :key="index">
+                        {{ venues.find((venue) => venue.id === id)?.room }}
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="space-y-4">
             <div class="flex justify-between items-center">
                 <p class="text-2xl font-semibold">Select date for venue</p>
@@ -369,7 +461,7 @@ mockVenues.forEach((venue) => {
                                         (date) => date.venueId.length > 0
                                     )
                                 "
-                                @click="handleSendRequest"
+                                @click="confirmRequest"
                             />
                         </div>
                         <div>
