@@ -1,36 +1,94 @@
 <script setup lang="ts">
 import { SIT_BOOKING_WEBSITE } from "../constants/url";
-import { mockVenues } from "../types/Venue";
+import { EVenueRequestStatus, type IClassroom } from "../types/Classroom";
+import { type IVenue } from "../types/Venue";
+
+const { reserveVenue } = useClassroom();
+const { getAllVenue } = useVenue();
 
 const classroomStore = useClassroomStore();
-const { editingClassroom } = storeToRefs(classroomStore);
-
-const config = useRuntimeConfig();
-const meetingUrl = ref();
-const selectedVenues = ref<number[]>([]);
-const dialogVisible = ref<Record<number, boolean>>({});
-
-const handleSendRequest = () => {
-    window.location.href = `mailto:${config.public.reservationEmailContact}
-        ?subject=Venue reservation request
-        &body=I would like to reserve the following venue(s):
-        ${selectedVenues.value
-            .map((id) => mockVenues.find((v) => v.id === id)?.room)
-            .join(", ")}
-        `;
+const { editingClassroom } = storeToRefs(classroomStore) as {
+    editingClassroom: Ref<IClassroom>;
 };
 
-const selectVenue = (id: number) => {
-    const index = selectedVenues.value.indexOf(id);
-    if (index === -1) {
-        selectedVenues.value.push(id);
+const meetingUrl = ref();
+const toast = useToast();
+const confirm = useConfirm();
+
+const selectingDate = ref<string>(
+    editingClassroom.value.dates[0].dates.startDateTime
+);
+const venues = ref<IVenue[]>([]);
+
+const dialogVisible = ref<Record<string, boolean>>({});
+const isSameVenue = ref(true);
+const otherVenue = ref();
+
+const handleSendRequest = () => {
+    reserveVenue(editingClassroom.value.id, editingClassroom.value.dates).then(
+        (res) => {
+            if (res.success) {
+                toast.add({
+                    severity: "success",
+                    summary: "Request sent",
+                    group: "tc",
+                    life: 3000,
+                });
+            } else {
+                toast.add({
+                    severity: "error",
+                    summary: "Request failed",
+                    detail: res.error,
+                    group: "tc",
+                    life: 3000,
+                });
+            }
+        }
+    );
+};
+
+const selectVenue = (id: string) => {
+    if (!selectingDate.value) {
+        return;
+    }
+
+    const findDateIndex = (dateString: string) => {
+        return editingClassroom.value.dates.findIndex(
+            (date) => date.dates.startDateTime === dateString
+        );
+    };
+
+    const dateIndex = findDateIndex(selectingDate.value);
+
+    if (dateIndex === -1) {
+        return;
+    }
+
+    if (isSameVenue.value) {
+        editingClassroom.value.dates.forEach((date) => {
+            const venueIndex = date.venueId.indexOf(id);
+            if (venueIndex !== -1) {
+                date.venueId.splice(venueIndex, 1);
+            } else {
+                date.venueId.push(id);
+            }
+        });
     } else {
-        selectedVenues.value.splice(index, 1);
+        const venueIndex =
+            editingClassroom.value.dates[dateIndex].venueId.indexOf(id);
+        if (venueIndex !== -1) {
+            editingClassroom.value.dates[dateIndex].venueId.splice(
+                venueIndex,
+                1
+            );
+        } else {
+            editingClassroom.value.dates[dateIndex].venueId.push(id);
+        }
     }
 };
 
-const groupVenues = (venues) => {
-    const grouped = {};
+const groupVenues = (venues: IVenue[]) => {
+    const grouped = {} as Record<string, Record<string, IVenue[]>>;
     venues.forEach((venue) => {
         const { building, floor } = venue.location;
         if (!grouped[building]) {
@@ -44,167 +102,413 @@ const groupVenues = (venues) => {
     return grouped;
 };
 
-const groupedVenues = groupVenues(mockVenues);
+const confirmRequest = () => {
+    confirm.require({
+        message: `
+    ${editingClassroom.value.dates
+        .map((date) => {
+            return `
+            Date: ${new Date(date.dates.startDateTime).toLocaleDateString(
+                "en-SG",
+                {
+                    weekday: "short",
+                    month: "long",
+                    day: "numeric",
+                }
+            )}
+            \n
+            Time: ${isoToDateWithTimezone(
+                date.dates.startDateTime
+            ).toLocaleTimeString("en-SG", {
+                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                hour: "numeric",
+                minute: "numeric",
+            })} - ${isoToDateWithTimezone(
+                date.dates.endDateTime
+            ).toLocaleTimeString("en-SG", {
+                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                hour: "numeric",
+                minute: "numeric",
+            })}
+            \n
+            Venue: ${date.venueId
+                .map((id) => {
+                    return venues.value.find((venue) => venue.id === id)?.room;
+                })
+                .join(", ")}
+        `;
+        })
+        .join("")}
 
-mockVenues.forEach((venue) => {
+        `,
+        header: "Are you sure you want to send request to reserve these venue?",
+        icon: "pi pi-send",
+        rejectProps: {
+            label: "Cancel",
+            text: true,
+        },
+        acceptProps: {
+            label: "Send request",
+        },
+        accept: () => {
+            handleSendRequest();
+        },
+    });
+};
+
+getAllVenue().then((res) => {
+    if (res.success) {
+        venues.value = res.result;
+    }
+});
+
+const groupedVenues = computed(() => groupVenues(venues.value));
+
+venues.value.forEach((venue) => {
     dialogVisible.value[venue.id] = false;
 });
 </script>
 
 <template>
-    <div class="space-y-[10px]">
-        <nuxt-link
-            :href="SIT_BOOKING_WEBSITE"
-            target="_blank"
-            class="block bg-gradient-to-l from-primary-200 to-teal-200 text-primary-500 text-xl font-medium p-6 rounded-xl border border-primary-500 duration-150 hover:text-primary-700 hover:border-primary-700 animate-scalein"
-        >
-            <p>
-                Check available room at SIT Booking System
-                <i class="pi pi-external-link" />
-            </p>
-        </nuxt-link>
-        <div
-            v-if="
-                editingClassroom?.format === 'MIXED' ||
-                editingClassroom?.format === 'ONSITE'
-            "
-            class="p-6 bg-white border rounded-3xl"
-        >
-            <div class="space-y-4">
-                <div class="flex flex-col gap-16">
-                    <div
-                        v-for="(floors, building) in groupedVenues"
-                        :key="building"
-                        class="space-y-8"
+    <div class="space-y-8">
+        <div class="space-y-2">
+            <nuxt-link
+                v-ripple
+                :href="SIT_BOOKING_WEBSITE"
+                target="_blank"
+                class="block bg-gradient-to-l from-primary-200 to-teal-200 text-primary-500 text-xl font-medium p-6 rounded-xl border border-primary-500 duration-150 hover:text-primary-700 hover:border-primary-700 animate-scalein"
+            >
+                <p>
+                    Check available room at SIT Booking System
+                    <i class="pi pi-external-link" />
+                </p>
+            </nuxt-link>
+            <div
+                v-if="
+                    editingClassroom?.venueStatus ===
+                    EVenueRequestStatus.PENDING
+                "
+                class="block bg-yellow-200 text-yellow-600 text-xl font-medium p-6 rounded-xl border border-yellow-500 duration-150 hover:text-yellow-700 hover:border-yellow-700 animate-scalein"
+            >
+                <h3>Request sent</h3>
+                <div
+                    v-for="(date, index) in editingClassroom.dates"
+                    :key="index"
+                >
+                    {{
+                        new Date(date.dates.startDateTime).toLocaleDateString(
+                            "en-SG",
+                            {
+                                weekday: "short",
+                                month: "long",
+                                day: "numeric",
+                            }
+                        )
+                    }}
+                    <div v-for="(id, index) in date.venueId" :key="index">
+                        {{ venues.find((venue) => venue.id === id)?.room }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="space-y-4">
+            <div class="flex justify-between items-center">
+                <p class="text-2xl font-semibold">Select date for venue</p>
+                <ToggleButton
+                    v-model="isSameVenue"
+                    offLabel="Use same venue everyday"
+                    onLabel="Select venue for each date"
+                    @change="
+                        editingClassroom?.dates.forEach((date) => {
+                            date.venueId = [];
+                        })
+                    "
+                />
+            </div>
+            <div
+                class="grid grid-cols-4 gap-2 bg-white p-4 rounded-2xl border overflow-clip"
+            >
+                <div
+                    v-for="(date, index) in editingClassroom?.dates"
+                    :key="index"
+                >
+                    <button
+                        @click="selectingDate = date.dates.startDateTime"
+                        v-ripple
+                        :disabled="isSameVenue"
+                        class="p-4 border w-full text-center rounded-lg duration-150"
+                        :class="
+                            isSameVenue
+                                ? 'border-primary-500 bg-primary-100'
+                                : selectingDate === date.dates.startDateTime
+                                ? 'border-primary-500 bg-primary-100 hover:bg-primary-200'
+                                : 'border-gray-200  bg-white hover:bg-gray-100'
+                        "
                     >
-                        <div class="space-y-2">
-                            <h2 class="text-xl font-bold">{{ building }}</h2>
-                            <p class="text-gray-500">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Aspernatur velit ipsam eius,
-                                fugiat delectus perspiciatis a ratione est,
-                                repellendus officia perferendis consectetur
-                                cupiditate maiores praesentium dolores sapiente
-                                magnam quos iste!
-                            </p>
-                        </div>
-                        <div
-                            v-for="(venues, floor) in floors"
-                            :key="floor"
-                            class="space-y-4"
-                        >
-                            <h3 class="text-lg text-gray-500">
-                                Floor {{ floor }}
-                            </h3>
-                            <div class="grid grid-cols-3 gap-2">
-                                <div v-for="venue in venues">
-                                    <Card
-                                        style="overflow: hidden"
-                                        @click="selectVenue(venue.id)"
-                                        class="cursor-pointer duration-100 hover:bg-gray-100 border"
-                                        :class="
-                                            selectedVenues.includes(venue.id)
-                                                ? '!bg-primary-100 border-primary-500'
-                                                : 'bg-white'
-                                        "
-                                    >
-                                        <template #header>
-                                            <img
-                                                :alt="`image of ${venue.room} at ${venue.location.building} fl.${venue.location.floor}`"
-                                                :src="venue.imageUrl"
-                                                class="h-52 bg-gray-100 object-cover w-full"
-                                            />
-                                        </template>
-                                        <template #title>{{
-                                            venue.room
-                                        }}</template>
-                                        <template #subtitle>{{
-                                            `${venue.location.building}, Floor ${venue.location.floor}`
-                                        }}</template>
-                                        <template #content>
-                                            <p class="m-0 line-clamp-2">
-                                                {{ venue.description }}
-                                            </p>
-                                        </template>
-                                        <template #footer>
-                                            <div
-                                                class="flex justify-end gap-4 mt-1"
-                                            >
-                                                <Button
-                                                    @click.stop="
-                                                        dialogVisible[
-                                                            venue.id
-                                                        ] = true
-                                                    "
-                                                    label="Read details"
-                                                    severity="secondary"
-                                                />
-                                            </div>
-                                        </template>
-                                    </Card>
-                                    <Dialog
-                                        v-model:visible="
-                                            dialogVisible[venue.id]
-                                        "
-                                        modal
-                                        :header="venue.room"
-                                        :style="{ width: '50rem' }"
-                                        :breakpoints="{
-                                            '1199px': '75vw',
-                                            '575px': '90vw',
-                                        }"
-                                        pt:mask:class="backdrop-blur-sm"
-                                    >
-                                        <img
-                                            :src="venue.imageUrl"
-                                            :alt="`image of ${venue.room} at ${venue.location.building} fl.${venue.location.floor}`"
-                                            class="h-[32rem] bg-gray-100 object-cover w-full rounded-xl"
-                                        />
-                                        <p>
-                                            <strong>Location:</strong>
-                                            {{ venue.location.building }}, Floor
-                                            {{ venue.location.floor }}
-                                        </p>
-                                        <p>
-                                            <strong>Capacity:</strong>
-                                            {{ venue.capacity }}
-                                        </p>
+                        <p>
+                            {{
+                                new Date(
+                                    date.dates.startDateTime
+                                ).toLocaleDateString("en-SG", {
+                                    weekday: "short",
+                                    month: "long",
+                                    day: "numeric",
+                                })
+                            }}
+                        </p>
 
-                                        <p>{{ venue.description }}</p>
-                                    </Dialog>
+                        <p class="text-sm text-gray-500">
+                            <span>
+                                {{
+                                    isoToDateWithTimezone(
+                                        date.dates.startDateTime
+                                    ).toLocaleTimeString("en-SG", {
+                                        timeZone:
+                                            Intl.DateTimeFormat().resolvedOptions()
+                                                .timeZone,
+                                        hour: "numeric",
+                                        minute: "numeric",
+                                    })
+                                }}
+                            </span>
+                            -
+                            <span>
+                                {{
+                                    isoToDateWithTimezone(
+                                        date.dates.endDateTime
+                                    ).toLocaleTimeString("en-SG", {
+                                        timeZone:
+                                            Intl.DateTimeFormat().resolvedOptions()
+                                                .timeZone,
+
+                                        hour: "numeric",
+                                        minute: "numeric",
+                                    })
+                                }}
+                            </span>
+                        </p>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div v-if="selectingDate" class="space-y-4">
+            <p class="text-2xl font-semibold">Select venue</p>
+            <div
+                v-if="
+                    editingClassroom?.format.toString() === 'MIXED' ||
+                    editingClassroom?.format.toString() === 'ONSITE'
+                "
+                class="rounded-2xl bg-white p-6 border overflow-clip"
+            >
+                <div>
+                    <div class="space-y-4">
+                        <div class="flex flex-col gap-16">
+                            <div
+                                v-for="(floors, building) in groupedVenues"
+                                :key="building"
+                                class="space-y-8"
+                            >
+                                <div class="space-y-2">
+                                    <h2 class="text-xl font-bold">
+                                        <i class="pi pi-building" />
+                                        {{ building }}
+                                    </h2>
+                                    <p class="text-gray-500">
+                                        SIT Building, KMUTT, 126 Pracha Uthit
+                                        54, Bang Mot, Thung Khru, Bangkok 10140
+                                    </p>
                                 </div>
+                                <div
+                                    v-for="(venues, floor) in floors"
+                                    :key="floor"
+                                    class="space-y-4"
+                                >
+                                    <h3 class="text-lg text-gray-500">
+                                        Floor {{ floor }}
+                                    </h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <div v-for="venue in venues">
+                                            <Card
+                                                style="overflow: hidden"
+                                                @click="selectVenue(venue.id)"
+                                                class="cursor-pointer duration-100 hover:bg-gray-100 border"
+                                                :class="
+                                                    selectingDate &&
+                                                    editingClassroom?.dates
+                                                        .find(
+                                                            (d) =>
+                                                                d.dates
+                                                                    .startDateTime ==
+                                                                selectingDate
+                                                        )
+                                                        ?.venueId?.includes(
+                                                            venue?.id
+                                                        )
+                                                        ? 'border-primary-500 !bg-primary-100'
+                                                        : ''
+                                                "
+                                            >
+                                                <template #header>
+                                                    <img
+                                                        :alt="`image of ${venue.room} at ${venue.location.building} fl.${venue.location.floor}`"
+                                                        :src="venue.imageUrl"
+                                                        class="h-52 bg-gray-100 object-cover w-full"
+                                                    />
+                                                </template>
+                                                <template #title>{{
+                                                    venue.room
+                                                }}</template>
+                                                <template #subtitle>
+                                                    <i
+                                                        class="pi pi-map-marker"
+                                                    />
+                                                    {{
+                                                        `${venue.location.building}, Floor ${venue.location.floor}`
+                                                    }}
+                                                </template>
+                                                <template #content>
+                                                    <p class="m-0 line-clamp-2">
+                                                        {{ venue.description }}
+                                                    </p>
+                                                </template>
+                                                <template #footer>
+                                                    <div
+                                                        class="flex justify-end gap-4 mt-1"
+                                                    >
+                                                        <Button
+                                                            @click.stop="
+                                                                dialogVisible[
+                                                                    venue.id
+                                                                ] = true
+                                                            "
+                                                            label="Read details"
+                                                            severity="secondary"
+                                                        />
+                                                    </div>
+                                                </template>
+                                            </Card>
+                                            <Dialog
+                                                v-model:visible="
+                                                    dialogVisible[venue.id]
+                                                "
+                                                modal
+                                                :header="venue.room"
+                                                :style="{
+                                                    width: '50rem',
+                                                }"
+                                                :breakpoints="{
+                                                    '1199px': '75vw',
+                                                    '575px': '90vw',
+                                                }"
+                                                pt:mask:class="backdrop-blur-sm"
+                                                class="rounded-lg shadow-lg"
+                                            >
+                                                <div
+                                                    class="flex flex-col items-center gap-4"
+                                                >
+                                                    <img
+                                                        :src="venue.imageUrl"
+                                                        :alt="`Image of ${venue.room} at ${venue.location.building}, Floor ${venue.location.floor}`"
+                                                        class="h-80 bg-gray-100 object-cover w-full rounded-lg"
+                                                    />
+                                                    <div
+                                                        class="text-gray-700 w-full space-y-3"
+                                                    >
+                                                        <p
+                                                            class="text-lg font-medium"
+                                                        >
+                                                            <span
+                                                                class="font-semibold text-gray-900"
+                                                                >Location:</span
+                                                            >
+                                                            {{
+                                                                venue.location
+                                                                    .building
+                                                            }}, Floor
+                                                            {{
+                                                                venue.location
+                                                                    .floor
+                                                            }}
+                                                        </p>
+                                                        <p
+                                                            class="text-lg font-medium"
+                                                        >
+                                                            <span
+                                                                class="font-semibold text-gray-900"
+                                                                >Capacity:</span
+                                                            >
+                                                            {{ venue.capacity }}
+                                                        </p>
+                                                        <p class="text-md">
+                                                            {{
+                                                                venue.description
+                                                            }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </Dialog>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end gap-4 mt-1">
+                            <Button
+                                label="Request to reserve"
+                                icon="pi pi-send"
+                                :disabled="
+                                    !editingClassroom?.dates.every(
+                                        (date) => date.venueId.length > 0
+                                    )
+                                "
+                                @click="confirmRequest"
+                            />
+                        </div>
+                        <div>
+                            <p>Other Venue</p>
+
+                            <div class="flex gap-1">
+                                <InputGroup>
+                                    <InputGroupAddon>
+                                        <i class="pi pi-map-marker" />
+                                    </InputGroupAddon>
+                                    <InputText
+                                        id="other-venue"
+                                        v-model="otherVenue"
+                                        placeholder="eg. SIT@Dover, SIT@NYP"
+                                    />
+                                </InputGroup>
+                                <Button
+                                    label="Save"
+                                    icon="pi pi-check"
+                                    @click=""
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-end gap-4 mt-1">
-                    <Button
-                        label="Request to reserve"
-                        icon="pi pi-send"
-                        @click="handleSendRequest"
-                    />
-                </div>
             </div>
-        </div>
-        <div
-            v-if="
-                editingClassroom?.format === 'MIXED' ||
-                editingClassroom?.format === 'ONLINE'
-            "
-            class="p-6 bg-white border rounded-3xl space-y-4"
-        >
-            <h3 class="text-lg">Online platform</h3>
-            <div class="flex gap-1">
-                <InputGroup>
-                    <InputGroupAddon>
-                        <i class="pi pi-link" />
-                    </InputGroupAddon>
-                    <InputText
-                        id="meeting-url"
-                        placeholder="eg. Zoom, Discord or Google Meet url"
-                    />
-                </InputGroup>
-                <Button label="Save" icon="pi pi-check" @click="" />
+            <div
+                v-if="
+                    editingClassroom?.format.toString() === 'MIXED' ||
+                    editingClassroom?.format.toString() === 'ONLINE'
+                "
+                class="p-6 bg-white border rounded-3xl space-y-4"
+            >
+                <h3 class="text-lg">Online platform</h3>
+                <div class="flex gap-1">
+                    <InputGroup>
+                        <InputGroupAddon>
+                            <i class="pi pi-link" />
+                        </InputGroupAddon>
+                        <InputText
+                            id="meeting-url"
+                            v-model="meetingUrl"
+                            placeholder="eg. Zoom, Discord or Google Meet url"
+                        />
+                    </InputGroup>
+                    <Button label="Save" icon="pi pi-check" @click="" />
+                </div>
             </div>
         </div>
     </div>
