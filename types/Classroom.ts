@@ -65,8 +65,8 @@ enum EStepperStatus {
     PREPARE_FOR_REG = 4,
 }
 
-enum EVenueRequestStatus {
-    PENDING = "pending",
-    APPROVED = "approved",
-    REJECTED = "rejected",
+export enum EVenueRequestStatus {
+    PENDING = 2,
+    APPROVED = 3,
+    REJECTED = 4,
 }
