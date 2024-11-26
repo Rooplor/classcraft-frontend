@@ -28,6 +28,9 @@ export default defineNuxtConfig({
     app: {
         baseURL: process.env.NUXT_BASE_URL
     },
+    generate: {
+        routes: ["/class"],
+    },
     modules: [
         "@primevue/nuxt-module",
         "@nuxtjs/tailwindcss",
