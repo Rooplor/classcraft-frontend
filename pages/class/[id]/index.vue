@@ -118,7 +118,7 @@ try {
                                     <p>
                                         {{
                                             isoToDateWithTimezone(
-                                                date.dates.startDateTime
+                                                date.date.startDateTime
                                             ).toLocaleString("en-GB", {
                                                 weekday: "long",
                                                 month: "long",
@@ -130,7 +130,7 @@ try {
                                     <p class="text-sm text-slate-500">
                                         {{
                                             isoToDateWithTimezone(
-                                                date.dates.startDateTime
+                                                date.date.startDateTime
                                             ).toLocaleString("en-GB", {
                                                 hour12: true,
                                                 hour: "numeric",
@@ -140,7 +140,7 @@ try {
                                         -
                                         {{
                                             isoToDateWithTimezone(
-                                                date.dates.endDateTime
+                                                date.date.endDateTime
                                             ).toLocaleString("en-GB", {
                                                 hour12: true,
                                                 hour: "numeric",

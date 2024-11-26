@@ -15,14 +15,14 @@ const formatDateRange = (dates: IReservationDateAndVenue[]) => {
 
     const sortedDates = dates.sort((a, b) => {
         return (
-            new Date(a.dates.startDateTime).getTime() -
-            new Date(b.dates.startDateTime).getTime()
+            new Date(a.date.startDateTime).getTime() -
+            new Date(b.date.startDateTime).getTime()
         );
     });
 
-    const firstDate = isoToDateWithTimezone(sortedDates[0].dates.startDateTime);
+    const firstDate = isoToDateWithTimezone(sortedDates[0].date.startDateTime);
     const lastDate = isoToDateWithTimezone(
-        sortedDates[sortedDates.length - 1].dates.endDateTime
+        sortedDates[sortedDates.length - 1].date.endDateTime
     );
 
     if (firstDate.toDateString() === lastDate.toDateString()) {

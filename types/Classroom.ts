@@ -39,7 +39,7 @@ export interface IAddClassroomDTO {
 }
 
 export interface IReservationDateAndVenue {
-    dates: {
+    date: {
         startDateTime: string;
         endDateTime: string;
     };
