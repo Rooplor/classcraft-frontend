@@ -108,7 +108,7 @@ const status = computed(() => {
         </div>
         <div class="group grid grid-cols-2 gap-2 overflow-x-visible">
             <button
-                @click="$emit('setDate', date.dates.startDateTime)"
+                @click="$emit('setDate', date.date.startDateTime)"
                 v-ripple
                 v-for="(date, index) in editingClassroom?.dates"
                 :key="index"
@@ -118,7 +118,7 @@ const status = computed(() => {
                     EVenueRequestStatus.NO_REQUEST.toString()
                         ? itemStyle
                         : isSameVenue ||
-                          selectingDate === date.dates.startDateTime
+                          selectingDate === date.date.startDateTime
                         ? 'border-primary-500 bg-primary-100 hover:bg-primary-200'
                         : 'hover:bg-gray-100'
                 "
@@ -126,7 +126,7 @@ const status = computed(() => {
                 <div class="text-start basis-36 font-normal">
                     {{
                         isoToDateWithTimezone(
-                            date.dates.startDateTime
+                            date.date.startDateTime
                         ).toLocaleDateString("en-SG", {
                             weekday: "short",
                             month: "long",
@@ -137,7 +137,7 @@ const status = computed(() => {
                         <i class="pi pi-clock text-sm mt-[0.2rem]" />
                         {{
                             isoToDateWithTimezone(
-                                date.dates.startDateTime
+                                date.date.startDateTime
                             ).toLocaleTimeString("en-SG", {
                                 timeZone:
                                     Intl.DateTimeFormat().resolvedOptions()
@@ -149,7 +149,7 @@ const status = computed(() => {
                         -
                         {{
                             isoToDateWithTimezone(
-                                date.dates.endDateTime
+                                date.date.endDateTime
                             ).toLocaleTimeString("en-SG", {
                                 timeZone:
                                     Intl.DateTimeFormat().resolvedOptions()
