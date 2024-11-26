@@ -66,6 +66,7 @@ enum EStepperStatus {
 }
 
 export enum EVenueRequestStatus {
+    NO_REQUEST = 1,
     PENDING = 2,
     APPROVED = 3,
     REJECTED = 4,
