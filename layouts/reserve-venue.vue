@@ -16,7 +16,7 @@ const toast = useToast();
 const confirm = useConfirm();
 
 const selectingDate = ref<string>(
-    editingClassroom.value.dates[0].dates.startDateTime
+    editingClassroom.value.dates[0].date.startDateTime
 );
 const venues = ref<IVenue[]>([]);
 
@@ -54,7 +54,7 @@ const selectVenue = (id: string) => {
 
     const findDateIndex = (dateString: string) => {
         return editingClassroom.value.dates.findIndex(
-            (date) => date.dates.startDateTime === dateString
+            (date) => date.date.startDateTime === dateString
         );
     };
 
@@ -108,7 +108,7 @@ const confirmRequest = () => {
     ${editingClassroom.value.dates
         .map((date) => {
             return `
-            Date: ${new Date(date.dates.startDateTime).toLocaleDateString(
+            Date: ${new Date(date.date.startDateTime).toLocaleDateString(
                 "en-SG",
                 {
                     weekday: "short",
@@ -118,13 +118,13 @@ const confirmRequest = () => {
             )}
             \n
             Time: ${isoToDateWithTimezone(
-                date.dates.startDateTime
+                date.date.startDateTime
             ).toLocaleTimeString("en-SG", {
                 timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                 hour: "numeric",
                 minute: "numeric",
             })} - ${isoToDateWithTimezone(
-                date.dates.endDateTime
+                date.date.endDateTime
             ).toLocaleTimeString("en-SG", {
                 timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                 hour: "numeric",
@@ -196,7 +196,7 @@ venues.value.forEach((venue) => {
                     :key="index"
                 >
                     {{
-                        new Date(date.dates.startDateTime).toLocaleDateString(
+                        new Date(date.date.startDateTime).toLocaleDateString(
                             "en-SG",
                             {
                                 weekday: "short",
@@ -233,14 +233,14 @@ venues.value.forEach((venue) => {
                     :key="index"
                 >
                     <button
-                        @click="selectingDate = date.dates.startDateTime"
+                        @click="selectingDate = date.date.startDateTime"
                         v-ripple
                         :disabled="isSameVenue"
                         class="p-4 border w-full text-center rounded-lg duration-150"
                         :class="
                             isSameVenue
                                 ? 'border-primary-500 bg-primary-100'
-                                : selectingDate === date.dates.startDateTime
+                                : selectingDate === date.date.startDateTime
                                 ? 'border-primary-500 bg-primary-100 hover:bg-primary-200'
                                 : 'border-gray-200  bg-white hover:bg-gray-100'
                         "
@@ -248,7 +248,7 @@ venues.value.forEach((venue) => {
                         <p>
                             {{
                                 new Date(
-                                    date.dates.startDateTime
+                                    date.date.startDateTime
                                 ).toLocaleDateString("en-SG", {
                                     weekday: "short",
                                     month: "long",
@@ -261,7 +261,7 @@ venues.value.forEach((venue) => {
                             <span>
                                 {{
                                     isoToDateWithTimezone(
-                                        date.dates.startDateTime
+                                        date.date.startDateTime
                                     ).toLocaleTimeString("en-SG", {
                                         timeZone:
                                             Intl.DateTimeFormat().resolvedOptions()
@@ -275,7 +275,7 @@ venues.value.forEach((venue) => {
                             <span>
                                 {{
                                     isoToDateWithTimezone(
-                                        date.dates.endDateTime
+                                        date.date.endDateTime
                                     ).toLocaleTimeString("en-SG", {
                                         timeZone:
                                             Intl.DateTimeFormat().resolvedOptions()
@@ -337,7 +337,7 @@ venues.value.forEach((venue) => {
                                                     editingClassroom?.dates
                                                         .find(
                                                             (d) =>
-                                                                d.dates
+                                                                d.date
                                                                     .startDateTime ==
                                                                 selectingDate
                                                         )
