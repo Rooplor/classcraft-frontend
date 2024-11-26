@@ -16,7 +16,7 @@ const toast = useToast();
 const confirm = useConfirm();
 
 const selectingDate = ref<string>(
-    editingClassroom.value.dates[0].dates.startDateTime
+    editingClassroom.value.dates[0].date.startDateTime
 );
 const venues = ref<IVenue[]>([]);
 
@@ -54,7 +54,7 @@ const selectVenue = (id: string) => {
 
     const findDateIndex = (dateString: string) => {
         return editingClassroom.value.dates.findIndex(
-            (date) => date.dates.startDateTime === dateString
+            (date) => date.date.startDateTime === dateString
         );
     };
 
@@ -115,7 +115,7 @@ const confirmRequest = () => {
         .map((date) => {
             return `
             Date: ${isoToDateWithTimezone(
-                date.dates.startDateTime
+                date.date.startDateTime
             ).toLocaleDateString("en-SG", {
                 weekday: "short",
                 month: "long",
@@ -123,13 +123,13 @@ const confirmRequest = () => {
             })}
             \n
             Time: ${isoToDateWithTimezone(
-                date.dates.startDateTime
+                date.date.startDateTime
             ).toLocaleTimeString("en-SG", {
                 timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                 hour: "numeric",
                 minute: "numeric",
             })} - ${isoToDateWithTimezone(
-                date.dates.endDateTime
+                date.date.endDateTime
             ).toLocaleTimeString("en-SG", {
                 timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                 hour: "numeric",
@@ -245,7 +245,7 @@ venues.value.forEach((venue) => {
                                                     editingClassroom?.dates
                                                         .find(
                                                             (d) =>
-                                                                d.dates
+                                                                d.date
                                                                     .startDateTime ==
                                                                 selectingDate
                                                         )

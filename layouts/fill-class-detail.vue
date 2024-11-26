@@ -27,7 +27,7 @@ const schema = yup.object({
     dates: yup.array().of(
         yup
             .object({
-                dates: yup.object({
+                date: yup.object({
                     startDateTime: yup.date().required("Fill the empty date"),
                     endDateTime: yup
                         .date()
@@ -57,12 +57,12 @@ const initialValues = editingClassroom.value
           type: editingClassroom.value.type,
           format: editingClassroom.value.format,
           capacity: editingClassroom.value.capacity,
-          dates: editingClassroom.value.dates.map((date: any) => ({
-              dates: {
+          dates: editingClassroom.value.date.map((date: any) => ({
+              date: {
                   startDateTime: isoToDateWithTimezone(
-                      date.dates.startDateTime
+                      date.date.startDateTime
                   ),
-                  endDateTime: isoToDateWithTimezone(date.dates.endDateTime),
+                  endDateTime: isoToDateWithTimezone(date.date.endDateTime),
               },
               venueId: date.venueId,
           })),
@@ -75,7 +75,7 @@ const initialValues = editingClassroom.value
     : {
           dates: [
               {
-                  dates: { startDateTime: null, endDateTime: null },
+                  date: { startDateTime: null, endDateTime: null },
                   venueId: [],
               },
           ],
@@ -116,9 +116,9 @@ const typeOption = ref([
 
 const onSubmit = handleSubmit((values: any) => {
     values.dates = values.dates.map((date: any) => ({
-        dates: {
-            startDateTime: date.dates.startDateTime.toISOString(),
-            endDateTime: date.dates.endDateTime.toISOString(),
+        date: {
+            startDateTime: date.date.startDateTime.toISOString(),
+            endDateTime: date.date.endDateTime.toISOString(),
         },
         venueId: date.venueId,
     }));
@@ -367,7 +367,7 @@ watch(selfInstructored, (value) => {
                                     </label>
                                     <DatePicker
                                         id="date"
-                                        v-model="entry.dates.startDateTime"
+                                        v-model="entry.date.startDateTime"
                                         :name="
                                             'dates[' +
                                             index +
@@ -382,9 +382,9 @@ watch(selfInstructored, (value) => {
                                         placeholder="Select date"
                                         v-on:date-select="
                                             (event) => {
-                                                entry.dates.startDateTime =
+                                                entry.date.startDateTime =
                                                     event;
-                                                entry.dates.endDateTime = event;
+                                                entry.date.endDateTime = event;
                                             }
                                         "
                                     />
@@ -399,7 +399,7 @@ watch(selfInstructored, (value) => {
                                         </label>
                                         <DatePicker
                                             id="date.startDateTime"
-                                            v-model="entry.dates.startDateTime"
+                                            v-model="entry.date.startDateTime"
                                             :name="
                                                 'dates[' +
                                                 index +
@@ -414,7 +414,7 @@ watch(selfInstructored, (value) => {
                                             placeholder="Select start time"
                                             v-on:date-select="
                                                 (event) => {
-                                                    entry.dates.endDateTime =
+                                                    entry.date.endDateTime =
                                                         event;
                                                 }
                                             "
@@ -437,7 +437,7 @@ watch(selfInstructored, (value) => {
                                         </label>
                                         <DatePicker
                                             id="date.endDateTime"
-                                            v-model="entry.dates.endDateTime"
+                                            v-model="entry.date.endDateTime"
                                             :name="
                                                 'dates[' +
                                                 index +
@@ -445,7 +445,7 @@ watch(selfInstructored, (value) => {
                                             "
                                             showIcon
                                             :min-date="
-                                                entry.dates.startDateTime
+                                                entry.date.startDateTime
                                             "
                                             iconDisplay="input"
                                             fluid
@@ -487,7 +487,7 @@ watch(selfInstructored, (value) => {
                             @click="
                                 () =>
                                     dates.push({
-                                        dates: {
+                                        date: {
                                             startDateTime: null,
                                             endDateTime: null,
                                         },
