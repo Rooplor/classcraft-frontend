@@ -102,20 +102,25 @@ const groupVenues = (venues: IVenue[]) => {
     return grouped;
 };
 
+const isSelectedVenueIsEmpty = () => {
+    return editingClassroom.value.dates.every(
+        (date) => date.venueId.length > 0
+    );
+};
+
 const confirmRequest = () => {
     confirm.require({
         message: `
     ${editingClassroom.value.dates
         .map((date) => {
             return `
-            Date: ${new Date(date.dates.startDateTime).toLocaleDateString(
-                "en-SG",
-                {
-                    weekday: "short",
-                    month: "long",
-                    day: "numeric",
-                }
-            )}
+            Date: ${isoToDateWithTimezone(
+                date.dates.startDateTime
+            ).toLocaleDateString("en-SG", {
+                weekday: "short",
+                month: "long",
+                day: "numeric",
+            })}
             \n
             Time: ${isoToDateWithTimezone(
                 date.dates.startDateTime
@@ -183,113 +188,16 @@ venues.value.forEach((venue) => {
                     <i class="pi pi-external-link" />
                 </p>
             </nuxt-link>
-            <div
-                v-if="
-                    editingClassroom?.venueStatus ===
-                    EVenueRequestStatus.PENDING
-                "
-                class="block bg-yellow-200 text-yellow-600 text-xl font-medium p-6 rounded-xl border border-yellow-500 duration-150 hover:text-yellow-700 hover:border-yellow-700 animate-scalein"
-            >
-                <h3>Request sent</h3>
-                <div
-                    v-for="(date, index) in editingClassroom.dates"
-                    :key="index"
-                >
-                    {{
-                        new Date(date.dates.startDateTime).toLocaleDateString(
-                            "en-SG",
-                            {
-                                weekday: "short",
-                                month: "long",
-                                day: "numeric",
-                            }
-                        )
-                    }}
-                    <div v-for="(id, index) in date.venueId" :key="index">
-                        {{ venues.find((venue) => venue.id === id)?.room }}
-                    </div>
-                </div>
-            </div>
         </div>
-        <div class="space-y-4">
-            <div class="flex justify-between items-center">
-                <p class="text-2xl font-semibold">Select date for venue</p>
-                <ToggleButton
-                    v-model="isSameVenue"
-                    offLabel="Use same venue everyday"
-                    onLabel="Select venue for each date"
-                    @change="
-                        editingClassroom?.dates.forEach((date) => {
-                            date.venueId = [];
-                        })
-                    "
-                />
-            </div>
-            <div
-                class="grid grid-cols-4 gap-2 bg-white p-4 rounded-2xl border overflow-clip"
-            >
-                <div
-                    v-for="(date, index) in editingClassroom?.dates"
-                    :key="index"
-                >
-                    <button
-                        @click="selectingDate = date.dates.startDateTime"
-                        v-ripple
-                        :disabled="isSameVenue"
-                        class="p-4 border w-full text-center rounded-lg duration-150"
-                        :class="
-                            isSameVenue
-                                ? 'border-primary-500 bg-primary-100'
-                                : selectingDate === date.dates.startDateTime
-                                ? 'border-primary-500 bg-primary-100 hover:bg-primary-200'
-                                : 'border-gray-200  bg-white hover:bg-gray-100'
-                        "
-                    >
-                        <p>
-                            {{
-                                new Date(
-                                    date.dates.startDateTime
-                                ).toLocaleDateString("en-SG", {
-                                    weekday: "short",
-                                    month: "long",
-                                    day: "numeric",
-                                })
-                            }}
-                        </p>
-
-                        <p class="text-sm text-gray-500">
-                            <span>
-                                {{
-                                    isoToDateWithTimezone(
-                                        date.dates.startDateTime
-                                    ).toLocaleTimeString("en-SG", {
-                                        timeZone:
-                                            Intl.DateTimeFormat().resolvedOptions()
-                                                .timeZone,
-                                        hour: "numeric",
-                                        minute: "numeric",
-                                    })
-                                }}
-                            </span>
-                            -
-                            <span>
-                                {{
-                                    isoToDateWithTimezone(
-                                        date.dates.endDateTime
-                                    ).toLocaleTimeString("en-SG", {
-                                        timeZone:
-                                            Intl.DateTimeFormat().resolvedOptions()
-                                                .timeZone,
-
-                                        hour: "numeric",
-                                        minute: "numeric",
-                                    })
-                                }}
-                            </span>
-                        </p>
-                    </button>
-                </div>
-            </div>
+        <div class="space-y-4 sticky top-[4.3rem] z-10">
+            <VenueRequestStatusItem
+                @setDate="selectingDate = $event"
+                @toggleSameVenue="isSameVenue = !isSameVenue"
+                :selectingDate="selectingDate"
+                :editingClassroom="editingClassroom"
+                :venues="venues"
+                :isSameVenue="isSameVenue"
+            />
         </div>
         <div v-if="selectingDate" class="space-y-4">
             <p class="text-2xl font-semibold">Select venue</p>
