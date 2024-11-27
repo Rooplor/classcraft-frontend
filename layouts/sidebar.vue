@@ -55,7 +55,7 @@ const handleSignOut = async () => {
                 </div>
                 <div>
                     <div class="flex justify-between mb-5">
-                        <p class="text-gray-500">Your classes</p>
+                        <p class="text-slate-500">Your classes</p>
                         <nuxt-link
                             to="/class/new/edit"
                             class="text-primary-500"
@@ -80,7 +80,7 @@ const handleSignOut = async () => {
                         <p class="truncate">
                             {{ user?.displayName }}
                         </p>
-                        <p class="text-gray-500 text-sm truncate">
+                        <p class="text-slate-500 text-sm truncate">
                             {{ user?.email }}
                         </p>
                     </div>
@@ -110,7 +110,7 @@ const handleSignOut = async () => {
                             <h2 class="text-lg font-bold">
                                 {{ user?.displayName }}
                             </h2>
-                            <p class="text-gray-500">{{ user?.email }}</p>
+                            <p class="text-slate-500">{{ user?.email }}</p>
                         </div>
                         <div class="flex flex-col w-full gap-2">
                             <!-- click and close popover -->

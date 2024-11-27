@@ -113,7 +113,7 @@ const handleProfileClick = () => {
                             <h2 class="text-lg font-bold">
                                 {{ user?.displayName }}
                             </h2>
-                            <p class="text-gray-500">{{ user?.email }}</p>
+                            <p class="text-slate-500">{{ user?.email }}</p>
                         </div>
                         <div class="flex flex-col w-full gap-2">
                             <!-- click and close popover -->

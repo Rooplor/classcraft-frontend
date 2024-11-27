@@ -186,7 +186,7 @@ venues.value.forEach((venue) => {
                                         <i class="pi pi-building" />
                                         {{ building }}
                                     </h2>
-                                    <p class="text-gray-500">
+                                    <p class="text-slate-500">
                                         SIT Building, KMUTT, 126 Pracha Uthit
                                         54, Bang Mot, Thung Khru, Bangkok 10140
                                     </p>
@@ -196,7 +196,7 @@ venues.value.forEach((venue) => {
                                     :key="floor"
                                     class="space-y-4"
                                 >
-                                    <h3 class="text-lg text-gray-500">
+                                    <h3 class="text-lg text-slate-500">
                                         Floor {{ floor }}
                                     </h3>
                                     <div class="grid grid-cols-3 gap-2">
@@ -204,7 +204,7 @@ venues.value.forEach((venue) => {
                                             <Card
                                                 style="overflow: hidden"
                                                 @click="selectVenue(venue.id)"
-                                                class="cursor-pointer duration-100 hover:bg-gray-100 border"
+                                                class="cursor-pointer duration-100 hover:bg-slate-100 border"
                                                 :class="
                                                     selectingDate &&
                                                     editingClassroom?.dates
@@ -225,7 +225,7 @@ venues.value.forEach((venue) => {
                                                     <img
                                                         :alt="`image of ${venue.room} at ${venue.location.building} fl.${venue.location.floor}`"
                                                         :src="venue.imageUrl"
-                                                        class="h-52 bg-gray-100 object-cover w-full"
+                                                        class="h-52 bg-slate-100 object-cover w-full"
                                                     />
                                                 </template>
                                                 <template #title>{{
@@ -282,16 +282,16 @@ venues.value.forEach((venue) => {
                                                     <img
                                                         :src="venue.imageUrl"
                                                         :alt="`Image of ${venue.room} at ${venue.location.building}, Floor ${venue.location.floor}`"
-                                                        class="h-80 bg-gray-100 object-cover w-full rounded-lg"
+                                                        class="h-80 bg-slate-100 object-cover w-full rounded-lg"
                                                     />
                                                     <div
-                                                        class="text-gray-700 w-full space-y-3"
+                                                        class="text-slate-700 w-full space-y-3"
                                                     >
                                                         <p
                                                             class="text-lg font-medium"
                                                         >
                                                             <span
-                                                                class="font-semibold text-gray-900"
+                                                                class="font-semibold text-slate-900"
                                                                 >Location:</span
                                                             >
                                                             {{
@@ -307,7 +307,7 @@ venues.value.forEach((venue) => {
                                                             class="text-lg font-medium"
                                                         >
                                                             <span
-                                                                class="font-semibold text-gray-900"
+                                                                class="font-semibold text-slate-900"
                                                                 >Capacity:</span
                                                             >
                                                             {{ venue.capacity }}

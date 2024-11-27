@@ -24,7 +24,7 @@ watch(user, (currentUser, prevUser) => {
             enterClass: 'animate-fadein',
         }"
     />
-    <div class="flex bg-gray-50 min-h-screen">
+    <div class="flex bg-slate-50 min-h-screen">
         <NuxtLayout name="sidebar" class="px-2 hidden md:block" />
         <slot />
     </div>
