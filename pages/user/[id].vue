@@ -16,7 +16,7 @@ console.log(user.value);
             <img
                 :src="user?.profilePicture"
                 :alt="user?.username"
-                class="rounded-full w-52 h-52 aspect-square object-cover bg-gray-200"
+                class="rounded-full w-52 h-52 aspect-square object-cover bg-slate-200"
             />
             <div class="space-y-4">
                 <div class="space-y-2">
@@ -26,12 +26,12 @@ console.log(user.value);
                         </h1>
                         <Button label="Follow" icon="pi pi-plus" size="small" />
                     </div>
-                    <p class="text-gray-500">{{ user?.email }}</p>
+                    <p class="text-slate-500">{{ user?.email }}</p>
                 </div>
                 <p class="space-x-2">
                     <span>2 Classes</span> <span>5 Followers</span>
                 </p>
-                <p class="text-gray-500">
+                <p class="text-slate-500">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Ipsa rerum doloremque iure illo quae consequatur
                     repellendus. Adipisci quibusdam, debitis magni distinctio
@@ -51,7 +51,7 @@ console.log(user.value);
                 />
             </div>
             <div v-else>
-                <p class="py-16 text-gray-500 text-center">No classes hosted yet</p>
+                <p class="py-16 text-slate-500 text-center">No classes hosted yet</p>
             </div>
         </div>
     </div>

@@ -33,7 +33,7 @@ const handleFeedTab = (display: number) => {
 <template>
     <button
         @click="handleFeedTab(display)"
-        class="bg-white p-3 w-full text-center border-b-4 hover:bg-gray-100 hover:border-b-gray-100 duration-200"
+        class="bg-white p-3 w-full text-center border-b-4 hover:bg-slate-100 hover:border-b-slate-100 duration-200"
         v-ripple
         :class="
             (path.includes('/class') && classroomFeedDisplay === display) ||

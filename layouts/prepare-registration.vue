@@ -151,7 +151,7 @@ const onEdit = (question: Question) => {
             <div v-if="hasUrl" class="w-full space-y-2">
                 <label for="capacity">
                     <p
-                        class="inline-flex items-center gap-1 text-gray-400 mb-1"
+                        class="inline-flex items-center gap-1 text-slate-400 mb-1"
                     >
                         <i class="pi pi-link" />Enter your registration form URL
                     </p></label
@@ -181,7 +181,7 @@ const onEdit = (question: Question) => {
             <div v-else class="space-y-8">
                 <div class="space-y-2">
                     <p
-                        class="inline-flex items-center gap-1 text-gray-400 mb-1"
+                        class="inline-flex items-center gap-1 text-slate-400 mb-1"
                     >
                         <i class="pi pi-id-card" />
                         Personal Information
@@ -189,10 +189,10 @@ const onEdit = (question: Question) => {
                     <div class="flex gap-2">
                         <div
                             v-ripple
-                            class="w-[8rem] p-4 bg-gray-100 hover:bg-gray-200 duration-150 rounded-2xl"
+                            class="w-[8rem] p-4 bg-slate-100 hover:bg-slate-200 duration-150 rounded-2xl"
                         >
                             <div class="inline-flex flex-col gap-1">
-                                <p class="text-sm text-gray-400">Required</p>
+                                <p class="text-sm text-slate-400">Required</p>
                                 <p>
                                     <i class="pi pi-user text-primary" />&nbsp;
                                     <span class="text-lg">Name</span>
@@ -201,10 +201,10 @@ const onEdit = (question: Question) => {
                         </div>
                         <div
                             v-ripple
-                            class="w-[8rem] p-4 bg-gray-100 hover:bg-gray-200 duration-150 rounded-2xl"
+                            class="w-[8rem] p-4 bg-slate-100 hover:bg-slate-200 duration-150 rounded-2xl"
                         >
                             <div class="inline-flex flex-col gap-1">
-                                <p class="text-sm text-gray-400">Required</p>
+                                <p class="text-sm text-slate-400">Required</p>
                                 <p>
                                     <i class="pi pi-at text-primary" />&nbsp;
                                     <span class="text-lg">Email</span>
@@ -215,17 +215,17 @@ const onEdit = (question: Question) => {
                 </div>
                 <div class="space-y-2">
                     <p
-                        class="inline-flex items-center gap-1 text-gray-400 mb-1"
+                        class="inline-flex items-center gap-1 text-slate-400 mb-1"
                     >
                         <i class="pi pi-question-circle" />Custom Questions
                     </p>
                     <div v-for="question in questions" :key="question.id">
                         <div
                             v-if="editingQuestion?.init?.id !== question.id"
-                            class="flex justify-between items-center p-5 bg-gray-100 hover:bg-gray-200 duration-150 rounded-2xl"
+                            class="flex justify-between items-center p-5 bg-slate-100 hover:bg-slate-200 duration-150 rounded-2xl"
                         >
                             <div class="inline-flex flex-col gap-1">
-                                <p class="text-sm text-gray-400">
+                                <p class="text-sm text-slate-400">
                                     <i class="pi pi-pen-to-square text-xs" />
                                     Text
                                 </p>
@@ -252,12 +252,12 @@ const onEdit = (question: Question) => {
                         </div>
                         <div
                             v-else
-                            class="flex justify-between items-center p-5 bg-gray-200 hover:bg-gray-200 border border-primary duration-150 rounded-2xl"
+                            class="flex justify-between items-center p-5 bg-slate-200 hover:bg-slate-200 border border-primary duration-150 rounded-2xl"
                         >
                             <div class="w-full inline-flex flex-col gap-1">
                                 <label
                                     :for="`question-${question.id}`"
-                                    class="text-sm text-gray-400"
+                                    class="text-sm text-slate-400"
                                 >
                                     <i class="pi pi-pen-to-square text-xs" />
                                     Text
@@ -300,7 +300,7 @@ const onEdit = (question: Question) => {
                             class="w-full p-6 border rounded-2xl duration-150"
                             :class="
                                 editingQuestion !== null && questions.length > 0
-                                    ? 'cursor-not-allowed text-gray-400 bg-gray-100 border-gray-100'
+                                    ? 'cursor-not-allowed text-slate-400 bg-slate-100 border-slate-100'
                                     : 'text-primary bg-primary-50 border-primary hover:bg-primary-100'
                             "
                         >

@@ -45,12 +45,12 @@ const formatDateRange = (dates: IReservationDateAndVenue[]) => {
         v-animateonscroll="{
             enterClass: 'animate-fadein',
         }"
-        class="flex gap-6 bg-white border rounded-3xl p-3 duration-150 hover:bg-gray-100 hover:drop-shadow-sm"
+        class="flex gap-6 bg-white border rounded-3xl p-3 duration-150 hover:bg-slate-100 hover:drop-shadow-sm"
         v-ripple
     >
         <div
             alt="class image"
-            class="flex justify-center items-center aspect-square w-64 h-64 bg-gray-200 rounded-2xl overflow-clip"
+            class="flex justify-center items-center aspect-square w-64 h-64 bg-slate-200 rounded-2xl overflow-clip"
         >
             <img
                 v-if="props.classroom.coverImage"
@@ -58,7 +58,7 @@ const formatDateRange = (dates: IReservationDateAndVenue[]) => {
                 alt="class image"
                 class="w-full h-full object-cover"
             />
-            <span class="text-gray-400" v-else>
+            <span class="text-slate-400" v-else>
                 <i class="pi pi-image text-[4rem]" />
             </span>
         </div>
@@ -106,7 +106,7 @@ const formatDateRange = (dates: IReservationDateAndVenue[]) => {
                         {{ props.classroom.venue?.room || "TBA" }}
                     </p>
                 </div>
-                <p class="text-gray-500 line-clamp-2">
+                <p class="text-slate-500 line-clamp-2">
                     <span v-html="props.classroom.details"></span>
                 </p>
             </div>

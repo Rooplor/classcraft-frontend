@@ -235,7 +235,7 @@ if (id) {
                 </div>
                 <StepPanels class="!p-0 max-w-screen-lg m-auto">
                     <StepPanel v-slot="{ activateCallback }" value="1">
-                        <div class="bg-gray-50">
+                        <div class="bg-slate-50">
                             <NuxtLayout name="fill-class-detail" />
                             <div
                                 @vue:mounted="
@@ -260,7 +260,7 @@ if (id) {
                         </div>
                     </StepPanel>
                     <StepPanel v-slot="{ activateCallback }" value="2">
-                        <div class="bg-gray-50">
+                        <div class="bg-slate-50">
                             <NuxtLayout name="reserve-venue" />
                             <div class="flex justify-between pt-6 gap-2 h-36">
                                 <Button
@@ -285,7 +285,7 @@ if (id) {
                         </div>
                     </StepPanel>
                     <StepPanel v-slot="{ activateCallback }" value="3">
-                        <div class="bg-gray-50">
+                        <div class="bg-slate-50">
                             <NuxtLayout name="craft-content" />
                             <div class="flex justify-between pt-6 gap-2 h-36">
                                 <Button

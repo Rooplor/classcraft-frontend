@@ -31,7 +31,7 @@ try {
                             <img
                                 :src="classroom.coverImage"
                                 :alt="`${classroom.title} class cover image`"
-                                class="bg-gray-200 w-[32rem] h-[32rem] aspect-square border rounded-3xl object-cover"
+                                class="bg-slate-200 w-[32rem] h-[32rem] aspect-square border rounded-3xl object-cover"
                             />
                         </template>
                         <template #original="slotProps">
@@ -47,9 +47,9 @@ try {
                 </div>
                 <div
                     v-else
-                    class="w-[32rem] h-[32rem] aspect-square bg-gray-200 border rounded-3xl flex justify-center items-center"
+                    class="w-[32rem] h-[32rem] aspect-square bg-slate-200 border rounded-3xl flex justify-center items-center"
                 >
-                    <i class="pi pi-image text-[4rem] text-gray-400" />
+                    <i class="pi pi-image text-[4rem] text-slate-400" />
                 </div>
                 <div class="group space-y-4 mt-6">
                     <p class="text-slate-500">Hosted by</p>
@@ -62,7 +62,7 @@ try {
                             :alt="`${owner.username} profile picture`"
                             class="w-8 h-8 rounded-full"
                         />
-                        <p class="group-hover:text-gray-500 duration-150">
+                        <p class="group-hover:text-slate-500 duration-150">
                             {{ owner.username }}
                         </p>
                     </nuxt-link>
@@ -164,11 +164,11 @@ try {
                         <div v-html="classroom.details" />
                     </div>
                     <div>
-                        <p class="text-gray-500">Made for</p>
+                        <p class="text-slate-500">Made for</p>
                         <div v-html="classroom.target" />
                     </div>
                     <div v-if="classroom.prerequisite">
-                        <p class="text-gray-500">Prerequisites</p>
+                        <p class="text-slate-500">Prerequisites</p>
                         <div>{{ classroom?.prerequisite }}</div>
                     </div>
                     <div class="flex justify-end gap-2">
@@ -234,7 +234,7 @@ try {
                                 </div>
                             </div>
                             <div>
-                                <p class="text-gray-500">
+                                <p class="text-slate-500">
                                     Familiarity to the topic
                                 </p>
                                 <p>
