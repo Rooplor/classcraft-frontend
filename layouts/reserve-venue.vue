@@ -23,6 +23,7 @@ const venues = ref<IVenue[]>([]);
 const dialogVisible = ref<Record<string, boolean>>({});
 const isSameVenue = ref(true);
 const otherVenue = ref();
+const isLoading = ref(false);
 
 const handleSendRequest = () => {
     reserveVenue(editingClassroom.value.id, editingClassroom.value.dates).then(
@@ -36,6 +37,7 @@ const handleSendRequest = () => {
                 });
                 editingClassroom.value.venueStatus =
                     EVenueRequestStatus.PENDING;
+                isLoading.value = false;
             } else {
                 toast.add({
                     severity: "error",
@@ -47,6 +49,7 @@ const handleSendRequest = () => {
             }
         }
     );
+    isLoading.value = true;
 };
 
 const selectVenue = (id: string) => {
@@ -139,6 +142,16 @@ venues.value.forEach((venue) => {
 </script>
 
 <template>
+    <div
+        v-if="isLoading"
+        class="fixed top-0 left-0 w-full h-full bg-[#00000045] z-20"
+    >
+        <div
+            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        >
+            <ProgressSpinner />
+        </div>
+    </div>
     <div class="space-y-8">
         <div class="space-y-2">
             <nuxt-link
