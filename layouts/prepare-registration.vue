@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
 import * as yup from "yup";
+import type { IClassroom } from "../types/Classroom";
 
 interface Question {
     init?: Question;
@@ -14,7 +15,9 @@ const confirm = useConfirm();
 const toast = useToast();
 const { updateRegistrationUrl } = useClassroom();
 const classroomStore = useClassroomStore();
-const { editingClassroom } = storeToRefs(classroomStore);
+const { editingClassroom } = storeToRefs(classroomStore) as {
+    editingClassroom: Ref<IClassroom | null>;
+};
 const hasUrl = ref(editingClassroom?.value?.registrationUrl ? true : false);
 
 const initialValues = editingClassroom.value && {
@@ -92,6 +95,8 @@ const onSubmit = handleSubmit((values: any) => {
 });
 
 const handleUpdateRegistrationUrl = () => {
+    if (!editingClassroom.value) return;
+    
     updateRegistrationUrl(
         editingClassroom.value.id,
         registrationUrl.value

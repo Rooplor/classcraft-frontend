@@ -5,7 +5,9 @@ const toast = useToast();
 const router = useRouter();
 const id = router.currentRoute.value.params.id;
 const classroomStore = useClassroomStore();
-const { editingClassroom } = storeToRefs(classroomStore);
+const { editingClassroom } = storeToRefs(classroomStore) as {
+    editingClassroom: Ref<IClassroom>;
+};
 const { getClassroomById, toggleRegistrationStatus, togglePublishStatus } =
     useClassroom();
 const op = ref();
@@ -223,7 +225,8 @@ if (id) {
                             :value="step.value"
                             :disabled="
                                 !editingClassroom ||
-                                editingClassroom?.stepperStatus < step.value
+                                editingClassroom?.stepperStatus.toString() <
+                                    step.value
                             "
                         >
                             {{ step.label }}
