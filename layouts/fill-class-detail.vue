@@ -57,7 +57,7 @@ const initialValues = editingClassroom.value
           type: editingClassroom.value.type,
           format: editingClassroom.value.format,
           capacity: editingClassroom.value.capacity,
-          dates: editingClassroom.value.date.map((date: any) => ({
+          dates: editingClassroom.value.date?.map((date: any) => ({
               date: {
                   startDateTime: isoToDateWithTimezone(
                       date.date.startDateTime
