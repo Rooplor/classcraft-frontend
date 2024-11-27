@@ -14,7 +14,7 @@ export enum DiscussionFeedDisplay {
 
 export const useFeedDisplayStore = defineStore("feedDisplay", {
     state: () => ({
-        classroomFeedDisplay: ClassroomFeedDisplay.FOLLOWING,
+        classroomFeedDisplay: ClassroomFeedDisplay.EXPLORE,
         discussionFeedDisplay: DiscussionFeedDisplay.TRENDING,
     }),
     actions: {
