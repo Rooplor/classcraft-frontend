@@ -344,7 +344,11 @@ venues.value.forEach((venue) => {
                                 :disabled="
                                     !editingClassroom?.dates.every(
                                         (date) => date.venueId.length > 0
-                                    )
+                                    ) ||
+                                    (editingClassroom?.venueStatus >
+                                        EVenueRequestStatus.NO_REQUEST &&
+                                        editingClassroom?.venueStatus <
+                                            EVenueRequestStatus.REJECTED)
                                 "
                                 @click="confirmRequest"
                             />
