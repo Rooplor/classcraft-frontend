@@ -50,6 +50,9 @@ const handleSendRequest = () => {
 };
 
 const selectVenue = (id: string) => {
+    if (editingClassroom.value.venueStatus > EVenueRequestStatus.NO_REQUEST) {
+        return;
+    }
     if (!selectingDate.value) {
         return;
     }
