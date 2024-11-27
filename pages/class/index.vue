@@ -65,6 +65,7 @@ watch(
 <style>
 /* width */
 ::-webkit-scrollbar {
+    height: 0px;
     width: 5px;
 }
 

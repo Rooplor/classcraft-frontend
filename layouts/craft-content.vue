@@ -1,18 +1,26 @@
 <script setup lang="ts">
+import type { IClassroom } from "../types/Classroom";
 import type { IContent } from "../types/Content";
 
 const classroomStore = useClassroomStore();
-const { editingClassroom } = storeToRefs(classroomStore);
+const { editingClassroom } = storeToRefs(classroomStore) as {
+    editingClassroom: Ref<IClassroom | null>;
+};
 
 const content = ref<IContent[]>(
-    JSON.parse(editingClassroom?.value?.content || null)
+    JSON.parse(
+        editingClassroom?.value?.content ||
+            '[{"id": 1, "title": "", "content": "", "activityGuides": [], "presentationGuides": []}]'
+    )
 );
-const editingContent = ref<IContent | null>(null);
+const editingContent = ref<IContent | null>(content.value[0]);
 const confirm = useConfirm();
 const toast = useToast();
 const { updateContent } = useClassroom();
 
 const onSaveContent = (newContent: IContent) => {
+    if (editingClassroom.value === null) return;
+
     delete newContent.init;
     const index = content.value.findIndex((c) => c.id === newContent.id);
     content.value[index] = newContent;
@@ -46,6 +54,8 @@ const addContent = () => {
 };
 
 const removeContent = (id: number) => {
+    if (editingClassroom.value === null) return;
+
     content.value = content.value.filter((c) => c.id !== id);
     updateContent(editingClassroom.value.id, content.value).then((res) => {
         if (res.success) {
@@ -244,6 +254,7 @@ const confirmDelete = (content: IContent) => {
                         severity="danger"
                         text
                         label="Delete"
+                        :disabled="content.length === 1"
                         @click="confirmDelete(editingContent)"
                     />
                     <div class="flex gap-2">
