@@ -13,7 +13,7 @@ defineProps({
     >
         <div class="w-full flex flex-col gap-4">
             <h1 class="font-bold text-xl">{{ discussion.title }}</h1>
-            <p class="text-gray-500">
+            <p class="text-slate-500">
                 {{ discussion.description }}
             </p>
             <div class="w-full flex justify-end gap-2">

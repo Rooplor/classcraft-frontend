@@ -78,7 +78,7 @@ const status = computed(() => {
                     "
                 />
             </div>
-            <p class="text-gray-500">{{ status?.description }}</p>
+            <p class="text-slate-500">{{ status?.description }}</p>
             <div v-if="editingClassroom?.rejectReason" class="gap-2 mt-4 pl-2 border-l-2 border-red-500">
                 <p class="text-sm text-slate-500">Reject reason</p>
                 <p class="text-red-500">
@@ -143,12 +143,12 @@ const status = computed(() => {
                                     : isSameVenue ||
                                       selectingDate === date.date.startDateTime
                                     ? 'border-primary-500 bg-primary-100 hover:bg-primary-200'
-                                    : 'bg-white hover:bg-gray-100'
+                                    : 'bg-white hover:bg-slate-100'
                             "
                         >
                             <div class="text-start basis-36 font-normal">
                                 {{
-                                    utcToDateWithTimezone(
+                                    isoToDateWithTimezone(
                                         date.date.startDateTime
                                     ).toLocaleDateString("en-SG", {
                                         weekday: "short",
@@ -156,12 +156,12 @@ const status = computed(() => {
                                         day: "numeric",
                                     })
                                 }}
-                                <p class="flex gap-1 text-sm text-gray-500">
+                                <p class="flex gap-1 text-sm text-slate-500">
                                     <i
                                         class="pi pi-clock text-sm mt-[0.2rem]"
                                     />
                                     {{
-                                        utcToDateWithTimezone(
+                                        isoToDateWithTimezone(
                                             date.date.startDateTime
                                         ).toLocaleTimeString("en-SG", {
                                             timeZone:
@@ -173,7 +173,7 @@ const status = computed(() => {
                                     }}
                                     -
                                     {{
-                                        utcToDateWithTimezone(
+                                        isoToDateWithTimezone(
                                             date.date.endDateTime
                                         ).toLocaleTimeString("en-SG", {
                                             timeZone:
@@ -190,7 +190,7 @@ const status = computed(() => {
                                     v-if="date.venueId.length > 0"
                                     v-for="(id, index) in date.venueId"
                                     :key="index"
-                                    class="flex items-center gap-1 whitespace-nowrap p-2 bg-gray-100 border border-gray-300 rounded-md animate-fadein"
+                                    class="flex items-center gap-1 whitespace-nowrap p-2 bg-slate-100 border border-slate-300 rounded-md animate-fadein"
                                 >
                                     <i class="pi pi-building" />
                                     {{
@@ -199,7 +199,7 @@ const status = computed(() => {
                                         )?.room
                                     }}
                                 </div>
-                                <div v-else class="text-gray-400">
+                                <div v-else class="text-slate-400">
                                     No venue selected
                                 </div>
                             </div>

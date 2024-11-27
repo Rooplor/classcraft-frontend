@@ -231,9 +231,9 @@ watch(selfInstructored, (value) => {
                     />
                     <button
                         v-else
-                        class="flex items-center justify-center w-full h-full bg-gray-200"
+                        class="flex items-center justify-center w-full h-full bg-slate-200"
                     >
-                        <span class="text-gray-400">
+                        <span class="text-slate-400">
                             <i class="pi pi-image text-[4rem]" />
                         </span>
                     </button>
@@ -345,7 +345,7 @@ watch(selfInstructored, (value) => {
                 <div class="space-y-2">
                     <label for="dates">Date and time</label>
                     <div
-                        class="bg-gray-50 border rounded-2xl p-2 space-y-3"
+                        class="bg-slate-50 border rounded-2xl p-2 space-y-3"
                         :class="errors.dates && 'border-red-500'"
                     >
                         <div
@@ -359,7 +359,7 @@ watch(selfInstructored, (value) => {
                                 <div class="space-y-2">
                                     <label
                                         for="date"
-                                        class="block text-sm font-medium text-gray-700 mb-1"
+                                        class="block text-sm font-medium text-slate-700 mb-1"
                                     >
                                         Day {{ index + 1 }}
                                     </label>
@@ -392,7 +392,7 @@ watch(selfInstructored, (value) => {
                                     <div>
                                         <label
                                             for="date.startDateTime"
-                                            class="block text-sm font-medium text-gray-700 mb-1"
+                                            class="block text-sm font-medium text-slate-700 mb-1"
                                         >
                                             From
                                         </label>
@@ -430,7 +430,7 @@ watch(selfInstructored, (value) => {
                                     <div>
                                         <label
                                             for="date.endTime"
-                                            class="block text-sm font-medium text-gray-700 mb-1"
+                                            class="block text-sm font-medium text-slate-700 mb-1"
                                         >
                                             To
                                         </label>
@@ -525,9 +525,9 @@ watch(selfInstructored, (value) => {
                                 />
                                 <button
                                     v-else
-                                    class="flex items-center justify-center w-full h-full bg-gray-200"
+                                    class="flex items-center justify-center w-full h-full bg-slate-200"
                                 >
-                                    <span class="text-gray-400">
+                                    <span class="text-slate-400">
                                         <i class="pi pi-image text-[3rem]" />
                                     </span>
                                 </button>

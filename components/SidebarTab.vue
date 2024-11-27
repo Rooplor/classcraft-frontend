@@ -70,7 +70,7 @@ watch(router.currentRoute, () => {
 });
 </script>
 <template>
-    <div v-ripple class="duration-100 rounded-lg hover:bg-gray-100">
+    <div v-ripple class="duration-100 rounded-lg hover:bg-slate-100">
         <nuxt-link
             :to="to"
             :class="
@@ -89,7 +89,7 @@ watch(router.currentRoute, () => {
                 />
                 <div
                     v-else-if="!label"
-                    class="h-12 flex justify-center items-center bg-gray-200 border border-gray-300 text-gray-400 rounded-lg aspect-square"
+                    class="h-12 flex justify-center items-center bg-slate-200 border border-slate-300 text-slate-400 rounded-lg aspect-square"
                 >
                     <i class="pi pi-image" />
                 </div>

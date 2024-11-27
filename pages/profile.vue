@@ -32,7 +32,7 @@ const handleSave = () => {
             <img
                 :src="user?.photoURL"
                 :alt="user?.displayName"
-                class="rounded-full w-52 h-52 aspect-square object-cover bg-gray-200"
+                class="rounded-full w-52 h-52 aspect-square object-cover bg-slate-200"
             />
             <div class="w-full space-y-4">
                 <div class="space-y-2">
@@ -49,7 +49,7 @@ const handleSave = () => {
                             @click="handleEdit"
                         />
                     </div>
-                    <p class="text-gray-500">{{ user?.email }}</p>
+                    <p class="text-slate-500">{{ user?.email }}</p>
                 </div>
                 <p class="space-x-2">
                     <span>2 Classes</span> <span>5 Followers</span>
@@ -72,7 +72,7 @@ const handleSave = () => {
                         <Button label="Save" @click="handleSave" />
                     </div>
                 </div>
-                <p v-else class="text-gray-500">{{ bio }}</p>
+                <p v-else class="text-slate-500">{{ bio }}</p>
             </div>
         </div>
         <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border">
@@ -86,7 +86,7 @@ const handleSave = () => {
                 />
             </div>
             <div v-else>
-                <p class="py-16 text-gray-500 text-center">
+                <p class="py-16 text-slate-500 text-center">
                     No classes hosted yet
                 </p>
             </div>
