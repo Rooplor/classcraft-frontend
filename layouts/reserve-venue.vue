@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SIT_BOOKING_WEBSITE } from "../constants/url";
-import { EVenueRequestStatus, type IClassroom } from "../types/Classroom";
+import { type IClassroom } from "../types/Classroom";
 import { type IVenue } from "../types/Venue";
 
 const { reserveVenue } = useClassroom();
@@ -16,7 +16,7 @@ const toast = useToast();
 const confirm = useConfirm();
 
 const selectingDate = ref<string>(
-    editingClassroom.value.dates[0].date.startDateTime
+    editingClassroom.value?.dates[0].date.startDateTime
 );
 const venues = ref<IVenue[]>([]);
 
@@ -110,44 +110,9 @@ const isSelectedVenueIsEmpty = () => {
 
 const confirmRequest = () => {
     confirm.require({
-        message: `
-    ${editingClassroom.value.dates
-        .map((date) => {
-            return `
-            Date: ${isoToDateWithTimezone(
-                date.date.startDateTime
-            ).toLocaleDateString("en-SG", {
-                weekday: "short",
-                month: "long",
-                day: "numeric",
-            })}
-            \n
-            Time: ${isoToDateWithTimezone(
-                date.date.startDateTime
-            ).toLocaleTimeString("en-SG", {
-                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                hour: "numeric",
-                minute: "numeric",
-            })} - ${isoToDateWithTimezone(
-                date.date.endDateTime
-            ).toLocaleTimeString("en-SG", {
-                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                hour: "numeric",
-                minute: "numeric",
-            })}
-            \n
-            Venue: ${date.venueId
-                .map((id) => {
-                    return venues.value.find((venue) => venue.id === id)?.room;
-                })
-                .join(", ")}
-        `;
-        })
-        .join("")}
-
-        `,
+        message: `After sending the request, you will not be able to edit the venue for this class. Are you sure you want to proceed?`,
         header: "Are you sure you want to send request to reserve these venue?",
-        icon: "pi pi-send",
+        icon: "pi pi-exclamation-triangle",
         rejectProps: {
             label: "Cancel",
             text: true,
