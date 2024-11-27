@@ -79,7 +79,7 @@ const status = computed(() => {
                 />
             </div>
             <p class="text-gray-500">{{ status?.description }}</p>
-            <div v-if="editingClassroom.rejectReason" class="gap-2 mt-4 pl-2 border-l-2 border-red-500">
+            <div v-if="editingClassroom?.rejectReason" class="gap-2 mt-4 pl-2 border-l-2 border-red-500">
                 <p class="text-sm text-slate-500">Reject reason</p>
                 <p class="text-red-500">
                     {{ editingClassroom.rejectReason }}
@@ -148,7 +148,7 @@ const status = computed(() => {
                         >
                             <div class="text-start basis-36 font-normal">
                                 {{
-                                    isoToDateWithTimezone(
+                                    utcToDateWithTimezone(
                                         date.date.startDateTime
                                     ).toLocaleDateString("en-SG", {
                                         weekday: "short",
@@ -161,7 +161,7 @@ const status = computed(() => {
                                         class="pi pi-clock text-sm mt-[0.2rem]"
                                     />
                                     {{
-                                        isoToDateWithTimezone(
+                                        utcToDateWithTimezone(
                                             date.date.startDateTime
                                         ).toLocaleTimeString("en-SG", {
                                             timeZone:
@@ -173,7 +173,7 @@ const status = computed(() => {
                                     }}
                                     -
                                     {{
-                                        isoToDateWithTimezone(
+                                        utcToDateWithTimezone(
                                             date.date.endDateTime
                                         ).toLocaleTimeString("en-SG", {
                                             timeZone:
