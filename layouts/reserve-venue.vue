@@ -107,12 +107,6 @@ const groupVenues = (venues: IVenue[]) => {
     return grouped;
 };
 
-const isSelectedVenueIsEmpty = () => {
-    return editingClassroom.value.dates.every(
-        (date) => date.venueId.length > 0
-    );
-};
-
 const confirmRequest = () => {
     confirm.require({
         message: `After sending the request, you will not be able to edit the venue for this class. Are you sure you want to proceed?`,
