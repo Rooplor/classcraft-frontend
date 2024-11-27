@@ -79,6 +79,12 @@ const status = computed(() => {
                 />
             </div>
             <p class="text-gray-500">{{ status?.description }}</p>
+            <div v-if="editingClassroom.rejectReason" class="gap-2 mt-4 pl-2 border-l-2 border-red-500">
+                <p class="text-sm text-slate-500">Reject reason</p>
+                <p class="text-red-500">
+                    {{ editingClassroom.rejectReason }}
+                </p>
+            </div>
         </div>
         <Accordion
             value="0"

@@ -16,6 +16,7 @@ export interface IClassroom {
     registrationUrl: string;
     registrationStatus: boolean;
     venueStatus: EVenueRequestStatus;
+    rejectReason: string;
     venue: IVenue;
     published: boolean;
     instructorName: string;
