@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SIT_BOOKING_WEBSITE } from "../constants/url";
-import { type IClassroom } from "../types/Classroom";
+import { EVenueRequestStatus, type IClassroom } from "../types/Classroom";
 import { type IVenue } from "../types/Venue";
 
 const { reserveVenue } = useClassroom();
@@ -34,6 +34,8 @@ const handleSendRequest = () => {
                     group: "tc",
                     life: 3000,
                 });
+                editingClassroom.value.venueStatus =
+                    EVenueRequestStatus.PENDING;
             } else {
                 toast.add({
                     severity: "error",
