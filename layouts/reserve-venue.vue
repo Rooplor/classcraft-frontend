@@ -16,7 +16,7 @@ const toast = useToast();
 const confirm = useConfirm();
 
 const selectingDate = ref<string>(
-    editingClassroom.value.dates[0].date.startDateTime
+    editingClassroom.value?.dates[0].date.startDateTime
 );
 const venues = ref<IVenue[]>([]);
 
