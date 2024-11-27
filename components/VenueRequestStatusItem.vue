@@ -53,7 +53,7 @@ const status = computed(() => {
             return {
                 lable: "Select date for venue",
                 icon: "pi pi-list",
-                description: "Venue you select will show here",
+                description: "Venues you select will show here",
             };
         case EVenueRequestStatus.PENDING:
             return {
@@ -79,7 +79,7 @@ const status = computed(() => {
 
 <template>
     <div
-        class="block space-y-4 p-4 rounded-xl border duration-150"
+        class="block space-y-4 p-4 w-full rounded-2xl border duration-150"
         :class="cardStyle"
     >
         <div>
@@ -106,77 +106,108 @@ const status = computed(() => {
             </div>
             <p class="text-gray-500">{{ status?.description }}</p>
         </div>
-        <div class="group grid grid-cols-2 gap-2 overflow-x-visible">
-            <button
-                @click="$emit('setDate', date.date.startDateTime)"
-                v-ripple
-                v-for="(date, index) in editingClassroom?.dates"
-                :key="index"
-                class="flex p-4 border rounded-lg gap-3 duration-150"
-                :class="
-                    editingClassroom?.venueStatus.toString() >
-                    EVenueRequestStatus.NO_REQUEST.toString()
-                        ? itemStyle
-                        : isSameVenue ||
-                          selectingDate === date.date.startDateTime
-                        ? 'border-primary-500 bg-primary-100 hover:bg-primary-200'
-                        : 'hover:bg-gray-100'
-                "
+        <Accordion
+            value="0"
+            :pt="{
+                root: '!border !rounded-xl !shadow-none !p-0 !bg-gray-50',
+            }"
+        >
+            <AccordionPanel
+                :pt="{
+                    root: '!border-none !rounded-xl !shadow-none',
+                }"
+                value="0"
             >
-                <div class="text-start basis-36 font-normal">
-                    {{
-                        isoToDateWithTimezone(
-                            date.date.startDateTime
-                        ).toLocaleDateString("en-SG", {
-                            weekday: "short",
-                            month: "long",
-                            day: "numeric",
-                        })
-                    }}
-                    <p class="flex gap-1 text-sm text-gray-500">
-                        <i class="pi pi-clock text-sm mt-[0.2rem]" />
-                        {{
-                            isoToDateWithTimezone(
-                                date.date.startDateTime
-                            ).toLocaleTimeString("en-SG", {
-                                timeZone:
-                                    Intl.DateTimeFormat().resolvedOptions()
-                                        .timeZone,
-                                hour: "numeric",
-                                minute: "numeric",
-                            })
-                        }}
-                        -
-                        {{
-                            isoToDateWithTimezone(
-                                date.date.endDateTime
-                            ).toLocaleTimeString("en-SG", {
-                                timeZone:
-                                    Intl.DateTimeFormat().resolvedOptions()
-                                        .timeZone,
-                                hour: "numeric",
-                                minute: "numeric",
-                            })
-                        }}
-                    </p>
-                </div>
-                <div class="border-l h-full border-gray-300" />
-                <div class="flex gap-1 overflow-auto">
+                <AccordionHeader
+                    :pt="{
+                        root: '!text-lg !font-semibold !bg-transparent !p-4',
+                    }"
+                    >Selected venue</AccordionHeader
+                >
+                <AccordionContent
+                    unstyled
+                    class="!rounded-xl !shadow-none !bg-transparent"
+                >
                     <div
-                        v-if="date.venueId.length > 0"
-                        v-for="(id, index) in date.venueId"
-                        :key="index"
-                        class="flex items-center gap-1 p-2 bg-gray-100 border rounded-md animate-fadein"
+                        class="grid grid-cols-2 text-nowrap flex-nowrap gap-2 overflow-x-scroll p-4"
                     >
-                        <i class="pi pi-building" />
-                        {{
-                            venues.find((venue: IVenue) => venue.id === id)
-                                ?.room
-                        }}
+                        <button
+                            @click="$emit('setDate', date.date.startDateTime)"
+                            v-ripple
+                            v-for="(date, index) in editingClassroom?.dates"
+                            :key="index"
+                            class="flex items-center p-3 border rounded-lg gap-8 duration-150 whitespace-nowrap overflow-scroll"
+                            :class="
+                                editingClassroom?.venueStatus.toString() >
+                                EVenueRequestStatus.NO_REQUEST.toString()
+                                    ? itemStyle
+                                    : isSameVenue ||
+                                      selectingDate === date.date.startDateTime
+                                    ? 'border-primary-500 bg-primary-100 hover:bg-primary-200'
+                                    : 'bg-white hover:bg-gray-100'
+                            "
+                        >
+                            <div class="text-start basis-36 font-normal">
+                                {{
+                                    isoToDateWithTimezone(
+                                        date.date.startDateTime
+                                    ).toLocaleDateString("en-SG", {
+                                        weekday: "short",
+                                        month: "long",
+                                        day: "numeric",
+                                    })
+                                }}
+                                <p class="flex gap-1 text-sm text-gray-500">
+                                    <i
+                                        class="pi pi-clock text-sm mt-[0.2rem]"
+                                    />
+                                    {{
+                                        isoToDateWithTimezone(
+                                            date.date.startDateTime
+                                        ).toLocaleTimeString("en-SG", {
+                                            timeZone:
+                                                Intl.DateTimeFormat().resolvedOptions()
+                                                    .timeZone,
+                                            hour: "numeric",
+                                            minute: "numeric",
+                                        })
+                                    }}
+                                    -
+                                    {{
+                                        isoToDateWithTimezone(
+                                            date.date.endDateTime
+                                        ).toLocaleTimeString("en-SG", {
+                                            timeZone:
+                                                Intl.DateTimeFormat().resolvedOptions()
+                                                    .timeZone,
+                                            hour: "numeric",
+                                            minute: "numeric",
+                                        })
+                                    }}
+                                </p>
+                            </div>
+                            <div class="flex w-full gap-1 overflow-x-scroll">
+                                <div
+                                    v-if="date.venueId.length > 0"
+                                    v-for="(id, index) in date.venueId"
+                                    :key="index"
+                                    class="flex items-center gap-1 whitespace-nowrap p-2 bg-gray-100 border border-gray-300 rounded-md animate-fadein"
+                                >
+                                    <i class="pi pi-building" />
+                                    {{
+                                        venues.find(
+                                            (venue: IVenue) => venue.id === id
+                                        )?.room
+                                    }}
+                                </div>
+                                <div v-else class="text-gray-400">
+                                    No venue selected
+                                </div>
+                            </div>
+                        </button>
                     </div>
-                    <div v-else class="text-gray-400">No venue selected</div>
-                </div>
-            </button>
-        </div>
+                </AccordionContent>
+            </AccordionPanel>
+        </Accordion>
     </div>
 </template>

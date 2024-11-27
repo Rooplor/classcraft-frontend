@@ -3,12 +3,15 @@ import { useForm } from "vee-validate";
 import * as yup from "yup";
 import { EFileType } from "../types/File";
 import type { EditorLoadEvent } from "primevue/editor";
+import type { IClassroom } from "../types/Classroom";
 
 const { addClassroom, updateClassroom } = useClassroom();
 const router = useRouter();
 
 const classroomStore = useClassroomStore();
-const { editingClassroom } = storeToRefs(classroomStore);
+const { editingClassroom } = storeToRefs(classroomStore) as {
+    editingClassroom: Ref<IClassroom | null>;
+};
 
 const { uploadFile } = useFileUpload();
 
@@ -57,11 +60,9 @@ const initialValues = editingClassroom.value
           type: editingClassroom.value.type,
           format: editingClassroom.value.format,
           capacity: editingClassroom.value.capacity,
-          dates: editingClassroom.value.date?.map((date: any) => ({
+          dates: editingClassroom.value.dates?.map((date: any) => ({
               date: {
-                  startDateTime: isoToDateWithTimezone(
-                      date.date.startDateTime
-                  ),
+                  startDateTime: isoToDateWithTimezone(date.date.startDateTime),
                   endDateTime: isoToDateWithTimezone(date.date.endDateTime),
               },
               venueId: date.venueId,
@@ -115,13 +116,10 @@ const typeOption = ref([
 ]);
 
 const onSubmit = handleSubmit((values: any) => {
-    values.dates = values.dates.map((date: any) => ({
-        date: {
-            startDateTime: date.date.startDateTime.toISOString(),
-            endDateTime: date.date.endDateTime.toISOString(),
-        },
-        venueId: date.venueId,
-    }));
+    values.dates = convertDatesToIsoString(values.dates)
+        .sortDatesByStartDateTime()
+        .removeDuplicatedDatesTime()
+        .get();
 
     if (editingClassroom.value) {
         updateClassroom(editingClassroom.value.id, values).then((res) => {
@@ -377,6 +375,7 @@ watch(selfInstructored, (value) => {
                                         iconDisplay="input"
                                         fluid
                                         hourFormat="24"
+                                        :minDate="new Date()"
                                         date-format="D d M yy"
                                         showButtonBar
                                         placeholder="Select date"
@@ -444,9 +443,7 @@ watch(selfInstructored, (value) => {
                                                 '].date.endDateTime'
                                             "
                                             showIcon
-                                            :min-date="
-                                                entry.date.startDateTime
-                                            "
+                                            :min-date="entry.date.startDateTime"
                                             iconDisplay="input"
                                             fluid
                                             timeOnly
