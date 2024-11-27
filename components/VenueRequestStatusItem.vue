@@ -129,7 +129,7 @@ const status = computed(() => {
                     class="!rounded-xl !shadow-none !bg-transparent"
                 >
                     <div
-                        class="grid grid-cols-2 text-nowrap flex-nowrap gap-2 overflow-x-scroll p-4"
+                        class="grid grid-cols-2 text-nowrap flex-nowrap gap-2 overflow-x-scroll p-4 pt-0"
                     >
                         <button
                             @click="$emit('setDate', date.date.startDateTime)"
