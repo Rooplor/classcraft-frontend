@@ -29,7 +29,7 @@ export default defineNuxtConfig({
         baseURL: process.env.NUXT_BASE_URL
     },
     generate: {
-        routes: ["/class"],
+        fallback: "custom_sap_fallbackpage.html",
     },
     modules: [
         "@primevue/nuxt-module",
