@@ -499,7 +499,9 @@ watch(selfInstructored, (value) => {
 
             <div class="flex flex-col w-full bg-white border rounded-3xl">
                 <div
-                    v-if="!instructorName || !instructorAvatar || !instructorBio"
+                    v-if="
+                        !instructorName || !instructorAvatar || !instructorBio
+                    "
                     class="flex items-center gap-2 p-4 rounded-t-3xl border-b"
                 >
                     <Checkbox
@@ -560,7 +562,6 @@ watch(selfInstructored, (value) => {
                                         errors.instructorName && 'p-invalid'
                                     "
                                     placeholder="Instructor name"
-                                    :disabled="selfInstructored"
                                     class="!text-2xl font-bold outline-none w-full"
                                     unstyled
                                 />
@@ -578,7 +579,6 @@ watch(selfInstructored, (value) => {
                                     rows="5"
                                     style="resize: none"
                                     placeholder="Tell us about the instructor"
-                                    :disabled="selfInstructored"
                                 />
                                 <VeeErrorMessage
                                     name="instructorBio"
