@@ -300,9 +300,6 @@ if (id) {
                                     severity="secondary"
                                     icon="pi pi-arrow-right"
                                     iconPos="right"
-                                    :disabled="
-                                        editingClassroom?.stepperStatus <= 3
-                                    "
                                     @click="activateCallback('4')"
                                     class="w-full"
                                 />

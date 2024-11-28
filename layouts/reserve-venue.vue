@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SIT_BOOKING_WEBSITE } from "../constants/url";
-import { type IClassroom } from "../types/Classroom";
+import { EVenueRequestStatus, type IClassroom } from "../types/Classroom";
 import { type IVenue } from "../types/Venue";
 
 const { reserveVenue } = useClassroom();
@@ -23,6 +23,7 @@ const venues = ref<IVenue[]>([]);
 const dialogVisible = ref<Record<string, boolean>>({});
 const isSameVenue = ref(true);
 const otherVenue = ref();
+const isLoading = ref(false);
 
 const handleSendRequest = () => {
     reserveVenue(editingClassroom.value.id, editingClassroom.value.dates).then(
@@ -34,6 +35,9 @@ const handleSendRequest = () => {
                     group: "tc",
                     life: 3000,
                 });
+                editingClassroom.value.venueStatus =
+                    EVenueRequestStatus.PENDING;
+                isLoading.value = false;
             } else {
                 toast.add({
                     severity: "error",
@@ -45,9 +49,13 @@ const handleSendRequest = () => {
             }
         }
     );
+    isLoading.value = true;
 };
 
 const selectVenue = (id: string) => {
+    if (editingClassroom.value.venueStatus > EVenueRequestStatus.NO_REQUEST) {
+        return;
+    }
     if (!selectingDate.value) {
         return;
     }
@@ -102,12 +110,6 @@ const groupVenues = (venues: IVenue[]) => {
     return grouped;
 };
 
-const isSelectedVenueIsEmpty = () => {
-    return editingClassroom.value.dates.every(
-        (date) => date.venueId.length > 0
-    );
-};
-
 const confirmRequest = () => {
     confirm.require({
         message: `After sending the request, you will not be able to edit the venue for this class. Are you sure you want to proceed?`,
@@ -140,6 +142,16 @@ venues.value.forEach((venue) => {
 </script>
 
 <template>
+    <div
+        v-if="isLoading"
+        class="fixed top-0 left-0 w-full h-full bg-[#00000045] z-20"
+    >
+        <div
+            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        >
+            <ProgressSpinner />
+        </div>
+    </div>
     <div class="space-y-8">
         <div class="space-y-2">
             <nuxt-link
@@ -332,7 +344,11 @@ venues.value.forEach((venue) => {
                                 :disabled="
                                     !editingClassroom?.dates.every(
                                         (date) => date.venueId.length > 0
-                                    )
+                                    ) ||
+                                    (editingClassroom?.venueStatus >
+                                        EVenueRequestStatus.NO_REQUEST &&
+                                        editingClassroom?.venueStatus <
+                                            EVenueRequestStatus.REJECTED)
                                 "
                                 @click="confirmRequest"
                             />

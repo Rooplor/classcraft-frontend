@@ -14,37 +14,6 @@ defineEmits<{
     (e: "toggleSameVenue"): void;
 }>();
 
-const cardStyle = computed(() => {
-    if (!props.editingClassroom?.venueStatus) return;
-    return {
-        "border-slate-300 bg-white":
-            props.editingClassroom.venueStatus ===
-            EVenueRequestStatus.NO_REQUEST,
-        "border-yellow-500 bg-yellow-200 text-yellow-600":
-            props.editingClassroom.venueStatus === EVenueRequestStatus.PENDING,
-        "border-green-500 bg-green-200 text-green-600":
-            props.editingClassroom.venueStatus === EVenueRequestStatus.APPROVED,
-        "border-red-500 bg-red-200 text-red-600":
-            props.editingClassroom.venueStatus === EVenueRequestStatus.REJECTED,
-    };
-});
-
-const itemStyle = computed(() => {
-    if (!props.editingClassroom?.venueStatus) return;
-
-    return {
-        "border-slate-300 bg-white":
-            props.editingClassroom.venueStatus ===
-            EVenueRequestStatus.NO_REQUEST,
-        "border-yellow-500 bg-yellow-100 text-yellow-600":
-            props.editingClassroom.venueStatus === EVenueRequestStatus.PENDING,
-        "border-green-500 bg-green-200 text-green-600":
-            props.editingClassroom.venueStatus === EVenueRequestStatus.APPROVED,
-        "border-red-500 bg-red-200 text-red-600":
-            props.editingClassroom.venueStatus === EVenueRequestStatus.REJECTED,
-    };
-});
-
 const status = computed(() => {
     if (!props.editingClassroom?.venueStatus) return;
 
@@ -54,24 +23,29 @@ const status = computed(() => {
                 lable: "Select date for venue",
                 icon: "pi pi-list",
                 description: "Venues you select will show here",
+                style: "border-gray-300 bg-white",
             };
         case EVenueRequestStatus.PENDING:
             return {
                 lable: "Pending",
                 icon: "pi pi-spinner-dotted animate-spin",
-                description: "Waiting for approval",
+                description:
+                    "Waiting for approval, please wait. This may take a while",
+                style: "border-yellow-500 bg-yellow-50 text-yellow-600",
             };
         case EVenueRequestStatus.APPROVED:
             return {
                 lable: "Approved",
                 icon: "pi pi-check",
                 description: "Venue has been approved",
+                style: "border-green-500 bg-green-50 text-green-600",
             };
         case EVenueRequestStatus.REJECTED:
             return {
                 lable: "Rejected",
                 icon: "pi pi-times",
                 description: "Venue has been rejected",
+                style: "border-red-500 bg-red-50 text-red-600",
             };
     }
 });
@@ -80,7 +54,7 @@ const status = computed(() => {
 <template>
     <div
         class="block space-y-4 p-4 w-full rounded-2xl border duration-150"
-        :class="cardStyle"
+        :class="status?.style"
     >
         <div>
             <div class="flex justify-between">
@@ -105,11 +79,28 @@ const status = computed(() => {
                 />
             </div>
             <p class="text-slate-500">{{ status?.description }}</p>
+            <div v-if="editingClassroom?.rejectReason" class="gap-2 mt-4 pl-2 border-l-2 border-red-500">
+                <p class="text-sm text-slate-500">Reject reason</p>
+                <p class="text-red-500">
+                    {{ editingClassroom.rejectReason }}
+                </p>
+            </div>
         </div>
         <Accordion
             value="0"
             :pt="{
-                root: '!border !rounded-xl !shadow-none !p-0 !bg-slate-50',
+                root: `!border !rounded-xl !shadow-none !p-0 ${
+                    editingClassroom?.venueStatus >
+                    EVenueRequestStatus.NO_REQUEST
+                        ? editingClassroom?.venueStatus ===
+                          EVenueRequestStatus.PENDING
+                            ? '!bg-yellow-100 !border-yellow-500 text-yellow-600'
+                            : editingClassroom?.venueStatus ===
+                              EVenueRequestStatus.APPROVED
+                            ? '!bg-green-100 !border-green-500 text-green-600'
+                            : '!bg-red-100 !border-red-500 text-red-600'
+                        : ''
+                }`,
             }"
         >
             <AccordionPanel
@@ -120,16 +111,24 @@ const status = computed(() => {
             >
                 <AccordionHeader
                     :pt="{
-                        root: '!text-lg !font-semibold !bg-transparent !p-4',
+                        root: `!text-lg !font-semibold !rounded-xl !p-4 ${
+                            editingClassroom?.venueStatus >
+                            EVenueRequestStatus.NO_REQUEST
+                                ? editingClassroom?.venueStatus ===
+                                  EVenueRequestStatus.PENDING
+                                    ? '!bg-yellow-100 !border-yellow-500 text-yellow-600'
+                                    : editingClassroom?.venueStatus ===
+                                      EVenueRequestStatus.APPROVED
+                                    ? '!bg-green-100 !border-green-500 text-green-600'
+                                    : '!bg-red-100 !border-red-500 text-red-600'
+                                : ''
+                        }`,
                     }"
                     >Selected venue</AccordionHeader
                 >
-                <AccordionContent
-                    unstyled
-                    class="!rounded-xl !shadow-none !bg-transparent"
-                >
+                <AccordionContent unstyled class="!rounded-xl !shadow-none">
                     <div
-                        class="grid grid-cols-2 text-nowrap flex-nowrap gap-2 overflow-x-scroll p-4"
+                        class="grid grid-cols-2 text-nowrap flex-nowrap gap-2 overflow-x-scroll p-4 pt-0"
                     >
                         <button
                             @click="$emit('setDate', date.date.startDateTime)"
@@ -140,7 +139,7 @@ const status = computed(() => {
                             :class="
                                 editingClassroom?.venueStatus.toString() >
                                 EVenueRequestStatus.NO_REQUEST.toString()
-                                    ? itemStyle
+                                    ? status?.style
                                     : isSameVenue ||
                                       selectingDate === date.date.startDateTime
                                     ? 'border-primary-500 bg-primary-100 hover:bg-primary-200'

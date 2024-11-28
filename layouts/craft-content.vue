@@ -131,6 +131,7 @@ const confirmDelete = (content: IContent) => {
         acceptProps: {
             label: "Delete",
             text: true,
+            severity: "danger"
         },
         accept: () => {
             removeContent(content.id);

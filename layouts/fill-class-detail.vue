@@ -499,8 +499,8 @@ watch(selfInstructored, (value) => {
 
             <div class="flex flex-col w-full bg-white border rounded-3xl">
                 <div
+                    v-if="!instructorName || !instructorAvatar || !instructorBio"
                     class="flex items-center gap-2 p-4 rounded-t-3xl border-b"
-                    :class="selfInstructored && 'bg-slate-200'"
                 >
                     <Checkbox
                         inputId="selfInstructored"
