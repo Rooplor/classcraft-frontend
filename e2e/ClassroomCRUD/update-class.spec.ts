@@ -1,40 +1,13 @@
 import {test, expect} from '@playwright/test';
 import {
+    initRoute,
     showValidationMsg,
     updateClassResponse
 } from "../utils/TestDataHelper/testHelper";
 import {validateMsg} from "../utils/TestDataHelper/validateMsg";
 
 test.beforeEach(async ({page}) => {
-    await page.route('http://localhost:8080/api/user/profile', route => {
-        route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({
-                success: true,
-                result: {
-                    id: "1",
-                    username: "John Doe",
-                    email: "JohnDoe@gmail.com",
-                    profilePicture: "www.example.com",
-                    myClassroom: ["1"]
-                },
-                error: null
-            })
-        });
-    });
-
-    await page.route("http://localhost:8080/api/venue", route => {
-        route.fulfill({
-            path: './e2e/utils/mockResponse/venueList.json',
-        })
-    })
-
-    await page.route("http://localhost:8080/api/class?userId=1", route => {
-        route.fulfill({
-            path: './e2e/utils/mockResponse/createdResponse/ownClassResponse.json',
-        })
-    })
+    await initRoute(page);
 });
 
 test("should be update class title", async ({page}) => {

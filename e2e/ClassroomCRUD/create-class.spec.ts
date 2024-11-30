@@ -1,34 +1,13 @@
 import {test, expect} from '@playwright/test';
 import {
+    initRoute,
     showValidationMsg,
     testCreateClassHelper
 } from "../utils/TestDataHelper/testHelper";
 import {validateMsg} from "../utils/TestDataHelper/validateMsg";
 
 test.beforeEach(async ({page}) => {
-    await page.route('http://localhost:8080/api/user/profile', route => {
-        route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({
-                success: true,
-                result: {
-                    id: "1",
-                    username: "John Doe",
-                    email: "JohnDoe@gmail.com",
-                    profilePicture: "www.example.com",
-                    myClassroom: []
-                },
-                error: null
-            })
-        });
-    });
-
-    await page.route("http://localhost:8080/api/venue", route => {
-        route.fulfill({
-            path: './e2e/utils/mockResponse/venueList.json',
-        })
-    })
+    await initRoute(page);
 });
 
 test('should create class successfully with 1 day', async ({page}) => {
