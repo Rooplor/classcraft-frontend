@@ -152,3 +152,21 @@ export async function getOneOrTwoDayClassResponse(page, numOfDay) {
         });
     }
 }
+
+export async function fillContent(page, title, content, activityGuide, presentationGuide) {
+    await page.getByRole('tab', {name: 'Craft your content'}).click();
+    await page.getByPlaceholder('Enter Title').click();
+    await page.getByPlaceholder('Enter Title').fill(title);
+    await page.getByPlaceholder('Content').click();
+    await page.getByPlaceholder('Content').fill(content);
+    if (activityGuide != null) {
+        await page.getByRole('button', {name: '   Add Activity Guide'}).click();
+        await page.getByPlaceholder('Enter Activity Guide').click();
+        await page.getByPlaceholder('Enter Activity Guide').fill(activityGuide);
+    }
+    if (presentationGuide != null) {
+        await page.getByLabel('Add', {exact: true}).click();
+        await page.getByPlaceholder('Presentation Guide').click();
+        await page.getByPlaceholder('Presentation Guide').fill(presentationGuide);
+    }
+}
