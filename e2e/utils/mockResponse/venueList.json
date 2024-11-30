@@ -1,0 +1,39 @@
+{
+  "success": true,
+  "result": [
+    {
+      "id": "1",
+      "room": "LX-10 - 1",
+      "location": {
+        "building": "LX Building",
+        "floor": 10
+      },
+      "description": "",
+      "capacity": 20,
+      "imageUrl": "test"
+    },
+    {
+      "id": "2",
+      "room": "LX-10 - 2",
+      "location": {
+        "building": "LX Building",
+        "floor": 10
+      },
+      "description": "",
+      "capacity": 20,
+      "imageUrl": "test"
+    },
+    {
+      "id": "3",
+      "room": "LX-10 - 3",
+      "location": {
+        "building": "LX Building",
+        "floor": 10
+      },
+      "description": "",
+      "capacity": 20,
+      "imageUrl": "test"
+    }
+  ],
+  "error": null
+}
