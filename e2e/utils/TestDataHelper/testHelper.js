@@ -140,3 +140,15 @@ export async function updateClassResponse(oldClassPath, newClassPath, page) {
 
     await page.goto("http://localhost:3000/class");
 }
+
+export async function getOneOrTwoDayClassResponse(page, numOfDay) {
+    if (numOfDay >= 0 && numOfDay <= 2) {
+        await page.route("http://localhost:8080/api/class/1", route => {
+            if (route.request().method() === "GET") {
+                route.fulfill({
+                    path: `./e2e/utils/mockResponse/createdResponse/class${numOfDay}DayResponse.json`,
+                })
+            }
+        });
+    }
+}
