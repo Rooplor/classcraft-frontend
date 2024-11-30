@@ -20,6 +20,12 @@ export async function initRoute(page) {
         });
     });
 
+    await page.route("http://localhost:8080/api/class", route => {
+        route.fulfill({
+            path: './e2e/utils/mockResponse/createdResponse/getEmptyClass.json',
+        })
+    })
+
     await page.route("http://localhost:8080/api/venue", route => {
         route.fulfill({
             path: './e2e/utils/mockResponse/venueList.json',
