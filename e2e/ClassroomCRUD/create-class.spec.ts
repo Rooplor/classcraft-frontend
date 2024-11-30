@@ -47,7 +47,7 @@ test('should create class successfully with 1 day', async ({page}) => {
         'test@gmail.com',
         'SIT STUDENT',
         1,
-        './e2e/utils/mockResponse/class1DayResponse.json'
+        './e2e/utils/mockResponse/createdResponse/class1DayResponse.json'
     );
 
     await expect(page.getByText(validateMsg.success)).toBeVisible()
@@ -69,7 +69,7 @@ test('should create class successfully with 2 day', async ({page}) => {
         'test@gmail.com',
         'SIT STUDENT',
         2,
-        './e2e/utils/mockResponse/class2DayResponse.json'
+        './e2e/utils/mockResponse/createdResponse/class2DayResponse.json'
     );
 
     await expect(page.getByText(validateMsg.success)).toBeVisible()
@@ -91,7 +91,7 @@ test('should create class successfully with class type = `LECTURE` and class for
         'test@gmail.com',
         'SIT STUDENT',
         1,
-        './e2e/utils/mockResponse/class1DayResponse.json'
+        './e2e/utils/mockResponse/createdResponse/class1DayResponse.json'
     );
 
     await expect(page.getByText(validateMsg.success)).toBeVisible()
@@ -113,7 +113,7 @@ test('should create class successfully with class type = `WORKSHOP` and class fo
         'test@gmail.com',
         'SIT STUDENT',
         1,
-        './e2e/utils/mockResponse/class1DayResponse.json'
+        './e2e/utils/mockResponse/createdResponse/class1DayResponse.json'
     );
 
     await expect(page.getByText(validateMsg.success)).toBeVisible()
@@ -135,7 +135,7 @@ test('should create class successfully with class type = `DISCUSSION` and class 
         'test@gmail.com',
         'SIT STUDENT',
         1,
-        './e2e/utils/mockResponse/class1DayResponse.json'
+        './e2e/utils/mockResponse/createdResponse/class1DayResponse.json'
     );
 
     await expect(page.getByText(validateMsg.success)).toBeVisible()
@@ -157,7 +157,7 @@ test('should create class successfully with class type = `LECTURE` and class for
         'test@gmail.com',
         'SIT STUDENT',
         1,
-        './e2e/utils/mockResponse/class1DayResponse.json'
+        './e2e/utils/mockResponse/createdResponse/class1DayResponse.json'
     );
 
     await expect(page.getByText(validateMsg.success)).toBeVisible()
@@ -179,7 +179,7 @@ test('should create class successfully with class type = `WORKSHOP` and class fo
         'test@gmail.com',
         'SIT STUDENT',
         1,
-        './e2e/utils/mockResponse/class1DayResponse.json'
+        './e2e/utils/mockResponse/createdResponse/class1DayResponse.json'
     );
 
     await expect(page.getByText(validateMsg.success)).toBeVisible()
@@ -201,7 +201,7 @@ test('should create class successfully with class type = `DISCUSSION` and class 
         'test@gmail.com',
         'SIT STUDENT',
         1,
-        './e2e/utils/mockResponse/class1DayResponse.json'
+        './e2e/utils/mockResponse/createdResponse/class1DayResponse.json'
     );
 
     await expect(page.getByText(validateMsg.success)).toBeVisible()
@@ -223,7 +223,7 @@ test('should create class successfully with class type = `LECTURE` and class for
         'test@gmail.com',
         'SIT STUDENT',
         1,
-        './e2e/utils/mockResponse/class1DayResponse.json'
+        './e2e/utils/mockResponse/createdResponse/class1DayResponse.json'
     );
 
     await expect(page.getByText(validateMsg.success)).toBeVisible()
@@ -245,7 +245,7 @@ test('should create class successfully with class type = `WORKSHOP` and class fo
         'test@gmail.com',
         'SIT STUDENT',
         1,
-        './e2e/utils/mockResponse/class1DayResponse.json'
+        './e2e/utils/mockResponse/createdResponse/class1DayResponse.json'
     );
 
     await expect(page.getByText(validateMsg.success)).toBeVisible()
@@ -267,7 +267,7 @@ test('should create class successfully with class type = `DISCUSSION` and class 
         'test@gmail.com',
         'SIT STUDENT',
         1,
-        './e2e/utils/mockResponse/class1DayResponse.json'
+        './e2e/utils/mockResponse/createdResponse/class1DayResponse.json'
     );
 
     await expect(page.getByText(validateMsg.success)).toBeVisible()

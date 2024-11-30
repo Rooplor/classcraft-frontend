@@ -1,0 +1,42 @@
+{
+    "success": true,
+    "result": [
+        {
+            "id": "1",
+            "title": "1. Cybersecurity Essentials for the Digital World",
+            "details": "<p><span style=\"background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);\">This lecture covers fundamental cybersecurity principles, common threats, and practical strategies to protect digital assets.</span></p>",
+            "target": "IT professionals, students, and small business owners",
+            "prerequisite": "Basic knowledge of IT systems",
+            "type": "LECTURE",
+            "format": "ONSITE",
+            "capacity": 50,
+            "dates": [
+                {
+                    "date": {
+                        "startDateTime": "2024-12-05T01:00:00.000",
+                        "endDateTime": "2024-12-05T09:00:00.000"
+                    },
+                    "venueId": []
+                }
+            ],
+            "stepperStatus": 2,
+            "meetingUrl": null,
+            "content": null,
+            "registrationUrl": null,
+            "registrationStatus": false,
+            "venueStatus": 1,
+            "rejectReason": "",
+            "instructorName": "testUser",
+            "instructorBio": "JohnDoe@gmail.com",
+            "instructorAvatar": "",
+            "instructorFamiliarity": "SIT STUDENT",
+            "coverImage": "",
+            "createdWhen": "2024-11-30T20:12:11.618",
+            "updatedWhen": "2024-11-30T20:12:11.618",
+            "owner": "1",
+            "coOwners": [],
+            "published": false
+        }
+    ],
+    "error": null
+}

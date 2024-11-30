@@ -63,7 +63,7 @@ export async function testCreateClassHelper(page, classTitle, classDetails, atte
     await page.getByRole('button', {name: 'Save'}).click();
 }
 
-export async function showValidationMsg(page, validateMsg, notVisibleMsg) {
+export async function showValidationMsg(page, validateMsg, notVisibleMsg, invert = false) {
     const validationMessages = [
         'titleRequired',
         'detailRequired',
@@ -78,10 +78,27 @@ export async function showValidationMsg(page, validateMsg, notVisibleMsg) {
     ];
 
     for (const msg of validationMessages) {
-        if (notVisibleMsg.includes(msg)) {
+        const isVisible = !notVisibleMsg.includes(msg);
+        if (invert ? isVisible : !isVisible) {
             await expect(page.getByText(validateMsg[msg])).toBeVisible({visible: false});
         } else {
             await expect(page.getByText(validateMsg[msg])).toBeVisible();
         }
     }
+}
+
+export async function updateClassResponse(oldClassPath, newClassPath, page) {
+    await page.route("http://localhost:8080/api/class/1", route => {
+        if (route.request().method() === "GET") {
+            route.fulfill({
+                path: './e2e/utils/mockResponse/updatedResponse/' + oldClassPath
+            })
+        } else if (route.request().method() === "PUT") {
+            route.fulfill({
+                path: './e2e/utils/mockResponse/updatedResponse/' + newClassPath
+            })
+        }
+    })
+
+    await page.goto("http://localhost:3000/class");
 }
