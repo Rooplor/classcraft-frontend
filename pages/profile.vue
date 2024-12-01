@@ -30,7 +30,7 @@ const handleSave = () => {
     <div class="w-full flex flex-col gap-[10px] p-[10px]">
         <div class="flex gap-8 bg-white border rounded-3xl p-8">
             <img
-                :src="user?.photoURL"
+                :src="user?.photoURL?.replace('s96-c', 's512-c')"
                 :alt="user?.displayName"
                 class="rounded-full w-52 h-52 aspect-square object-cover bg-slate-200"
             />
