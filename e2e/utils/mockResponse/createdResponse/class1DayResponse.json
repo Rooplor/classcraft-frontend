@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "result": {
+    "id": "1",
+    "title": "1. Cybersecurity Essentials for the Digital World",
+    "details": "<p><span style=\"background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);\">This lecture covers fundamental cybersecurity principles, common threats, and practical strategies to protect digital assets.</span></p>",
+    "target": "IT professionals, students, and small business owners",
+    "prerequisite": "Basic knowledge of IT systems",
+    "type": "LECTURE",
+    "format": "ONSITE",
+    "capacity": "50",
+    "dates": [
+      {
+        "date": {
+          "startDateTime": "2024-12-05T01:00:00.000",
+          "endDateTime": "2024-12-05T09:00:00.000"
+        },
+        "venueId": []
+      }
+    ],
+    "stepperStatus": 2,
+    "meetingUrl": null,
+    "content": null,
+    "registrationUrl": null,
+    "registrationStatus": false,
+    "venueStatus": 1,
+    "rejectReason": "",
+    "instructorName": "Natdanai Nitipan",
+    "instructorBio": "c3bosskung@gmail.com",
+    "instructorAvatar": "https://lh3.googleusercontent.com/a/ACg8ocLi7iT0Hu6LMAif9P8UyNpb2ga-yHhWwqy8RW9cjaQKAjDDjubk=s96-c",
+    "instructorFamiliarity": "SIT STUDENT",
+    "coverImage": null,
+    "createdWhen": "2024-11-30T17:32:44.5132095",
+    "updatedWhen": "2024-11-30T17:32:44.5132095",
+    "owner": "1",
+    "coOwners": null,
+    "published": false
+  },
+  "error": null
+}

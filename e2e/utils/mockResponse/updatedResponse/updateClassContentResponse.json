@@ -1,0 +1,42 @@
+{
+  "success": true,
+  "result": {
+    "id": "1",
+    "title": "1. Cybersecurity Essentials for the Digital World",
+    "details": "<p><span style=\"background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);\">This lecture covers fundamental cybersecurity principles, common threats, and practical strategies to protect digital assets.</span></p>",
+    "target": "IT professionals, students, and small business owners",
+    "prerequisite": "Basic knowledge of IT systems",
+    "type": "LECTURE",
+    "format": "ONSITE",
+    "capacity": 50,
+    "dates": [
+      {
+        "date": {
+          "startDateTime": "2024-12-05T01:00:00",
+          "endDateTime": "2024-12-05T09:00:00"
+        },
+        "venueId": [
+          "1"
+        ]
+      }
+    ],
+    "stepperStatus": 3,
+    "meetingUrl": null,
+    "content": "[{\"id\":1,\"title\":\"Fundamentals of Cloud Computing\",\"content\":\"Cloud computing delivers on-demand computing resources via the internet. It features scalability, elasticity, and resource pooling and is categorized into IaaS, PaaS, and SaaS.\",\"activityGuides\":[{\"id\":\"1-1\",\"activityGuide\":\"ice breaking\"}],\"presentationGuides\":[{\"id\":\"1-1\",\"presentationGuide\":\"Key Points: Define cloud computing, highlight its characteristics (on-demand, scalable, cost-efficient), and explain service models (IaaS, PaaS, SaaS).\\nVisuals: Diagram comparing traditional IT vs. cloud computing, icons representing IaaS, PaaS, SaaS with examples (e.g., AWS EC2, Google App Engine, Microsoft Office 365).\"}]}]",
+    "registrationUrl": null,
+    "registrationStatus": false,
+    "venueStatus": 3,
+    "rejectReason": "",
+    "instructorName": "Natdanai Nitipan",
+    "instructorBio": "c3bosskung@gmail.com",
+    "instructorAvatar": "https://lh3.googleusercontent.com/a/ACg8ocLi7iT0Hu6LMAif9P8UyNpb2ga-yHhWwqy8RW9cjaQKAjDDjubk=s96-c",
+    "instructorFamiliarity": "SIT STUDENT",
+    "coverImage": "",
+    "createdWhen": "2024-12-01T02:32:58.513",
+    "updatedWhen": "2024-12-01T05:49:41.4533991",
+    "owner": "1",
+    "coOwners": [],
+    "published": true
+  },
+  "error": null
+}
