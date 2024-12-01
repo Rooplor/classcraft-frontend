@@ -14,6 +14,22 @@ defineEmits<{
     (e: "toggleSameVenue"): void;
 }>();
 
+const isOpen = ref("0");
+
+onMounted(() => {
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+            isOpen.value = "1";
+        }
+    });
+
+    window.addEventListener("scroll", () => {
+        if (window.scrollY < 300) {
+            isOpen.value = "0";
+        }
+    });
+});
+
 const status = computed(() => {
     if (!props.editingClassroom?.venueStatus) return;
 
@@ -79,7 +95,10 @@ const status = computed(() => {
                 />
             </div>
             <p class="text-slate-500">{{ status?.description }}</p>
-            <div v-if="editingClassroom?.rejectReason" class="gap-2 mt-4 pl-2 border-l-2 border-red-500">
+            <div
+                v-if="editingClassroom?.rejectReason"
+                class="gap-2 mt-4 pl-2 border-l-2 border-red-500"
+            >
                 <p class="text-sm text-slate-500">Reject reason</p>
                 <p class="text-red-500">
                     {{ editingClassroom.rejectReason }}
@@ -87,7 +106,7 @@ const status = computed(() => {
             </div>
         </div>
         <Accordion
-            value="0"
+            :value="isOpen"
             :pt="{
                 root: `!border !rounded-xl !shadow-none !p-0 ${
                     editingClassroom?.venueStatus >
