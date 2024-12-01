@@ -207,7 +207,10 @@ watch(selfInstructored, (value) => {
     if (value) {
         instructorName.value = user.value?.displayName;
         instructorBio.value = user.value?.email;
-        instructorAvatar.value = user.value?.photoURL;
+        instructorAvatar.value = user.value?.photoURL?.replace(
+            "s96-c",
+            "s512-c"
+        );
     } else {
         instructorName.value = "";
         instructorBio.value = "";

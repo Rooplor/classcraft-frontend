@@ -100,7 +100,12 @@ const handleSignOut = async () => {
                         <Image :alt="`${user?.displayName} profile picture`">
                             <template #image>
                                 <img
-                                    :src="user?.photoURL || ''"
+                                    :src="
+                                        user?.photoURL?.replace(
+                                            's96-c',
+                                            's384-c'
+                                        ) || ''
+                                    "
                                     :alt="`${user?.displayName} profile picture`"
                                     class="rounded-full w-24 h-24"
                                 />
