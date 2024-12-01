@@ -23,7 +23,7 @@ const status = computed(() => {
                 lable: "Select date for venue",
                 icon: "pi pi-list",
                 description: "Venues you select will show here",
-                style: "border-gray-300 bg-white",
+                style: "border-slate-300 bg-white",
             };
         case EVenueRequestStatus.PENDING:
             return {
@@ -99,7 +99,7 @@ const status = computed(() => {
                               EVenueRequestStatus.APPROVED
                             ? '!bg-green-100 !border-green-500 text-green-600'
                             : '!bg-red-100 !border-red-500 text-red-600'
-                        : ''
+                        : '!bg-slate-50'
                 }`,
             }"
         >
@@ -121,7 +121,7 @@ const status = computed(() => {
                                       EVenueRequestStatus.APPROVED
                                     ? '!bg-green-100 !border-green-500 text-green-600'
                                     : '!bg-red-100 !border-red-500 text-red-600'
-                                : ''
+                                : '!bg-slate-50'
                         }`,
                     }"
                     >Selected venue</AccordionHeader
