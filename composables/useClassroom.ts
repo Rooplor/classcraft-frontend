@@ -158,7 +158,7 @@ const useClassroom = () => {
     const updateVenueStatus = (
         classroomId: string,
         venueStatusId: EVenueRequestStatus,
-        rejectReason: string
+        rejectReason?: string
     ): Promise<IResponse<IClassroom>> => {
         return $fetch(
             `${config.public.baseUrl}/api/class/${classroomId}/venue-status`,
