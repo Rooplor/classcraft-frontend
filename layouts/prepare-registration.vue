@@ -27,10 +27,10 @@ const initialValues = editingClassroom.value && {
 const schema = yup.object({
     registrationUrl: yup
         .string()
-        .required("Registration URL is required")
+        .required("Registration Url is required")
         .matches(
             /^https?:\/\/[\w-]+(\.[\w-]+)+([\w-.,@?^=%&:/~+#]*[\w-@?^=%&/~+#])?$/,
-            "Invalid URL"
+            "Invalid Url"
         ),
 });
 
@@ -105,7 +105,7 @@ const handleUpdateRegistrationUrl = () => {
             classroomStore.setEditingClassroom(res.result);
             toast.add({
                 severity: "success",
-                summary: "Registration URL updated",
+                summary: "Registration Url updated",
                 group: "tc",
                 life: 1000,
             });
@@ -153,7 +153,7 @@ const onEdit = (question: Question) => {
                     <p
                         class="inline-flex items-center gap-1 text-slate-400 mb-1"
                     >
-                        <i class="pi pi-link" />Enter your registration form URL
+                        <i class="pi pi-link" />Enter your registration form Url
                     </p></label
                 >
                 <div class="w-full flex gap-2">
@@ -162,7 +162,7 @@ const onEdit = (question: Question) => {
                             id="registrationUrl"
                             v-model="registrationUrl"
                             aria-describedby="registrationUrl-help"
-                            placeholder="Enter registration URL"
+                            placeholder="Enter registration Url"
                             :class="errors.registrationUrl && 'p-invalid'"
                             class="w-full"
                         />
