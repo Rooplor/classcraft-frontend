@@ -96,7 +96,10 @@ const status = computed(() => {
             </div>
             <p class="text-slate-500">{{ status?.description }}</p>
             <div
-                v-if="editingClassroom?.rejectReason"
+                v-if="
+                    editingClassroom?.venueStatus ===
+                    EVenueRequestStatus.REJECTED
+                "
                 class="gap-2 mt-4 pl-2 border-l-2 border-red-500"
             >
                 <p class="text-sm text-slate-500">Reject reason</p>
