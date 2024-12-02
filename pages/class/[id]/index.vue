@@ -113,7 +113,7 @@ try {
                             />
                         </div>
                     </div>
-                    <div class="space-y-4">
+                    <div class="space-y-8">
                         <div class="inline-flex gap-3">
                             <div>
                                 <div>
@@ -128,7 +128,7 @@ try {
                                     class="border-r border-slate-300 w-1/2 h-full"
                                 />
                             </div>
-                            <div class="space-y-8">
+                            <div class="space-y-6">
                                 <div
                                     v-for="(date, index) in classroom.dates"
                                     :key="index"
