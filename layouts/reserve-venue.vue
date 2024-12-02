@@ -176,7 +176,14 @@ venues.value.forEach((venue) => {
                 :isSameVenue="isSameVenue"
             />
         </div>
-        <div v-if="selectingDate" class="space-y-4">
+        <div
+            v-if="
+                editingClassroom?.venueStatus ===
+                    EVenueRequestStatus.NO_REQUEST ||
+                editingClassroom?.venueStatus === EVenueRequestStatus.REJECTED
+            "
+            class="space-y-4"
+        >
             <p class="text-2xl font-semibold">Select venue</p>
             <div
                 v-if="
@@ -344,11 +351,7 @@ venues.value.forEach((venue) => {
                                 :disabled="
                                     !editingClassroom?.dates.every(
                                         (date) => date.venueId.length > 0
-                                    ) ||
-                                    (editingClassroom?.venueStatus >
-                                        EVenueRequestStatus.NO_REQUEST &&
-                                        editingClassroom?.venueStatus <
-                                            EVenueRequestStatus.REJECTED)
+                                    )
                                 "
                                 @click="confirmRequest"
                             />
