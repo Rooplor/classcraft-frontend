@@ -1,4 +1,5 @@
 import type {
+    EVenueRequestStatus,
     IAddClassroomDTO,
     IClassroom,
     IReservationDateAndVenue,
@@ -154,6 +155,23 @@ const useClassroom = () => {
         );
     };
 
+    const updateVenueStatus = (
+        classroomId: string,
+        venueStatusId: EVenueRequestStatus,
+        rejectReason: string
+    ): Promise<IResponse<IClassroom>> => {
+        return $fetch(
+            `${config.public.baseUrl}/api/class/${classroomId}/venue-status`,
+            {
+                params: {
+                    venueStatusId,
+                    rejectReason,
+                },
+                method: "GET",
+            }
+        );
+    };
+
     return {
         getAllClassroom,
         getClassroomById,
@@ -169,6 +187,7 @@ const useClassroom = () => {
         updateContent,
         updateClassroomStatus,
         reserveVenue,
+        updateVenueStatus,
     };
 };
 
