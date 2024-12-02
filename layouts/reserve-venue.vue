@@ -53,7 +53,10 @@ const handleSendRequest = () => {
 };
 
 const selectVenue = (id: string) => {
-    if (editingClassroom.value.venueStatus > EVenueRequestStatus.NO_REQUEST) {
+    if (
+        editingClassroom.value.venueStatus === EVenueRequestStatus.PENDING ||
+        editingClassroom.value.venueStatus === EVenueRequestStatus.APPROVED
+    ) {
         return;
     }
     if (!selectingDate.value) {
