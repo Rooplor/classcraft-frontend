@@ -9,6 +9,7 @@ const auth = useFirebaseAuth();
 const router = useRouter();
 
 const signInWithGoogle = async () => {
+    if (!auth) return;
     try {
         const res = await signInWithPopup(auth, new GoogleAuthProvider());
         const token = await res.user.getIdToken();
