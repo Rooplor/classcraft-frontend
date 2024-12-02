@@ -23,8 +23,12 @@ const signInWithGoogle = async () => {
     <div
         class="min-h-screen flex justify-end bg-gradient-to-br from-primary to-indigo-600"
     >
+        <div class="w-full m-auto text-center text-white space-y-5">
+            <h2 class="text-8xl font-bold">ClassCraft</h2>
+            <p class="text-4xl">Knowledge sharing made simple</p>
+        </div>
         <div
-            class="flex flex-col justify-center max-w-sm w-full bg-white rounded-xl shadow-lg p-6 m-2"
+            class="flex flex-col justify-center max-w-md w-full bg-white rounded-xl shadow-lg p-6 m-2"
         >
             <h1 class="text-4xl font-bold text-gray-800 text-center mb-8">
                 Welcome
