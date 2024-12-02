@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IClassroom } from "../../../../types/Classroom";
+import { EVenueRequestStatus, type IClassroom } from "../../../../types/Classroom";
 
 definePageMeta({
     layout: false,
@@ -7,12 +7,13 @@ definePageMeta({
 
 const router = useRouter();
 const { id } = router.currentRoute.value.params;
-const { getClassroomById } = useClassroom();
+const { getClassroomById, updateVenueStatus } = useClassroom();
 
 let classroom: IClassroom = {} as IClassroom;
 
 try {
     classroom = (await getClassroomById(id.toString())).result;
+    await updateVenueStatus(id.toString(), EVenueRequestStatus.APPROVED);
 } catch (error) {
     router.replace("/404");
 }
