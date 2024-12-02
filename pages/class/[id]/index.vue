@@ -79,6 +79,11 @@ try {
                         <div class="flex gap-2">
                             <Tag
                                 icon="pi pi-comment"
+                                v-tooltip.bottom="
+                                    `Type: ${classroom.type
+                                        .toString()
+                                        .toLowerCase()}`
+                                "
                                 severity="secondary"
                                 :value="classroom.type"
                                 rounded
@@ -86,6 +91,11 @@ try {
                             />
                             <Tag
                                 icon="pi pi-desktop"
+                                v-tooltip.bottom="
+                                    `Format: ${classroom.format
+                                        .toString()
+                                        .toLowerCase()}`
+                                "
                                 severity="secondary"
                                 :value="classroom.format"
                                 rounded
@@ -93,6 +103,9 @@ try {
                             />
                             <Tag
                                 icon="pi pi-users"
+                                v-tooltip.bottom="
+                                    `Capacity: ${classroom.capacity}`
+                                "
                                 severity="secondary"
                                 :value="classroom.capacity.toString()"
                                 rounded
@@ -101,11 +114,16 @@ try {
                         </div>
                     </div>
                     <div class="space-y-4">
-                        <div class="inline-flex gap-3 space-y-2">
+                        <div class="inline-flex gap-3">
                             <div>
-                                <i
-                                    class="pi pi-calendar p-3 text-xl rounded-xl border bg-slate-100 text-slate-500"
-                                />
+                                <div>
+                                    <i
+                                        v-tooltip.top="
+                                            `Date and time of this class`
+                                        "
+                                        class="pi pi-calendar p-3 text-xl rounded-xl border bg-slate-100 text-slate-500"
+                                    />
+                                </div>
                                 <div
                                     class="border-r border-slate-300 w-1/2 h-full"
                                 />
@@ -114,7 +132,12 @@ try {
                                 <div
                                     v-for="(date, index) in classroom.dates"
                                     :key="index"
+                                    class="relative"
                                 >
+                                    <div
+                                        v-if="index !== 0"
+                                        class="absolute -left-[39.5px] top-1/2 -translate-y-1/2 w-2 h-2 bg-slate-300 rounded-full"
+                                    />
                                     <p>
                                         {{
                                             isoToDateWithTimezone(
@@ -153,6 +176,7 @@ try {
                         </div>
                         <div class="flex items-center gap-3">
                             <i
+                                v-tooltip.top="`Location of this class`"
                                 class="pi pi-map-marker p-3 text-xl rounded-xl border bg-slate-100 text-slate-500"
                             />
                             <p>
