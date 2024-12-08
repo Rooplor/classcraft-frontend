@@ -15,7 +15,6 @@ const currentUrl = window?.location?.href.replace(/\/edit$/, "");
 const steps = [
     { label: "Fill class detail", value: "1" },
     { label: "Reserve venue", value: "2" },
-    // { label: "Craft your content", value: "3" },
     { label: "Prepare for registration", value: "3" },
 ];
 
