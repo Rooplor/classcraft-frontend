@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import type { IClassroom } from "../../../types/Classroom";
 
+const { getUserProfile } = useUser();
+const userID = (await getUserProfile()).result.id;
+
 const toast = useToast();
 const router = useRouter();
 const id = router.currentRoute.value.params.id;
@@ -115,6 +118,13 @@ if (id) {
     } catch (error) {
         router.replace("/404");
     }
+}
+
+if (
+    editingClassroom?.value?.owner !== userID &&
+    !editingClassroom?.value?.coOwners?.includes(userID)
+) {
+    router.replace("/404");
 }
 
 useHead({
