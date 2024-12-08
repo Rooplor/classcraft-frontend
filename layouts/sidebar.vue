@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { signOut } from "firebase/auth";
+import type { IClassroom } from "../types/Classroom";
 
 const classroomStore = useClassroomStore();
-const { classrooms } = storeToRefs(classroomStore);
+const { classrooms } = storeToRefs(classroomStore) as {
+    classrooms: Ref<IClassroom[]>;
+};
 
 const op = ref();
 const auth = useFirebaseAuth();
@@ -64,11 +67,17 @@ const handleSignOut = async () => {
                         </nuxt-link>
                     </div>
                     <SidebarTab
+                        v-if="classrooms?.values.length == 0"
                         v-for="classroom in classrooms"
                         :key="classroom?.id"
                         :to="`/class/${classroom?.id}/edit`"
                         :classroom="classroom"
                     />
+                    <div v-else>
+                        <p class="text-slate-500 text-center mt-32">
+                            No classes yet
+                        </p>
+                    </div>
                 </div>
             </div>
             <div
