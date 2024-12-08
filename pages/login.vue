@@ -19,6 +19,20 @@ const signInWithGoogle = async () => {
         console.error("Error signing in with Google:", error);
     }
 };
+
+useHead({
+    title: "Login · ClassCraft",
+    meta: [
+        {
+            name: "description",
+            content: "Login to ClassCraft",
+        },
+        {
+            name: "keywords",
+            content: "ClassCraft, login",
+        },
+    ],
+});
 </script>
 <template>
     <div

@@ -1,13 +1,28 @@
 <script setup lang="ts">
+import type { IUser } from "../../types/User";
+
 const { getUserById } = useUser();
 
 const router = useRouter();
 const id = router.currentRoute.value.params.id;
 
-const user = ref();
+const user = ref<IUser>();
 
 user.value = (await getUserById(id.toString())).result;
-console.log(user.value);
+
+useHead({
+    title: `${user?.value.username}'s Profile · ClassCraft`,
+    meta: [
+        {
+            name: "description",
+            content: `${user?.value.username}'s profile.`,
+        },
+        {
+            name: "keywords",
+            content: `${user?.value.username}, profile`,
+        },
+    ],
+});
 </script>
 
 <template>
@@ -51,7 +66,9 @@ console.log(user.value);
                 />
             </div>
             <div v-else>
-                <p class="py-16 text-slate-500 text-center">No classes hosted yet</p>
+                <p class="py-16 text-slate-500 text-center">
+                    No classes hosted yet
+                </p>
             </div>
         </div>
     </div>

@@ -115,6 +115,22 @@ if (id) {
         router.replace("/404");
     }
 }
+
+useHead({
+    title: editingClassroom?.value?.title
+        ? `Editing "${editingClassroom.value.title}" · Classroom · ClassCraft`
+        : "Create New · Classroom · ClassCraft",
+    meta: [
+        {
+            name: "description",
+            content: "Create or edit your classroom on ClassCraft",
+        },
+        {
+            name: "keywords",
+            content: "ClassCraft, Classroom",
+        },
+    ],
+});
 </script>
 
 <template>
