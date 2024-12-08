@@ -41,21 +41,21 @@ const status = computed(() => {
                 icon: "pi pi-spinner-dotted animate-spin",
                 description:
                     "Waiting for approval, please wait. This may take a while",
-                style: "border-yellow-500 bg-yellow-50 text-yellow-600",
+                style: "border-yellow-300 bg-yellow-50 text-yellow-600",
             };
         case EVenueRequestStatus.APPROVED:
             return {
                 lable: "Approved",
                 icon: "pi pi-check",
                 description: "Venue has been approved",
-                style: "border-green-500 bg-green-50 text-green-600",
+                style: "border-green-300 bg-green-50 text-green-500",
             };
         case EVenueRequestStatus.REJECTED:
             return {
                 lable: "Rejected",
                 icon: "pi pi-times",
                 description: "Venue has been rejected",
-                style: "border-red-500 bg-red-50 text-red-600",
+                style: "border-red-200 bg-red-50 text-red-500",
             };
     }
 });
@@ -110,11 +110,11 @@ const status = computed(() => {
                     EVenueRequestStatus.NO_REQUEST
                         ? editingClassroom?.venueStatus ===
                           EVenueRequestStatus.PENDING
-                            ? '!bg-yellow-100 !border-yellow-500 text-yellow-600'
+                            ? '!bg-yellow-100 !border-yellow-300 text-yellow-600'
                             : editingClassroom?.venueStatus ===
                               EVenueRequestStatus.APPROVED
-                            ? '!bg-green-100 !border-green-500 text-green-600'
-                            : '!bg-red-100 !border-red-500 text-red-600'
+                            ? '!bg-green-100 !border-green-300 text-green-600'
+                            : '!bg-red-100 !border-red-200 text-red-500'
                         : '!bg-slate-50'
                 }`,
             }"
@@ -132,11 +132,11 @@ const status = computed(() => {
                             EVenueRequestStatus.NO_REQUEST
                                 ? editingClassroom?.venueStatus ===
                                   EVenueRequestStatus.PENDING
-                                    ? '!bg-yellow-100 !border-yellow-500 text-yellow-600'
+                                    ? '!bg-yellow-100 !border-yellow-300 text-yellow-600'
                                     : editingClassroom?.venueStatus ===
                                       EVenueRequestStatus.APPROVED
-                                    ? '!bg-green-100 !border-green-500 text-green-600'
-                                    : '!bg-red-100 !border-red-500 text-red-600'
+                                    ? '!bg-green-100 !border-green-300 text-green-600'
+                                    : '!bg-red-100 !border-red-500 text-red-500'
                                 : '!bg-slate-50'
                         }`,
                     }"
