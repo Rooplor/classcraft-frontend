@@ -8,12 +8,9 @@ const { editingClassroom } = storeToRefs(classroomStore) as {
 };
 
 const content = ref<IContent[]>(
-    JSON.parse(
-        editingClassroom?.value?.content ||
-            '[{"id": 1, "title": "", "content": "", "activityGuides": [], "presentationGuides": []}]'
-    )
+    JSON.parse(editingClassroom?.value?.content || "[]")
 );
-const editingContent = ref<IContent | null>(content.value[0]);
+const editingContent = ref<IContent | null>(null);
 const confirm = useConfirm();
 const toast = useToast();
 const { updateContent } = useClassroom();
@@ -26,6 +23,7 @@ const onSaveContent = (newContent: IContent) => {
     content.value[index] = newContent;
     updateContent(editingClassroom.value.id, content.value).then((res) => {
         if (res.success) {
+            classroomStore.setEditingClassroom(res.result);
             toast.add({
                 severity: "success",
                 summary: "Saved",
@@ -131,7 +129,7 @@ const confirmDelete = (content: IContent) => {
         acceptProps: {
             label: "Delete",
             text: true,
-            severity: "danger"
+            severity: "danger",
         },
         accept: () => {
             removeContent(content.id);
@@ -141,7 +139,11 @@ const confirmDelete = (content: IContent) => {
 </script>
 <template>
     <div class="space-y-4">
-        <div v-for="(c, index) in content" :key="index">
+        <div
+            v-if="content.length > 0"
+            v-for="(c, index) in content"
+            :key="index"
+        >
             <div
                 v-if="c.id === editingContent?.id"
                 class="border rounded-3xl bg-white overflow-clip divide-y"
@@ -173,7 +175,7 @@ const confirmDelete = (content: IContent) => {
                                     guide, index
                                 ) in editingContent.activityGuides"
                                 :key="index"
-                                class="p-4 bg-slate-100 text-slate-500 rounded-xl flex gap-2 items-center duration-150 hover:bg-slate-200"
+                                class="p-2 px-4 bg-slate-100 text-slate-500 rounded-xl flex gap-2 items-center duration-150 hover:bg-slate-200"
                             >
                                 <p class="text-slate-400">{{ index + 1 }}.</p>
                                 <div class="w-full flex justify-end gap-2">
@@ -255,7 +257,6 @@ const confirmDelete = (content: IContent) => {
                         severity="danger"
                         text
                         label="Delete"
-                        :disabled="content.length === 1"
                         @click="confirmDelete(editingContent)"
                     />
                     <div class="flex gap-2">
@@ -280,6 +281,13 @@ const confirmDelete = (content: IContent) => {
                 </div>
             </div>
             <ContentCard v-else :content="c" @edit="editingContent = c" />
+        </div>
+        <div v-else>
+            <div class="flex justify-center items-center h-52">
+                <p class="text-slate-400">
+                    No content available. Click the button below to add content.
+                </p>
+            </div>
         </div>
         <Button
             :disabled="editingContent !== null && content.length > 0"
