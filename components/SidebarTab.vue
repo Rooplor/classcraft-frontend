@@ -78,9 +78,9 @@ watch(router.currentRoute, () => {
                     ? 'text-primary-500 bg-primary-100 hover:!bg-primary-100'
                     : ''
             "
-            class="flex items-center p-3"
+            class="flex items-center justify-between p-3"
         >
-            <div class="flex items-center w-full gap-2">
+            <div class="flex items-center w-5/6 gap-2">
                 <img
                     :src="classroom?.coverImage"
                     :alt="classroom?.title"
