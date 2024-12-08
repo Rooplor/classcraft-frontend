@@ -7,6 +7,7 @@ const { classrooms } = storeToRefs(classroomStore);
 const op = ref();
 const auth = useFirebaseAuth();
 const router = useRouter();
+const isCollapsed = ref(false);
 
 const toggle = (event: MouseEvent) => {
     op.value.toggle(event);
@@ -34,33 +35,59 @@ const handleSignOut = async () => {
 <template>
     <div class="sticky top-[10px] h-[calc(100vh-20px)]">
         <div
-            class="relative flex flex-col overflow-y-auto justify-between h-full screen py-6 px-3 pb-0 bg-white border basis-64 w-72 rounded-3xl overflow-clip"
+            class="relative flex flex-col overflow-y-auto justify-between h-full screen pb-0 bg-white border basis-64 rounded-3xl overflow-clip duration-500"
+            :class="isCollapsed ? 'w-20 p-1 py-4' : 'w-72 py-6 px-3'"
         >
             <div class="flex flex-col gap-9">
-                <h1 class="inline-flex items-center text-xl text-primary">
-                    <i class="pi pi-sparkles mr-2" />
-                    Class<span class="font-bold">Craft</span>
-                </h1>
+                <div
+                    class="flex gap-2"
+                    :class="isCollapsed ? 'justify-center' : 'justify-between'"
+                >
+                    <h1
+                        v-if="!isCollapsed"
+                        class="inline-flex items-center text-xl text-primary"
+                    >
+                        <i class="pi pi-sparkles mr-2" />
+                        Class<span class="font-bold">Craft</span>
+                    </h1>
+                    <Button
+                        :icon="
+                            isCollapsed
+                                ? 'pi pi-angle-right'
+                                : 'pi pi-angle-left'
+                        "
+                        severity="secondary"
+                        rounded
+                        aria-label="Toggle sidebar"
+                        @click="isCollapsed = !isCollapsed"
+                    />
+                </div>
                 <div>
                     <SidebarTab
                         to="/class"
                         label="Classroom"
                         icon="pi pi-book"
+                        :isCollapsed="isCollapsed"
                     />
                     <SidebarTab
                         to="/discussion"
                         label="Request for class"
                         icon="pi pi-comments"
+                        :isCollapsed="isCollapsed"
                     />
                 </div>
-                <div>
-                    <div class="flex justify-between mb-5">
+                <div
+                    :class="{ 'flex flex-col items-center gap-1': isCollapsed }"
+                >
+                    <Button v-if="isCollapsed" icon="pi pi-plus" text rounded />
+                    <div v-else class="flex justify-between mb-5">
                         <p class="text-slate-500">Your classes</p>
                         <nuxt-link
                             to="/class/new/edit"
-                            class="text-primary-500"
+                            class="text-primary-500 flex items-center gap-1"
                         >
-                            + Add
+                            <i class="pi pi-plus" />
+                            <p>Add</p>
                         </nuxt-link>
                     </div>
                     <SidebarTab
@@ -68,15 +95,23 @@ const handleSignOut = async () => {
                         :key="classroom?.id"
                         :to="`/class/${classroom?.id}/edit`"
                         :classroom="classroom"
+                        :isCollapsed="isCollapsed"
                     />
                 </div>
             </div>
             <div
-                class="w-full flex justify-between items-center py-4 border-t bg-white sticky bottom-0"
+                class="w-full flex items-center border-t bg-white sticky bottom-0"
+                :class="
+                    isCollapsed ? 'justify-center py-2' : 'justify-between py-4'
+                "
             >
-                <div class="flex gap-2">
-                    <Avatar :image="user?.photoURL || ''" shape="circle" />
-                    <div class="leading-4 w-40">
+                <div class="flex gap-2 items-center">
+                    <Avatar
+                        :image="user?.photoURL || ''"
+                        shape="circle"
+                        size="large"
+                    />
+                    <div v-if="!isCollapsed" class="leading-4 w-40">
                         <p class="truncate">
                             {{ user?.displayName }}
                         </p>
@@ -86,6 +121,7 @@ const handleSignOut = async () => {
                     </div>
                 </div>
                 <Button
+                    v-if="!isCollapsed"
                     icon="pi pi-ellipsis-h"
                     severity="secondary"
                     rounded
@@ -118,7 +154,6 @@ const handleSignOut = async () => {
                             <p class="text-slate-500">{{ user?.email }}</p>
                         </div>
                         <div class="flex flex-col w-full gap-2">
-                            <!-- click and close popover -->
                             <Button
                                 label="Profile"
                                 severity="secondary"
