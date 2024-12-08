@@ -108,6 +108,14 @@ const onToggleRegistrationStatus = () => {
     });
 };
 
+if (
+    editingClassroom.value &&
+    editingClassroom?.value?.owner !== userID &&
+    !editingClassroom?.value?.coOwners?.includes(userID)
+) {
+    console.log();
+}
+
 classroomStore.clearEditingClassroom();
 
 if (id) {
@@ -118,14 +126,6 @@ if (id) {
     } catch (error) {
         router.replace("/404");
     }
-}
-
-if (
-    editingClassroom &&
-    editingClassroom?.value?.owner !== userID &&
-    !editingClassroom?.value?.coOwners?.includes(userID)
-) {
-    router.replace("/404");
 }
 
 useHead({
@@ -147,7 +147,9 @@ useHead({
 
 <template>
     <div class="w-full pb-9 pr-2">
+        <div v-if="!editingClassroom" class="h-10" />
         <div
+            v-else
             class="w-full p-2 mb-16 sticky top-[10px] flex justify-between items-center gap-2 bg-white border rounded-full z-10"
         >
             <div class="flex gap-2">
@@ -225,6 +227,7 @@ useHead({
                     :severity="
                         editingClassroom?.published ? 'secondary' : 'primary'
                     "
+                    :disabled="!editingClassroom"
                     rounded
                     @click="onPublish"
                 />
