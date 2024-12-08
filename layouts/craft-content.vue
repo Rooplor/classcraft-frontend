@@ -175,7 +175,7 @@ const confirmDelete = (content: IContent) => {
                                     guide, index
                                 ) in editingContent.activityGuides"
                                 :key="index"
-                                class="p-4 bg-slate-100 text-slate-500 rounded-xl flex gap-2 items-center duration-150 hover:bg-slate-200"
+                                class="p-2 px-4 bg-slate-100 text-slate-500 rounded-xl flex gap-2 items-center duration-150 hover:bg-slate-200"
                             >
                                 <p class="text-slate-400">{{ index + 1 }}.</p>
                                 <div class="w-full flex justify-end gap-2">
