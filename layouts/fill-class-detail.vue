@@ -382,10 +382,9 @@ watch(selfInstructored, (value) => {
                                         date-format="D d M yy"
                                         showButtonBar
                                         placeholder="Select date"
-                                        v-on:date-select="
+                                        v-on:update:model-value="
                                             (event) => {
-                                                entry.date.startDateTime =
-                                                    event;
+                                               
                                                 entry.date.endDateTime = event;
                                             }
                                         "
@@ -411,10 +410,12 @@ watch(selfInstructored, (value) => {
                                             iconDisplay="input"
                                             fluid
                                             timeOnly
+                                            :manual-input="false"
+                                            :step-minute="10"
                                             hourFormat="24"
                                             date-format="D d M yy"
                                             placeholder="Select start time"
-                                            v-on:date-select="
+                                            v-on:update:model-value="
                                                 (event) => {
                                                     entry.date.endDateTime =
                                                         event;
@@ -450,6 +451,8 @@ watch(selfInstructored, (value) => {
                                             iconDisplay="input"
                                             fluid
                                             timeOnly
+                                            :manual-input="false"
+                                            :step-minute="10"
                                             hourFormat="24"
                                             date-format="D d M yy"
                                             placeholder="Select end time"
