@@ -121,6 +121,7 @@ if (id) {
 }
 
 if (
+    editingClassroom &&
     editingClassroom?.value?.owner !== userID &&
     !editingClassroom?.value?.coOwners?.includes(userID)
 ) {
