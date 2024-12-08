@@ -15,9 +15,11 @@ const currentUrl = window?.location?.href.replace(/\/edit$/, "");
 const steps = [
     { label: "Fill class detail", value: "1" },
     { label: "Reserve venue", value: "2" },
-    { label: "Craft your content", value: "3" },
-    { label: "Prepare for registration", value: "4" },
+    // { label: "Craft your content", value: "3" },
+    { label: "Prepare for registration", value: "3" },
 ];
+
+const isContentDialogVisible = ref(false);
 
 const showToast = () => {
     toast.add({
@@ -122,12 +124,21 @@ if (id) {
         <div
             class="w-full p-2 mb-16 sticky top-[10px] flex justify-between items-center gap-2 bg-white border rounded-xl z-10"
         >
-            <div
-                class="h-full text-sm p-2 px-3 text-green-700 bg-green-200 rounded-md"
-            >
-                <i class="pi pi-star-fill" />&nbsp;14 People interested
+            <div class="flex gap-2">
+                <Button
+                    class="h-full text-sm p-2 px-3 text-green-700 bg-green-200 rounded-md"
+                    :disabled="!editingClassroom"
+                    label="Craft your content"
+                    icon="pi pi-sparkles"
+                    @click="isContentDialogVisible = true"
+                />
             </div>
             <div class="flex gap-2">
+                <div
+                    class="h-full p-2 px-3 text-green-600 border border-green-600 rounded-md"
+                >
+                    <i class="pi pi-star-fill" />&nbsp;14
+                </div>
                 <Button
                     label="Share"
                     :severity="
@@ -285,35 +296,13 @@ if (id) {
                         </div>
                     </StepPanel>
                     <StepPanel v-slot="{ activateCallback }" value="3">
-                        <div class="bg-slate-50">
-                            <NuxtLayout name="craft-content" />
-                            <div class="flex justify-between pt-6 gap-2 h-36">
-                                <Button
-                                    label="Reserve venue"
-                                    severity="secondary"
-                                    icon="pi pi-arrow-left"
-                                    @click="activateCallback('2')"
-                                    class="w-full"
-                                />
-                                <Button
-                                    label="Prepare for registration"
-                                    severity="secondary"
-                                    icon="pi pi-arrow-right"
-                                    iconPos="right"
-                                    @click="activateCallback('4')"
-                                    class="w-full"
-                                />
-                            </div>
-                        </div>
-                    </StepPanel>
-                    <StepPanel v-slot="{ activateCallback }" value="4">
                         <NuxtLayout name="prepare-registration" />
                         <div class="flex justify-between pt-6 gap-2 h-36">
                             <Button
                                 label="Reserve venue"
                                 severity="secondary"
                                 icon="pi pi-arrow-left"
-                                @click="activateCallback('3')"
+                                @click="activateCallback('2')"
                                 class="w-full"
                             />
                             <Button
@@ -332,4 +321,19 @@ if (id) {
             </Stepper>
         </div>
     </div>
+    <Dialog
+        v-model:visible="isContentDialogVisible"
+        header="Craft Your Content"
+        position="top"
+        :modal="true"
+        :draggable="false"
+        class="w-full max-w-screen-lg m-auto bgslate"
+        :style="{
+            height: '100vh',
+            background: '#f8fafc',
+            borderRadius: '1.5rem',
+        }"
+    >
+        <NuxtLayout name="craft-content" />
+    </Dialog>
 </template>
