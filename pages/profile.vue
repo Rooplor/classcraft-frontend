@@ -24,6 +24,20 @@ const handleEdit = () => {
 const handleSave = () => {
     isEditing.value = false;
 };
+
+useHead({
+    title: `${user?.value?.displayName}'s Profile · ClassCraft`,
+    meta: [
+        {
+            name: "description",
+            content: `View ${user?.value?.displayName}'s profile on ClassCraft`,
+        },
+        {
+            name: "keywords",
+            content: "profile, user, classcraft",
+        },
+    ],
+});
 </script>
 
 <template>

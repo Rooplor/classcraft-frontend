@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { EVenueRequestStatus, type IClassroom } from "../../../../types/Classroom";
+import {
+    EVenueRequestStatus,
+    type IClassroom,
+} from "../../../../types/Classroom";
 
 definePageMeta({
     layout: false,
@@ -17,6 +20,10 @@ try {
 } catch (error) {
     router.replace("/404");
 }
+
+useHead({
+    title: `Approve Venue Reservation ${classroom.title} · ClassCraft`,
+});
 </script>
 <template>
     <div
@@ -27,7 +34,9 @@ try {
             <h1 class="text-5xl font-bold">Approved</h1>
             <p class="text-3xl leading-10">
                 Successfully reserve venue for
-                <span class="font-semibold text-primary">{{ classroom.title }}</span
+                <span class="font-semibold text-primary">{{
+                    classroom.title
+                }}</span
                 >.
                 <br />
                 Classroom’s host is available to open registration now.

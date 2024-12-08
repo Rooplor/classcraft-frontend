@@ -35,6 +35,10 @@ try {
 } catch (error) {
     router.replace("/404");
 }
+
+useHead({
+    title: `Reject Venue Reservation ${classroom.title} · ClassCraft`,
+});
 </script>
 <template>
     <div
@@ -47,8 +51,10 @@ try {
             <h1 class="text-5xl font-bold">Reasons of rejection</h1>
             <p class="text-3xl leading-10">
                 Please provide the reasons why
-                <span class="font-bold text-primary">{{ classroom.title }}</span> is unable
-                to reserve these venue.
+                <span class="font-bold text-primary">{{
+                    classroom.title
+                }}</span>
+                is unable to reserve these venue.
             </p>
             <form
                 @submit="onSubmit"

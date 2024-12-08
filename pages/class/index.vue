@@ -31,6 +31,20 @@ watch(
     },
     { deep: true }
 );
+
+useHead({
+    title: "Classroom · ClassCraft",
+    meta: [
+        {
+            name: "description",
+            content: "Classroom page.",
+        },
+        {
+            name: "keywords",
+            content: "ClassCraft, Classroom",
+        },
+    ],
+});
 </script>
 
 <template>

@@ -16,6 +16,20 @@ try {
 } catch (error) {
     router.replace("/404");
 }
+
+useHead({
+    title: `${classroom.title} · Classroom · ClassCraft`,
+    meta: [
+        {
+            name: "description",
+            content: `${classroom.title} class details.`,
+        },
+        {
+            name: "keywords",
+            content: `${classroom.title}, class, details`,
+        },
+    ],
+});
 </script>
 <template>
     <div class="w-full max-w-screen-lg mx-auto px-2 flex flex-col gap-2">
