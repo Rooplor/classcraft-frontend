@@ -22,12 +22,6 @@ onMounted(() => {
             isOpen.value = "1";
         }
     });
-
-    window.addEventListener("scroll", () => {
-        if (window.scrollY < 300) {
-            isOpen.value = "0";
-        }
-    });
 });
 
 const status = computed(() => {
