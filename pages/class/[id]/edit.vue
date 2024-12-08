@@ -113,7 +113,7 @@ if (
     editingClassroom?.value?.owner !== userID &&
     !editingClassroom?.value?.coOwners?.includes(userID)
 ) {
-    console.log();
+    router.replace("/404");
 }
 
 classroomStore.clearEditingClassroom();
