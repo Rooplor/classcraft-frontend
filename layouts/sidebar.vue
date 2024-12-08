@@ -83,7 +83,7 @@ const handleSignOut = async () => {
             <div
                 class="w-full flex justify-between items-center py-4 border-t bg-white sticky bottom-0"
             >
-                <div class="flex gap-2">
+                <div @click="handleProfileClick" class="flex gap-2 cursor-pointer">
                     <Avatar :image="user?.photoURL || ''" shape="circle" />
                     <div class="leading-4 w-40">
                         <p class="truncate">
