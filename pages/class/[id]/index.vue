@@ -32,9 +32,9 @@ useHead({
 });
 </script>
 <template>
-    <div class="w-full max-w-screen-lg mx-auto px-2 flex flex-col gap-2">
+    <div class="w-full flex flex-col gap-2">
         <Feedbar />
-        <div class="flex gap-2 mb-3">
+        <div class="flex gap-2 mb-3 w-full max-w-screen-lg mx-auto px-2">
             <div>
                 <div
                     v-if="classroom.coverImage"

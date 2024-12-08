@@ -6,7 +6,7 @@ const path = ref(route.currentRoute.value.path);
 <template>
     <div
         v-if="path.includes('/class')"
-        class="sticky mb-[10px] top-[10px] flex gap-1 w-[calc(100%-0.5rem)] bg-white rounded-2xl border overflow-clip px-3 z-50 drop-shadow-sm"
+        class="sticky mb-[10px] top-[10px] flex gap-1 w-[calc(100%-0.5rem)] bg-white rounded-full border overflow-clip px-5 z-50 drop-shadow-sm"
     >
         <FeedbarTab
             name="Explore"
@@ -26,7 +26,7 @@ const path = ref(route.currentRoute.value.path);
     </div>
     <div
         v-if="path.includes('/discussion')"
-        class="sticky mb-[10px] top-[10px] flex gap-1 w-full bg-white rounded-xl border overflow-clip px-3 z-50 drop-shadow-sm"
+        class="sticky mb-[10px] top-[10px] flex gap-1 w-[calc(100%-0.5rem)] bg-white rounded-full border overflow-clip px-5 z-50 drop-shadow-sm"
     >
         <FeedbarTab
             name="For you"
