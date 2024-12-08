@@ -137,35 +137,39 @@ useHead({
 <template>
     <div class="w-full pb-9 pr-2">
         <div
-            class="w-full p-2 mb-16 sticky top-[10px] flex justify-between items-center gap-2 bg-white border rounded-xl z-10"
+            class="w-full p-2 mb-16 sticky top-[10px] flex justify-between items-center gap-2 bg-white border rounded-full z-10"
         >
             <div class="flex gap-2">
                 <Button
-                    class="h-full text-sm p-2 px-3 text-green-700 bg-green-200 rounded-md"
                     :disabled="!editingClassroom"
                     label="Craft your content"
                     icon="pi pi-sparkles"
+                    rounded
                     @click="isContentDialogVisible = true"
                 />
             </div>
             <div class="flex gap-2">
                 <div
-                    class="h-full p-2 px-3 text-green-600 border border-green-600 rounded-md"
+                    class="h-full p-2 px-3 text-green-600 border border-green-500 bg-green-50 rounded-full"
                 >
                     <i class="pi pi-star-fill" />&nbsp;14
                 </div>
                 <Button
-                    label="Share"
-                    :severity="
-                        editingClassroom?.published ? 'secondary' : 'primary'
-                    "
+                    severity="secondary"
                     icon="pi pi-share-alt"
                     :disabled="!editingClassroom"
                     size="small"
+                    rounded
                     @click="toggle"
                 />
-                <Popover ref="op">
+                <Popover ref="op" class="p-1" style="border-radius: 1rem">
                     <div class="flex flex-col gap-4 w-[25rem]">
+                        <Message
+                            v-if="!editingClassroom?.published"
+                            severity="warn"
+                        >
+                            Publish this classroom first to share the link
+                        </Message>
                         <div>
                             <span class="block mb-2 font-medium"
                                 >Let the world know about this class</span
@@ -176,47 +180,44 @@ useHead({
                                     readonly
                                     disabled
                                     class="w-[25rem]"
-                                ></InputText>
+                                />
                                 <Button
                                     icon="pi pi-copy"
                                     severity="secondary"
                                     @click="copyLink"
                                 />
                             </InputGroup>
-                        </div>
-                        <div class="flex justify-end gap-2">
-                            <Button
-                                :label="
-                                    editingClassroom?.published
-                                        ? 'Unpublish'
-                                        : 'Publish'
-                                "
-                                :icon="
-                                    editingClassroom?.published
-                                        ? 'pi pi-lock-open'
-                                        : 'pi pi-lock'
-                                "
-                                :severity="
-                                    editingClassroom?.published
-                                        ? 'secondary'
-                                        : 'primary'
-                                "
-                                @click="onPublish"
-                            />
-
-                            <Button
-                                label="Preview"
-                                :severity="
-                                    editingClassroom?.published
-                                        ? 'primary'
-                                        : 'secondary'
-                                "
-                                icon="pi pi-eye"
-                                @click="onPreviewClassroom"
-                            />
+                            <div class="flex justify-end mt-2">
+                                <Button
+                                    label="Preview"
+                                    :severity="
+                                        editingClassroom?.published
+                                            ? 'primary'
+                                            : 'secondary'
+                                    "
+                                    icon="pi pi-eye"
+                                    @click="onPreviewClassroom"
+                                />
+                            </div>
                         </div>
                     </div>
                 </Popover>
+                <Button
+                    :label="
+                        editingClassroom?.published ? 'Unpublish' : 'Publish'
+                    "
+                    :icon="
+                        editingClassroom?.published
+                            ? 'pi pi-ban'
+                            : 'pi pi-globe'
+                    "
+                    :severity="
+                        editingClassroom?.published ? 'secondary' : 'primary'
+                    "
+                    rounded
+                    @click="onPublish"
+                />
+
                 <Button
                     :label="
                         editingClassroom?.registrationStatus
@@ -236,7 +237,7 @@ useHead({
                     :disabled="
                         !editingClassroom || !editingClassroom?.registrationUrl
                     "
-                    size="small"
+                    rounded
                     @click="onToggleRegistrationStatus"
                 />
             </div>
@@ -297,7 +298,7 @@ useHead({
                                     class="w-full"
                                 />
                                 <Button
-                                    label="Craft your content"
+                                    label="Prepare for registration"
                                     severity="secondary"
                                     icon="pi pi-arrow-right"
                                     iconPos="right"
