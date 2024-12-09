@@ -9,13 +9,9 @@ const props = defineProps({
     },
     label: {
         type: String,
-        default: "",
     },
     icon: {
         type: String,
-    },
-    isCollapsed: {
-        type: Boolean,
     },
 });
 const router = useRouter();
@@ -23,7 +19,10 @@ const path = ref(router.currentRoute.value.path);
 
 const { deleteClassroom } = useClassroom();
 const classroomStore = useClassroomStore();
-
+const sidebarStore = useSidebarStore();
+const { isSidebarOpen } = storeToRefs(sidebarStore) as {
+    isSidebarOpen: Ref<boolean>;
+};
 const op = ref();
 const confirm = useConfirm();
 const toast = useToast();
@@ -80,13 +79,15 @@ watch(router.currentRoute, () => {
                 (path.includes(to)
                     ? 'text-primary-500 bg-primary-100 hover:!bg-primary-100'
                     : '') +
-                ` ${isCollapsed ? 'p-1 justify-center' : 'p-3 justify-between'}`
+                ` ${
+                    isSidebarOpen ? 'p-3 justify-between' : 'p-1 justify-center'
+                }`
             "
             class="flex items-center"
         >
             <div
                 class="flex items-center gap-2"
-                :class="{ 'w-5/6': !isCollapsed }"
+                :class="{ 'w-5/6': isSidebarOpen }"
             >
                 <img
                     :src="classroom?.coverImage"
@@ -100,9 +101,12 @@ watch(router.currentRoute, () => {
                 >
                     <i class="pi pi-image" />
                 </div>
-                <i v-else :class="icon + (isCollapsed ? ` text-xl p-2` : ``)" />
+                <i
+                    v-else
+                    :class="icon + (isSidebarOpen ? `` : ` text-xl p-2`)"
+                />
                 <div
-                    v-if="!isCollapsed"
+                    v-if="isSidebarOpen"
                     class="space-y-1 w-3/4 overflow-hidden"
                 >
                     <div v-if="!label" class="flex gap-1">
@@ -130,7 +134,7 @@ watch(router.currentRoute, () => {
                 </div>
             </div>
             <Button
-                v-if="!label && !isCollapsed"
+                v-if="!label && isSidebarOpen"
                 severity="secondary"
                 icon="pi pi-ellipsis-v"
                 aria-label="More"
