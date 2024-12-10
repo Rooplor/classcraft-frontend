@@ -18,7 +18,7 @@ const useVenue = () => {
 
     const getVenueByIds = (ids: string[]): Promise<IResponse<IVenue[]>> => {
         return $fetch(
-            `${config.public.baseUrl}/api/venue/ids?ids=${ids.join("ids=")}`,
+            `${config.public.baseUrl}/api/venue/ids?ids=${ids.join("&ids=")}`,
             {
                 method: "GET",
             }
