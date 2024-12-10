@@ -1,36 +1,44 @@
 <script setup lang="ts">
-const { getAllClassroom } = useClassroom();
+const { getAllClassroom, searchByTitleOrDetail } = useClassroom();
 const { classroomFeedDisplay } = storeToRefs(useFeedDisplayStore());
 let classrooms = ref();
 
 const getClassroomFeed = async (feed: ClassroomFeedDisplay) => {
     switch (feed) {
         case ClassroomFeedDisplay.FOLLOWING:
-            classrooms.value = (await getAllClassroom(true)).result;
-            break;
+            return (await getAllClassroom(true)).result;
         case ClassroomFeedDisplay.VOTING:
-            classrooms.value = (await getAllClassroom(false)).result;
-            break;
+            return (await getAllClassroom(false)).result;
         case ClassroomFeedDisplay.EXPLORE:
-            classrooms.value = (await getAllClassroom()).result;
-            break;
+            return (await getAllClassroom()).result;
     }
 };
 
+const search = ref("");
 const value = ref("Upcoming");
 const options = ref(["Upcoming", "Past"]);
 
-getClassroomFeed(classroomFeedDisplay.value);
+classrooms.value = await getClassroomFeed(classroomFeedDisplay.value);
 
 watch(
     classroomFeedDisplay,
     async (current, prev) => {
         if (prev !== current) {
-            getClassroomFeed(current);
+            classrooms.value = await getClassroomFeed(current);
         }
     },
     { deep: true }
 );
+watch(search, async (current, prev) => {
+    if (current === "") {
+        classrooms.value = await getClassroomFeed(classroomFeedDisplay.value);
+        return;
+    }
+
+    if (prev !== current) {
+        classrooms.value = (await searchByTitleOrDetail(current)).result;
+    }
+});
 
 useHead({
     title: "Classroom · ClassCraft",
@@ -58,14 +66,26 @@ useHead({
                         :options="options"
                         aria-labelledby="basic"
                     />
-                    <nuxt-link to="class/new">
-                        <Button>
-                            <p><i class="pi pi-plus" /> Add class</p>
-                        </Button>
-                    </nuxt-link>
+                    <div class="flex gap-2">
+                        <div>
+                            <InputGroup>
+                                <InputGroupAddon>
+                                    <i class="pi pi-search"></i>
+                                </InputGroupAddon>
+                                <InputText
+                                    placeholder="Search classroom"
+                                    v-model="search"
+                                />
+                            </InputGroup>
+                        </div>
+                        <nuxt-link to="class/new">
+                            <Button label="Add class" icon="pi pi-plus" />
+                        </nuxt-link>
+                    </div>
                 </div>
                 <div class="space-y-[10px]">
                     <ClassroomItem
+                        v-if="classrooms.length > 0"
                         v-for="(classroom, index) in classrooms"
                         :key="index"
                         :classroom="classroom"
