@@ -88,7 +88,6 @@ const status = computed(() => {
                     "
                 />
             </div>
-            <p class="text-slate-500">{{ status?.description }}</p>
             <div
                 v-if="
                     editingClassroom?.venueStatus ===
@@ -127,7 +126,7 @@ const status = computed(() => {
             >
                 <AccordionHeader
                     :pt="{
-                        root: `!text-lg !font-semibold !rounded-xl !p-4 ${
+                        root: `!text-lg !font-semibold !rounded-xl !p-3 ${
                             editingClassroom?.venueStatus >
                             EVenueRequestStatus.NO_REQUEST
                                 ? editingClassroom?.venueStatus ===
@@ -144,7 +143,7 @@ const status = computed(() => {
                 >
                 <AccordionContent unstyled class="!rounded-xl !shadow-none">
                     <div
-                        class="grid grid-cols-2 text-nowrap flex-nowrap gap-2 overflow-x-scroll p-4 pt-0"
+                        class="grid grid-cols-2 text-nowrap flex-nowrap gap-2 overflow-x-scroll p-2 pt-0"
                     >
                         <button
                             @click="$emit('setDate', date.date.startDateTime)"
