@@ -61,7 +61,11 @@ const handleSignOut = async () => {
                 severity="secondary"
                 rounded
                 aria-label="Toggle sidebar"
-                @click="sidebarStore.toggleSidebar"
+                @click="
+                    closeCallback
+                        ? closeCallback()
+                        : sidebarStore.toggleSidebar()
+                "
             />
         </div>
         <div>
