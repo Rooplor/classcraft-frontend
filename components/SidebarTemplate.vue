@@ -86,7 +86,7 @@ const handleSignOut = async () => {
         </div>
         <div
             :class="{
-                'flex flex-col items-center gap-1': !isSidebarOpen,
+                'flex flex-col items-center': !isSidebarOpen,
             }"
         >
             <div v-if="isSidebarOpen" class="flex justify-between mb-5">
