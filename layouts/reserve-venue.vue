@@ -213,7 +213,7 @@ venues.value.forEach((venue) => {
                                         </h2>
                                     </AccordionHeader>
                                     <AccordionContent>
-                                        <p class="text-slate-500 mt-2">
+                                        <p class="text-slate-500 mb-6">
                                             SIT Building, KMUTT, 126 Pracha
                                             Uthit 54, Bang Mot, Thung Khru,
                                             Bangkok 10140
@@ -226,7 +226,9 @@ venues.value.forEach((venue) => {
                                             <h3 class="text-lg text-slate-500">
                                                 Floor {{ floor }}
                                             </h3>
-                                            <div class="grid grid-cols-3 gap-2">
+                                            <div
+                                                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"
+                                            >
                                                 <div v-for="venue in venues">
                                                     <Card
                                                         style="overflow: hidden"
