@@ -4,13 +4,21 @@ import type { IClassroom } from "../../../types/Classroom";
 const toast = useToast();
 const router = useRouter();
 const id = router.currentRoute.value.params.id;
+const screenWidth = window.innerWidth;
 const classroomStore = useClassroomStore();
+const sidebarStore = useSidebarStore();
 const { editingClassroom } = storeToRefs(classroomStore) as {
     editingClassroom: Ref<IClassroom>;
 };
+
+const { isSidebarOpen } = storeToRefs(sidebarStore) as {
+    isSidebarOpen: Ref<boolean>;
+};
+
 const { getClassroomById, toggleRegistrationStatus, togglePublishStatus } =
     useClassroom();
 const op = ref();
+const action = ref();
 const currentUrl = window?.location?.href.replace(/\/edit$/, "");
 const steps = [
     { label: "Fill class detail", value: "1" },
@@ -29,8 +37,12 @@ const showToast = () => {
     });
 };
 
-const toggle = (event: MouseEvent) => {
+const toggleOp = (event: MouseEvent) => {
     op.value.toggle(event);
+};
+
+const toggleAction = (event: MouseEvent) => {
+    action.value.toggle(event);
 };
 
 const copyLink = () => {
@@ -135,32 +147,43 @@ useHead({
 </script>
 
 <template>
-    <div class="w-full pb-9 pr-2">
+    <div class="w-full pb-9 px-2">
         <div
-            class="w-full p-2 mb-16 sticky top-[10px] flex justify-between items-center gap-2 bg-white border rounded-full z-10"
+            class="w-full p-2 mb-16 sticky top-2 flex justify-between items-center gap-2 bg-white border rounded-full z-10"
         >
-            <div class="flex gap-2">
+            <DrawerButton />
+            <div class="hidden md:flex gap-2">
                 <Button
                     :disabled="!editingClassroom"
-                    label="Craft your content"
+                    label="Craft Content"
                     icon="pi pi-sparkles"
                     rounded
                     @click="isContentDialogVisible = true"
                 />
             </div>
+
             <div class="flex gap-2">
                 <div
-                    class="h-full p-2 px-3 text-green-600 border border-green-500 bg-green-50 rounded-full"
+                    class="h-full py-2 px-3 text-green-600 border border-green-500 bg-green-50 rounded-full"
                 >
                     <i class="pi pi-star-fill" />&nbsp;14
+                    <span class="hidden lg:inline">followers</span>
+                </div>
+                <div class="md:hidden">
+                    <Button
+                        :disabled="!editingClassroom"
+                        label="Craft Content"
+                        icon="pi pi-sparkles"
+                        rounded
+                        @click="isContentDialogVisible = true"
+                    />
                 </div>
                 <Button
                     severity="secondary"
                     icon="pi pi-share-alt"
                     :disabled="!editingClassroom"
-                    size="small"
                     rounded
-                    @click="toggle"
+                    @click="toggleOp"
                 />
                 <Popover ref="op" class="p-1" style="border-radius: 1rem">
                     <div class="flex flex-col gap-4 w-[25rem]">
@@ -196,50 +219,123 @@ useHead({
                                             : 'secondary'
                                     "
                                     icon="pi pi-eye"
+                                    rounded
                                     @click="onPreviewClassroom"
                                 />
                             </div>
                         </div>
                     </div>
                 </Popover>
-                <Button
-                    :label="
-                        editingClassroom?.published ? 'Unpublish' : 'Publish'
-                    "
-                    :icon="
-                        editingClassroom?.published
-                            ? 'pi pi-ban'
-                            : 'pi pi-globe'
-                    "
-                    :severity="
-                        editingClassroom?.published ? 'secondary' : 'primary'
-                    "
-                    rounded
-                    @click="onPublish"
-                />
-
-                <Button
-                    :label="
-                        editingClassroom?.registrationStatus
-                            ? 'Close registration'
-                            : 'Open registration'
-                    "
-                    :icon="
-                        editingClassroom?.registrationStatus
-                            ? 'pi pi-lock'
-                            : 'pi pi-lock-open'
-                    "
-                    :severity="
-                        editingClassroom?.registrationStatus
-                            ? 'secondary'
-                            : 'contrast'
-                    "
-                    :disabled="
-                        !editingClassroom || !editingClassroom?.registrationUrl
-                    "
-                    rounded
-                    @click="onToggleRegistrationStatus"
-                />
+                <div
+                    :class="`flex gap-1 ${
+                        isSidebarOpen ? 'lg:hidden' : 'md:hidden'
+                    }`"
+                >
+                    <Button
+                        icon="pi pi-ellipsis-v"
+                        severity="secondary"
+                        rounded
+                        @click="toggleAction"
+                    />
+                    <Popover
+                        ref="action"
+                        class="p-1"
+                        style="border-radius: 1rem"
+                    >
+                        <div class="flex flex-col gap-2 w-52">
+                            <Button
+                                :label="
+                                    editingClassroom?.published
+                                        ? 'Unpublish'
+                                        : 'Publish'
+                                "
+                                :icon="
+                                    editingClassroom?.published
+                                        ? 'pi pi-ban'
+                                        : 'pi pi-globe'
+                                "
+                                :severity="
+                                    editingClassroom?.published
+                                        ? 'secondary'
+                                        : 'primary'
+                                "
+                                rounded
+                                @click="onPublish"
+                            />
+                            <Button
+                                :label="
+                                    editingClassroom?.registrationStatus
+                                        ? 'Close registration'
+                                        : 'Open registration'
+                                "
+                                :icon="
+                                    editingClassroom?.registrationStatus
+                                        ? 'pi pi-lock'
+                                        : 'pi pi-lock-open'
+                                "
+                                :severity="
+                                    editingClassroom?.registrationStatus
+                                        ? 'secondary'
+                                        : 'contrast'
+                                "
+                                :disabled="
+                                    !editingClassroom ||
+                                    !editingClassroom?.registrationUrl
+                                "
+                                rounded
+                                @click="onToggleRegistrationStatus"
+                            />
+                        </div>
+                    </Popover>
+                </div>
+                <div
+                    :class="`hidden gap-2 ${
+                        isSidebarOpen ? 'lg:flex' : 'md:flex'
+                    }`"
+                >
+                    <Button
+                        :label="
+                            editingClassroom?.published
+                                ? 'Unpublish'
+                                : 'Publish'
+                        "
+                        :icon="
+                            editingClassroom?.published
+                                ? 'pi pi-ban'
+                                : 'pi pi-globe'
+                        "
+                        :severity="
+                            editingClassroom?.published
+                                ? 'secondary'
+                                : 'primary'
+                        "
+                        rounded
+                        @click="onPublish"
+                    />
+                    <Button
+                        :label="
+                            editingClassroom?.registrationStatus
+                                ? 'Close registration'
+                                : 'Open registration'
+                        "
+                        :icon="
+                            editingClassroom?.registrationStatus
+                                ? 'pi pi-lock'
+                                : 'pi pi-lock-open'
+                        "
+                        :severity="
+                            editingClassroom?.registrationStatus
+                                ? 'secondary'
+                                : 'contrast'
+                        "
+                        :disabled="
+                            !editingClassroom ||
+                            !editingClassroom?.registrationUrl
+                        "
+                        rounded
+                        @click="onToggleRegistrationStatus"
+                    />
+                </div>
             </div>
         </div>
         <div class="flex justify-center">
@@ -256,7 +352,15 @@ useHead({
                                     step.value
                             "
                         >
-                            {{ step.label }}
+                            <p
+                                :class="`hidden ${
+                                    screenWidth > 768 && isSidebarOpen
+                                        ? 'lg:block'
+                                        : 'sm:block'
+                                }`"
+                            >
+                                {{ step.label }}
+                            </p>
                         </Step>
                     </StepList>
                 </div>
@@ -339,7 +443,7 @@ useHead({
     </div>
     <Dialog
         v-model:visible="isContentDialogVisible"
-        header="Craft Your Content"
+        header="Craft Content"
         position="top"
         :modal="true"
         :draggable="false"
