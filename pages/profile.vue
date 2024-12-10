@@ -10,11 +10,8 @@ const bio = ref(
 const user = useCurrentUser();
 const isEditing = ref(false);
 
-const hostedClassrooms = computed(() =>
-    classrooms.value.filter(
-        (classroom: IClassroom) =>
-            classroom.published && classroom.registrationStatus
-    )
+const publishedClassrooms = computed(() =>
+    classrooms.value.filter((classroom: IClassroom) => classroom.published)
 );
 
 const handleEdit = () => {
@@ -41,11 +38,20 @@ useHead({
 </script>
 
 <template>
-    <div class="w-full flex flex-col gap-[10px] p-[10px]">
-        <div class="flex gap-8 bg-white border rounded-3xl p-8">
+    <div
+        class="w-full flex flex-col gap-[10px] p-[10px] max-w-screen-lg mx-auto"
+    >
+        <div
+            class="sticky z-20 top-2 flex basis-full gap-1 overflow-auto bg-white rounded-full border p-2 md:hidden"
+        >
+            <DrawerButton />
+        </div>
+        <div
+            class="flex flex-col gap-8 bg-white border rounded-3xl p-8 md:flex-row"
+        >
             <img
                 :src="user?.photoURL?.replace('s96-c', 's512-c')"
-                :alt="user?.displayName"
+                :alt="user?.displayName as string"
                 class="rounded-full w-52 h-52 aspect-square object-cover bg-slate-200"
             />
             <div class="w-full space-y-4">
@@ -89,14 +95,13 @@ useHead({
                 <p v-else class="text-slate-500">{{ bio }}</p>
             </div>
         </div>
-        <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border">
-            <h2 class="text-xl font-bold">Hosted classes</h2>
-            <div v-if="hostedClassrooms?.length >= 0" class="space-y-[10px]">
+        <div class="space-y-4 mt-6">
+            <h2 class="text-xl font-bold">Hosted classrooms</h2>
+            <div v-if="publishedClassrooms?.length >= 0" class="space-y-[10px]">
                 <ClassroomItem
-                    v-for="(classroom, index) in hostedClassrooms"
+                    v-for="(classroom, index) in publishedClassrooms"
                     :key="index"
                     :classroom="classroom"
-                    class="border-none"
                 />
             </div>
             <div v-else>
