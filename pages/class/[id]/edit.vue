@@ -260,6 +260,7 @@ useHead({
                                         : 'primary'
                                 "
                                 rounded
+                                :disabled="!editingClassroom"
                                 @click="onPublish"
                             />
                             <Button
@@ -309,6 +310,7 @@ useHead({
                                 ? 'secondary'
                                 : 'primary'
                         "
+                        :disabled="!editingClassroom"
                         rounded
                         @click="onPublish"
                     />
