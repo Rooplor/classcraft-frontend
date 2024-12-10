@@ -1,9 +1,27 @@
 <script setup lang="ts">
-import type { IClassroom, IReservationDateAndVenue } from "../types/Classroom";
+import {
+    EVenueRequestStatus,
+    type IClassroom,
+    type IReservationDateAndVenue,
+} from "../types/Classroom";
+import type { IVenue } from "../types/Venue";
 
 const props = defineProps<{
     classroom: IClassroom;
 }>();
+
+let venues: IVenue[] = [];
+const { getVenueByIds } = useVenue();
+
+venues = (
+    await getVenueByIds(
+        props.classroom.dates
+            .map((date) => date.venueId.map((id) => id.toString()))
+            .flat()
+    )
+).result.filter((venue, index, self) => {
+    return index === self.findIndex((t) => t.id === venue.id);
+});
 
 const formatDateRange = (dates: IReservationDateAndVenue[]) => {
     const locale = "en-GB";
@@ -90,18 +108,41 @@ const formatDateRange = (dates: IReservationDateAndVenue[]) => {
                     </div>
                 </div>
                 <div class="flex flex-col gap-2 text-slate-500">
-                    <p>
+                    <div class="flex items-center gap-1">
                         <i
                             class="pi pi-calendar p-2 rounded-lg border bg-slate-100"
                         />
-                        {{ formatDateRange(classroom.dates) }}
-                    </p>
-                    <p>
+                        <p>{{ formatDateRange(classroom.dates) }}</p>
+                    </div>
+                    <div class="flex items-center gap-1">
                         <i
                             class="pi pi-map-marker p-2 rounded-lg border bg-slate-100"
                         />
-                        {{ props.classroom.venue?.room || "TBA" }}
-                    </p>
+                        <div>
+                            <div
+                                v-if="
+                                    venues.length > 0 &&
+                                    classroom.venueStatus ===
+                                        EVenueRequestStatus.APPROVED
+                                "
+                            >
+                                <p>
+                                    {{ venues[0]?.room }},
+                                    {{ venues[0]?.location?.building }}
+                                    <span v-if="venues[0]?.location.floor">
+                                        fl. {{ venues[0]?.location.floor }}
+                                    </span>
+                                    <span
+                                        v-if="venues.length > 1"
+                                        class="font-light italic"
+                                    >
+                                        and {{ venues.length - 1 }} more
+                                    </span>
+                                </p>
+                            </div>
+                            <p v-else>TBA</p>
+                        </div>
+                    </div>
                 </div>
                 <p class="text-slate-500 line-clamp-2">
                     <span v-html="props.classroom.details"></span>
