@@ -9,6 +9,12 @@ export const useSidebarStore = defineStore("sidebar", {
         toggleSidebar() {
             this.isSidebarOpen = !this.isSidebarOpen;
         },
+        openSidebar() {
+            this.isSidebarOpen = true;
+        },
+        closeSidebar() {
+            this.isSidebarOpen = false;
+        },
         toggleDrawer() {
             this.isDrawerOpen = !this.isDrawerOpen;
         },
