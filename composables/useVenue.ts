@@ -10,6 +10,21 @@ const useVenue = () => {
         });
     };
 
+    const getVenueById = (id: string): Promise<IResponse<IVenue>> => {
+        return $fetch(`${config.public.baseUrl}/api/venue/${id}`, {
+            method: "GET",
+        });
+    };
+
+    const getVenueByIds = (ids: string[]): Promise<IResponse<IVenue[]>> => {
+        return $fetch(
+            `${config.public.baseUrl}/api/venue/ids?ids=${ids.join(",")}`,
+            {
+                method: "GET",
+            }
+        );
+    };
+
     const addVenue = (venue: IVenue): Promise<IResponse<IVenue>> => {
         return $fetch(`${config.public.baseUrl}/api/venue`, {
             body: JSON.stringify(venue),
@@ -25,6 +40,8 @@ const useVenue = () => {
 
     return {
         getAllVenue,
+        getVenueById,
+        getVenueByIds,
         addVenue,
         deleteVenue,
     };
