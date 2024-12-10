@@ -25,7 +25,7 @@ watch(user, (currentUser, prevUser) => {
         }"
     />
     <div class="flex bg-slate-50 min-h-screen">
-        <NuxtLayout name="sidebar" class="px-2 hidden md:block" />
+        <NuxtLayout name="sidebar" />
         <slot />
     </div>
 </template>

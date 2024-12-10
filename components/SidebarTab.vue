@@ -9,7 +9,6 @@ const props = defineProps({
     },
     label: {
         type: String,
-        default: "",
     },
     icon: {
         type: String,
@@ -20,7 +19,10 @@ const path = ref(router.currentRoute.value.path);
 
 const { deleteClassroom } = useClassroom();
 const classroomStore = useClassroomStore();
-
+const sidebarStore = useSidebarStore();
+const { isSidebarOpen } = storeToRefs(sidebarStore) as {
+    isSidebarOpen: Ref<boolean>;
+};
 const op = ref();
 const confirm = useConfirm();
 const toast = useToast();
@@ -70,31 +72,41 @@ watch(router.currentRoute, () => {
 });
 </script>
 <template>
-    <div v-ripple class="duration-100 rounded-lg hover:bg-slate-100">
+    <div v-ripple class="w-full rounded-xl hover:bg-slate-100 duration-100">
         <nuxt-link
             :to="to"
             :class="
-                path.includes(to)
-                    ? 'text-primary-500 bg-primary-100 hover:!bg-primary-100'
-                    : ''
+                (path.includes(to) &&
+                    'text-primary-500 bg-primary-100 hover:!bg-primary-100') +
+                ` ${
+                    isSidebarOpen
+                        ? 'p-2 justify-between'
+                        : 'p-1 justify-center h-16'
+                }`
             "
-            class="flex items-center justify-between p-3"
+            class="flex items-center"
         >
-            <div class="flex items-center w-5/6 gap-2">
+            <div
+                class="flex items-center gap-2"
+                :class="{ 'w-5/6': isSidebarOpen }"
+            >
                 <img
+                    v-if="classroom?.coverImage"
                     :src="classroom?.coverImage"
                     :alt="classroom?.title"
-                    v-if="classroom?.coverImage"
-                    class="h-12 w-12 rounded-md aspect-square object-cover"
+                    class="w-full h-full max-w-14 max-h-14 rounded-lg aspect-square object-cover"
                 />
                 <div
                     v-else-if="!label"
-                    class="h-12 flex justify-center items-center bg-slate-200 border border-slate-300 text-slate-400 rounded-lg aspect-square"
+                    class="flex justify-center items-center w-14 h-14 bg-slate-200 border border-slate-300 text-slate-400 rounded-lg aspect-square"
                 >
                     <i class="pi pi-image" />
                 </div>
-                <i v-else :class="icon" />
-                <div class="space-y-1 w-3/4 overflow-hidden">
+                <i v-else :class="icon + (!isSidebarOpen ? ` text-2xl` : ``)" />
+                <div
+                    v-if="isSidebarOpen"
+                    class="space-y-1 w-3/4 overflow-hidden"
+                >
                     <div v-if="!label" class="flex gap-1">
                         <Badge
                             :value="
@@ -120,7 +132,7 @@ watch(router.currentRoute, () => {
                 </div>
             </div>
             <Button
-                v-if="!label"
+                v-if="!label && isSidebarOpen"
                 severity="secondary"
                 icon="pi pi-ellipsis-v"
                 aria-label="More"

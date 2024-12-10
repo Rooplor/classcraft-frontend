@@ -144,7 +144,7 @@ const status = computed(() => {
                 >
                 <AccordionContent unstyled class="!rounded-xl !shadow-none">
                     <div
-                        class="grid grid-cols-2 text-nowrap flex-nowrap gap-2 overflow-x-scroll p-4 pt-0"
+                        class="grid grid-cols-1 text-nowrap flex-nowrap gap-2 overflow-x-scroll p-4 pt-0 md:grid-cols-2"
                     >
                         <button
                             @click="$emit('setDate', date.date.startDateTime)"

@@ -6,9 +6,9 @@ const options = ref(["Pending", "Closed"]);
 </script>
 
 <template>
-    <div class="w-full max-w-screen-lg mx-auto px-2">
+    <div class="w-full">
         <Feedbar />
-        <div class="flex flex-col gap-4 pt-6 pb-[10px]">
+        <div class="w-full max-w-screen-lg mx-auto px-2">
             <div class="flex justify-between">
                 <SelectButton
                     v-model="value"
