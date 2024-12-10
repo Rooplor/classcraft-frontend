@@ -74,7 +74,7 @@ const formatDateRange = (dates: IReservationDateAndVenue[]) => {
                 class="w-full h-full object-cover"
             />
             <span class="text-slate-400" v-else>
-                <i class="pi pi-image text-[4rem]" />
+                <i class="pi pi-image" style="font-size: 4rem" />
             </span>
         </div>
         <div class="w-full flex flex-col gap-8">

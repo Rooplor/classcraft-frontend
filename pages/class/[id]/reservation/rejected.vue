@@ -45,7 +45,8 @@ useHead({
         class="flex flex-col gap-8 items-center mt-20 w-full max-w-screen-md m-auto text-center"
     >
         <i
-            class="pi pi-spinner-dotted animate-spin animate-duration-3000 text-7xl text-slate-500"
+            class="pi pi-spinner-dotted animate-spin animate-duration-3000 text-slate-500"
+            style="font-size: 4.5rem"
         />
         <div class="flex flex-col gap-5 w-full">
             <h1 class="text-5xl font-bold">Reasons of rejection</h1>
