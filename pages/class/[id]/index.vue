@@ -1,18 +1,30 @@
 <script setup lang="ts">
-import type { IClassroom } from "../../../types/Classroom";
+import { EVenueRequestStatus, type IClassroom } from "../../../types/Classroom";
 import type { IUser } from "../../../types/User";
+import type { IVenue } from "../../../types/Venue";
 
 const router = useRouter();
 const { id } = router.currentRoute.value.params;
 const { getClassroomById } = useClassroom();
+const { getVenueByIds } = useVenue();
 const { getUserById } = useUser();
 
 let classroom: IClassroom = {} as IClassroom;
 let owner: IUser = {} as IUser;
+let venues: IVenue[] = [];
 
 try {
     classroom = (await getClassroomById(id.toString())).result;
     owner = (await getUserById(classroom.owner)).result;
+    venues = (
+        await getVenueByIds(
+            classroom.dates
+                .map((date) => date.venueId.map((id) => id.toString()))
+                .flat()
+        )
+    ).result.filter((venue, index, self) => {
+        return index === self.findIndex((t) => t.id === venue.id);
+    });
 } catch (error) {
     router.replace("/404");
 }
@@ -169,9 +181,30 @@ useHead({
                             <i
                                 class="pi pi-map-marker p-3 text-xl rounded-xl border bg-slate-100 text-slate-500"
                             />
-                            <p>
-                                {{ classroom?.venue?.room || "TBA" }}
-                            </p>
+                            <div>
+                                <div
+                                    v-if="
+                                        venues.length > 0 &&
+                                        classroom.venueStatus ===
+                                            EVenueRequestStatus.APPROVED
+                                    "
+                                >
+                                    <p>
+                                        {{ venues[0]?.room }},
+                                        {{ venues[0]?.location?.building }}
+                                        <span v-if="venues[0]?.location.floor">
+                                            fl. {{ venues[0]?.location.floor }}
+                                        </span>
+                                        <span
+                                            v-if="venues.length > 1"
+                                            class="font-light italic"
+                                        >
+                                            and {{ venues.length - 1 }} more
+                                        </span>
+                                    </p>
+                                </div>
+                                <p v-else>TBA</p>
+                            </div>
                         </div>
                     </div>
                     <div class="mb-8">
