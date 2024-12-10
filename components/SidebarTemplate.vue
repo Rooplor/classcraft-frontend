@@ -99,7 +99,9 @@ const handleSignOut = async () => {
                     <p>Add</p>
                 </nuxt-link>
             </div>
-            <Button v-else icon="pi pi-plus" text rounded />
+            <nuxt-link v-else to="/class/new/edit" class="mb-6">
+                <Button icon="pi pi-plus" text rounded />
+            </nuxt-link>
 
             <SidebarTab
                 v-for="classroom in classrooms"
