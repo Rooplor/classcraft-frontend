@@ -221,7 +221,9 @@ venues.value.forEach((venue) => {
                                     <h3 class="text-lg text-slate-500">
                                         Floor {{ floor }}
                                     </h3>
-                                    <div class="grid grid-cols-3 gap-2">
+                                    <div
+                                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"
+                                    >
                                         <div v-for="venue in venues">
                                             <Card
                                                 style="overflow: hidden"

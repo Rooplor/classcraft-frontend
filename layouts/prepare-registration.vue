@@ -96,7 +96,7 @@ const onSubmit = handleSubmit((values: any) => {
 
 const handleUpdateRegistrationUrl = () => {
     if (!editingClassroom.value) return;
-    
+
     updateRegistrationUrl(
         editingClassroom.value.id,
         registrationUrl.value
@@ -127,25 +127,27 @@ const onEdit = (question: Question) => {
             @submit="onSubmit"
             class="p-6 bg-white border rounded-3xl space-y-4"
         >
-            <div class="flex justify-between">
+            <div class="flex gap-2 justify-between">
                 <h3 class="text-xl font-bold">
                     {{ hasUrl ? "Registration Url" : "Registration Questions" }}
                 </h3>
-                <button
-                    type="button"
-                    v-ripple
-                    class="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-lg duration-150 hover:bg-slate-200"
-                    @click="toggleHasRegistrationUrl"
-                >
-                    <span v-if="hasUrl" class="flex items-center gap-2">
-                        <i class="pi pi-list-check" />
-                        Use ClassCraft registration
-                    </span>
-                    <span v-else class="flex items-center gap-2">
-                        <i class="pi pi-link" />
-                        I have my registration form
-                    </span>
-                </button>
+                <div>
+                    <button
+                        type="button"
+                        v-ripple
+                        class="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-lg duration-150 hover:bg-slate-200"
+                        @click="toggleHasRegistrationUrl"
+                    >
+                        <span v-if="hasUrl" class="flex items-center gap-2">
+                            <i class="pi pi-list-check" />
+                            Use ClassCraft registration
+                        </span>
+                        <span v-else class="flex items-center gap-2">
+                            <i class="pi pi-link" />
+                            Use registration Url
+                        </span>
+                    </button>
+                </div>
             </div>
 
             <div v-if="hasUrl" class="w-full space-y-2">
