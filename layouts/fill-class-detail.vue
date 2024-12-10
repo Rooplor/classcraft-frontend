@@ -220,17 +220,17 @@ watch(selfInstructored, (value) => {
 </script>
 
 <template>
-    <form @submit="onSubmit" class="flex gap-2">
-        <div class="w-1/2">
+    <form @submit="onSubmit" class="flex w-full flex-col gap-2 lg:flex-row">
+        <div class="lg:w-1/2">
             <div
-                class="border aspect-square rounded-3xl overflow-clip sticky top-[10px]"
+                class="w-full border aspect-square rounded-3xl overflow-clip sticky top-[10px] max-w-96 max-h-96 m-auto lg:max-w-full lg:max-h-full"
             >
                 <div class="w-full aspect-square bg-clip-border relative">
                     <img
                         v-if="coverImage"
                         :src="coverImage"
                         alt="Uploaded Image"
-                        class="object-cover w-full h-full"
+                        class="object-cover w-full h-full max-w-96 max-h-96 lg:max-w-full lg:max-h-full"
                     />
                     <button
                         v-else
@@ -260,7 +260,7 @@ watch(selfInstructored, (value) => {
                 </div>
             </div>
         </div>
-        <div class="relative w-1/2 flex flex-col gap-2">
+        <div class="relative flex flex-col gap-2 w-full lg:w-1/2">
             <div
                 class="flex flex-col w-full gap-8 px-6 py-8 bg-white border rounded-3xl"
             >
@@ -271,8 +271,8 @@ watch(selfInstructored, (value) => {
                         aria-describedby="title-help"
                         :class="errors.title && 'p-invalid'"
                         placeholder="Class title"
-                        class="!text-4xl font-bold outline-none"
-                        unstyled
+                        class="font-bold !text-4xl !outline-none !border-none !shadow-none !p-0"
+                        fluid
                     />
                     <VeeErrorMessage name="title" class="text-red-500" />
                 </div>
@@ -384,7 +384,6 @@ watch(selfInstructored, (value) => {
                                         placeholder="Select date"
                                         v-on:update:model-value="
                                             (event) => {
-                                               
                                                 entry.date.endDateTime = event;
                                             }
                                         "
@@ -518,7 +517,7 @@ watch(selfInstructored, (value) => {
                     <label for="selfInstructored"> I'm the instructor </label>
                 </div>
                 <div class="flex flex-col gap-8 px-6 py-8">
-                    <div class="flex gap-6">
+                    <div class="flex flex-col gap-6">
                         <div
                             class="w-52 h-52 border aspect-square rounded-full overflow-clip relative"
                         >
@@ -615,7 +614,7 @@ watch(selfInstructored, (value) => {
             </div>
             <div class="sticky bottom-0 left-0 py-3 justify-end w-full z-40">
                 <Button
-                    label="Save"
+                    :label="editingClassroom ? 'Update' : 'Create'"
                     icon="pi pi-check"
                     type="submit"
                     size="large"

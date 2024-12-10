@@ -5,43 +5,48 @@ const path = ref(route.currentRoute.value.path);
 
 <template>
     <div
-        v-if="path.includes('/class')"
-        class="sticky mb-[10px] top-[10px] flex gap-1 w-[calc(100%-0.5rem)] bg-white rounded-2xl border overflow-clip px-3 z-50 drop-shadow-sm"
+        class="sticky flex gap-2 items-center mb-2 top-0 m-auto p-2 z-20 min-w-72 w-full drop-shadow-sm"
     >
-        <FeedbarTab
-            name="Explore"
-            icon="pi pi-compass"
-            :display="ClassroomFeedDisplay.EXPLORE"
-        />
-        <FeedbarTab
-            name="Following"
-            icon="pi pi-users"
-            :display="ClassroomFeedDisplay.FOLLOWING"
-        />
-        <FeedbarTab
-            name="Voting"
-            icon="pi pi-arrow-up"
-            :display="ClassroomFeedDisplay.VOTING"
-        />
-    </div>
-    <div
-        v-if="path.includes('/discussion')"
-        class="sticky mb-[10px] top-[10px] flex gap-1 w-full bg-white rounded-xl border overflow-clip px-3 z-50 drop-shadow-sm"
-    >
-        <FeedbarTab
-            name="For you"
-            icon="pi pi-sparkles"
-            :display="DiscussionFeedDisplay.FOR_YOU"
-        />
-        <FeedbarTab
-            name="Trending"
-            icon="pi pi-star"
-            :display="DiscussionFeedDisplay.TRENDING"
-        />
-        <FeedbarTab
-            name="Explore"
-            icon="pi pi-compass"
-            :display="DiscussionFeedDisplay.EXPLORE"
-        />
+        <DrawerButton />
+        <div
+            v-if="path.includes('/class')"
+            class="flex basis-full gap-1 overflow-auto bg-white rounded-2xl border px-3"
+        >
+            <FeedbarTab
+                name="Explore"
+                icon="pi pi-compass"
+                :display="ClassroomFeedDisplay.EXPLORE"
+            />
+            <FeedbarTab
+                name="Following"
+                icon="pi pi-users"
+                :display="ClassroomFeedDisplay.FOLLOWING"
+            />
+            <FeedbarTab
+                name="Voting"
+                icon="pi pi-arrow-up"
+                :display="ClassroomFeedDisplay.VOTING"
+            />
+        </div>
+        <div
+            v-if="path.includes('/discussion')"
+            class="flex basis-full gap-1 overflow-auto bg-white rounded-2xl border px-3"
+        >
+            <FeedbarTab
+                name="For you"
+                icon="pi pi-sparkles"
+                :display="DiscussionFeedDisplay.FOR_YOU"
+            />
+            <FeedbarTab
+                name="Trending"
+                icon="pi pi-star"
+                :display="DiscussionFeedDisplay.TRENDING"
+            />
+            <FeedbarTab
+                name="Explore"
+                icon="pi pi-compass"
+                :display="DiscussionFeedDisplay.EXPLORE"
+            />
+        </div>
     </div>
 </template>
