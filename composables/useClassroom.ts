@@ -172,6 +172,17 @@ const useClassroom = () => {
         );
     };
 
+    const searchByTitleOrDetail = (
+        keyword: string
+    ): Promise<IResponse<IClassroom[]>> => {
+        return $fetch(`${config.public.baseUrl}/api/class/search`, {
+            params: {
+                keyword,
+            },
+            method: "GET",
+        });
+    };
+
     return {
         getAllClassroom,
         getClassroomById,
@@ -188,6 +199,7 @@ const useClassroom = () => {
         updateClassroomStatus,
         reserveVenue,
         updateVenueStatus,
+        searchByTitleOrDetail,
     };
 };
 
