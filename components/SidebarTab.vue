@@ -102,7 +102,11 @@ watch(router.currentRoute, () => {
                 >
                     <i class="pi pi-image" />
                 </div>
-                <i v-else :class="icon + (!isSidebarOpen ? ` text-2xl` : ``)" />
+                <i
+                    v-else
+                    :class="icon"
+                    :style="!isSidebarOpen && 'font-size: 1.5rem'"
+                />
                 <div
                     v-if="isSidebarOpen"
                     class="space-y-1 w-3/4 overflow-hidden"

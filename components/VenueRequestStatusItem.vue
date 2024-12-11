@@ -173,7 +173,8 @@ const status = computed(() => {
                                 }}
                                 <p class="flex gap-1 text-sm text-slate-500">
                                     <i
-                                        class="pi pi-clock text-sm mt-[0.2rem]"
+                                        class="pi pi-clock mt-[0.2rem]"
+                                        style="font-size: 14px"
                                     />
                                     {{
                                         isoToDateWithTimezone(

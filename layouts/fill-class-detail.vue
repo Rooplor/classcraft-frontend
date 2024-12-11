@@ -237,7 +237,7 @@ watch(selfInstructored, (value) => {
                         class="flex items-center justify-center w-full h-full bg-slate-200"
                     >
                         <span class="text-slate-400">
-                            <i class="pi pi-image text-[4rem]" />
+                            <i class="pi pi-image" style="font-size: 4rem" />
                         </span>
                     </button>
                     <input
@@ -535,7 +535,10 @@ watch(selfInstructored, (value) => {
                                     class="flex items-center justify-center w-full h-full bg-slate-200"
                                 >
                                     <span class="text-slate-400">
-                                        <i class="pi pi-image text-[3rem]" />
+                                        <i
+                                            class="pi pi-image"
+                                            style="font-size: 3rem"
+                                        />
                                     </span>
                                 </button>
                                 <input
