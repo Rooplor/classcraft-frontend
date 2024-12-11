@@ -223,7 +223,7 @@ watch(selfInstructored, (value) => {
     <form @submit="onSubmit" class="flex w-full flex-col gap-2 lg:flex-row">
         <div class="lg:w-1/2">
             <div
-                class="w-full border aspect-square rounded-3xl overflow-clip sticky top-[10px] max-w-96 max-h-96 m-auto lg:max-w-full lg:max-h-full"
+                class="w-full border aspect-square rounded-3xl overflow-clip sticky top-20 max-w-96 max-h-96 m-auto lg:max-w-full lg:max-h-full"
             >
                 <div class="w-full aspect-square bg-clip-border relative">
                     <img
