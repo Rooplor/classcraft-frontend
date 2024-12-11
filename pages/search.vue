@@ -5,7 +5,12 @@ const search = route.query.q?.toString() || "";
 const { searchByTitleOrDetail } = useClassroom();
 const classrooms = ref((await searchByTitleOrDetail(search)).result);
 
-const options = ref(["Classroom", "Topic request", "User"]);
+const selectedOption = ref({ icon: "pi pi-book", label: "Classroom" });
+const options = ref([
+    { icon: "pi pi-book", label: "Classroom" },
+    { icon: "pi pi-comment", label: "Request topic" },
+    { icon: "pi pi-user", label: "User" },
+]);
 
 const onSearch = async (keyword: string) => {
     try {
@@ -23,14 +28,18 @@ const onSearch = async (keyword: string) => {
                 <div class="flex justify-between">
                     <div class="overflow-auto">
                         <div class="flex gap-2 w-96">
-                            <Button
-                                :label="option"
-                                severity="secondary"
-                                rounded
-                                outlined
+                            <button
                                 v-for="option in options"
-                                class="whitespace-nowrap"
-                            />
+                                class="py-2 px-4 border rounded-full font-medium whitespace-nowrap duration-200"
+                                :class="
+                                    selectedOption === option
+                                        ? 'bg-primary-100 text-primary'
+                                        : 'bg-white text-slate-500 hover:bg-slate-200'
+                                "
+                                @click="selectedOption = option"
+                            >
+                                <i :class="option.icon" /> {{ option.label }}
+                            </button>
                         </div>
                     </div>
                 </div>
