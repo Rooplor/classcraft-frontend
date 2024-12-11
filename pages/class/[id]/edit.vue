@@ -147,7 +147,7 @@ useHead({
 </script>
 
 <template>
-    <div class="w-full pb-9 px-2">
+    <div class="w-full pb-9">
         <div
             class="w-full p-2 mb-16 sticky top-2 flex justify-between items-center gap-2 bg-white border rounded-full z-10"
         >
