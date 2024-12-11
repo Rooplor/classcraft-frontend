@@ -15,11 +15,31 @@ const confirm = useConfirm();
 const toast = useToast();
 const { updateContent } = useClassroom();
 
+const cleanContentData = (content: IContent) => {
+    // remove all empty activity guides after last non-empty activity guide
+    content.activityGuides = content.activityGuides.filter(
+        (g, i) =>
+            g.activityGuide.trim() !== "" ||
+            content.activityGuides
+                .slice(i + 1)
+                .some((g) => g.activityGuide.trim() !== "")
+    );
+    // remove all empty presentation guides after last non-empty presentation guide
+    content.presentationGuides = content.presentationGuides.filter(
+        (g, i) =>
+            g.presentationGuide.trim() !== "" ||
+            content.presentationGuides
+                .slice(i + 1)
+                .some((g) => g.presentationGuide.trim() !== "")
+    );
+};
+
 const onSaveContent = (newContent: IContent) => {
     if (editingClassroom.value === null) return;
 
     delete newContent.init;
     const index = content.value.findIndex((c) => c.id === newContent.id);
+    cleanContentData(newContent);
     content.value[index] = newContent;
     updateContent(editingClassroom.value.id, content.value).then((res) => {
         if (res.success) {
@@ -109,15 +129,11 @@ const removePresentationGuide = (id: string) => {
 
 const isContentEmpty = (content: IContent | undefined) => {
     if (content) {
-        return (
-            content.title === "" &&
-            content.content === "" &&
-            content.activityGuides.length === 0 &&
-            content.presentationGuides.length === 0
-        );
+        return content.title.trim() === "" && content.content.trim() === "";
     }
     return false;
 };
+
 const confirmDelete = (content: IContent) => {
     confirm.require({
         message: `Are you sure you want to delete this question: ${content.title}?`,
@@ -183,6 +199,7 @@ const confirmDelete = (content: IContent) => {
                                         v-model="guide.activityGuide"
                                         placeholder="Enter Activity Guide"
                                         unstyled
+                                        required
                                         class="w-full bg-transparent outline-none border-b border-slate-300"
                                     />
                                     <Button
@@ -221,6 +238,7 @@ const confirmDelete = (content: IContent) => {
                                         v-model="guide.presentationGuide"
                                         placeholder="Presentation Guide"
                                         rows="7"
+                                        required
                                         unstyled
                                         class="bg-transparent outline-none border-slate-300 w-full"
                                     />
