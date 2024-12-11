@@ -1,13 +1,26 @@
 <script setup lang="ts">
 import { signOut } from "firebase/auth";
 
-const route = useRouter();
-
 const user = useCurrentUser();
 const op = ref();
 const auth = useFirebaseAuth();
 const router = useRouter();
-const search = ref("");
+
+const sidebarStore = useSidebarStore();
+const { isSidebarOpen } = storeToRefs(sidebarStore) as {
+    isSidebarOpen: Ref<boolean>;
+};
+
+const props = defineProps({
+    q: {
+        type: String,
+        default: "",
+    },
+});
+
+const emit = defineEmits(["search"]);
+
+const search = ref(props.q);
 
 const menu = ref();
 const items = ref([
@@ -65,7 +78,14 @@ const handleSignOut = async () => {
                             placeholder="Search"
                             fluid
                             variant="filled"
-                            class="!rounded-full !w-[16rem] lg:!w-[32rem]"
+                            class="!rounded-full lg:!w-[32rem]"
+                            :class="isSidebarOpen ? '!w-[16rem]' : '!w-[28rem]'"
+                            @keyup.enter="
+                                () => {
+                                    router.push(`/search?q=${search.trim()}`);
+                                    emit('search', search.trim());
+                                }
+                            "
                         />
                     </IconField>
                 </div>
