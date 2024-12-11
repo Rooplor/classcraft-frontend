@@ -21,7 +21,6 @@ const props = defineProps({
 const emit = defineEmits(["search"]);
 
 const search = ref(props.q);
-
 const menu = ref();
 const items = ref([
     {
@@ -64,36 +63,33 @@ const handleSignOut = async () => {
 <template>
     <div class="sticky top-0 z-20 py-2 mb-6">
         <div
-            class="flex gap-2 justify-between items-center p-2 bg-white m-auto w-full rounded-full border"
+            class="flex gap-1 md:gap-2 justify-between items-center p-2 bg-white m-auto w-full rounded-full border"
         >
             <div class="md:hidden lg:block">
                 <DrawerButton />
             </div>
-            <div class="flex gap-2">
-                <div class="w-full hidden md:block">
-                    <IconField>
-                        <InputIcon class="pi pi-search" />
-                        <InputText
-                            v-model="search"
-                            placeholder="Search"
-                            fluid
-                            variant="filled"
-                            class="!rounded-full lg:!w-[32rem]"
-                            :class="isSidebarOpen ? '!w-[16rem]' : '!w-[28rem]'"
-                            @keyup.enter="
-                                () => {
-                                    if (search.trim() === '') return;
-                                    router.push(`/search?q=${search.trim()}`);
-                                    emit('search', search.trim());
-                                }
-                            "
-                        />
-                    </IconField>
-                </div>
+            <div class="w-full md:w-auto md:block">
+                <IconField class="!w-full">
+                    <InputIcon class="pi pi-search" />
+                    <InputText
+                        v-model="search"
+                        placeholder="Search"
+                        fluid
+                        variant="filled"
+                        class="!rounded-full lg:!w-[32rem]"
+                        :class="isSidebarOpen ? '!w-full' : '!w-[28rem]'"
+                        @keyup.enter="
+                            () => {
+                                if (search.trim() === '') return;
+                                router.push(`/search?q=${search.trim()}`);
+                                emit('search', search.trim());
+                            }
+                        "
+                    />
+                </IconField>
             </div>
-            <div class="flex gap-2 items-center justify-center">
+            <div class="flex gap-1 md:gap-2 items-center justify-center">
                 <Button
-                    label="Create"
                     severity="secondary"
                     icon="pi pi-plus"
                     rounded
