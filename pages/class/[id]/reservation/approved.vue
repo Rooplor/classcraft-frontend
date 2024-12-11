@@ -29,7 +29,7 @@ useHead({
     <div
         class="flex flex-col gap-8 items-center mt-20 w-full max-w-screen-md m-auto text-center"
     >
-        <i class="pi pi-check-circle text-7xl text-primary" />
+        <i class="pi pi-check-circle text-primary" style="font-size: 4.5rem" />
         <div class="flex flex-col gap-5">
             <h1 class="text-5xl font-bold">Approved</h1>
             <p class="text-3xl leading-10">

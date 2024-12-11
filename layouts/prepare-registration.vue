@@ -228,7 +228,10 @@ const onEdit = (question: Question) => {
                         >
                             <div class="inline-flex flex-col gap-1">
                                 <p class="text-sm text-slate-400">
-                                    <i class="pi pi-pen-to-square text-xs" />
+                                    <i
+                                        class="pi pi-pen-to-square"
+                                        style="font-size: 12px"
+                                    />
                                     Text
                                 </p>
                                 <p class="text-lg">{{ question.question }}</p>
@@ -261,7 +264,10 @@ const onEdit = (question: Question) => {
                                     :for="`question-${question.id}`"
                                     class="text-sm text-slate-400"
                                 >
-                                    <i class="pi pi-pen-to-square text-xs" />
+                                    <i
+                                        class="pi pi-pen-to-square"
+                                        style="font-size: 12px"
+                                    />
                                     Text
                                 </label>
                                 <InputText

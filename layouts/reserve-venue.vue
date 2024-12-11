@@ -193,161 +193,188 @@ venues.value.forEach((venue) => {
                     editingClassroom?.format.toString() === 'MIXED' ||
                     editingClassroom?.format.toString() === 'ONSITE'
                 "
-                class="rounded-2xl bg-white p-6 border overflow-clip"
+                class="rounded-2xl bg-white p-2 border overflow-clip"
             >
                 <div>
                     <div class="space-y-4">
                         <div class="flex flex-col gap-16">
-                            <div
-                                v-for="(floors, building) in groupedVenues"
-                                :key="building"
-                                class="space-y-8"
-                            >
-                                <div class="space-y-2">
-                                    <h2 class="text-xl font-bold">
-                                        <i class="pi pi-building" />
-                                        {{ building }}
-                                    </h2>
-                                    <p class="text-slate-500">
-                                        SIT Building, KMUTT, 126 Pracha Uthit
-                                        54, Bang Mot, Thung Khru, Bangkok 10140
-                                    </p>
-                                </div>
-                                <div
-                                    v-for="(venues, floor) in floors"
-                                    :key="floor"
-                                    class="space-y-4"
+                            <Accordion multiple :value="['0']">
+                                <AccordionPanel
+                                    v-for="(
+                                        floors, building, index
+                                    ) in groupedVenues"
+                                    :value="index.toString()"
+                                    :key="index"
                                 >
-                                    <h3 class="text-lg text-slate-500">
-                                        Floor {{ floor }}
-                                    </h3>
-                                    <div
-                                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"
-                                    >
-                                        <div v-for="venue in venues">
-                                            <Card
-                                                style="overflow: hidden"
-                                                @click="selectVenue(venue.id)"
-                                                class="cursor-pointer duration-100 hover:bg-slate-100 border"
-                                                :class="
-                                                    selectingDate &&
-                                                    editingClassroom?.dates
-                                                        .find(
-                                                            (d) =>
-                                                                d.date
-                                                                    .startDateTime ==
-                                                                selectingDate
-                                                        )
-                                                        ?.venueId?.includes(
-                                                            venue?.id
-                                                        )
-                                                        ? 'border-primary-500 !bg-primary-100'
-                                                        : ''
-                                                "
+                                    <AccordionHeader class="space-y-2">
+                                        <h2 class="text-xl font-bold">
+                                            <i class="pi pi-building" />
+                                            {{ building }}
+                                        </h2>
+                                    </AccordionHeader>
+                                    <AccordionContent>
+                                        <p class="text-slate-500 mb-6">
+                                            SIT Building, KMUTT, 126 Pracha
+                                            Uthit 54, Bang Mot, Thung Khru,
+                                            Bangkok 10140
+                                        </p>
+                                        <div
+                                            v-for="(venues, floor) in floors"
+                                            :key="floor"
+                                            class="space-y-4"
+                                        >
+                                            <h3 class="text-lg text-slate-500">
+                                                Floor {{ floor }}
+                                            </h3>
+                                            <div
+                                                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"
                                             >
-                                                <template #header>
-                                                    <img
-                                                        :alt="`image of ${venue.room} at ${venue.location.building} fl.${venue.location.floor}`"
-                                                        :src="venue.imageUrl"
-                                                        class="h-52 bg-slate-100 object-cover w-full"
-                                                    />
-                                                </template>
-                                                <template #title>{{
-                                                    venue.room
-                                                }}</template>
-                                                <template #subtitle>
-                                                    <i
-                                                        class="pi pi-map-marker"
-                                                    />
-                                                    {{
-                                                        `${venue.location.building}, Floor ${venue.location.floor}`
-                                                    }}
-                                                </template>
-                                                <template #content>
-                                                    <p class="m-0 line-clamp-2">
-                                                        {{ venue.description }}
-                                                    </p>
-                                                </template>
-                                                <template #footer>
-                                                    <div
-                                                        class="flex justify-end gap-4 mt-1"
+                                                <div v-for="venue in venues">
+                                                    <Card
+                                                        style="overflow: hidden"
+                                                        @click="
+                                                            selectVenue(
+                                                                venue.id
+                                                            )
+                                                        "
+                                                        class="cursor-pointer duration-100 hover:bg-slate-100 border"
+                                                        :class="
+                                                            selectingDate &&
+                                                            editingClassroom?.dates
+                                                                .find(
+                                                                    (d) =>
+                                                                        d.date
+                                                                            .startDateTime ==
+                                                                        selectingDate
+                                                                )
+                                                                ?.venueId?.includes(
+                                                                    venue?.id
+                                                                )
+                                                                ? 'border-primary-500 !bg-primary-100'
+                                                                : ''
+                                                        "
                                                     >
-                                                        <Button
-                                                            @click.stop="
-                                                                dialogVisible[
-                                                                    venue.id
-                                                                ] = true
-                                                            "
-                                                            label="Read details"
-                                                            severity="secondary"
-                                                        />
-                                                    </div>
-                                                </template>
-                                            </Card>
-                                            <Dialog
-                                                v-model:visible="
-                                                    dialogVisible[venue.id]
-                                                "
-                                                modal
-                                                :header="venue.room"
-                                                :style="{
-                                                    width: '50rem',
-                                                }"
-                                                :breakpoints="{
-                                                    '1199px': '75vw',
-                                                    '575px': '90vw',
-                                                }"
-                                                pt:mask:class="backdrop-blur-sm"
-                                                class="rounded-lg shadow-lg"
-                                            >
-                                                <div
-                                                    class="flex flex-col items-center gap-4"
-                                                >
-                                                    <img
-                                                        :src="venue.imageUrl"
-                                                        :alt="`Image of ${venue.room} at ${venue.location.building}, Floor ${venue.location.floor}`"
-                                                        class="h-80 bg-slate-100 object-cover w-full rounded-lg"
-                                                    />
-                                                    <div
-                                                        class="text-slate-700 w-full space-y-3"
+                                                        <template #header>
+                                                            <img
+                                                                :alt="`image of ${venue.room} at ${venue.location.building} fl.${venue.location.floor}`"
+                                                                :src="
+                                                                    venue.imageUrl
+                                                                "
+                                                                class="h-52 bg-slate-100 object-cover w-full"
+                                                            />
+                                                        </template>
+                                                        <template #title>{{
+                                                            venue.room
+                                                        }}</template>
+                                                        <template #subtitle>
+                                                            <i
+                                                                class="pi pi-map-marker"
+                                                            />
+                                                            {{
+                                                                `${venue.location.building}, Floor ${venue.location.floor}`
+                                                            }}
+                                                        </template>
+                                                        <template #content>
+                                                            <p
+                                                                class="m-0 line-clamp-2"
+                                                            >
+                                                                {{
+                                                                    venue.description
+                                                                }}
+                                                            </p>
+                                                        </template>
+                                                        <template #footer>
+                                                            <div
+                                                                class="flex justify-end gap-4 mt-1"
+                                                            >
+                                                                <Button
+                                                                    @click.stop="
+                                                                        dialogVisible[
+                                                                            venue.id
+                                                                        ] = true
+                                                                    "
+                                                                    label="Read details"
+                                                                    severity="secondary"
+                                                                />
+                                                            </div>
+                                                        </template>
+                                                    </Card>
+                                                    <Dialog
+                                                        v-model:visible="
+                                                            dialogVisible[
+                                                                venue.id
+                                                            ]
+                                                        "
+                                                        modal
+                                                        :header="venue.room"
+                                                        :style="{
+                                                            width: '50rem',
+                                                        }"
+                                                        :breakpoints="{
+                                                            '1199px': '75vw',
+                                                            '575px': '90vw',
+                                                        }"
+                                                        pt:mask:class="backdrop-blur-sm"
+                                                        class="rounded-lg shadow-lg"
                                                     >
-                                                        <p
-                                                            class="text-lg font-medium"
+                                                        <div
+                                                            class="flex flex-col items-center gap-4"
                                                         >
-                                                            <span
-                                                                class="font-semibold text-slate-900"
-                                                                >Location:</span
+                                                            <img
+                                                                :src="
+                                                                    venue.imageUrl
+                                                                "
+                                                                :alt="`Image of ${venue.room} at ${venue.location.building}, Floor ${venue.location.floor}`"
+                                                                class="h-80 bg-slate-100 object-cover w-full rounded-lg"
+                                                            />
+                                                            <div
+                                                                class="text-slate-700 w-full space-y-3"
                                                             >
-                                                            {{
-                                                                venue.location
-                                                                    .building
-                                                            }}, Floor
-                                                            {{
-                                                                venue.location
-                                                                    .floor
-                                                            }}
-                                                        </p>
-                                                        <p
-                                                            class="text-lg font-medium"
-                                                        >
-                                                            <span
-                                                                class="font-semibold text-slate-900"
-                                                                >Capacity:</span
-                                                            >
-                                                            {{ venue.capacity }}
-                                                        </p>
-                                                        <p class="text-md">
-                                                            {{
-                                                                venue.description
-                                                            }}
-                                                        </p>
-                                                    </div>
+                                                                <p
+                                                                    class="text-lg font-medium"
+                                                                >
+                                                                    <span
+                                                                        class="font-semibold text-slate-900"
+                                                                        >Location:</span
+                                                                    >
+                                                                    {{
+                                                                        venue
+                                                                            .location
+                                                                            .building
+                                                                    }}, Floor
+                                                                    {{
+                                                                        venue
+                                                                            .location
+                                                                            .floor
+                                                                    }}
+                                                                </p>
+                                                                <p
+                                                                    class="text-lg font-medium"
+                                                                >
+                                                                    <span
+                                                                        class="font-semibold text-slate-900"
+                                                                        >Capacity:</span
+                                                                    >
+                                                                    {{
+                                                                        venue.capacity
+                                                                    }}
+                                                                </p>
+                                                                <p
+                                                                    class="text-md"
+                                                                >
+                                                                    {{
+                                                                        venue.description
+                                                                    }}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </Dialog>
                                                 </div>
-                                            </Dialog>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
+                                    </AccordionContent>
+                                </AccordionPanel>
+                            </Accordion>
                         </div>
                         <div class="flex justify-end gap-4 mt-1">
                             <Button
