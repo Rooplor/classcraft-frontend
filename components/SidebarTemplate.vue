@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { signOut } from "firebase/auth";
 import type { IClassroom } from "~/types/Classroom";
 
 defineProps({
@@ -15,31 +14,6 @@ const { classrooms } = storeToRefs(classroomStore) as {
 const sidebarStore = useSidebarStore();
 const { isSidebarOpen } = storeToRefs(sidebarStore) as {
     isSidebarOpen: Ref<boolean>;
-};
-
-const op = ref();
-const auth = useFirebaseAuth();
-const router = useRouter();
-const toggle = (event: MouseEvent) => {
-    op.value.toggle(event);
-};
-
-const user = useCurrentUser();
-
-const handleProfileClick = () => {
-    router.push("/profile");
-    op.value.hide();
-};
-
-const handleSignOut = async () => {
-    try {
-        if (auth) {
-            await signOut(auth);
-            await useAuth().logout();
-        }
-    } catch (error) {
-        console.error("Error signing out:", error);
-    }
 };
 </script>
 
@@ -71,8 +45,22 @@ const handleSignOut = async () => {
         <div>
             <SidebarTab
                 to="/class"
-                label="Classroom"
-                icon="pi pi-book"
+                label="Home"
+                icon="pi pi-home"
+                :isSidebarOpen="isSidebarOpen"
+                @click="closeCallback?.()"
+            />
+            <SidebarTab
+                to="/class/following"
+                label="Following"
+                icon="pi pi-users"
+                :isSidebarOpen="isSidebarOpen"
+                @click="closeCallback?.()"
+            />
+            <SidebarTab
+                to="/class/voting"
+                label="Voting"
+                icon="pi pi-arrow-up"
                 :isSidebarOpen="isSidebarOpen"
                 @click="closeCallback?.()"
             />
@@ -89,89 +77,71 @@ const handleSignOut = async () => {
                 'flex flex-col items-center': !isSidebarOpen,
             }"
         >
-            <div v-if="isSidebarOpen" class="flex justify-between mb-5">
-                <p class="text-slate-500">Your classes</p>
-                <nuxt-link
-                    to="/class/new/edit"
-                    class="text-primary-500 flex items-center gap-1"
-                >
-                    <i class="pi pi-plus" />
-                    <p>Add</p>
-                </nuxt-link>
-            </div>
-            <nuxt-link v-else to="/class/new/edit" class="mb-6">
-                <Button icon="pi pi-plus" text rounded />
-            </nuxt-link>
-
-            <SidebarTab
-                v-for="classroom in classrooms"
-                :key="classroom?.id"
-                :to="`/class/${classroom?.id}/edit`"
-                :classroom="classroom"
-                :isCollapsed="isSidebarOpen"
-                @click="closeCallback?.()"
-            />
-        </div>
-    </div>
-
-    <div
-        class="w-full flex items-center border-t bg-white sticky bottom-0"
-        :class="isSidebarOpen ? 'justify-between py-4' : 'justify-center py-2'"
-    >
-        <div class="flex gap-2 items-center">
-            <Avatar :image="user?.photoURL || ''" shape="circle" size="large" />
-            <div v-if="isSidebarOpen" class="leading-4 w-40">
-                <p class="truncate">
-                    {{ user?.displayName }}
-                </p>
-                <p class="text-slate-500 text-sm truncate">
-                    {{ user?.email }}
-                </p>
-            </div>
-        </div>
-        <Button
-            v-if="isSidebarOpen"
-            icon="pi pi-ellipsis-h"
-            severity="secondary"
-            rounded
-            outlined
-            aria-label="Profile"
-            @click="toggle"
-        />
-        <Popover ref="op" class="pt-4">
-            <div
-                class="flex flex-col justify-center items-center gap-4 w-[12rem]"
+            <Accordion
+                multiple
+                :value="['0', '1']"
+                collapseIcon="pi pi-angle-up"
+                expandIcon="pi pi-angle-down"
             >
-                <Image :alt="`${user?.displayName} profile picture`">
-                    <template #image>
-                        <img
-                            :src="
-                                user?.photoURL?.replace('s96-c', 's384-c') || ''
-                            "
-                            :alt="`${user?.displayName} profile picture`"
-                            class="rounded-full w-24 h-24"
+                <AccordionPanel value="0" :pt="{ root: '!border-none' }">
+                    <AccordionHeader
+                        :pt="{ root: 'hover:!bg-slate-100 !rounded-xl !p-4' }"
+                    >
+                        <div v-if="isSidebarOpen" class="flex justify-between">
+                            <p class="text-slate-500 text-sm font-medium">
+                                YOUR CLASSROOMS
+                            </p>
+                        </div>
+                    </AccordionHeader>
+                    <AccordionContent unstyled>
+                        <SidebarTab
+                            to="/class/new/edit"
+                            label="Create a classroom"
+                            icon="pi pi-plus"
+                            :isSidebarOpen="isSidebarOpen"
+                            @click="closeCallback?.()"
+                            class="text-primary"
                         />
-                    </template>
-                </Image>
-                <div class="text-center">
-                    <h2 class="text-lg font-bold">
-                        {{ user?.displayName }}
-                    </h2>
-                    <p class="text-slate-500">{{ user?.email }}</p>
-                </div>
-                <div class="flex flex-col w-full gap-2">
-                    <Button
-                        label="Profile"
-                        severity="secondary"
-                        @click="handleProfileClick"
-                    />
-                    <Button
-                        @click="handleSignOut"
-                        label="Logout"
-                        severity="danger"
-                    />
-                </div>
-            </div>
-        </Popover>
+                        <SidebarTab
+                            v-for="classroom in classrooms"
+                            :key="classroom?.id"
+                            :to="`/class/${classroom?.id}/edit`"
+                            :classroom="classroom"
+                            :isCollapsed="isSidebarOpen"
+                            @click="closeCallback?.()"
+                        />
+                    </AccordionContent>
+                </AccordionPanel>
+                <AccordionPanel value="1" :pt="{ root: '!border-none' }">
+                    <AccordionHeader
+                        :pt="{ root: 'hover:!bg-slate-100 !rounded-xl !p-4' }"
+                    >
+                        <div v-if="isSidebarOpen" class="flex justify-between">
+                            <p class="text-slate-500 text-sm font-medium">
+                                YOUR REQUESTS
+                            </p>
+                        </div>
+                    </AccordionHeader>
+                    <AccordionContent unstyled>
+                        <SidebarTab
+                            to="/class/new/edit"
+                            label="Create a request"
+                            icon="pi pi-plus"
+                            :isSidebarOpen="isSidebarOpen"
+                            @click="closeCallback?.()"
+                            class="text-primary"
+                        />
+                        <SidebarTab
+                            v-for="classroom in classrooms"
+                            :key="classroom?.id"
+                            :to="`/class/${classroom?.id}/edit`"
+                            :classroom="classroom"
+                            :isCollapsed="isSidebarOpen"
+                            @click="closeCallback?.()"
+                        />
+                    </AccordionContent>
+                </AccordionPanel>
+            </Accordion>
+        </div>
     </div>
 </template>
