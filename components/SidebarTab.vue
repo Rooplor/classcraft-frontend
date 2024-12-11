@@ -84,7 +84,7 @@ watch(router.currentRoute, () => {
                         : 'p-1 justify-center h-16'
                 }`
             "
-            class="flex items-center"
+            class="flex items-center min-h-14"
         >
             <div
                 class="flex items-center gap-2"
