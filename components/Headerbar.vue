@@ -82,6 +82,7 @@ const handleSignOut = async () => {
                             :class="isSidebarOpen ? '!w-[16rem]' : '!w-[28rem]'"
                             @keyup.enter="
                                 () => {
+                                    if (search.trim() === '') return;
                                     router.push(`/search?q=${search.trim()}`);
                                     emit('search', search.trim());
                                 }
