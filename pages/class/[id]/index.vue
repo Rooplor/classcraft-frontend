@@ -44,8 +44,8 @@ useHead({
 });
 </script>
 <template>
-    <div class="w-full px-2 flex flex-col">
-        <Feedbar />
+    <div class="w-full flex flex-col">
+        <Headerbar />
         <div
             class="flex flex-col gap-x-2 w-full mx-auto mb-3 lg:flex-row md:max-w-screen-lg"
         >
@@ -75,7 +75,7 @@ useHead({
                 </div>
                 <div
                     v-else
-                    class="hidden w-full h-full max-w-96 max-h-96 m-auto aspect-square bg-slate-200 border rounded-3xl lg:flex justify-center items-center"
+                    class="hidden w-96 h-full max-h-96 m-auto aspect-square bg-slate-200 border rounded-3xl lg:flex justify-center items-center"
                 >
                         <i class="pi pi-image text-slate-400" style="font-size: 4rem;"/>
                 </div>
@@ -291,7 +291,9 @@ useHead({
                                                 "
                                                 :alt="`${classroom.instructorName} profile image`"
                                                 :style="slotProps.style"
-                                                @click="slotProps.previewCallback"
+                                                @click="
+                                                    slotProps.previewCallback
+                                                "
                                                 class="w-[52rem] h-[52rem] aspect-square object-cover"
                                             />
                                         </template>

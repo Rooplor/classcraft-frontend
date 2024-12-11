@@ -49,9 +49,9 @@ useHead({
 
 <template>
     <div class="w-full">
-        <Feedbar />
-        <div class="w-full max-w-screen-lg mx-auto px-2">
-            <div class="flex flex-col gap-4 pt-4 pb-[10px]">
+        <Headerbar />
+        <div class="w-full max-w-screen-lg mx-auto">
+            <div class="flex flex-col gap-4 pb-[10px]">
                 <div class="flex justify-between">
                     <SelectButton
                         v-model="value"

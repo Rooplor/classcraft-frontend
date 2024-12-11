@@ -7,8 +7,8 @@ const options = ref(["Pending", "Closed"]);
 
 <template>
     <div class="w-full">
-        <Feedbar />
-        <div class="w-full max-w-screen-lg mx-auto px-2">
+        <Headerbar />
+        <div class="w-full max-w-screen-lg mx-auto">
             <div class="flex justify-between">
                 <SelectButton
                     v-model="value"
