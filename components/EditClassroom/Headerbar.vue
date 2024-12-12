@@ -316,7 +316,7 @@ const confirmDelete = () => {
                 />
             </div>
             <Button
-                label="Delete"
+                label="Delete Classroom"
                 icon="pi pi-trash"
                 severity="danger"
                 text
