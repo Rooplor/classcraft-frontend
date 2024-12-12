@@ -1,36 +1,15 @@
 <script setup lang="ts">
 const { getAllClassroom } = useClassroom();
-const { classroomFeedDisplay } = storeToRefs(useFeedDisplayStore());
 let classrooms = ref();
-
-const getClassroomFeed = async (feed: ClassroomFeedDisplay) => {
-    switch (feed) {
-        case ClassroomFeedDisplay.FOLLOWING:
-            classrooms.value = (await getAllClassroom(true)).result;
-            break;
-        case ClassroomFeedDisplay.VOTING:
-            classrooms.value = (await getAllClassroom(false)).result;
-            break;
-        case ClassroomFeedDisplay.EXPLORE:
-            classrooms.value = (await getAllClassroom()).result;
-            break;
-    }
-};
 
 const value = ref("Upcoming");
 const options = ref(["Upcoming", "Past"]);
 
-getClassroomFeed(classroomFeedDisplay.value);
-
-watch(
-    classroomFeedDisplay,
-    async (current, prev) => {
-        if (prev !== current) {
-            getClassroomFeed(current);
-        }
-    },
-    { deep: true }
-);
+try {
+    classrooms.value = (await getAllClassroom(false)).result;
+} catch (error) {
+    console.error("Error getting classrooms:", error);
+}
 
 useHead({
     title: "Classroom · ClassCraft",
@@ -73,27 +52,3 @@ useHead({
         </div>
     </div>
 </template>
-
-<style>
-/* width */
-::-webkit-scrollbar {
-    height: 0px;
-    width: 5px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #ddd;
-    border-radius: 5px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #ccc;
-}
-</style>
