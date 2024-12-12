@@ -2,6 +2,7 @@
 import type { IClassroom } from "../../../types/Classroom";
 
 const toast = useToast();
+const confirm = useConfirm();
 const router = useRouter();
 const id = router.currentRoute.value.params.id;
 const screenWidth = window.innerWidth;
@@ -15,8 +16,13 @@ const { isSidebarOpen } = storeToRefs(sidebarStore) as {
     isSidebarOpen: Ref<boolean>;
 };
 
-const { getClassroomById, toggleRegistrationStatus, togglePublishStatus } =
-    useClassroom();
+const {
+    getClassroomById,
+    toggleRegistrationStatus,
+    togglePublishStatus,
+    deleteClassroom,
+} = useClassroom();
+
 const op = ref();
 const action = ref();
 const currentUrl = window?.location?.href.replace(/\/edit$/, "");
@@ -115,6 +121,39 @@ const onToggleRegistrationStatus = () => {
             showRegistrationToast(editingClassroom.value.registrationStatus);
         }
     });
+};
+
+const confirmDelete = () => {
+    confirm.require({
+        message: `Are you sure you want to delete "${editingClassroom.value.title}" classroom?`,
+        header: "Delete Confirmation",
+        icon: "pi pi-exclamation-triangle",
+        rejectProps: {
+            label: "Cancel",
+        },
+        acceptProps: {
+            label: "Delete",
+            text: true,
+        },
+        accept: () => {
+            handleDelete();
+            toast.add({
+                severity: "error",
+                summary: "Deleted",
+                detail: `Your classroom has been deleted`,
+                group: "tc",
+                life: 3000,
+            });
+        },
+    });
+};
+
+const handleDelete = async () => {
+    const res = await deleteClassroom(editingClassroom.value.id);
+    if (res.success) {
+        classroomStore.removeClassroomById(editingClassroom.value.id);
+        op.value.hide();
+    }
 };
 
 classroomStore.clearEditingClassroom();
@@ -286,6 +325,14 @@ useHead({
                                 rounded
                                 @click="onToggleRegistrationStatus"
                             />
+                            <Button
+                                label="Delete"
+                                icon="pi pi-trash"
+                                severity="danger"
+                                text
+                                rounded
+                                @click="confirmDelete"
+                            />
                         </div>
                     </Popover>
                 </div>
@@ -337,6 +384,28 @@ useHead({
                         rounded
                         @click="onToggleRegistrationStatus"
                     />
+                    <Button
+                        icon="pi pi-ellipsis-v"
+                        severity="secondary"
+                        rounded
+                        @click="toggleAction"
+                    />
+                    <Popover
+                        ref="action"
+                        class="p-1"
+                        style="border-radius: 1rem"
+                    >
+                        <div class="flex flex-col gap-2 w-52">
+                            <Button
+                                label="Delete"
+                                icon="pi pi-trash"
+                                severity="danger"
+                                text
+                                rounded
+                                @click="confirmDelete"
+                            />
+                        </div>
+                    </Popover>
                 </div>
             </div>
         </div>
