@@ -42,7 +42,7 @@ useHead({
                     </nuxt-link>
                 </div>
                 <div class="space-y-[10px]">
-                    <ClassroomItem
+                    <ClassroomListItem
                         v-for="(classroom, index) in classrooms"
                         :key="index"
                         :classroom="classroom"

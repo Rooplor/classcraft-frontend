@@ -69,7 +69,7 @@ useHead({
                     v-if="user?.myClassrooms?.length >= 0"
                     class="space-y-[10px]"
                 >
-                    <ClassroomItem
+                    <ClassroomListItem
                         v-for="(classroom, index) in user?.myClassrooms"
                         :key="index"
                         :classroom="classroom"
