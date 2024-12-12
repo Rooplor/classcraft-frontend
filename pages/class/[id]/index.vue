@@ -49,17 +49,17 @@ useHead({
         <div
             class="flex flex-col gap-x-2 w-full mx-auto mb-3 lg:flex-row md:max-w-screen-lg"
         >
-            <div class="mx-auto">
+            <div class="mb-2 mx-auto md:w-1/2 lg:mt-0 lg:m-auto">
                 <div
                     v-if="classroom.coverImage"
-                    class="w-full h-full max-w-96 mb-2 max-h-96 m-auto aspect-square rounded-3xl overflow-clip"
+                    class="max-w-96 h-full m-auto aspect-square rounded-3xl overflow-clip md:max-w-full"
                 >
                     <Image :preview="classroom.coverImage ? true : false">
                         <template #image>
                             <img
                                 :src="classroom.coverImage"
                                 :alt="`${classroom.title} class cover image`"
-                                class="bg-slate-200 w-full h-full max-w-96 max-h-96 aspect-square border rounded-3xl object-cover"
+                                class="w-full bg-slate-200 aspect-square border rounded-3xl object-cover md:max-w-full"
                             />
                         </template>
                         <template #original="slotProps">
@@ -75,7 +75,7 @@ useHead({
                 </div>
                 <div
                     v-else
-                    class="hidden w-96 h-full max-h-96 m-auto aspect-square bg-slate-200 border rounded-3xl lg:flex justify-center items-center"
+                    class="hidden w-full max-w-96 m-auto aspect-square bg-slate-200 border rounded-3xl lg:flex justify-center items-center md:max-w-full"
                 >
                     <i class="pi pi-image text-[4rem] text-slate-400" />
                     <i
@@ -100,7 +100,7 @@ useHead({
                     </nuxt-link>
                 </div>
             </div>
-            <div class="w-full space-y-8">
+            <div class="lg:w-1/2 space-y-8">
                 <div
                     class="bg-white px-6 py-8 border rounded-3xl flex flex-col gap-10"
                 >
