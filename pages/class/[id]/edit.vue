@@ -224,188 +224,57 @@ useHead({
                     rounded
                     @click="toggleOp"
                 />
-                <Popover ref="op" class="p-1" style="border-radius: 1rem">
-                    <div class="flex flex-col gap-4 w-[25rem]">
-                        <Message
-                            v-if="!editingClassroom?.published"
-                            severity="warn"
-                        >
-                            Publish this classroom first to share the link
-                        </Message>
-                        <div>
-                            <span class="block mb-2 font-medium"
-                                >Let the world know about this class</span
-                            >
-                            <InputGroup>
-                                <InputText
-                                    :value="currentUrl"
-                                    readonly
-                                    disabled
-                                    class="w-[25rem]"
-                                />
-                                <Button
-                                    icon="pi pi-copy"
-                                    severity="secondary"
-                                    @click="copyLink"
-                                />
-                            </InputGroup>
-                            <div class="flex justify-end mt-2">
-                                <Button
-                                    label="Preview"
-                                    :severity="
-                                        editingClassroom?.published
-                                            ? 'primary'
-                                            : 'secondary'
-                                    "
-                                    icon="pi pi-eye"
-                                    rounded
-                                    @click="onPreviewClassroom"
-                                />
-                            </div>
-                        </div>
+                <div class="flex gap-2">
+                    <div class="hidden gap-2 lg:flex">
+                        <Button
+                            v-if="editingClassroom?.published"
+                            label="Unpublish"
+                            icon="pi pi-ban"
+                            severity="secondary"
+                            :disabled="!editingClassroom"
+                            rounded
+                            @click="onPublish"
+                        />
+                        <Button
+                            v-else
+                            label="Publish"
+                            icon="pi pi-globe"
+                            severity="primary"
+                            :disabled="!editingClassroom"
+                            rounded
+                            @click="onPublish"
+                        />
+                        <Button
+                            v-if="editingClassroom?.registrationStatus"
+                            label="Close registration"
+                            icon="pi pi-lock"
+                            severity="secondary"
+                            :disabled="
+                                !editingClassroom ||
+                                !editingClassroom?.registrationUrl
+                            "
+                            rounded
+                            @click="onToggleRegistrationStatus"
+                        />
+                        <Button
+                            v-else
+                            label="Open registration"
+                            icon="pi pi-lock-open"
+                            severity="contrast"
+                            :disabled="
+                                !editingClassroom ||
+                                !editingClassroom?.registrationUrl
+                            "
+                            rounded
+                            @click="onToggleRegistrationStatus"
+                        />
                     </div>
-                </Popover>
-                <div
-                    :class="`flex gap-1 ${
-                        isSidebarOpen ? 'lg:hidden' : 'md:hidden'
-                    }`"
-                >
                     <Button
                         icon="pi pi-ellipsis-v"
                         severity="secondary"
                         rounded
                         @click="toggleAction"
                     />
-                    <Popover
-                        ref="action"
-                        class="p-1"
-                        style="border-radius: 1rem"
-                    >
-                        <div class="flex flex-col gap-2 w-52">
-                            <Button
-                                :label="
-                                    editingClassroom?.published
-                                        ? 'Unpublish'
-                                        : 'Publish'
-                                "
-                                :icon="
-                                    editingClassroom?.published
-                                        ? 'pi pi-ban'
-                                        : 'pi pi-globe'
-                                "
-                                :severity="
-                                    editingClassroom?.published
-                                        ? 'secondary'
-                                        : 'primary'
-                                "
-                                rounded
-                                :disabled="!editingClassroom"
-                                @click="onPublish"
-                            />
-                            <Button
-                                :label="
-                                    editingClassroom?.registrationStatus
-                                        ? 'Close registration'
-                                        : 'Open registration'
-                                "
-                                :icon="
-                                    editingClassroom?.registrationStatus
-                                        ? 'pi pi-lock'
-                                        : 'pi pi-lock-open'
-                                "
-                                :severity="
-                                    editingClassroom?.registrationStatus
-                                        ? 'secondary'
-                                        : 'contrast'
-                                "
-                                :disabled="
-                                    !editingClassroom ||
-                                    !editingClassroom?.registrationUrl
-                                "
-                                rounded
-                                @click="onToggleRegistrationStatus"
-                            />
-                            <Button
-                                label="Delete"
-                                icon="pi pi-trash"
-                                severity="danger"
-                                text
-                                rounded
-                                @click="confirmDelete"
-                            />
-                        </div>
-                    </Popover>
-                </div>
-                <div
-                    :class="`hidden gap-2 ${
-                        isSidebarOpen ? 'lg:flex' : 'md:flex'
-                    }`"
-                >
-                    <Button
-                        :label="
-                            editingClassroom?.published
-                                ? 'Unpublish'
-                                : 'Publish'
-                        "
-                        :icon="
-                            editingClassroom?.published
-                                ? 'pi pi-ban'
-                                : 'pi pi-globe'
-                        "
-                        :severity="
-                            editingClassroom?.published
-                                ? 'secondary'
-                                : 'primary'
-                        "
-                        :disabled="!editingClassroom"
-                        rounded
-                        @click="onPublish"
-                    />
-                    <Button
-                        :label="
-                            editingClassroom?.registrationStatus
-                                ? 'Close registration'
-                                : 'Open registration'
-                        "
-                        :icon="
-                            editingClassroom?.registrationStatus
-                                ? 'pi pi-lock'
-                                : 'pi pi-lock-open'
-                        "
-                        :severity="
-                            editingClassroom?.registrationStatus
-                                ? 'secondary'
-                                : 'contrast'
-                        "
-                        :disabled="
-                            !editingClassroom ||
-                            !editingClassroom?.registrationUrl
-                        "
-                        rounded
-                        @click="onToggleRegistrationStatus"
-                    />
-                    <Button
-                        icon="pi pi-ellipsis-v"
-                        severity="secondary"
-                        rounded
-                        @click="toggleAction"
-                    />
-                    <Popover
-                        ref="action"
-                        class="p-1"
-                        style="border-radius: 1rem"
-                    >
-                        <div class="flex flex-col gap-2 w-52">
-                            <Button
-                                label="Delete"
-                                icon="pi pi-trash"
-                                severity="danger"
-                                text
-                                rounded
-                                @click="confirmDelete"
-                            />
-                        </div>
-                    </Popover>
                 </div>
             </div>
         </div>
@@ -527,4 +396,96 @@ useHead({
     >
         <NuxtLayout name="craft-content" />
     </Dialog>
+    <Popover ref="op" class="p-1" style="border-radius: 1rem">
+        <div class="flex flex-col gap-4 w-[25rem]">
+            <Message v-if="!editingClassroom?.published" severity="warn">
+                Publish this classroom first to share the link
+            </Message>
+            <div>
+                <span class="block mb-2 font-medium"
+                    >Let the world know about this class</span
+                >
+                <InputGroup>
+                    <InputText
+                        :value="currentUrl"
+                        readonly
+                        disabled
+                        class="w-[25rem]"
+                    />
+                    <Button
+                        icon="pi pi-copy"
+                        severity="secondary"
+                        @click="copyLink"
+                    />
+                </InputGroup>
+                <div class="flex justify-end mt-2">
+                    <Button
+                        label="Preview"
+                        :severity="
+                            editingClassroom?.published
+                                ? 'primary'
+                                : 'secondary'
+                        "
+                        icon="pi pi-eye"
+                        rounded
+                        @click="onPreviewClassroom"
+                    />
+                </div>
+            </div>
+        </div>
+    </Popover>
+    <Popover ref="action" class="p-1" style="border-radius: 1rem">
+        <div class="flex flex-col gap-2 w-52">
+            <div class="flex flex-col gap-2 lg:hidden">
+                <Button
+                    v-if="editingClassroom?.published"
+                    label="Unpublish"
+                    icon="pi pi-ban"
+                    severity="secondary"
+                    :disabled="!editingClassroom"
+                    rounded
+                    @click="onPublish"
+                />
+                <Button
+                    v-else
+                    label="Publish"
+                    icon="pi pi-globe"
+                    severity="primary"
+                    :disabled="!editingClassroom"
+                    rounded
+                    @click="onPublish"
+                />
+                <Button
+                    v-if="editingClassroom?.registrationStatus"
+                    label="Close registration"
+                    icon="pi pi-lock"
+                    severity="secondary"
+                    :disabled="
+                        !editingClassroom || !editingClassroom?.registrationUrl
+                    "
+                    rounded
+                    @click="onToggleRegistrationStatus"
+                />
+                <Button
+                    v-else
+                    label="Open registration"
+                    icon="pi pi-lock-open"
+                    severity="contrast"
+                    :disabled="
+                        !editingClassroom || !editingClassroom?.registrationUrl
+                    "
+                    rounded
+                    @click="onToggleRegistrationStatus"
+                />
+            </div>
+            <Button
+                label="Delete"
+                icon="pi pi-trash"
+                severity="danger"
+                text
+                rounded
+                @click="confirmDelete"
+            />
+        </div>
+    </Popover>
 </template>
