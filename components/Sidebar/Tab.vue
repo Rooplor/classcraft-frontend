@@ -17,12 +17,55 @@ const props = defineProps({
 const router = useRouter();
 const path = ref(router.currentRoute.value.path);
 
-
+const { deleteClassroom } = useClassroom();
+const classroomStore = useClassroomStore();
 const sidebarStore = useSidebarStore();
 const { isSidebarOpen } = storeToRefs(sidebarStore) as {
     isSidebarOpen: Ref<boolean>;
 };
 const op = ref();
+const confirm = useConfirm();
+const toast = useToast();
+const toggle = (event: MouseEvent) => {
+    op.value.toggle(event);
+};
+
+const handleEdit = () => {
+    router.push(props.to);
+    op.value.hide();
+};
+
+const confirmDelete = (name: string) => {
+    confirm.require({
+        message: `Are you sure you want to delete "${name}" classroom?`,
+        header: "Delete Confirmation",
+        icon: "pi pi-exclamation-triangle",
+        rejectProps: {
+            label: "Cancel",
+        },
+        acceptProps: {
+            label: "Delete",
+            text: true,
+        },
+        accept: () => {
+            handleDelete();
+            toast.add({
+                severity: "error",
+                summary: "Deleted",
+                detail: `Your classroom has been deleted`,
+                group: "tc",
+                life: 3000,
+            });
+        },
+    });
+};
+
+const handleDelete = () => {
+    if (props.label) return;
+    deleteClassroom(props.classroom?.id);
+    classroomStore.removeClassroomById(props.classroom?.id);
+    op.value.hide();
+};
 
 watch(router.currentRoute, () => {
     path.value = router.currentRoute.value.path;
@@ -43,7 +86,10 @@ watch(router.currentRoute, () => {
             "
             class="flex items-center min-h-14"
         >
-            <div class="flex items-center gap-2">
+            <div
+                class="flex items-center gap-2"
+                :class="{ 'w-5/6': isSidebarOpen }"
+            >
                 <img
                     v-if="classroom?.coverImage"
                     :src="classroom?.coverImage"
@@ -61,7 +107,10 @@ watch(router.currentRoute, () => {
                     :class="icon"
                     :style="!isSidebarOpen && 'font-size: 1.5rem'"
                 />
-                <div v-if="isSidebarOpen" class="space-y-1 overflow-hidden">
+                <div
+                    v-if="isSidebarOpen"
+                    class="space-y-1 w-3/4 overflow-hidden"
+                >
                     <div v-if="!label" class="flex gap-1">
                         <Badge
                             :value="
@@ -86,6 +135,32 @@ watch(router.currentRoute, () => {
                     </p>
                 </div>
             </div>
+            <Button
+                v-if="!label && isSidebarOpen"
+                severity="secondary"
+                icon="pi pi-ellipsis-v"
+                aria-label="More"
+                rounded
+                text
+                @click.prevent="toggle"
+            />
+            <Popover ref="op">
+                <div class="flex flex-col gap-1">
+                    <Button
+                        label="Edit"
+                        icon="pi pi-pencil"
+                        severity="secondary"
+                        @click="handleEdit"
+                    />
+                    <Button
+                        label="Delete"
+                        icon="pi pi-trash"
+                        severity="danger"
+                        text
+                        @click="confirmDelete(classroom?.title)"
+                    />
+                </div>
+            </Popover>
         </nuxt-link>
     </div>
 </template>

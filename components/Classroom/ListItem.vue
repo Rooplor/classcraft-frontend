@@ -3,8 +3,8 @@ import {
     EVenueRequestStatus,
     type IClassroom,
     type IReservationDateAndVenue,
-} from "../types/Classroom";
-import type { IVenue } from "../types/Venue";
+} from "../../types/Classroom";
+import type { IVenue } from "../../types/Venue";
 
 const props = defineProps<{
     classroom: IClassroom;

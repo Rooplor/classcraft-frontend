@@ -96,7 +96,7 @@ useHead({
                     v-if="publishedClassrooms?.length >= 0"
                     class="space-y-[10px]"
                 >
-                    <ClassroomItem
+                    <ClassroomListItem
                         v-for="(classroom, index) in publishedClassrooms"
                         :key="index"
                         :classroom="classroom"
