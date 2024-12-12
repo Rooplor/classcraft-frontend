@@ -37,9 +37,6 @@ useHead({
                         :options="options"
                         aria-labelledby="basic"
                     />
-                    <nuxt-link to="class/new">
-                        <Button label="Add class" icon="pi pi-plus" rounded />
-                    </nuxt-link>
                 </div>
                 <div class="space-y-[10px]">
                     <ClassroomListItem
