@@ -80,7 +80,7 @@ const formatDateRange = (dates: IReservationDateAndVenue[]) => {
         <div class="w-full flex flex-col gap-8">
             <div class="flex flex-col gap-2 md:gap-4">
                 <div class="space-y-2">
-                    <h1 class="font-bold text-xl">
+                    <h1 class="font-bold text-xl line-clamp-1">
                         {{ props.classroom.title }}
                     </h1>
                     <div class="hidden md:flex gap-2 flex-wrap">

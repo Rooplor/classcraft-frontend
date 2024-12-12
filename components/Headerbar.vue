@@ -89,12 +89,23 @@ const handleSignOut = async () => {
                 </IconField>
             </div>
             <div class="flex gap-1 md:gap-2 items-center justify-center">
-                <Button
-                    severity="secondary"
-                    icon="pi pi-plus"
-                    rounded
-                    @click="toggleMenu"
-                />
+                <div class="hidden md:block">
+                    <Button
+                        label="Create"
+                        severity="secondary"
+                        icon="pi pi-plus"
+                        rounded
+                        @click="toggleMenu"
+                    />
+                </div>
+                <div class="md:hidden">
+                    <Button
+                        severity="secondary"
+                        icon="pi pi-plus"
+                        rounded
+                        @click="toggleMenu"
+                    />
+                </div>
                 <Menu
                     ref="menu"
                     id="overlay_menu"
@@ -121,7 +132,7 @@ const handleSignOut = async () => {
                     </template>
                 </Menu>
                 <div
-                    class="flex items-center p-1 hover:bg-slate-100 rounded-full duration-300 cursor-pointer"
+                    class="flex items-center p-1 hover:bg-slate-200 rounded-full duration-300 cursor-pointer"
                     @click="togglePopOver"
                 >
                     <Avatar
