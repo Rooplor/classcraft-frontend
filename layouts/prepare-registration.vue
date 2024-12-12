@@ -140,11 +140,11 @@ const onEdit = (question: Question) => {
                     >
                         <span v-if="hasUrl" class="flex items-center gap-2">
                             <i class="pi pi-list-check" />
-                            Use ClassCraft registration
+                            Use form
                         </span>
                         <span v-else class="flex items-center gap-2">
                             <i class="pi pi-link" />
-                            Use registration Url
+                            Use Url
                         </span>
                     </button>
                 </div>
