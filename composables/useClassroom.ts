@@ -67,7 +67,7 @@ const useClassroom = () => {
         });
     };
 
-    const deleteClassroom = (id: string) => {
+    const deleteClassroom = (id: string): Promise<IResponse<{}>> => {
         return $fetch(`${config.public.baseUrl}/api/class/${id}`, {
             method: "DELETE",
         });
