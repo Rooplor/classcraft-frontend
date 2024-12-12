@@ -66,7 +66,7 @@ const { isSidebarOpen } = storeToRefs(sidebarStore) as {
             />
             <SidebarTab
                 to="/discussion"
-                label="Request for class"
+                label="Topic request"
                 icon="pi pi-comments"
                 :isSidebarOpen="isSidebarOpen"
                 @click="closeCallback?.()"
