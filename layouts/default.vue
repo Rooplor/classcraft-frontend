@@ -14,7 +14,6 @@ try {
 } catch {
     if (auth) {
         await signOut(auth);
-        await useAuth().logout();
     }
 }
 
