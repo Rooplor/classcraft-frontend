@@ -86,6 +86,11 @@ const handleSignOut = async () => {
                             }
                         "
                     />
+                    <InputIcon
+                        v-if="search.trim() !== ''"
+                        class="pi pi-times"
+                        @click="search = ''"
+                    />
                 </IconField>
             </div>
             <div class="flex gap-1 md:gap-2 items-center justify-center">

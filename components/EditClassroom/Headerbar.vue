@@ -2,7 +2,6 @@
 import type { IClassroom } from "../../types/Classroom";
 
 const toast = useToast();
-const confirm = useConfirm();
 const router = useRouter();
 const classroomStore = useClassroomStore();
 const { toggleRegistrationStatus, togglePublishStatus, deleteClassroom } =
@@ -15,6 +14,9 @@ const { editingClassroom } = storeToRefs(classroomStore) as {
 const op = ref();
 const action = ref();
 const isContentDialogVisible = ref(false);
+
+const deleteInput = ref("");
+const isMatch = ref(true);
 
 const currentUrl = window?.location?.href.replace(/\/edit$/, "");
 
@@ -108,38 +110,18 @@ const onToggleRegistrationStatus = () => {
 };
 
 const handleDelete = async () => {
+    if (deleteInput.value !== editingClassroom.value.title) {
+        isMatch.value = false;
+        return;
+    }
     const res = await deleteClassroom(editingClassroom.value.id);
     if (res.success) {
         classroomStore.removeClassroomById(editingClassroom.value.id);
-        op.value.hide();
+        router.push("/class");
     }
 };
 
-const confirmDelete = () => {
-    confirm.require({
-        message: `Are you sure you want to delete "${editingClassroom.value.title}" classroom?`,
-        header: "Delete Confirmation",
-        icon: "pi pi-exclamation-triangle",
-        rejectProps: {
-            label: "Cancel",
-        },
-        acceptProps: {
-            label: "Delete",
-            text: true,
-            severity: "danger",
-        },
-        accept: () => {
-            handleDelete();
-            toast.add({
-                severity: "error",
-                summary: "Deleted",
-                detail: `Your classroom has been deleted`,
-                group: "tc",
-                life: 3000,
-            });
-        },
-    });
-};
+const isDeleteDialogOpen = ref(false);
 </script>
 <template>
     <div
@@ -321,7 +303,7 @@ const confirmDelete = () => {
                 severity="danger"
                 text
                 rounded
-                @click="confirmDelete"
+                @click="isDeleteDialogOpen = true"
             />
         </div>
     </Popover>
@@ -339,5 +321,46 @@ const confirmDelete = () => {
         }"
     >
         <NuxtLayout name="craft-content" />
+    </Dialog>
+    <Dialog
+        v-model:visible="isDeleteDialogOpen"
+        :header="`Delete ${editingClassroom?.title}`"
+        :style="{ width: '32rem' }"
+        modal
+        :draggable="false"
+    >
+        <span class="text-surface-500 dark:text-surface-400 block mb-2">
+            Once deleted, you can not undo this action
+        </span>
+        <div class="flex flex-col gap-4 mb-4">
+            <label for="username">
+                Type
+                <span class="font-semibold">
+                    "{{ editingClassroom?.title }}"
+                </span>
+                to delete</label
+            >
+            <!-- Type text to match classroom title to delete, if not match, show error message -->
+            <InputText
+                id="classroom-title"
+                class="flex-auto"
+                autocomplete="off"
+                v-model="deleteInput"
+                @keyup.enter="handleDelete"
+            />
+            <span v-if="!isMatch" class="text-red-500">
+                Please type text to match classroom title to delete
+            </span>
+        </div>
+        <div class="flex justify-end gap-2">
+            <Button
+                type="button"
+                label="Delete"
+                severity="danger"
+                fluid
+                outlined
+                @click="handleDelete"
+            />
+        </div>
     </Dialog>
 </template>
