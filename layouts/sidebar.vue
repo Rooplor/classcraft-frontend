@@ -17,7 +17,7 @@ const { isSidebarOpen, isDrawerOpen } = storeToRefs(sidebarStore) as {
     <div class="absolute hidden md:block top-0 h-[100vh] z-[100] md:sticky p-2">
         <div
             class="relative flex flex-col overflow-y-auto justify-between h-full screen pb-0 bg-white border basis-64 rounded-3xl overflow-clip duration-500"
-            :class="isSidebarOpen ? 'w-72 py-6 px-3' : 'w-20 p-1 py-4'"
+            :class="isSidebarOpen ? 'w-64 py-4 p-2' : 'w-20 p-1 py-4'"
         >
             <SidebarTemplate />
         </div>

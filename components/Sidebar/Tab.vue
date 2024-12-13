@@ -84,12 +84,9 @@ watch(router.currentRoute, () => {
                         : 'p-1 justify-center h-16'
                 }`
             "
-            class="flex items-center min-h-14"
+            class="flex items-center min-h-12"
         >
-            <div
-                class="flex items-center gap-2"
-                :class="{ 'w-5/6': isSidebarOpen }"
-            >
+            <div class="flex items-center gap-2">
                 <img
                     v-if="classroom?.coverImage"
                     :src="classroom?.coverImage"
@@ -107,10 +104,7 @@ watch(router.currentRoute, () => {
                     :class="icon"
                     :style="!isSidebarOpen && 'font-size: 1.5rem'"
                 />
-                <div
-                    v-if="isSidebarOpen"
-                    class="space-y-1 w-3/4 overflow-hidden"
-                >
+                <div v-if="isSidebarOpen" class="space-y-1 overflow-hidden">
                     <div v-if="!label" class="flex gap-1">
                         <Badge
                             :value="
@@ -135,32 +129,6 @@ watch(router.currentRoute, () => {
                     </p>
                 </div>
             </div>
-            <Button
-                v-if="!label && isSidebarOpen"
-                severity="secondary"
-                icon="pi pi-ellipsis-v"
-                aria-label="More"
-                rounded
-                text
-                @click.prevent="toggle"
-            />
-            <Popover ref="op">
-                <div class="flex flex-col gap-1">
-                    <Button
-                        label="Edit"
-                        icon="pi pi-pencil"
-                        severity="secondary"
-                        @click="handleEdit"
-                    />
-                    <Button
-                        label="Delete"
-                        icon="pi pi-trash"
-                        severity="danger"
-                        text
-                        @click="confirmDelete(classroom?.title)"
-                    />
-                </div>
-            </Popover>
         </nuxt-link>
     </div>
 </template>
