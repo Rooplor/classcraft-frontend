@@ -27,7 +27,7 @@ const onSearch = async (keyword: string) => {
             <div class="flex flex-col gap-4 pb-[10px]">
                 <div class="flex justify-between">
                     <div class="overflow-auto">
-                        <div class="flex gap-2 w-96">
+                        <div class="flex gap-2 w-full">
                             <button
                                 v-for="option in options"
                                 class="py-2 px-4 border rounded-full font-medium whitespace-nowrap duration-200"
