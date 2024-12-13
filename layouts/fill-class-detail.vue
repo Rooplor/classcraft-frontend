@@ -101,7 +101,7 @@ const [instructorAvatar] = defineField("instructorAvatar");
 const [instructorFamiliarity] = defineField("instructorFamiliarity");
 const [coverImage] = defineField("coverImage");
 
-const selfInstructored = ref(false);
+const selfInstructored = ref<boolean | null>(null);
 
 const formatOption = ref([
     { name: "Online", value: "ONLINE" },
@@ -502,20 +502,33 @@ watch(selfInstructored, (value) => {
                 </div>
             </div>
 
-            <div class="flex flex-col w-full bg-white border rounded-3xl">
-                <div
-                    v-if="
-                        !instructorName || !instructorAvatar || !instructorBio
-                    "
-                    class="flex items-center gap-2 p-4 rounded-t-3xl border-b"
-                >
-                    <Checkbox
-                        inputId="selfInstructored"
-                        v-model="selfInstructored"
-                        binary
+            <div
+                v-if="selfInstructored === null"
+                class="flex flex-col space-y-4 p-4 rounded-3xl bg-white border"
+            >
+                <label for="selfInstructored"> Are you the instructor? </label>
+                <div class="space-y-2">
+                    <Button
+                        label="Yes, I teach this class by myself"
+                        severity="success"
+                        outlined
+                        fluid
+                        @click="selfInstructored = true"
                     />
-                    <label for="selfInstructored"> I'm the instructor </label>
+                    <Button
+                        label="No, I will invite an instructor"
+                        severity="secondary"
+                        outlined
+                        fluid
+                        @click="selfInstructored = false"
+                    />
                 </div>
+            </div>
+
+            <div
+                v-if="selfInstructored !== null"
+                class="flex flex-col w-full bg-white border rounded-3xl"
+            >
                 <div class="flex flex-col gap-8 px-6 py-8">
                     <div class="flex flex-col gap-6">
                         <div
@@ -621,6 +634,7 @@ watch(selfInstructored, (value) => {
                     icon="pi pi-check"
                     type="submit"
                     size="large"
+                    :disabled="selfInstructored === null"
                     class="w-full"
                 />
             </div>
