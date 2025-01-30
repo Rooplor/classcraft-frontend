@@ -154,13 +154,6 @@ const isDeleteDialogOpen = ref(false);
                     @click="isContentDialogVisible = true"
                 />
             </div>
-            <Button
-                severity="secondary"
-                icon="pi pi-share-alt"
-                :disabled="!editingClassroom"
-                rounded
-                @click="toggleOp"
-            />
             <div class="flex gap-2">
                 <div class="hidden gap-2 lg:flex">
                     <Button
@@ -207,6 +200,13 @@ const isDeleteDialogOpen = ref(false);
                     />
                 </div>
                 <Button
+                    severity="secondary"
+                    icon="pi pi-share-alt"
+                    :disabled="!editingClassroom"
+                    rounded
+                    @click="toggleOp"
+                />
+                <Button
                     icon="pi pi-ellipsis-v"
                     severity="secondary"
                     rounded
@@ -215,7 +215,7 @@ const isDeleteDialogOpen = ref(false);
             </div>
         </div>
     </div>
-    <Popover ref="op" class="p-1" style="border-radius: 1rem">
+    <Popover ref="op" style="border-radius: 1rem">
         <div class="flex flex-col gap-4 w-[25rem]">
             <Message v-if="!editingClassroom?.published" severity="warn">
                 Publish this classroom first to share the link
@@ -253,7 +253,7 @@ const isDeleteDialogOpen = ref(false);
             </div>
         </div>
     </Popover>
-    <Popover ref="action" class="p-1" style="border-radius: 1rem">
+    <Popover ref="action" style="border-radius: 1rem">
         <div class="flex flex-col gap-2 w-52">
             <div class="flex flex-col gap-2 lg:hidden">
                 <Button
@@ -262,7 +262,6 @@ const isDeleteDialogOpen = ref(false);
                     icon="pi pi-ban"
                     severity="secondary"
                     :disabled="!editingClassroom"
-                    rounded
                     @click="onPublish"
                 />
                 <Button
@@ -271,7 +270,6 @@ const isDeleteDialogOpen = ref(false);
                     icon="pi pi-globe"
                     severity="primary"
                     :disabled="!editingClassroom"
-                    rounded
                     @click="onPublish"
                 />
                 <Button
@@ -282,7 +280,6 @@ const isDeleteDialogOpen = ref(false);
                     :disabled="
                         !editingClassroom || !editingClassroom?.registrationUrl
                     "
-                    rounded
                     @click="onToggleRegistrationStatus"
                 />
                 <Button
@@ -293,7 +290,6 @@ const isDeleteDialogOpen = ref(false);
                     :disabled="
                         !editingClassroom || !editingClassroom?.registrationUrl
                     "
-                    rounded
                     @click="onToggleRegistrationStatus"
                 />
             </div>
@@ -302,7 +298,6 @@ const isDeleteDialogOpen = ref(false);
                 icon="pi pi-trash"
                 severity="danger"
                 text
-                rounded
                 @click="isDeleteDialogOpen = true"
             />
         </div>
