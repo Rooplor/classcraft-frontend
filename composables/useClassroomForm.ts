@@ -30,7 +30,9 @@ const useForm = () => {
     });
   };
 
-  const submitForm = (form: IForm): Promise<IResponse<IFormSubmission>> => {
+  const submitForm = (
+    form: IFormSubmission
+  ): Promise<IResponse<IFormSubmission>> => {
     return $fetch(`${config.public.baseUrl}/api/form/submit`, {
       body: JSON.stringify(form),
       method: "POST",
@@ -52,7 +54,7 @@ const useForm = () => {
   const getUserFormSubmissions = (
     userId: string,
     id: string
-  ): Promise<IResponse<IFormSubmission>> => {
+  ): Promise<IResponse<IFormSubmission[]>> => {
     return $fetch(
       `${config.public.baseUrl}/api/form/submissions?userId=${userId}&formId=${id}`,
       {
@@ -63,7 +65,7 @@ const useForm = () => {
 
   const getClassroomFormSubmission = (
     classroomId: string
-  ): Promise<IResponse<IFormSubmission>> => {
+  ): Promise<IResponse<IFormSubmission[]>> => {
     return $fetch(
       `${config.public.baseUrl}/api/form/submissions/${classroomId}`,
       {
