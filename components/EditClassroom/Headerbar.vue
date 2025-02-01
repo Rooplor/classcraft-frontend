@@ -278,7 +278,7 @@ const isDeleteDialogOpen = ref(false);
                     icon="pi pi-lock"
                     severity="secondary"
                     :disabled="
-                        !editingClassroom || !editingClassroom?.registrationUrl
+                        !editingClassroom
                     "
                     @click="onToggleRegistrationStatus"
                 />
@@ -288,7 +288,7 @@ const isDeleteDialogOpen = ref(false);
                     icon="pi pi-lock-open"
                     severity="contrast"
                     :disabled="
-                        !editingClassroom || !editingClassroom?.registrationUrl
+                        !editingClassroom
                     "
                     @click="onToggleRegistrationStatus"
                 />
