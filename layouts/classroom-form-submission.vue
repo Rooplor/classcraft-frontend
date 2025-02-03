@@ -23,9 +23,8 @@ const columns = computed(() => {
 const formattedFormSubmission = computed(() => {
   return formSubmission.value.map((submission) => {
     return {
+      ...submission,
       ...submission.responses,
-      submittedBy: submission.submittedBy,
-      approvedByOwner: submission.approvedByOwner,
     };
   });
 });
@@ -50,24 +49,23 @@ onMounted(async () => {
     stripedRows
     tableStyle="min-width: 50rem"
   >
-    <Column field="userDetail" header="User id">
+    <Column field="userDetail" header="User">
       <template #body="{ data }">
-        <div
+        <button
           @click="
             $router.push({
               name: 'user',
-              params: { id: data.id },
+              params: { id: data.userDetail.id },
             })
           "
           class="flex items-center gap-2"
         >
-          <img
-            :alt="data.profilePicture"
-            :src="data.profilePicture"
-            style="width: 32px"
+          <Avatar
+            :image="data.userDetail.profilePicture"
+            shape="circle"
           />
-          <span>{{ data.username }}</span>
-        </div>
+          <span>{{ data.userDetail.username }}</span>
+        </button>
       </template>
     </Column>
     <Column field="approvedByOwner" header="Status">
