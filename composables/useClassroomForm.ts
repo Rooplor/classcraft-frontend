@@ -1,5 +1,6 @@
 import type { IResponse } from "../types/Response";
 import type { IForm, IFormSubmission } from "../types/Form";
+import type { IUser } from "../types/User";
 
 const useForm = () => {
   const config = useRuntimeConfig();
@@ -31,7 +32,7 @@ const useForm = () => {
   };
 
   const submitForm = (
-    form: IFormSubmission
+    form: Partial<IFormSubmission>
   ): Promise<IResponse<IFormSubmission>> => {
     return $fetch(`${config.public.baseUrl}/api/form/submit`, {
       body: JSON.stringify(form),
@@ -54,7 +55,7 @@ const useForm = () => {
   const getUserFormSubmissions = (
     userId: string,
     id: string
-  ): Promise<IResponse<IFormSubmission[]>> => {
+  ): Promise<IResponse<IFormSubmission>> => {
     return $fetch(
       `${config.public.baseUrl}/api/form/submissions?userId=${userId}&formId=${id}`,
       {
@@ -74,6 +75,25 @@ const useForm = () => {
     );
   };
 
+  const getClassroomFormSubmissionByUserId = (
+    userId: string
+  ): Promise<IResponse<IFormSubmission[]>> => {
+    return $fetch(
+      `${config.public.baseUrl}/api/form/submissions/user/${userId}`,
+      {
+        method: "GET",
+      }
+    );
+  };
+
+  const getUserInClassroom = (
+    classroomId: string
+  ): Promise<IResponse<IUser[]>> => {
+    return $fetch(`${config.public.baseUrl}/api/form/user/${classroomId}`, {
+      method: "GET",
+    });
+  };
+
   return {
     getFormById,
     addForm,
@@ -84,6 +104,8 @@ const useForm = () => {
     getFormCSV,
     getUserFormSubmissions,
     getClassroomFormSubmission,
+    getClassroomFormSubmissionByUserId,
+    getUserInClassroom,
   };
 };
 
