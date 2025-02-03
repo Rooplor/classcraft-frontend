@@ -25,7 +25,7 @@ const formattedFormSubmission = computed(() => {
     return {
       ...submission.responses,
       submittedBy: submission.submittedBy,
-      isApprovedByOwner: submission.isApprovedByOwner,
+      approvedByOwner: submission.approvedByOwner,
     };
   });
 });
@@ -40,18 +40,40 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <div>{{ formSubmission.length }} people</div>
-
+  <div
+    class="p-4 border border-primary rounded-lg font-medium bg-primary-50 text-primary inline-block text-lg mb-4"
+  >
+    {{ formSubmission.length }} people registered
+  </div>
   <DataTable
     :value="formattedFormSubmission"
     stripedRows
     tableStyle="min-width: 50rem"
   >
-    <Column field="submittedBy" header="User id" />
-    <Column field="isApprovedByOwner" header="Status">
+    <Column field="userDetail" header="User id">
+      <template #body="{ data }">
+        <div
+          @click="
+            $router.push({
+              name: 'user',
+              params: { id: data.id },
+            })
+          "
+          class="flex items-center gap-2"
+        >
+          <img
+            :alt="data.profilePicture"
+            :src="data.profilePicture"
+            style="width: 32px"
+          />
+          <span>{{ data.username }}</span>
+        </div>
+      </template>
+    </Column>
+    <Column field="approvedByOwner" header="Status">
       <template #body="slotProps">
         <Tag
-          v-if="slotProps.data.isApprovedByOwner"
+          v-if="slotProps.data.approvedByOwner"
           severity="success"
           value="Approved"
           rounded
