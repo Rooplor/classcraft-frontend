@@ -94,6 +94,18 @@ const useForm = () => {
     });
   };
 
+  const setApprovalStatus = (
+    id: string,
+    isApproved: boolean
+  ): Promise<IResponse<IFormSubmission>> => {
+    return $fetch(
+      `${config.public.baseUrl}/api/form/isApprovedByOwner/${id}?isApproved=${isApproved}`,
+      {
+        method: "PATCH",
+      }
+    );
+  };
+
   return {
     getFormById,
     addForm,
@@ -106,6 +118,7 @@ const useForm = () => {
     getClassroomFormSubmission,
     getClassroomFormSubmissionByUserId,
     getUserInClassroom,
+    setApprovalStatus,
   };
 };
 
