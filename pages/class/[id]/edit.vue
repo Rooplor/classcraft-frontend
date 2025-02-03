@@ -132,25 +132,27 @@ useHead({
                         </div>
                     </StepPanel>
                     <StepPanel v-slot="{ activateCallback }" value="3">
-                        <NuxtLayout name="prepare-registration" />
-                        <div class="flex justify-between pt-6 gap-2 h-36">
-                            <Button
-                                label="Reserve venue"
-                                severity="secondary"
-                                icon="pi pi-arrow-left"
-                                @click="activateCallback('2')"
-                                class="w-full"
-                            />
-                            <Button
-                                label="Go to the classroom"
-                                severity="secondary"
-                                icon="pi pi-arrow-up-right"
-                                iconPos="right"
-                                class="w-full"
-                                @click="
-                                    router.push(`/class/${editingClassroom.id}`)
-                                "
-                            />
+                        <div class="bg-slate-50">
+                            <NuxtLayout name="prepare-registration" />
+                            <div class="flex justify-between pt-6 gap-2 h-36">
+                                <Button
+                                    label="Reserve venue"
+                                    severity="secondary"
+                                    icon="pi pi-arrow-left"
+                                    @click="activateCallback('2')"
+                                    class="w-full"
+                                />
+                                <Button
+                                    label="Go to the classroom"
+                                    severity="secondary"
+                                    icon="pi pi-arrow-up-right"
+                                    iconPos="right"
+                                    class="w-full"
+                                    @click="
+                                        router.push(`/class/${editingClassroom.id}`)
+                                    "
+                                />
+                            </div>
                         </div>
                     </StepPanel>
                 </StepPanels>
