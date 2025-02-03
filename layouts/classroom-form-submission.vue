@@ -3,10 +3,15 @@ import type { IClassroom } from "../types/Classroom";
 import type { IFormSubmission } from "../types/Form";
 
 const classroomStore = useClassroomStore();
+const toast = useToast();
 const { editingClassroom } = storeToRefs(classroomStore) as {
   editingClassroom: Ref<IClassroom>;
 };
-const { getClassroomFormSubmission, getFormQuestions } = useClassroomForm();
+const {
+  getClassroomFormSubmission,
+  getFormQuestions,
+  setApprovalStatus: setApprovalStatusApi,
+} = useClassroomForm();
 
 const formSubmission = ref<IFormSubmission[]>([]);
 const formQuestions = ref({});
@@ -28,6 +33,23 @@ const formattedFormSubmission = computed(() => {
     };
   });
 });
+
+const setApprovalStatus = async (id: string, status: boolean) => {
+  const submission = formSubmission.value.find((item) => item.id === id);
+  if (submission) {
+    submission.approvedByOwner = status;
+  }
+
+  const res = await setApprovalStatusApi(id, status);
+  if (res.success) {
+    toast.add({
+      severity: "success",
+      summary: "Success",
+      detail: "Approval status updated",
+      group: "tc",
+    });
+  }
+};
 
 onMounted(async () => {
   getClassroomFormSubmission(editingClassroom.value.id).then((data) => {
@@ -62,13 +84,15 @@ onMounted(async () => {
     </Column>
     <Column field="approvedByOwner" header="Status">
       <template #body="slotProps">
-        <Tag
+        <button
           v-if="slotProps.data.approvedByOwner"
-          severity="success"
-          value="Approved"
-          rounded
-        />
-        <Tag v-else severity="warn" value="Pending" rounded />
+          @click="setApprovalStatus(slotProps.data.id, false)"
+        >
+          <Tag severity="success" value="Approved" rounded />
+        </button>
+        <button v-else @click="setApprovalStatus(slotProps.data.id, true)">
+          <Tag severity="warn" value="Pending" rounded />
+        </button>
       </template>
     </Column>
     <Column
