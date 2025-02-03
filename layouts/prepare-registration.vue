@@ -23,7 +23,7 @@ const openDate = ref<Date | null>(null);
 const closeDate = ref<Date | null>(null);
 
 const updateFormQuestions = () => {
-  updateForm({
+  return updateForm({
     id: editingClassroom.value?.id,
     classroomId: editingClassroom.value?.id,
     title: "Registration Form",
@@ -42,11 +42,20 @@ const updateFormQuestions = () => {
   });
 };
 
-const onSaveQuestion = (question: Question) => {
+const onSaveQuestion = async (question: Question) => {
   const index = questions.value.findIndex((q) => q.id === question.init?.id);
   questions.value[index].question = question.question;
-  updateFormQuestions();
-  editingQuestion.value = null;
+  const res = await updateFormQuestions();
+  if (res.success) {
+    toast.add({
+      severity: "success",
+      summary: "Saved",
+      detail: `Your question has been saved`,
+      group: "tc",
+      life: 3000,
+    });
+    editingQuestion.value = null;
+  }
 };
 const addQuestion = () => {
   let newQuestion: Question = {
@@ -73,17 +82,19 @@ const confirmDelete = (question: Question) => {
       severity: "danger",
       text: true,
     },
-    accept: () => {
+    accept: async () => {
       removeQuestion(question.id);
-      updateFormQuestions();
-      editingQuestion.value = null;
-      toast.add({
-        severity: "error",
-        summary: "Deleted",
-        detail: `Your question has been deleted`,
-        group: "tc",
-        life: 3000,
-      });
+      const res = await updateFormQuestions();
+      if (res.success) {
+        editingQuestion.value = null;
+        toast.add({
+          severity: "error",
+          summary: "Deleted",
+          detail: `Your question has been deleted`,
+          group: "tc",
+          life: 3000,
+        });
+      }
     },
   });
 };
