@@ -120,7 +120,7 @@ useHead({
           v-else
           class="hidden w-full max-w-96 m-auto aspect-square bg-slate-200 border rounded-3xl lg:flex justify-center items-center md:max-w-full"
         >
-          <i class="pi pi-image text-[4rem] text-slate-400" />
+          <i class="pi pi-image text-slate-400" style="font-size: 4rem" />
         </div>
         <div class="group hidden space-y-2 mt-6 lg:block">
           <p class="text-slate-500">Hosted by</p>
