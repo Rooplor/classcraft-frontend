@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { IClassroom } from "../../types/Classroom";
+import  {EStepperStatus, type IClassroom } from "../../types/Classroom";
 
 const toast = useToast();
 const router = useRouter();
 const classroomStore = useClassroomStore();
-const { toggleRegistrationStatus, togglePublishStatus, deleteClassroom } =
+const { togglePublishStatus, deleteClassroom } =
     useClassroom();
 
 const { editingClassroom } = storeToRefs(classroomStore) as {
@@ -70,44 +70,7 @@ const onPublish = async () => {
     });
 };
 
-const showRegistrationToast = (registrationStatus: boolean) => {
-    toast.add({
-        severity: registrationStatus ? "success" : "info",
-        summary: registrationStatus
-            ? "Classroom is open for registration"
-            : "Classroom is closed for registration",
-        group: "tc",
-        life: 1000,
-    });
-};
 
-const updateClassroomStore = (classroom: IClassroom) => {
-    classroomStore.setEditingClassroom(classroom);
-    classroomStore.updateClassroom(classroom);
-};
-
-const onToggleRegistrationStatus = () => {
-    toggleRegistrationStatus(editingClassroom.value.id).then((res) => {
-        if (res.success) {
-            const { result: classroom } = res;
-            if (classroom.registrationStatus && !classroom.published) {
-                togglePublishStatus(editingClassroom.value.id).then((res) => {
-                    if (res.success) {
-                        let { result: updatedClassroom } = res;
-                        updateClassroomStore(updatedClassroom);
-
-                        showRegistrationToast(
-                            editingClassroom.value.registrationStatus
-                        );
-                    }
-                });
-                return;
-            }
-            updateClassroomStore(classroom);
-            showRegistrationToast(editingClassroom.value.registrationStatus);
-        }
-    });
-};
 
 const handleDelete = async () => {
     if (deleteInput.value !== editingClassroom.value.title) {
@@ -139,12 +102,6 @@ const isDeleteDialogOpen = ref(false);
         </div>
 
         <div class="flex gap-2">
-            <div
-                class="h-full py-2 px-3 text-green-600 border border-green-500 bg-green-50 rounded-full"
-            >
-                <i class="pi pi-star-fill" />&nbsp;14
-                <span class="hidden lg:inline">followers</span>
-            </div>
             <div class="md:hidden">
                 <Button
                     :disabled="!editingClassroom"
@@ -156,48 +113,24 @@ const isDeleteDialogOpen = ref(false);
             </div>
             <div class="flex gap-2">
                 <div class="hidden gap-2 lg:flex">
-                    <Button
-                        v-if="editingClassroom?.published"
-                        label="Unpublish"
-                        icon="pi pi-ban"
-                        severity="secondary"
-                        :disabled="!editingClassroom"
-                        rounded
-                        @click="onPublish"
-                    />
-                    <Button
-                        v-else
-                        label="Publish"
-                        icon="pi pi-globe"
-                        severity="primary"
-                        :disabled="!editingClassroom"
-                        rounded
-                        @click="onPublish"
-                    />
-                    <Button
-                        v-if="editingClassroom?.registrationStatus"
-                        label="Close registration"
-                        icon="pi pi-lock"
-                        severity="secondary"
-                        :disabled="
-                            !editingClassroom ||
-                            !editingClassroom?.registrationUrl
-                        "
-                        rounded
-                        @click="onToggleRegistrationStatus"
-                    />
-                    <Button
-                        v-else
-                        label="Open registration"
-                        icon="pi pi-lock-open"
-                        severity="contrast"
-                        :disabled="
-                            !editingClassroom ||
-                            !editingClassroom?.registrationUrl
-                        "
-                        rounded
-                        @click="onToggleRegistrationStatus"
-                    />
+                        <Button
+                            v-if="editingClassroom?.published"
+                            label="Unpublish"
+                            icon="pi pi-ban"
+                            severity="secondary"
+                            :disabled="!editingClassroom"
+                            rounded
+                            @click="onPublish"
+                        />
+                        <Button
+                            v-else
+                            label="Publish"
+                            icon="pi pi-globe"
+                            severity="primary"
+                            :disabled="!editingClassroom"
+                            rounded
+                            @click="onPublish"
+                        />
                 </div>
                 <Button
                     severity="secondary"
@@ -210,12 +143,13 @@ const isDeleteDialogOpen = ref(false);
                     icon="pi pi-ellipsis-v"
                     severity="secondary"
                     rounded
+                    :disabled="!editingClassroom"
                     @click="toggleAction"
                 />
             </div>
         </div>
     </div>
-    <Popover ref="op" style="border-radius: 1rem">
+    <Popover  ref="op" style="border-radius: 1rem">
         <div class="flex flex-col gap-4 w-[25rem]">
             <Message v-if="!editingClassroom?.published" severity="warn">
                 Publish this classroom first to share the link
@@ -255,7 +189,7 @@ const isDeleteDialogOpen = ref(false);
     </Popover>
     <Popover ref="action" style="border-radius: 1rem">
         <div class="flex flex-col gap-2 w-52">
-            <div class="flex flex-col gap-2 lg:hidden">
+            <div class="flex flex-col gap-2">
                 <Button
                     v-if="editingClassroom?.published"
                     label="Unpublish"
@@ -272,26 +206,8 @@ const isDeleteDialogOpen = ref(false);
                     :disabled="!editingClassroom"
                     @click="onPublish"
                 />
-                <Button
-                    v-if="editingClassroom?.registrationStatus"
-                    label="Close registration"
-                    icon="pi pi-lock"
-                    severity="secondary"
-                    :disabled="
-                        !editingClassroom
-                    "
-                    @click="onToggleRegistrationStatus"
-                />
-                <Button
-                    v-else
-                    label="Open registration"
-                    icon="pi pi-lock-open"
-                    severity="contrast"
-                    :disabled="
-                        !editingClassroom
-                    "
-                    @click="onToggleRegistrationStatus"
-                />
+                <div v-if="editingClassroom?.published">
+                </div>
             </div>
             <Button
                 label="Delete Classroom"
@@ -308,7 +224,7 @@ const isDeleteDialogOpen = ref(false);
         position="top"
         :modal="true"
         :draggable="false"
-        class="w-full max-w-screen-lg m-auto bgslate"
+        class="w-full max-w-screen-lg m-auto"
         :style="{
             height: '100vh',
             background: '#f8fafc',
@@ -325,7 +241,7 @@ const isDeleteDialogOpen = ref(false);
         :draggable="false"
     >
         <span class="text-surface-500 dark:text-surface-400 block mb-2">
-            Once deleted, you can not undo this action
+            You can NOT undo this action
         </span>
         <div class="flex flex-col gap-4 mb-4">
             <label for="username">
@@ -353,7 +269,7 @@ const isDeleteDialogOpen = ref(false);
                 label="Delete"
                 severity="danger"
                 fluid
-                outlined
+                text
                 @click="handleDelete"
             />
         </div>
