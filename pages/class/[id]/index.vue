@@ -301,16 +301,25 @@ useHead({
             <div>{{ classroom?.prerequisite }}</div>
           </div>
           <div class="flex flex-col text-center gap-2">
-            <Button
+            <!-- <Button
               v-if="!classroom.registrationStatus"
               icon="pi pi-arrow-up"
-              severity="info"
               rounded
               outlined
               label="88"
+            /> -->
+            <Button
+              v-if="classroom.owner === user.id"
+              size="large"
+              :label="`Edit ${classroom.title}`"
+              rounded
+              severity="secondary"
+              icon="pi pi-pencil"
+              @click="router.push(`/class/${id}/edit`)"
+              class="w-full font-medium"
             />
             <Button
-              v-if="classroom.registrationStatus"
+              v-else-if="classroom.registrationStatus"
               size="large"
               rounded
               :disabled="isUserRegistered"
@@ -320,6 +329,10 @@ useHead({
             >
               {{ isUserRegistered ? `Registered` : `Join  ${classroom.title}` }}
             </Button>
+            <Button v-else size="large" severity="secondary" rounded disabled>
+              Not open for registration
+            </Button>
+
             <div
               v-if="usersInClassroom.length > 0"
               class="flex justify-center items-center gap-2"
