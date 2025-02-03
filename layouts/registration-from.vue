@@ -31,16 +31,13 @@ const onSubmit = async (event: Event) => {
       detail: "Form submitted successfully",
       group: "tc",
     });
-    window.location.reload();
+    // window.location.reload();
   }
 };
 
 onMounted(async () => {
   classroomForm.value = (await getFormById(id.toString())).result;
   userProfile.value = (await getUserProfile()).result;
-
-  console.log(userProfile.value);
-
   formData.value = {
     "Full Name": userProfile.value.username,
     Email: userProfile.value.email,
