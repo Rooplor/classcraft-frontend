@@ -3,8 +3,8 @@ interface IForm {
   classroomId: string;
   title: string;
   description: string;
-  openDate: string;
-  closeDate: string;
+  openDate?: string;
+  closeDate?: string;
   fields: IField[];
   isOwnerApprovalRequired: boolean;
 }
@@ -23,7 +23,12 @@ interface IFormSubmission {
   classroomId: string;
   responses: any;
   submittedBy: string;
-  isApprovedByOwner: boolean;
+  userDetail: {
+    id: string;
+    username: string;
+    profilePicture: string;
+  };
+  approvedByOwner: boolean;
 }
 
 enum EFieldValidation {
@@ -34,4 +39,4 @@ enum EFieldValidation {
   URL = "URL",
 }
 
-export type { IForm, IFormSubmission, EFieldValidation };
+export { type IForm, type IFormSubmission, EFieldValidation };
