@@ -88,7 +88,7 @@ const isDeleteDialogOpen = ref(false);
     class="w-full p-2 mb-16 sticky top-2 flex justify-between items-center gap-2 bg-white border rounded-full z-10"
   >
     <DrawerButton />
-    <div/>
+    <div />
     <div class="flex gap-2">
       <Button
         :disabled="!editingClassroom"
@@ -97,42 +97,40 @@ const isDeleteDialogOpen = ref(false);
         rounded
         @click="isContentDialogVisible = true"
       />
-      <div class="flex gap-2">
-        <div class="hidden gap-2 lg:flex">
-          <!-- <Button
-                            v-if="editingClassroom?.published"
-                            label="Unpublish"
-                            icon="pi pi-ban"
-                            severity="secondary"
-                            :disabled="!editingClassroom"
-                            rounded
-                            @click="onPublish"
-                        />
-                        <Button
-                            v-else
-                            label="Publish"
-                            icon="pi pi-globe"
-                            severity="primary"
-                            :disabled="!editingClassroom"
-                            rounded
-                            @click="onPublish"
-                        /> -->
-        </div>
+      <div class="hidden gap-2 lg:flex">
         <Button
+          v-if="editingClassroom?.published"
+          label="Unpublish"
+          icon="pi pi-ban"
           severity="secondary"
-          icon="pi pi-share-alt"
           :disabled="!editingClassroom"
           rounded
-          @click="toggleOp"
+          @click="onPublish"
         />
         <Button
-          icon="pi pi-ellipsis-v"
-          severity="secondary"
-          rounded
+          v-else
+          label="Publish"
+          icon="pi pi-globe"
+          outlined
           :disabled="!editingClassroom"
-          @click="toggleAction"
+          rounded
+          @click="onPublish"
         />
       </div>
+      <Button
+        severity="secondary"
+        icon="pi pi-share-alt"
+        :disabled="!editingClassroom"
+        rounded
+        @click="toggleOp"
+      />
+      <Button
+        icon="pi pi-ellipsis-v"
+        severity="secondary"
+        rounded
+        :disabled="!editingClassroom"
+        @click="toggleAction"
+      />
     </div>
   </div>
   <Popover ref="op" style="border-radius: 1rem">
@@ -175,7 +173,7 @@ const isDeleteDialogOpen = ref(false);
           v-else
           label="Publish"
           icon="pi pi-globe"
-          severity="primary"
+          outlined
           :disabled="!editingClassroom"
           @click="onPublish"
         />
