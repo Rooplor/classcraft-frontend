@@ -217,7 +217,7 @@ useHead({
             </div>
           </div>
           <div class="space-y-4">
-            <div class="inline-flex gap-3 space-y-2">
+            <div class="inline-flex items-start justify-start gap-3">
               <div>
                 <i
                   class="pi pi-calendar p-3 text-xl rounded-xl border bg-slate-100 text-slate-500"
