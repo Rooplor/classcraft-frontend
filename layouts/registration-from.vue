@@ -50,26 +50,72 @@ onMounted(async () => {
 </script>
 
 <template>
-  <form @submit="onSubmit" class="flex flex-col">
-    <div class="flex flex-col gap-8">
-      <div
-        v-if="classroomForm"
-        v-for="(field, index) in classroomForm.fields"
-        :key="index"
-        class="flex flex-col gap-2"
-      >
-        <label :for="field.name">{{ field.name }}</label>
-        <InputText
-          :id="field.name"
-          v-model="formData[field.name]"
-          :required="field.required"
-          :type="field.type"
-          :value="formData[field.name]"
-        />
+  <form @submit="onSubmit" class="flex flex-col gap-8">
+    <div>
+      <p class="inline-flex items-center gap-1 text-slate-400 mb-2">
+        <i class="pi pi-id-card" />
+        Personal Information
+      </p>
+      <div class="flex flex-col gap-4 border rounded-2xl p-4 bg-slate-50">
+        <div class="flex flex-col gap-2">
+          <label for="Full Name">Full Name</label>
+          <InputText
+            id="Full Name"
+            v-model="formData['Full Name']"
+            required
+            type="text"
+            :value="formData['Full Name']"
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label for="Email">Email</label>
+          <InputText
+            id="Email"
+            v-model="formData['Email']"
+            required
+            type="email"
+            :value="formData['Email']"
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label for="Phone">Phone</label>
+          <InputText
+            id="Phone"
+            v-model="formData['Phone']"
+            required
+            type="tel"
+            :value="formData['Phone']"
+          />
+        </div>
       </div>
-      <Button type="submit" rounded size="large" class="font-medium"
-        >Join</Button
-      >
     </div>
+    <div>
+      <p class="inline-flex items-center gap-1 text-slate-400 mb-2">
+        <i class="pi pi-question-circle" />
+        Other questions
+      </p>
+      <div class="flex flex-col gap-4 border rounded-2xl p-4 bg-slate-50">
+        <div
+          v-for="(field, index) in classroomForm.fields.filter(
+            (field) =>
+              field.name !== 'Full Name' &&
+              field.name !== 'Email' &&
+              field.name !== 'Phone'
+          )"
+          :key="index"
+          class="flex flex-col gap-2"
+        >
+          <label :for="field.name">{{ field.name }}</label>
+          <InputText
+            :id="field.name"
+            v-model="formData[field.name]"
+            :required="field.required"
+            :type="field.type"
+            :value="formData[field.name]"
+          />
+        </div>
+      </div>
+    </div>
+    <Button type="submit" rounded size="large" class="font-medium">Join</Button>
   </form>
 </template>
