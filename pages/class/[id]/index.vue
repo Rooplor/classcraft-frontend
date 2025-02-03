@@ -351,7 +351,7 @@ useHead({
                 />
               </AvatarGroup>
               <p class="text-slate-500">
-                Join {{ usersInClassroom.length }} people in this class
+                {{ usersInClassroom.length }} people joined this class
               </p>
             </div>
             <div v-else>
