@@ -363,16 +363,16 @@ useHead({
           <p class="text-xl font-bold mb-4">Who will be teaching me?</p>
           <div class="bg-white p-6 border rounded-3xl flex flex-col gap-4">
             <div class="space-y-5">
-              <div class="flex flex-col gap-4">
+              <div class="flex gap-4">
                 <div
-                  class="w-32 h-32 aspect-square border rounded-full overflow-clip"
+                  class="w-24 h-24 aspect-square border rounded-full overflow-clip"
                 >
                   <Image preview>
                     <template #image>
                       <img
                         :src="classroom.instructorAvatar"
                         :alt="`${classroom.instructorName} profile image`"
-                        class="w-32 h-32 aspect-square border rounded-full object-cover"
+                        class="w-24 h-24 aspect-square border rounded-full object-cover"
                       />
                     </template>
                     <template #original="slotProps">
@@ -386,18 +386,20 @@ useHead({
                     </template>
                   </Image>
                 </div>
-                <div>
-                  <p class="text-xl font-bold">
-                    {{ classroom.instructorName }}
-                  </p>
-                  <p>{{ classroom.instructorBio }}</p>
+                <div class="space-y-4">
+                  <div>
+                    <p class="text-xl font-bold">
+                      {{ classroom.instructorName }}
+                    </p>
+                    <p>{{ classroom.instructorBio }}</p>
+                  </div>
+                  <div>
+                    <p class="text-slate-500">Familiarity to the topic</p>
+                    <p>
+                      {{ classroom.instructorFamiliarity || "" }}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <p class="text-slate-500">Familiarity to the topic</p>
-                <p>
-                  {{ classroom.instructorFamiliarity || "" }}
-                </p>
               </div>
             </div>
           </div>
