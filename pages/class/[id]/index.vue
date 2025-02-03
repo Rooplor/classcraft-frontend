@@ -39,9 +39,7 @@ try {
   ).result
     ? true
     : false;
-  usersInClassroom.value = (
-    await getUserInClassroom(id.toString())
-  ).result
+  usersInClassroom.value = (await getUserInClassroom(id.toString())).result;
 } catch (error) {
   router.replace("/404");
 }
@@ -322,11 +320,11 @@ useHead({
             >
               {{ isUserRegistered ? `Registered` : `Join  ${classroom.title}` }}
             </Button>
-            <div class="flex justify-center items-center gap-2">
-              <AvatarGroup
-                v-if="usersInClassroom.length > 0"
-                class="flex justify-center"
-              >
+            <div
+              v-if="usersInClassroom.length > 0"
+              class="flex justify-center items-center gap-2"
+            >
+              <AvatarGroup class="flex justify-center">
                 <Avatar
                   v-for="(user, index) in usersInClassroom.slice(0, 5)"
                   :key="index"
@@ -339,7 +337,12 @@ useHead({
                   shape="circle"
                 />
               </AvatarGroup>
-              <p class="text-slate-500">Join {{ usersInClassroom.length }} people in this class</p>
+              <p class="text-slate-500">
+                Join {{ usersInClassroom.length }} people in this class
+              </p>
+            </div>
+            <div v-else>
+              <p class="text-slate-500">Be the first to join this class</p>
             </div>
           </div>
         </div>
