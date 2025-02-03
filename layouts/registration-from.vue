@@ -93,7 +93,7 @@ onMounted(async () => {
       </p>
       <div class="flex flex-col gap-4 border rounded-2xl p-4 bg-slate-50">
         <div
-          v-for="(field, index) in classroomForm.fields.filter(
+          v-for="(field, index) in classroomForm.fields?.filter(
             (field) =>
               field.name !== 'Full Name' &&
               field.name !== 'Email' &&
