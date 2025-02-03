@@ -51,21 +51,13 @@ onMounted(async () => {
   >
     <Column field="userDetail" header="User">
       <template #body="{ data }">
-        <button
-          @click="
-            $router.push({
-              name: 'user',
-              params: { id: data.userDetail.id },
-            })
-          "
+        <nuxt-link
+          :to="`/user/${data.userDetail.id}`"
           class="flex items-center gap-2"
         >
-          <Avatar
-            :image="data.userDetail.profilePicture"
-            shape="circle"
-          />
+          <Avatar :image="data.userDetail.profilePicture" shape="circle" />
           <span>{{ data.userDetail.username }}</span>
-        </button>
+        </nuxt-link>
       </template>
     </Column>
     <Column field="approvedByOwner" header="Status">
