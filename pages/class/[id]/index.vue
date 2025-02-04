@@ -315,7 +315,20 @@ useHead({
               class="w-full font-medium"
             />
             <Button
-              v-else-if="classroom.registrationStatus"
+              v-else-if="
+                !classroom.registrationStatus ||
+                (classroomForm.openDate &&
+                  isoToDateWithTimezone(classroomForm.openDate) < new Date())
+              "
+              size="large"
+              severity="secondary"
+              rounded
+              disabled
+            >
+              Not open for registration
+            </Button>
+            <Button
+              v-else
               size="large"
               rounded
               :disabled="isUserRegistered"
@@ -324,9 +337,6 @@ useHead({
               class="w-full font-medium"
             >
               {{ isUserRegistered ? `Registered` : `Join  ${classroom.title}` }}
-            </Button>
-            <Button v-else size="large" severity="secondary" rounded disabled>
-              Not open for registration
             </Button>
 
             <div
