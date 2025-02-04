@@ -146,8 +146,12 @@ const onToggleRegistrationStatus = () => {
 editingClassroom.value &&
   getFormById(editingClassroom.value.id).then((data) => {
     const { result } = data;
-    openDate.value = result.openDate ? new Date(result.openDate) : null;
-    closeDate.value = result.closeDate ? new Date(result.closeDate) : null;
+    openDate.value = result.openDate
+      ? isoToDateWithTimezone(result.openDate)
+      : null;
+    closeDate.value = result.closeDate
+      ? isoToDateWithTimezone(result.closeDate)
+      : null;
 
     questions.value = result.fields.map((field, index) => ({
       id: index,
@@ -369,18 +373,40 @@ editingClassroom.value &&
       </div>
       <div class="flex justify-end pt-4">
         <Button
-          v-if="editingClassroom?.registrationStatus"
-          :label="`Close registration
-          ${
-            closeDate != null
-              ? `(closing in 
-                ${Math.floor(
-                  (closeDate.getTime() - new Date().getTime()) /
-                    (1000 * 60 * 60 * 24)
-                )} days)`
-              : ''
-          }
-          `"
+          v-if="
+            openDate &&
+            editingClassroom?.registrationStatus &&
+            new Date() < openDate
+          "
+          :label="`Scheduled registration (opening in ${countdownTimer(
+            openDate
+          )})`"
+          severity="secondary"
+          fluid
+          rounded
+          size="large"
+          :disabled="!editingClassroom"
+          @click="onToggleRegistrationStatus"
+        />
+        <Button
+          v-else-if="
+            closeDate &&
+            editingClassroom?.registrationStatus &&
+            new Date() < closeDate
+          "
+          :label="`Close registration (closing in ${countdownTimer(
+            closeDate
+          )})`"
+          severity="secondary"
+          fluid
+          rounded
+          size="large"
+          :disabled="!editingClassroom"
+          @click="onToggleRegistrationStatus"
+        />
+        <Button
+          v-else-if="editingClassroom?.registrationStatus"
+          :label="`Close registration now`"
           severity="secondary"
           fluid
           rounded
@@ -390,7 +416,11 @@ editingClassroom.value &&
         />
         <Button
           v-else
-          :label="openDate || closeDate ? 'Schedule' : 'Open now'"
+          :label="
+            openDate || closeDate
+              ? 'Schedule registration'
+              : 'Open registration now'
+          "
           :icon="openDate || closeDate ? 'pi pi-calendar' : 'pi pi-check'"
           severity="contrast"
           fluid
