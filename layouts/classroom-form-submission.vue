@@ -13,8 +13,12 @@ const {
   setApprovalStatus: setApprovalStatusApi,
 } = useClassroomForm();
 
-const formSubmission = ref<IFormSubmission[]>([]);
-const formQuestions = ref({});
+const formSubmission = ref<IFormSubmission[]>(
+  (await getClassroomFormSubmission(editingClassroom.value.id)).result || []
+);
+const formQuestions = ref(
+  (await getFormQuestions(editingClassroom.value.id)).result || {}
+);
 
 const columns = computed(() => {
   return Object.keys(formQuestions.value).map((key) => {
@@ -51,15 +55,6 @@ const setApprovalStatus = async (id: string, status: boolean) => {
     });
   }
 };
-
-onMounted(async () => {
-  getClassroomFormSubmission(editingClassroom.value.id).then((data) => {
-    formSubmission.value = data.result;
-  });
-  getFormQuestions(editingClassroom.value.id).then((data) => {
-    formQuestions.value = data.result;
-  });
-});
 </script>
 <template>
   <div
