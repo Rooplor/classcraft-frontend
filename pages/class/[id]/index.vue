@@ -148,12 +148,10 @@ useHead({
                 class="py-1 px-2 text-sm text-primary bg-primary-100 inline-block rounded-lg mb-3"
               >
                 {{
-                  `Openning in 
-                ${Math.floor(
-                  (isoToDateWithTimezone(classroomForm.openDate).getTime() -
-                    new Date().getTime()) /
-                    (1000 * 60 * 60 * 24)
-                )} days`
+                  `Opening in 
+                ${countdownTimer(
+                  isoToDateWithTimezone(classroomForm.openDate)
+                )}`
                 }}
               </p>
               <p
@@ -165,11 +163,9 @@ useHead({
               >
                 {{
                   `Closing in 
-                ${Math.floor(
-                  (isoToDateWithTimezone(classroomForm.closeDate).getTime() -
-                    new Date().getTime()) /
-                    (1000 * 60 * 60 * 24)
-                )} days`
+                ${countdownTimer(
+                  isoToDateWithTimezone(classroomForm.closeDate)
+                )}`
                 }}
               </p>
               <h1 class="text-4xl font-bold">
@@ -311,7 +307,7 @@ useHead({
             <Button
               v-if="classroom.owner === user.id"
               size="large"
-              :label="`Edit ${classroom.title}`"
+              :label="`Edit &quot;${classroom.title}&quot;`"
               rounded
               severity="secondary"
               icon="pi pi-pencil"
