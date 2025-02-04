@@ -362,7 +362,11 @@ useHead({
                 {{ usersInClassroom.length }} people joined this class
               </p>
             </div>
-            <div v-else>
+            <div
+              v-else-if="
+                classroom.registrationStatus && user.id !== classroom.owner
+              "
+            >
               <p class="text-slate-500">Be the first to join this class</p>
             </div>
           </div>
