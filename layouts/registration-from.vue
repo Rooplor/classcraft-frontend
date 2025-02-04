@@ -9,6 +9,14 @@ const toast = useToast();
 const { id } = router.currentRoute.value.params;
 
 const classroomForm = ref<IForm>({} as IForm);
+const customQuestions = computed(() => {
+  return classroomForm.value.fields?.filter(
+    (field) =>
+      field.name !== "Full Name" &&
+      field.name !== "Email" &&
+      field.name !== "Phone"
+  );
+});
 const formData = ref<{ [key: string]: any }>({});
 const userProfile = ref();
 
@@ -85,19 +93,14 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-    <div>
+    <div v-if="customQuestions.length > 0">
       <p class="inline-flex items-center gap-1 text-slate-400 mb-2">
         <i class="pi pi-question-circle" />
         Other questions
       </p>
       <div class="flex flex-col gap-4 border rounded-2xl p-4 bg-slate-50">
         <div
-          v-for="(field, index) in classroomForm.fields?.filter(
-            (field) =>
-              field.name !== 'Full Name' &&
-              field.name !== 'Email' &&
-              field.name !== 'Phone'
-          )"
+          v-for="(field, index) in customQuestions"
           :key="index"
           class="flex flex-col gap-2"
         >
