@@ -69,6 +69,7 @@ onMounted(async () => {
             required
             type="text"
             :value="formData['Full Name']"
+            placeholder="Enter your full name e.g. Jerome Tana"
           />
         </div>
         <div class="flex flex-col gap-2">
@@ -79,6 +80,7 @@ onMounted(async () => {
             required
             type="email"
             :value="formData['Email']"
+            placeholder="Enter your email e.g. example@email.com"
           />
         </div>
         <div class="flex flex-col gap-2">
@@ -89,6 +91,7 @@ onMounted(async () => {
             required
             type="tel"
             :value="formData['Phone']"
+            placeholder="Enter your phone number e.g. 0901234567"
           />
         </div>
       </div>
