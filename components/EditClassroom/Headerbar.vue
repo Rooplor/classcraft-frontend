@@ -46,28 +46,30 @@ const copyLink = () => {
 };
 
 const onPublish = async () => {
-  togglePublishStatus(editingClassroom.value.id).then((res) => {
-    if (res.success) {
-      classroomStore.setEditingClassroom(res.result);
-      classroomStore.updateClassroom(res.result);
-      if (editingClassroom.value.published) {
-        toast.add({
-          severity: "success",
-          summary: "Classroom is published",
-          group: "tc",
-          life: 1000,
-        });
-      } else {
-        toast.add({
-          severity: "info",
-          summary: "Classroom is unpublished",
-          group: "tc",
-          life: 1000,
-        });
-      }
+  let res = await togglePublishStatus(editingClassroom.value.id)
+
+  if (res.success) {
+    classroomStore.setEditingClassroom(res.result);
+    classroomStore.updateClassroom(res.result);
+
+    if (editingClassroom.value.published) {
+      toast.add({
+        severity: "success",
+        summary: "Classroom is published",
+        group: "tc",
+        life: 1000,
+      });
+      return;
     }
-  });
-};
+
+    toast.add({
+      severity: "info",
+      summary: "Classroom is unpublished",
+      group: "tc",
+      life: 1000,
+    });
+  }
+  }
 
 const handleDelete = async () => {
   if (deleteInput.value !== editingClassroom.value.title) {
