@@ -47,6 +47,7 @@ const setApprovalStatus = async (id: string, status: boolean) => {
       summary: "Success",
       detail: "Approval status updated",
       group: "tc",
+      life: 1000,
     });
   }
 };
@@ -62,9 +63,10 @@ onMounted(async () => {
 </script>
 <template>
   <div
-    class="p-4 border border-primary rounded-lg font-medium bg-primary-50 text-primary inline-block text-lg mb-4"
+    class="p-4 border border-primary rounded-lg font-medium bg-primary-50 text-primary inline-block mb-4"
   >
-    {{ formSubmission.length }} people registered
+    <i class="pi pi-users" /> {{ formSubmission.length }} /
+    {{ editingClassroom.capacity }} people registered
   </div>
   <DataTable
     :value="formattedFormSubmission"
@@ -99,6 +101,10 @@ onMounted(async () => {
       v-for="column in columns"
       :field="column.field"
       :header="column.header"
-    />
+    >
+    </Column>
+    <template #empty>
+      <p class="text-slate-500">No submissions</p>
+    </template>
   </DataTable>
 </template>
