@@ -318,15 +318,14 @@ useHead({
               v-else-if="
                 !classroom.registrationStatus ||
                 (classroomForm.openDate &&
-                  new Date() < isoToDateWithTimezone(classroomForm.openDate))
+                  new Date() <= isoToDateWithTimezone(classroomForm.openDate))
               "
+              :label="`Not open for registration`"
               size="large"
               severity="secondary"
               rounded
               disabled
-            >
-              Not open for registration
-            </Button>
+            />
             <Button
               v-else
               size="large"
