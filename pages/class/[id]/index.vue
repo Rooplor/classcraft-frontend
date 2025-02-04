@@ -352,11 +352,6 @@ useHead({
                   :image="user.profilePicture"
                   shape="circle"
                 />
-                <Avatar
-                  v-if="usersInClassroom.length > 5"
-                  :label="`+${usersInClassroom.length - 5}`"
-                  shape="circle"
-                />
               </AvatarGroup>
               <p class="text-slate-500">
                 {{ usersInClassroom.length }} people joined this class
