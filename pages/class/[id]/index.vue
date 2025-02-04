@@ -318,7 +318,7 @@ useHead({
               v-else-if="
                 !classroom.registrationStatus ||
                 (classroomForm.openDate &&
-                  isoToDateWithTimezone(classroomForm.openDate) < new Date())
+                  new Date() < isoToDateWithTimezone(classroomForm.openDate))
               "
               size="large"
               severity="secondary"
