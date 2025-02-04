@@ -297,13 +297,6 @@ useHead({
             <div>{{ classroom?.prerequisite }}</div>
           </div>
           <div class="flex flex-col text-center gap-2">
-            <!-- <Button
-              v-if="!classroom.registrationStatus"
-              icon="pi pi-arrow-up"
-              rounded
-              outlined
-              label="88"
-            /> -->
             <Button
               v-if="classroom.owner === user.id"
               size="large"

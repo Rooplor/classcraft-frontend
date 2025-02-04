@@ -150,13 +150,6 @@ const formatDateRange = (dates: IReservationDateAndVenue[]) => {
             </div>
         </div>
         <div>
-            <Button
-                icon="pi pi-star"
-                rounded
-                outlined
-                label="88"
-                size="small"
-            />
         </div>
     </nuxt-link>
 </template>
