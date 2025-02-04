@@ -6,6 +6,8 @@ const id = router.currentRoute.value.params.id;
 const screenWidth = window.innerWidth;
 const classroomStore = useClassroomStore();
 const sidebarStore = useSidebarStore();
+const { getUserProfile } = useUser();
+const userProfile = (await getUserProfile()).result;
 const { editingClassroom } = storeToRefs(classroomStore) as {
     editingClassroom: Ref<IClassroom>;
 };
@@ -26,9 +28,12 @@ classroomStore.clearEditingClassroom();
 
 if (id) {
     try {
-        classroomStore.setEditingClassroom(
-            (await getClassroomById(id.toString())).result
-        );
+        let res = await getClassroomById(id.toString())
+        if (res.result.owner !== userProfile.id) {
+            router.replace("/404");
+        }
+
+        classroomStore.setEditingClassroom(res.result);
     } catch (error) {
         router.replace("/404");
     }
@@ -36,7 +41,7 @@ if (id) {
 
 useHead({
     title: editingClassroom?.value?.title
-        ? `Editing "${editingClassroom.value.title}" · Classroom · ClassCraft`
+        ? `Editing "${editingClassroom.value.title}" · ClassCraft`
         : "Create New · Classroom · ClassCraft",
     meta: [
         {
@@ -56,6 +61,12 @@ useHead({
         <EditClassroomHeaderbar />
         <div class="flex justify-center">
             <Stepper value="1" class="basis-full max-w-screen-lg m-auto">
+                <div v-if="editingClassroom" class="inline-flex items-center gap-2 px-4 text-3xl mb-10 text-slate-500 font-bold">
+                    <i class="pi pi-pencil" style="
+                        font-size: 1.5rem;
+                    " />
+                    <p>Editing "{{ editingClassroom.title }}"</p>
+                </div>
                 <div class="mb-5">
                     <StepList>
                         <Step
