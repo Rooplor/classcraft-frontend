@@ -376,7 +376,7 @@ editingClassroom.value &&
           v-if="
             openDate &&
             editingClassroom?.registrationStatus &&
-            new Date() < openDate
+            new Date() <= openDate
           "
           :label="`Scheduled registration (opening in ${countdownTimer(
             openDate
@@ -392,7 +392,7 @@ editingClassroom.value &&
           v-else-if="
             closeDate &&
             editingClassroom?.registrationStatus &&
-            new Date() < closeDate
+            new Date() <= closeDate
           "
           :label="`Close registration (closing in ${countdownTimer(
             closeDate
