@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   searchDialogOptions: {
     label: string;
     items: {
@@ -13,6 +13,15 @@ defineProps<{
     }[];
   }[];
 }>();
+
+const selectedOption = ref(props.searchDialogOptions[0].items[0]);
+
+watch(
+  () => props.searchDialogOptions,
+  () => {
+    selectedOption.value = props.searchDialogOptions[0]?.items[0];
+  }
+);
 </script>
 <template>
   <div v-for="(option, index) in searchDialogOptions" :key="index">
@@ -23,7 +32,11 @@ defineProps<{
       <div
         v-for="(item, index) in option.items"
         :key="index"
-        class="flex gap-3 items-center p-3 rounded-lg cursor-pointer hover:bg-slate-100 duration-200"
+        class="flex gap-3 items-center p-3 rounded-lg cursor-pointer"
+        :class="{
+          'bg-slate-100': selectedOption.onClick === item.onClick,
+        }"
+        @mouseenter="selectedOption = item"
         @click="item.onClick"
       >
         <i v-if="item.icon" :class="`${item.icon} w-6 text-center`" />
