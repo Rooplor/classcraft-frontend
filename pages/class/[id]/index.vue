@@ -314,7 +314,7 @@ useHead({
               class="w-full font-medium"
             />
             <Button
-              v-if="
+              v-else-if="
                 !classroom.registrationStatus ||
                 (classroomForm.openDate &&
                   new Date() <=
