@@ -13,8 +13,10 @@ const { getUserFormSubmissions, getFormById, getUserInClassroom } =
 const { getVenueByIds } = useVenue();
 const { getUserById, getUserProfile } = useUser();
 const isRegistrationDialogVisible = ref(false);
+const isSubmissionDialogVisible = ref(false);
 const isUserRegistered = ref(false);
 const user = (await getUserProfile()).result;
+const userFormSubmission = ref<IFormSubmission>();
 const usersInClassroom = ref<Partial<IUser>[]>([]);
 const classroomForm = ref<IForm>({} as IForm);
 let classroom: IClassroom = {} as IClassroom;
@@ -35,11 +37,10 @@ try {
     return index === self.findIndex((t) => t.id === venue.id);
   });
   classroomForm.value = (await getFormById(classroom.id)).result;
-  isUserRegistered.value = (
+  userFormSubmission.value = (
     await getUserFormSubmissions(user.id, id.toString())
-  ).result
-    ? true
-    : false;
+  ).result;
+  isUserRegistered.value = userFormSubmission.value ? true : false;
   usersInClassroom.value = (await getUserInClassroom(id.toString())).result;
   seatsLeft = classroom.capacity - usersInClassroom.value.length;
 } catch (error) {
@@ -64,6 +65,7 @@ const onFormSubmitted = (submission: IFormSubmission) => {
   isRegistrationDialogVisible.value = false;
   isUserRegistered.value = true;
   usersInClassroom.value.push(submission.userDetail);
+  userFormSubmission.value = submission;
 };
 
 useHead({
@@ -315,7 +317,6 @@ useHead({
               severity="secondary"
               icon="pi pi-pencil"
               @click="router.push(`/class/${id}/edit`)"
-              class="w-full font-medium"
             />
             <Button
               v-else-if="
@@ -334,17 +335,21 @@ useHead({
               disabled
             />
             <Button
-              v-else
+              v-else-if="isUserRegistered"
+              label="View my submission"
               size="large"
               rounded
-              :disabled="isUserRegistered"
-              :severity="isUserRegistered ? 'secondary' : 'primary'"
+              severity="secondary"
+              @click="isSubmissionDialogVisible = true"
+            />
+            <Button
+              v-else
+              size="large"
+              :label="`Join &quot;${classroom.title}&quot;`"
+              rounded
+              :severity="'primary'"
               @click="isRegistrationDialogVisible = true"
-              class="w-full font-medium"
-            >
-              {{ isUserRegistered ? `Registered` : `Join  ${classroom.title}` }}
-            </Button>
-
+            />
             <div
               v-if="usersInClassroom.length > 0"
               class="flex justify-center items-center gap-2"
@@ -419,8 +424,9 @@ useHead({
   </div>
   <Dialog
     v-model:visible="isRegistrationDialogVisible"
-    :header="`Registration for ${classroom.title}`"
+    :header="`Registration for &quot;${classroom.title}&quot;`"
     :modal="true"
+    dismissableMask
     :draggable="false"
     position="center"
     class="w-full max-w-screen-sm m-auto"
@@ -429,5 +435,19 @@ useHead({
     }"
   >
     <RegistrationForm @submitted="onFormSubmitted" />
+  </Dialog>
+  <Dialog
+    v-model:visible="isSubmissionDialogVisible"
+    :header="`Your submission for &quot;${classroom.title}&quot;`"
+    :modal="true"
+    dismissableMask
+    :draggable="false"
+    position="center"
+    class="w-full max-w-screen-sm m-auto"
+    :style="{
+      'border-radius': '1.5rem',
+    }"
+  >
+    <NuxtLayout name="form-submission" :userFormSubmission="userFormSubmission" />
   </Dialog>
 </template>
