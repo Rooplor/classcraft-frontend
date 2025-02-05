@@ -101,7 +101,7 @@ const searchDialogOptions: SearchDialogOption[] = [
 ];
 
 const searchResults = computed(() => {
-  return [
+  let result = [
     ...searchDialogOptions
       .map((option) => {
         return {
@@ -114,19 +114,22 @@ const searchResults = computed(() => {
         };
       })
       .filter((option) => option.items.length > 0),
-    // searchedClassrooms.value.length > 0 && {
-    //   label: "Explore",
-    //   items: [
-    //     ...searchedClassrooms.value.map((classroom) => ({
-    //       image: { src: classroom.coverImage, class: "w-6 h-6 rounded" },
-    //       label: classroom.title,
-    //       onClick: () => {
-    //         router.push(`/class/${classroom.id}`);
-    //       },
-    //     })),
-    //   ],
-    // },
   ];
+
+  if (searchedClassrooms.value.length > 0) {
+    result.push({
+      label: "Search results",
+      items: searchedClassrooms.value.map((classroom) => ({
+        image: { src: classroom.coverImage, class: "w-6 h-6 rounded" },
+        label: classroom.title,
+        onClick: () => {
+          router.push(`/class/${classroom.id}`);
+        },
+      })),
+    });
+  }
+
+  return result;
 });
 
 const toggleMenu = (event: MouseEvent) => {
