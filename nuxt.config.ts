@@ -10,7 +10,7 @@ const preset = definePreset(Aura, {
             200: "{blue.200}",
             300: "{blue.300}",
             400: "{blue.400}",
-            500: "{blue.500}",
+            500: "#2F3EE3",
             600: "{blue.600}",
             700: "{blue.700}",
             800: "{blue.800}",
