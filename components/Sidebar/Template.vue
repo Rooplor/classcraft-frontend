@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IClassroom } from "~/types/Classroom";
+import type { IClassroom } from "../../types/Classroom";
 
 defineProps({
     closeCallback: {
@@ -51,20 +51,6 @@ const { isSidebarOpen } = storeToRefs(sidebarStore) as {
                 @click="closeCallback?.()"
             />
             <SidebarTab
-                to="/class/following"
-                label="Following"
-                icon="pi pi-users"
-                :isSidebarOpen="isSidebarOpen"
-                @click="closeCallback?.()"
-            />
-            <SidebarTab
-                to="/class/voting"
-                label="Voting"
-                icon="pi pi-arrow-up"
-                :isSidebarOpen="isSidebarOpen"
-                @click="closeCallback?.()"
-            />
-            <SidebarTab
                 to="/discussion"
                 label="Topic request"
                 icon="pi pi-comments"
@@ -89,7 +75,7 @@ const { isSidebarOpen } = storeToRefs(sidebarStore) as {
                     >
                         <div v-if="isSidebarOpen" class="flex justify-between">
                             <p class="text-slate-500 text-sm font-medium">
-                                YOUR CLASSROOMS
+                                HOSTED CLASSROOMS
                             </p>
                         </div>
                     </AccordionHeader>
@@ -100,7 +86,7 @@ const { isSidebarOpen } = storeToRefs(sidebarStore) as {
                             icon="pi pi-plus"
                             :isSidebarOpen="isSidebarOpen"
                             @click="closeCallback?.()"
-                            class="text-primary"
+                            class="text-primary hover:bg-blue-50"
                         />
                         <SidebarTab
                             v-for="classroom in classrooms"
@@ -118,7 +104,7 @@ const { isSidebarOpen } = storeToRefs(sidebarStore) as {
                     >
                         <div v-if="isSidebarOpen" class="flex justify-between">
                             <p class="text-slate-500 text-sm font-medium">
-                                YOUR REQUESTS
+                                TOPIC REQUESTS
                             </p>
                         </div>
                     </AccordionHeader>

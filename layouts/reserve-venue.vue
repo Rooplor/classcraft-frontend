@@ -18,37 +18,36 @@ const confirm = useConfirm();
 const selectingDate = ref<string>(
     editingClassroom.value?.dates[0].date.startDateTime
 );
-const venues = ref<IVenue[]>([]);
+const venues = ref<IVenue[]>((await getAllVenue()).result || []);
 
 const dialogVisible = ref<Record<string, boolean>>({});
 const isSameVenue = ref(true);
 const otherVenue = ref();
 const isLoading = ref(false);
 
-const handleSendRequest = () => {
-    reserveVenue(editingClassroom.value.id, editingClassroom.value.dates).then(
-        (res) => {
-            if (res.success) {
-                toast.add({
-                    severity: "success",
-                    summary: "Request sent",
-                    group: "tc",
-                    life: 3000,
-                });
-                editingClassroom.value.venueStatus =
-                    EVenueRequestStatus.PENDING;
-                isLoading.value = false;
-            } else {
-                toast.add({
-                    severity: "error",
-                    summary: "Request failed",
-                    detail: res.error,
-                    group: "tc",
-                    life: 3000,
-                });
-            }
-        }
-    );
+const handleSendRequest = async () => {
+    let res = await reserveVenue(editingClassroom.value.id, editingClassroom.value.dates)
+    
+    if (res.success) {
+        toast.add({
+            severity: "success",
+            summary: "Request sent",
+            group: "tc",
+            life: 3000,
+        });
+        editingClassroom.value.venueStatus =
+            EVenueRequestStatus.PENDING;
+        isLoading.value = false;
+    } else {
+        toast.add({
+            severity: "error",
+            summary: "Request failed",
+            detail: res.error,
+            group: "tc",
+            life: 3000,
+        });
+    }
+
     isLoading.value = true;
 };
 
@@ -131,12 +130,6 @@ const confirmRequest = () => {
     });
 };
 
-getAllVenue().then((res) => {
-    if (res.success) {
-        venues.value = res.result;
-    }
-});
-
 const groupedVenues = computed(() => groupVenues(venues.value));
 
 venues.value.forEach((venue) => {
@@ -147,7 +140,7 @@ venues.value.forEach((venue) => {
 <template>
     <div
         v-if="isLoading"
-        class="fixed top-0 left-0 w-full h-full bg-[#00000045] z-20"
+        class="fixed top-0 left-0 w-full h-full bg-black/40 z-50"
     >
         <div
             class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
@@ -161,7 +154,7 @@ venues.value.forEach((venue) => {
                 v-ripple
                 :href="SIT_BOOKING_WEBSITE"
                 target="_blank"
-                class="block bg-gradient-to-l from-primary-200 to-teal-200 text-primary-500 text-xl font-medium p-6 rounded-xl border border-primary-500 duration-150 hover:text-primary-700 hover:border-primary-700 animate-scalein"
+                class="block bg-primary-100 text-primary-500 text-xl font-medium p-6 rounded-xl border border-primary-500 duration-150 hover:bg-primary-200 animate-scalein"
             >
                 <p>
                     Check available room at SIT Booking System
