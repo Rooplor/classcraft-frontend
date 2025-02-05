@@ -9,6 +9,19 @@ const props = defineProps({
   },
 });
 
+interface SearchDialogOption {
+  label: string;
+  items: {
+    icon?: string;
+    image?: {
+      src?: string;
+      class: string;
+    };
+    label: string;
+    onClick: () => void;
+  }[];
+}
+
 const searchInput = ref(props.q);
 const menu = ref();
 const user = useCurrentUser();
@@ -38,7 +51,7 @@ const items = ref([
   },
 ]);
 
-const searchDialogOptions = [
+const searchDialogOptions: SearchDialogOption[] = [
   {
     label: "Shortcuts",
     items: [
@@ -62,7 +75,10 @@ const searchDialogOptions = [
         },
       },
       {
-        image: { src: user.value?.photoURL, class: "w-6 h-6 rounded-full" },
+        image: {
+          src: user.value?.photoURL || "",
+          class: "w-6 h-6 rounded-full",
+        },
         label: "Open profile page",
         onClick: () => {
           router.push("/profile");
@@ -98,18 +114,18 @@ const searchResults = computed(() => {
         };
       })
       .filter((option) => option.items.length > 0),
-    searchedClassrooms.value.length > 0 && {
-      label: "Explore",
-      items: [
-        ...searchedClassrooms.value.map((classroom) => ({
-          image: { src: classroom.coverImage, class: "w-6 h-6 rounded" },
-          label: classroom.title,
-          onClick: () => {
-            router.push(`/class/${classroom.id}`);
-          },
-        })),
-      ],
-    },
+    // searchedClassrooms.value.length > 0 && {
+    //   label: "Explore",
+    //   items: [
+    //     ...searchedClassrooms.value.map((classroom) => ({
+    //       image: { src: classroom.coverImage, class: "w-6 h-6 rounded" },
+    //       label: classroom.title,
+    //       onClick: () => {
+    //         router.push(`/class/${classroom.id}`);
+    //       },
+    //     })),
+    //   ],
+    // },
   ];
 });
 

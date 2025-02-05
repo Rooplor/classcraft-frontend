@@ -1,5 +1,6 @@
 import type { IResponse } from "../types/Response";
 import type { IForm, IFormSubmission } from "../types/Form";
+import type { IUser } from "../types/User";
 
 const useForm = () => {
   const config = useRuntimeConfig();
@@ -30,7 +31,9 @@ const useForm = () => {
     });
   };
 
-  const submitForm = (form: IForm): Promise<IResponse<IFormSubmission>> => {
+  const submitForm = (
+    form: Partial<IFormSubmission>
+  ): Promise<IResponse<IFormSubmission>> => {
     return $fetch(`${config.public.baseUrl}/api/form/submit`, {
       body: JSON.stringify(form),
       method: "POST",
@@ -63,11 +66,42 @@ const useForm = () => {
 
   const getClassroomFormSubmission = (
     classroomId: string
-  ): Promise<IResponse<IFormSubmission>> => {
+  ): Promise<IResponse<IFormSubmission[]>> => {
     return $fetch(
       `${config.public.baseUrl}/api/form/submissions/${classroomId}`,
       {
         method: "GET",
+      }
+    );
+  };
+
+  const getClassroomFormSubmissionByUserId = (
+    userId: string
+  ): Promise<IResponse<IFormSubmission[]>> => {
+    return $fetch(
+      `${config.public.baseUrl}/api/form/submissions/user/${userId}`,
+      {
+        method: "GET",
+      }
+    );
+  };
+
+  const getUserInClassroom = (
+    classroomId: string
+  ): Promise<IResponse<IUser[]>> => {
+    return $fetch(`${config.public.baseUrl}/api/form/user/${classroomId}`, {
+      method: "GET",
+    });
+  };
+
+  const setApprovalStatus = (
+    id: string,
+    isApproved: boolean
+  ): Promise<IResponse<IFormSubmission>> => {
+    return $fetch(
+      `${config.public.baseUrl}/api/form/isApprovedByOwner/${id}?isApproved=${isApproved}`,
+      {
+        method: "PATCH",
       }
     );
   };
@@ -82,6 +116,9 @@ const useForm = () => {
     getFormCSV,
     getUserFormSubmissions,
     getClassroomFormSubmission,
+    getClassroomFormSubmissionByUserId,
+    getUserInClassroom,
+    setApprovalStatus,
   };
 };
 
