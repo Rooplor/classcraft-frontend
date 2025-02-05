@@ -140,7 +140,7 @@ const handleSignOut = async () => {
 window.addEventListener("keydown", (e) => {
   if (e.ctrlKey && e.key === "k") {
     e.preventDefault();
-    isSearchDialogVisible.value = true;
+    isSearchDialogVisible.value = !isSearchDialogVisible.value;
   }
 });
 
@@ -167,7 +167,6 @@ watch(searchInput, async (value) => {
           icon="pi pi-search"
           label="Search (Ctrl + K)"
           rounded
-          outlined
           @keyup.enter="
             () => {
               isSearchDialogVisible = true;
