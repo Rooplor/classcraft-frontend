@@ -7,6 +7,7 @@ const { getUserProfile } = useUser();
 const router = useRouter();
 const toast = useToast();
 const { id } = router.currentRoute.value.params;
+const emit = defineEmits(["submitted"]);
 
 const classroomForm = ref<IForm>({} as IForm);
 const customQuestions = computed(() => {
@@ -38,7 +39,8 @@ const onSubmit = async (event: Event) => {
       detail: "Form submitted successfully",
       group: "tc",
     });
-    window.location.reload();
+    // window.location.reload();
+    emit("submitted");
   }
 };
 
@@ -96,7 +98,7 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-    <div v-if="customQuestions.length > 0">
+    <div v-if="customQuestions?.length > 0">
       <p class="inline-flex items-center gap-1 text-slate-400 mb-2">
         <i class="pi pi-question-circle" />
         Other questions
