@@ -65,6 +65,7 @@ const onFormSubmitted = (submission: IFormSubmission) => {
   isRegistrationDialogVisible.value = false;
   isUserRegistered.value = true;
   usersInClassroom.value.push(submission.userDetail);
+  userFormSubmission.value = submission;
 };
 
 useHead({
@@ -309,7 +310,7 @@ useHead({
           </div>
           <div class="flex flex-col text-center gap-2">
             <Button
-              v-if="classroom.owner !== user.id"
+              v-if="classroom.owner === user.id"
               size="large"
               :label="`Edit &quot;${classroom.title}&quot;`"
               rounded
