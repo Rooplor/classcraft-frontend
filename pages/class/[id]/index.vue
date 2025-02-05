@@ -58,8 +58,14 @@ const signInWithGoogle = async () => {
   }
 };
 
+const onFormSubmitted = (submission: IFormSubmission) => {
+  isRegistrationDialogVisible.value = false;
+  isUserRegistered.value = true;
+  usersInClassroom.value.push(submission.userDetail);
+};
+
 useHead({
-  title: `${classroom.title} · Classroom · ClassCraft`,
+  title: `${classroom.title} · ClassCraft`,
   meta: [
     {
       name: "description",
@@ -308,7 +314,7 @@ useHead({
               class="w-full font-medium"
             />
             <Button
-              v-else-if="
+              v-if="
                 !classroom.registrationStatus ||
                 (classroomForm.openDate &&
                   new Date() <=
@@ -415,6 +421,6 @@ useHead({
       'border-radius': '1.5rem',
     }"
   >
-    <NuxtLayout name="registration-from" />
+    <RegistrationForm @submitted="onFormSubmitted" />
   </Dialog>
 </template>
