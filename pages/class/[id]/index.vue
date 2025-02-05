@@ -20,6 +20,7 @@ const classroomForm = ref<IForm>({} as IForm);
 let classroom: IClassroom = {} as IClassroom;
 let owner: IUser = {} as IUser;
 let venues: IVenue[] = [];
+let seatsLeft = 0;
 
 try {
   classroom = (await getClassroomById(id.toString())).result;
@@ -40,6 +41,7 @@ try {
     ? true
     : false;
   usersInClassroom.value = (await getUserInClassroom(id.toString())).result;
+  seatsLeft = classroom.capacity - usersInClassroom.value.length;
 } catch (error) {
   router.replace("/404");
 }
@@ -212,7 +214,9 @@ useHead({
               <Tag
                 icon="pi pi-users"
                 severity="secondary"
-                :value="classroom.capacity.toString()"
+                :value="`${
+                  usersInClassroom.length
+                } / ${classroom.capacity.toString()}`"
                 rounded
                 class="border"
               />
@@ -316,6 +320,7 @@ useHead({
             <Button
               v-else-if="
                 !classroom.registrationStatus ||
+                seatsLeft <= 0 ||
                 (classroomForm.openDate &&
                   new Date() <=
                     isoToDateWithTimezone(classroomForm.openDate)) ||
@@ -354,6 +359,8 @@ useHead({
               </AvatarGroup>
               <p class="text-slate-500">
                 {{ usersInClassroom.length }} people joined this class
+                <span v-if="seatsLeft > 0">({{ seatsLeft }} seats left)</span>
+                <span v-else>(Full)</span>
               </p>
             </div>
             <div v-else-if="user.id === classroom.owner" />
