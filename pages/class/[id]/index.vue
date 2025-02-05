@@ -212,7 +212,7 @@ useHead({
               <Tag
                 icon="pi pi-users"
                 severity="secondary"
-                :value="classroom.capacity.toString()"
+                :value="`${usersInClassroom.length} / ${classroom.capacity.toString()}`"
                 rounded
                 class="border"
               />
@@ -353,7 +353,7 @@ useHead({
                 />
               </AvatarGroup>
               <p class="text-slate-500">
-                {{ usersInClassroom.length }} people joined this class
+                {{ usersInClassroom.length }} people joined this class ({{ classroom.capacity - usersInClassroom.length }} spots left)
               </p>
             </div>
             <div v-else-if="user.id === classroom.owner" />
