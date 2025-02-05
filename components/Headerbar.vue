@@ -250,13 +250,7 @@ watch(searchInput, async (value) => {
           autofocus
           fluid
           variant="filled"
-          @keyup.enter="
-            () => {
-              if (searchInput.trim() === '') return;
-              router.push(`/search?q=${searchInput.trim()}`);
-              emit('search', searchInput.trim());
-            }
-          "
+          @keyup.enter="searchResults[0]?.items[0]?.onClick"
         />
         <InputIcon
           v-if="searchInput.trim() !== ''"
