@@ -23,13 +23,17 @@ const { isSidebarOpen } = storeToRefs(sidebarStore) as {
             class="flex gap-2"
             :class="isSidebarOpen ? 'justify-between' : 'justify-center'"
         >
-            <h1
+            <nuxt-link
                 v-if="isSidebarOpen"
+                to="/"
                 class="inline-flex items-center text-xl text-primary"
             >
-                <i class="pi pi-sparkles mr-2" />
-                Class<span class="font-bold">Craft</span>
-            </h1>
+                <img
+                    src="/logo_text_primary.png"
+                    alt="ClassCraft Logo"
+                    class="h-8"
+                />
+            </nuxt-link>
             <Button
                 :icon="isSidebarOpen ? 'pi pi-angle-left' : 'pi pi-angle-right'"
                 severity="secondary"
