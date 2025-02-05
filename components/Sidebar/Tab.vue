@@ -102,7 +102,7 @@ watch(router.currentRoute, () => {
                 <i
                     v-else
                     :class="icon"
-                    :style="!isSidebarOpen && 'font-size: 1.5rem'"
+                    :style="!isSidebarOpen && 'font-size: 1.2rem'"
                 />
                 <div v-if="isSidebarOpen" class="space-y-1 overflow-hidden">
                     <div v-if="!label" class="flex gap-1">

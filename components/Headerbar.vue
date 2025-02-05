@@ -61,7 +61,7 @@ const handleSignOut = async () => {
 </script>
 
 <template>
-    <div class="sticky top-0 z-20 py-2 mb-6">
+    <div v-if="user" class="sticky top-0 z-20 py-2 mb-6">
         <div
             class="flex gap-1 md:gap-2 justify-between items-center p-2 bg-white m-auto w-full rounded-full border"
         >
