@@ -5,7 +5,7 @@ defineProps<{
     items: {
       icon?: string;
       image?: {
-        src: string;
+        src?: string;
         class: string;
       };
       label: string;
