@@ -11,8 +11,6 @@ const customQuestions = computed(() => {
     (key) => key !== "Full Name" && key !== "Email" && key !== "Phone"
   );
 });
-console.log(userFormSubmission);
-console.log(customQuestions.value);
 </script>
 <template>
   <div class="flex flex-col gap-8">
