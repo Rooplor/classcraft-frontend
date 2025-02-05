@@ -37,9 +37,9 @@ const onSubmit = async (event: Event) => {
       severity: "success",
       summary: "Success",
       detail: "Form submitted successfully",
+      life: 3000,
       group: "tc",
     });
-    // Emit event to parent component with response
     emit("submitted", res.result);
   }
 };
