@@ -250,7 +250,6 @@ watch(searchInput, async (value) => {
           autofocus
           fluid
           variant="filled"
-          @keyup.enter="searchResults[0]?.items[0]?.onClick"
         />
         <InputIcon
           v-if="searchInput.trim() !== ''"
