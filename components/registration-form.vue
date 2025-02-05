@@ -39,8 +39,8 @@ const onSubmit = async (event: Event) => {
       detail: "Form submitted successfully",
       group: "tc",
     });
-    // window.location.reload();
-    emit("submitted");
+    // Emit event to parent component with response
+    emit("submitted", res.result);
   }
 };
 
