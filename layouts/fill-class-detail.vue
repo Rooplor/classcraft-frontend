@@ -20,13 +20,13 @@ const user = useCurrentUser();
 const toast = useToast();
 
 const schema = yup.object({
-    title: yup.string().required(),
-    details: yup.string().required(),
-    target: yup.string().required(),
+    title: yup.string().required("Fill classroom title"),
+    details: yup.string().required("Fill classroom description"),
+    target: yup.string().required("Fill target audience of the class"),
     prerequisite: yup.string(),
-    type: yup.string().required(),
-    format: yup.string().required(),
-    capacity: yup.number().required(),
+    type: yup.string().required("Select classroom type"),
+    format: yup.string().required("Select classroom format"),
+    capacity: yup.number().required("Fill classrooms the capacity").min(1),
     dates: yup.array().of(
         yup
             .object({
@@ -44,10 +44,10 @@ const schema = yup.object({
             })
             .required()
     ),
-    instructorName: yup.string().required(),
-    instructorBio: yup.string().required(),
+    instructorName: yup.string().required("Fill instructor name"),
+    instructorBio: yup.string().required("Fill instructor bio"),    
     instructorAvatar: yup.string(),
-    instructorFamiliarity: yup.string().required(),
+    instructorFamiliarity: yup.string().required("Fill instructor familiarity"),
     coverImage: yup.string(),
 });
 
@@ -101,7 +101,7 @@ const [instructorAvatar] = defineField("instructorAvatar");
 const [instructorFamiliarity] = defineField("instructorFamiliarity");
 const [coverImage] = defineField("coverImage");
 
-const selfInstructored = ref<boolean | null>(null);
+const selfInstructored = ref<boolean | null>(editingClassroom.value?.instructorName ? true : null);
 
 const formatOption = ref([
     { name: "Online", value: "ONLINE" },
@@ -115,40 +115,40 @@ const typeOption = ref([
     { name: "Discussion", value: "DISCUSSION" },
 ]);
 
-const onSubmit = handleSubmit((values: any) => {
+const onSubmit = handleSubmit(async (values: any) => {
     values.dates = convertDatesToIsoString(values.dates)
         .sortDatesByStartDateTime()
         .removeDuplicatedDatesTime()
         .get();
 
     if (editingClassroom.value) {
-        updateClassroom(editingClassroom.value.id, values).then((res) => {
-            if (res.success) {
-                classroomStore.updateClassroom(res.result);
-                classroomStore.setEditingClassroom(res.result);
-                toast.add({
-                    severity: "success",
-                    summary: "Class updated",
-                    group: "tc",
-                    life: 3000,
-                });
-            }
-        });
-        return;
-    }
-    addClassroom(values).then((res) => {
+        let res = await updateClassroom(editingClassroom.value.id, values)
+
         if (res.success) {
-            router.push(`/class/${res.result.id}/edit`);
-            classroomStore.addClassroom(res.result);
+            classroomStore.updateClassroom(res.result);
+            classroomStore.setEditingClassroom(res.result);
             toast.add({
                 severity: "success",
-                summary: "Class created",
+                summary: "Class updated",
                 group: "tc",
                 life: 3000,
             });
-            resetForm();
         }
-    });
+        return;
+    }
+
+    let res = await addClassroom(values)
+    if (res.success) {
+        router.push(`/class/${res.result.id}/edit`);
+        classroomStore.addClassroom(res.result);
+        toast.add({
+            severity: "success",
+            summary: "Class created",
+            group: "tc",
+            life: 3000,
+        });
+        resetForm();
+    }
 });
 
 const onCoverImageChange = async (event: any) => {
@@ -277,13 +277,15 @@ watch(selfInstructored, (value) => {
                     <VeeErrorMessage name="title" class="text-red-500" />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <Editor
+                    <label for="details">Description</label>
+                    <Textarea
                         id="details"
                         v-model="details"
-                        @load="initEditorValue"
-                        editorStyle="height: 320px"
+                        aria-describedby="details-help"
                         :class="errors.details && 'p-invalid'"
                         placeholder="Enter class details"
+                        rows="10"
+                        style="resize: none"
                     />
                     <VeeErrorMessage name="details" class="text-red-500" />
                 </div>
@@ -484,6 +486,8 @@ watch(selfInstructored, (value) => {
                         </div>
                         <Button
                             label="Add date"
+                            rounded
+                            text
                             icon="pi pi-plus"
                             class="w-full"
                             @click="
@@ -628,12 +632,13 @@ watch(selfInstructored, (value) => {
                     </div>
                 </div>
             </div>
-            <div class="sticky bottom-0 left-0 py-3 justify-end w-full z-40">
+            <div class="py-3 justify-end w-full z-40">
                 <Button
                     :label="editingClassroom ? 'Update' : 'Create'"
                     icon="pi pi-check"
                     type="submit"
                     size="large"
+                    rounded
                     :disabled="selfInstructored === null"
                     class="w-full"
                 />
