@@ -1,3 +1,8 @@
+const MILLISECONDS_IN_A_SECOND = 1000;
+const SECONDS_IN_A_MINUTE = 60;
+const MINUTES_IN_AN_HOUR = 60;
+const HOURS_IN_A_DAY = 24;
+
 export function isoToDateWithTimezone(isoString: string): Date {
   const date = new Date(isoString);
   const timezoneOffsetInMinutes = date.getTimezoneOffset();
@@ -58,11 +63,31 @@ export function countdownTimer(endDate: Date) {
 
   if (distance < 0) {
     return "Expired";
-  } else if (distance < 1000 * 60 * 60) {
-    return `${Math.floor(distance / (1000 * 60))} minutes`;
-  } else if (distance < 1000 * 60 * 60 * 24) {
-    return `${Math.floor(distance / (1000 * 60 * 60))} hours`;
+  } else if (
+    distance <
+    MILLISECONDS_IN_A_SECOND * SECONDS_IN_A_MINUTE * MINUTES_IN_AN_HOUR
+  ) {
+    return `${Math.floor(
+      distance / (MILLISECONDS_IN_A_SECOND * SECONDS_IN_A_MINUTE)
+    )} minutes`;
+  } else if (
+    distance <
+    MILLISECONDS_IN_A_SECOND *
+      SECONDS_IN_A_MINUTE *
+      MINUTES_IN_AN_HOUR *
+      HOURS_IN_A_DAY
+  ) {
+    return `${Math.floor(
+      distance /
+        (MILLISECONDS_IN_A_SECOND * SECONDS_IN_A_MINUTE * MINUTES_IN_AN_HOUR)
+    )} hours`;
   } else {
-    return `${Math.floor(distance / (1000 * 60 * 60 * 24))} days`;
+    return `${Math.floor(
+      distance /
+        (MILLISECONDS_IN_A_SECOND *
+          SECONDS_IN_A_MINUTE *
+          MINUTES_IN_AN_HOUR *
+          HOURS_IN_A_DAY)
+    )} days`;
   }
 }
