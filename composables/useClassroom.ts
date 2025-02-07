@@ -85,23 +85,27 @@ const useClassroom = () => {
         );
     };
 
-    const toggleRegistrationStatus = (
-        id: string
+    const setRegistrationStatus = (
+        id: string,
+        status: boolean
     ): Promise<IResponse<IClassroom>> => {
         return $fetch(
-            `${config.public.baseUrl}/api/class/${id}/toggle-registration-status`,
+            `${config.public.baseUrl}/api/class/${id}/set-registration-status`,
             {
+                body: { status },
                 method: "PATCH",
             }
         );
     };
 
-    const togglePublishStatus = (
-        id: string
+    const setPublishStatus = (
+        id: string,
+        status: boolean
     ): Promise<IResponse<IClassroom>> => {
         return $fetch(
-            `${config.public.baseUrl}/api/class/${id}/toggle-publish-status`,
+            `${config.public.baseUrl}/api/class/${id}/set-publish-status`,
             {
+                body: { status },
                 method: "PATCH",
             }
         );
@@ -191,8 +195,8 @@ const useClassroom = () => {
         updateClassroom,
         deleteClassroom,
         updateVenue,
-        toggleRegistrationStatus,
-        togglePublishStatus,
+        setRegistrationStatus,
+        setPublishStatus,
         updateRegistrationUrl,
         updateMeetingUrl,
         updateContent,
