@@ -6,7 +6,7 @@ interface IForm {
   openDate?: string;
   closeDate?: string;
   fields: IField[];
-  isOwnerApprovalRequired: boolean;
+  ownerApprovalRequired: boolean;
 }
 
 interface IField {
