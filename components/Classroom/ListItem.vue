@@ -60,12 +60,12 @@ const formatDateRange = (dates: IReservationDateAndVenue[]) => {
 <template>
     <nuxt-link
         :to="'/class/' + classroom.id"
-        class="flex gap-3 bg-white border rounded-3xl p-3 duration-150 hover:bg-slate-100 hover:drop-shadow-sm animate-fadein md:gap-6"
+        class="flex gap-3 bg-white border rounded-2xl p-3 duration-150 hover:border-slate-300 hover:drop-shadow-sm animate-fadein md:gap-6"
         v-ripple
     >
         <div
             alt="class image"
-            class="flex justify-center items-center aspect-square w-40 h-40 bg-slate-200 rounded-2xl overflow-clip lg:w-52 lg:h-52"
+            class="flex justify-center items-center aspect-square w-40 h-40 bg-slate-200 rounded-xl overflow-clip lg:w-52 lg:h-52"
         >
             <img
                 v-if="props.classroom.coverImage"
