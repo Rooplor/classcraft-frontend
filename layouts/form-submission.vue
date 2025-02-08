@@ -21,7 +21,9 @@ const customQuestions = computed(() => {
       </p>
       <div class="flex flex-col gap-4 border rounded-2xl p-4 bg-slate-50">
         <div class="flex flex-col gap-2">
-          <label class="text-sm text-slate-500" for="Full Name">Full Name</label>
+          <label class="text-sm text-slate-500" for="Full Name"
+            >Full Name</label
+          >
           <p>
             {{ userFormSubmission.responses["Full Name"] }}
           </p>
@@ -36,10 +38,10 @@ const customQuestions = computed(() => {
         </div>
       </div>
     </div>
-    <div>
+    <div v-if="customQuestions.length > 0">
       <p class="inline-flex items-center gap-1 text-slate-400 mb-2">
-        <i class="pi pi-id-card" />
-        Custom Questions
+        <i class="pi pi-question-circle" />
+        Other Questions
       </p>
       <div class="flex flex-col gap-4 border rounded-2xl p-4 bg-slate-50">
         <div
