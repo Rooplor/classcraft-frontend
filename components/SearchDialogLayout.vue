@@ -17,7 +17,6 @@ const props = defineProps<{
 const selectedOption = ref(props.searchDialogOptions[0].items[0]);
 
 window.addEventListener("keyup", (e) => {
-  // click on the selected option
   if (e.key === "Enter") {
     selectedOption.value.onClick();
   }

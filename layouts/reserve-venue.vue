@@ -381,8 +381,8 @@ venues.value.forEach((venue) => {
                                 @click="confirmRequest"
                             />
                         </div>
-                        <div>
-                            <p>Other Venue</p>
+                        <div class="p-4 space-y-4">
+                            <p class="text-lg">Other Venue</p>
 
                             <div class="flex gap-1">
                                 <InputGroup>
@@ -392,7 +392,7 @@ venues.value.forEach((venue) => {
                                     <InputText
                                         id="other-venue"
                                         v-model="otherVenue"
-                                        placeholder="eg. SIT@Dover, SIT@NYP"
+                                        placeholder="e.g. SIT@Dover, SIT@NYP"
                                     />
                                 </InputGroup>
                                 <Button
@@ -421,7 +421,7 @@ venues.value.forEach((venue) => {
                         <InputText
                             id="meeting-url"
                             v-model="meetingUrl"
-                            placeholder="eg. Zoom, Discord or Google Meet url"
+                            placeholder="e.g. Zoom, Discord or Google Meet url"
                         />
                     </InputGroup>
                     <Button label="Save" icon="pi pi-check" @click="" />

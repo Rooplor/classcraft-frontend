@@ -223,7 +223,7 @@ watch(selfInstructored, (value) => {
     <form @submit="onSubmit" class="flex w-full flex-col gap-2 lg:flex-row">
         <div class="lg:w-1/2">
             <div
-                class="w-full border aspect-square rounded-3xl overflow-clip sticky top-20 max-w-96 max-h-96 m-auto lg:max-w-full lg:max-h-full"
+                class="w-full border aspect-square rounded-2xl overflow-clip sticky top-20 max-w-96 max-h-96 m-auto lg:max-w-full lg:max-h-full"
             >
                 <div class="w-full aspect-square bg-clip-border relative">
                     <img
@@ -262,7 +262,7 @@ watch(selfInstructored, (value) => {
         </div>
         <div class="relative flex flex-col gap-2 w-full lg:w-1/2">
             <div
-                class="flex flex-col w-full gap-8 px-6 py-8 bg-white border rounded-3xl"
+                class="flex flex-col w-full gap-8 px-6 py-8 bg-white border rounded-xl"
             >
                 <div class="flex flex-col gap-2">
                     <InputText
@@ -350,7 +350,7 @@ watch(selfInstructored, (value) => {
                 <div class="space-y-2">
                     <label for="dates">Date and time</label>
                     <div
-                        class="bg-slate-50 border rounded-2xl p-2 space-y-3"
+                        class="bg-slate-50 border rounded-xl p-2 space-y-3"
                         :class="errors.dates && 'border-red-500'"
                     >
                         <div
@@ -359,7 +359,7 @@ watch(selfInstructored, (value) => {
                             class="relative"
                         >
                             <div
-                                class="border bg-white p-4 rounded-xl space-y-2"
+                                class="border bg-white p-4 rounded-lg space-y-2"
                             >
                                 <div class="space-y-2">
                                     <label
@@ -486,7 +486,6 @@ watch(selfInstructored, (value) => {
                         </div>
                         <Button
                             label="Add date"
-                            rounded
                             text
                             icon="pi pi-plus"
                             class="w-full"
@@ -508,7 +507,7 @@ watch(selfInstructored, (value) => {
 
             <div
                 v-if="selfInstructored === null"
-                class="flex flex-col space-y-4 p-4 rounded-3xl bg-white border"
+                class="flex flex-col space-y-4 p-4 rounded-2xl bg-white border"
             >
                 <label for="selfInstructored"> Are you the instructor? </label>
                 <div class="space-y-2">
@@ -531,7 +530,7 @@ watch(selfInstructored, (value) => {
 
             <div
                 v-if="selfInstructored !== null"
-                class="flex flex-col w-full bg-white border rounded-3xl"
+                class="flex flex-col w-full bg-white border rounded-2xl"
             >
                 <div class="flex flex-col gap-8 px-6 py-8">
                     <div class="flex flex-col gap-6">
@@ -637,7 +636,6 @@ watch(selfInstructored, (value) => {
                     :label="editingClassroom ? 'Update' : 'Create'"
                     icon="pi pi-check"
                     type="submit"
-                    size="large"
                     rounded
                     :disabled="selfInstructored === null"
                     class="w-full"

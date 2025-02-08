@@ -6,6 +6,7 @@ const sidebarStore = useSidebarStore();
         <Button
             icon="pi pi-bars"
             severity="secondary"
+            text
             rounded
             aria-label="Toggle sidebar"
             @click="sidebarStore.toggleDrawer"
