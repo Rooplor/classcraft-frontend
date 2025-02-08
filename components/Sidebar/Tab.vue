@@ -22,7 +22,6 @@ const { isSidebarOpen } = storeToRefs(sidebarStore) as {
   isSidebarOpen: Ref<boolean>;
 };
 
-
 watch(router.currentRoute, () => {
   path.value = router.currentRoute.value.path;
 });
@@ -36,7 +35,7 @@ watch(router.currentRoute, () => {
           'text-primary-500 bg-primary-100 hover:!bg-primary-100') +
         ` ${isSidebarOpen ? 'p-2 justify-between' : 'p-1 justify-center'}`
       "
-      class="flex items-center"
+      class="flex items-start"
     >
       <div class="flex items-center gap-2">
         <img
@@ -56,21 +55,18 @@ watch(router.currentRoute, () => {
           :class="icon"
           :style="!isSidebarOpen && 'font-size: 1.2rem'"
         />
-        <div v-if="isSidebarOpen" class="space-y-1 overflow-hidden">
-          <div v-if="!label" class="text-xs">
-          </div>
-          <p class="w-full truncate inline-flex gap-1 p-1">
-            {{ classroom?.title || label }}
-            <span
-              v-if="classroom?.published"
-              class="relative w-1.5 h-1.5 bg-green-500 rounded-full"
-            >
-              <span
-                class="absolute w-1.5 h-1.5 bg-green-500 top-0 left-0 rounded-full animate-ping"
-            /></span>
-          </p>
-        </div>
+        <p v-if="isSidebarOpen" class="truncate">
+          {{ classroom?.title || label }}
+        </p>
       </div>
+      <span
+        v-if="classroom?.published"
+        class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-green-500 rounded-full"
+      >
+        <span
+          class="absolute w-1.5 h-1.5 bg-green-500 top-0 left-0 rounded-full animate-ping"
+        />
+      </span>
     </nuxt-link>
   </div>
 </template>
