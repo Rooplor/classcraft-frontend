@@ -15,16 +15,7 @@ const confirm = useConfirm();
 const toast = useToast();
 const { updateContent } = useClassroom();
 
-const cleanContentData = (content: IContent) => {
-    // remove all empty activity guides after last non-empty activity guide
-    content.activityGuides = content.activityGuides.filter(
-        (g, i) =>
-            g.activityGuide.trim() !== "" ||
-            content.activityGuides
-                .slice(i + 1)
-                .some((g) => g.activityGuide.trim() !== "")
-    );
-    // remove all empty presentation guides after last non-empty presentation guide
+const removeEmptyPresentationGuide = (content: IContent) => {
     content.presentationGuides = content.presentationGuides.filter(
         (g, i) =>
             g.presentationGuide.trim() !== "" ||
@@ -34,26 +25,38 @@ const cleanContentData = (content: IContent) => {
     );
 };
 
-const onSaveContent = (newContent: IContent) => {
+const removeEmptyActivityGuide = (content: IContent) => {
+  content.activityGuides = content.activityGuides.filter(
+        (g, i) =>
+            g.activityGuide.trim() !== "" ||
+            content.activityGuides
+                .slice(i + 1)
+                .some((g) => g.activityGuide.trim() !== "")
+    );
+};
+
+const onSaveContent = async (newContent: IContent) => {
     if (editingClassroom.value === null) return;
 
     delete newContent.init;
     const index = content.value.findIndex((c) => c.id === newContent.id);
-    cleanContentData(newContent);
+    removeEmptyPresentationGuide(newContent);
+    removeEmptyActivityGuide(newContent);
     content.value[index] = newContent;
-    updateContent(editingClassroom.value.id, content.value).then((res) => {
-        if (res.success) {
-            classroomStore.setEditingClassroom(res.result);
-            toast.add({
-                severity: "success",
-                summary: "Saved",
-                detail: `Content has been saved`,
-                group: "tc",
-                life: 3000,
-            });
-            editingContent.value = null;
-        }
-    });
+
+    let res = await updateContent(editingClassroom.value.id, content.value)
+
+    if (res.success) {
+        classroomStore.setEditingClassroom(res.result);
+        toast.add({
+            severity: "success",
+            summary: "Saved",
+            detail: `Content has been saved`,
+            group: "tc",
+            life: 3000,
+        });
+        editingContent.value = null;
+    }
 };
 
 const addContent = () => {
@@ -71,22 +74,22 @@ const addContent = () => {
     };
 };
 
-const removeContent = (id: number) => {
+const removeContent = async (id: number) => {
     if (editingClassroom.value === null) return;
 
     content.value = content.value.filter((c) => c.id !== id);
-    updateContent(editingClassroom.value.id, content.value).then((res) => {
-        if (res.success) {
-            toast.add({
-                severity: "error",
-                summary: "Deleted",
-                detail: `Content has been removed`,
-                group: "tc",
-                life: 3000,
-            });
-            editingContent.value = null;
-        }
-    });
+    let res = await updateContent(editingClassroom.value.id, content.value)
+
+    if (res.success) {
+        toast.add({
+            severity: "error",
+            summary: "Deleted",
+            detail: `Content has been removed`,
+            group: "tc",
+            life: 3000,
+        });
+        editingContent.value = null;
+    }
 };
 
 const addActivityGuide = () => {
