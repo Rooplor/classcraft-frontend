@@ -312,7 +312,7 @@ useHead({
             <Button
               v-if="classroom.owner === user.id"
               size="large"
-              :label="`Edit &quot;${classroom.title}&quot;`"
+              :label="`Manage &quot;${classroom.title}&quot;`"
               rounded
               severity="secondary"
               icon="pi pi-pencil"
@@ -328,20 +328,30 @@ useHead({
                 (classroomForm.closeDate &&
                   new Date() > isoToDateWithTimezone(classroomForm.closeDate))
               "
-              :label="`Not open for registration`"
+              :label="`Subscribe to &quot;${classroom.title}&quot; waitlist`"
               size="large"
               severity="secondary"
               rounded
               disabled
             />
-            <Button
+            <div
               v-else-if="isUserRegistered"
-              label="View my submission"
-              size="large"
-              rounded
-              severity="secondary"
-              @click="isSubmissionDialogVisible = true"
-            />
+              class="p-4 border rounded-xl bg-slate-50 flex flex-col gap-4"
+            >
+              <div class="flex justify-center items-center gap-2">
+                <img
+                  :src="userFormSubmission?.userDetail?.profilePicture"
+                  :alt="`${userFormSubmission?.userDetail?.username} profile picture`"
+                  class="w-8 h-8 rounded-full"
+                />
+                <p class="text-slate-500">Thank you for joining</p>
+              </div>
+              <Button
+                label="View my submission"
+                severity="secondary"
+                @click="isSubmissionDialogVisible = true"
+              />
+            </div>
             <Button
               v-else
               size="large"
@@ -362,7 +372,7 @@ useHead({
                   shape="circle"
                 />
               </AvatarGroup>
-              <p class="text-slate-500">
+              <p class="text-slate-500 text-left">
                 {{ usersInClassroom.length }} people joined this class
                 <span v-if="seatsLeft > 0">({{ seatsLeft }} seats left)</span>
                 <span v-else>(Full)</span>
@@ -448,6 +458,9 @@ useHead({
       'border-radius': '1.5rem',
     }"
   >
-    <NuxtLayout name="form-submission" :userFormSubmission="userFormSubmission" />
+    <NuxtLayout
+      name="form-submission"
+      :userFormSubmission="userFormSubmission"
+    />
   </Dialog>
 </template>
