@@ -8,13 +8,12 @@ interface Question {
   question: string;
 }
 
-const isSubmissionDialogVisible = ref(false);
 const questions: Ref<Question[]> = ref([]);
 const editingQuestion = ref<Question | null>(null);
 const confirm = useConfirm();
 const toast = useToast();
 const { getFormById, updateForm } = useClassroomForm();
-const { toggleRegistrationStatus, togglePublishStatus } = useClassroom();
+const { setRegistrationStatus, setPublishStatus } = useClassroom();
 const classroomStore = useClassroomStore();
 const { editingClassroom } = storeToRefs(classroomStore) as {
   editingClassroom: Ref<IClassroom>;
@@ -122,25 +121,27 @@ const updateClassroomStore = (classroom: IClassroom) => {
   classroomStore.updateClassroom(classroom);
 };
 
-const onToggleRegistrationStatus = () => {
-  toggleRegistrationStatus(editingClassroom.value.id).then((res) => {
-    if (res.success) {
-      const { result: classroom } = res;
-      if (classroom.registrationStatus && !classroom.published) {
-        togglePublishStatus(editingClassroom.value.id).then((res) => {
-          if (res.success) {
-            let { result: updatedClassroom } = res;
-            updateClassroomStore(updatedClassroom);
+const onOpenRegistration = async () => {
+  if (!editingClassroom.value.published) {
+    await setPublishStatus(editingClassroom.value.id, true);
+  }
 
-            showRegistrationToast(editingClassroom.value.registrationStatus);
-          }
-        });
-        return;
-      }
-      updateClassroomStore(classroom);
-      showRegistrationToast(editingClassroom.value.registrationStatus);
-    }
-  });
+  let registrationRes = await setRegistrationStatus(
+    editingClassroom.value.id,
+    true
+  );
+  if (registrationRes.success) {
+    updateClassroomStore(registrationRes.result);
+    showRegistrationToast(editingClassroom.value.registrationStatus);
+  }
+};
+
+const onCloseRegistration = async () => {
+  let res = await setRegistrationStatus(editingClassroom.value.id, false);
+  if (res.success) {
+    updateClassroomStore(res.result);
+    showRegistrationToast(editingClassroom.value.registrationStatus);
+  }
 };
 
 editingClassroom.value &&
@@ -162,20 +163,9 @@ editingClassroom.value &&
 
 <template>
   <div class="space-y-2">
-    <div class="p-6 bg-white border rounded-3xl space-y-4">
+    <div class="p-6 bg-white border rounded-2xl space-y-4">
       <div class="flex flex-col-reverse sm:flex-row gap-4 justify-between">
         <h3 class="text-xl font-bold">Registration Questions</h3>
-        <div>
-          <Button
-            v-ripple
-            severity="secondary"
-            class="flex items-center gap-2 font-medium !text-green-600 px-4 py-2"
-            @click="isSubmissionDialogVisible = true"
-          >
-            <i class="pi pi-users" />
-            View submissions
-          </Button>
-        </div>
       </div>
       <div class="space-y-8">
         <div class="space-y-2">
@@ -185,34 +175,34 @@ editingClassroom.value &&
           </p>
           <div class="flex flex-col sm:flex-row gap-2">
             <div
-              class="sm:w-[8rem] p-4 bg-slate-100 hover:bg-slate-200 duration-150 rounded-2xl cursor-not-allowed"
+              class="sm:w-[8rem] p-4 bg-slate-100 hover:bg-slate-200 duration-150 rounded-xl cursor-not-allowed"
             >
               <div class="inline-flex flex-col gap-1">
                 <p class="text-sm text-slate-400">Required</p>
                 <p>
-                  <i class="pi pi-user text-primary" />&nbsp;
+                  <i class="pi pi-user text-slate-500" />&nbsp;
                   <span class="text-lg">Name</span>
                 </p>
               </div>
             </div>
             <div
-              class="sm:w-[8rem] p-4 bg-slate-100 hover:bg-slate-200 duration-150 rounded-2xl cursor-not-allowed"
+              class="sm:w-[8rem] p-4 bg-slate-100 hover:bg-slate-200 duration-150 rounded-xl cursor-not-allowed"
             >
               <div class="inline-flex flex-col gap-1">
                 <p class="text-sm text-slate-400">Required</p>
                 <p>
-                  <i class="pi pi-at text-primary" />&nbsp;
+                  <i class="pi pi-at text-slate-500" />&nbsp;
                   <span class="text-lg">Email</span>
                 </p>
               </div>
             </div>
             <div
-              class="sm:w-[8rem] p-4 bg-slate-100 hover:bg-slate-200 duration-150 rounded-2xl cursor-not-allowed"
+              class="sm:w-[8rem] p-4 bg-slate-100 hover:bg-slate-200 duration-150 rounded-xl cursor-not-allowed"
             >
               <div class="inline-flex flex-col gap-1">
                 <p class="text-sm text-slate-400">Required</p>
                 <p>
-                  <i class="pi pi-phone text-primary" />&nbsp;
+                  <i class="pi pi-phone text-slate-500" />&nbsp;
                   <span class="text-lg">Phone</span>
                 </p>
               </div>
@@ -235,7 +225,7 @@ editingClassroom.value &&
           >
             <div
               v-if="editingQuestion?.init?.id !== question.id"
-              class="flex justify-between items-center p-4 bg-slate-100 hover:bg-slate-200 duration-150 rounded-2xl"
+              class="flex justify-between items-center p-4 bg-slate-100 hover:bg-slate-200 duration-150 rounded-xl"
             >
               <div class="inline-flex flex-col gap-1">
                 <p class="text-sm text-slate-400">
@@ -265,7 +255,7 @@ editingClassroom.value &&
             </div>
             <div
               v-else
-              class="flex justify-between items-center p-4 bg-slate-200 hover:bg-slate-200 border border-primary duration-150 rounded-2xl"
+              class="flex justify-between items-center p-4 bg-slate-200 hover:bg-slate-200 border border-primary duration-150 rounded-xl"
             >
               <div class="w-full inline-flex flex-col gap-1">
                 <label
@@ -308,7 +298,7 @@ editingClassroom.value &&
               :disabled="editingQuestion !== null && questions.length > 0"
               v-ripple
               @click="addQuestion"
-              class="w-full p-6 border rounded-2xl duration-150"
+              class="w-full p-6 rounded-xl duration-150"
               :class="
                 editingQuestion !== null && questions.length > 0
                   ? 'cursor-not-allowed text-slate-400 bg-slate-100 border-slate-100'
@@ -321,8 +311,8 @@ editingClassroom.value &&
         </div>
       </div>
     </div>
-    <div class="p-6 bg-white border rounded-3xl space-y-4">
-      <h3 class="text-xl font-bold">Opening registration</h3>
+    <div class="p-6 bg-white border rounded-2xl space-y-4">
+      <h3 class="text-xl font-bold">Schedule Registration</h3>
       <div class="flex flex-col lg:flex-row gap-4">
         <div class="space-y-2">
           <label
@@ -386,7 +376,7 @@ editingClassroom.value &&
           rounded
           size="large"
           :disabled="!editingClassroom"
-          @click="onToggleRegistrationStatus"
+          @click="onCloseRegistration"
         />
         <Button
           v-else-if="
@@ -402,7 +392,7 @@ editingClassroom.value &&
           rounded
           size="large"
           :disabled="!editingClassroom"
-          @click="onToggleRegistrationStatus"
+          @click="onCloseRegistration"
         />
         <Button
           v-else-if="editingClassroom?.registrationStatus"
@@ -412,7 +402,7 @@ editingClassroom.value &&
           rounded
           size="large"
           :disabled="!editingClassroom"
-          @click="onToggleRegistrationStatus"
+          @click="onCloseRegistration"
         />
         <Button
           v-else
@@ -427,22 +417,9 @@ editingClassroom.value &&
           rounded
           size="large"
           :disabled="!editingClassroom || editingClassroom.stepperStatus < 3"
-          @click="onToggleRegistrationStatus"
+          @click="onOpenRegistration"
         />
       </div>
     </div>
   </div>
-  <Dialog
-    v-model:visible="isSubmissionDialogVisible"
-    :header="`Submission of ${editingClassroom?.title}`"
-    :modal="true"
-    :draggable="false"
-    position="center"
-    class="w-full mx-3 m-auto"
-    :style="{
-      height: '100vh',
-    }"
-  >
-    <NuxtLayout name="classroom-form-submission" />
-  </Dialog>
 </template>
