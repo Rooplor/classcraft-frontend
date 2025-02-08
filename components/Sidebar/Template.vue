@@ -2,136 +2,107 @@
 import type { IClassroom } from "../../types/Classroom";
 
 defineProps({
-    closeCallback: {
-        type: Function,
-    },
+  closeCallback: {
+    type: Function,
+  },
 });
 
 const classroomStore = useClassroomStore();
 const { classrooms } = storeToRefs(classroomStore) as {
-    classrooms: Ref<IClassroom[]>;
+  classrooms: Ref<IClassroom[]>;
 };
 const sidebarStore = useSidebarStore();
 const { isSidebarOpen } = storeToRefs(sidebarStore) as {
-    isSidebarOpen: Ref<boolean>;
+  isSidebarOpen: Ref<boolean>;
 };
+const user = useCurrentUser();
 </script>
 
 <template>
-    <div class="flex flex-col gap-9">
-        <div
-            class="flex gap-2"
-            :class="isSidebarOpen ? 'justify-between' : 'justify-center'"
+  <div class="flex flex-col h-full justify-between">
+    <div class="flex flex-col gap-9 p-2">
+      <div
+        class="flex gap-2 h-full"
+        :class="isSidebarOpen ? 'justify-between' : 'justify-center'"
+      >
+        <nuxt-link
+          v-if="isSidebarOpen"
+          to="/"
+          class="inline-flex items-center text-xl text-primary"
         >
-            <nuxt-link
-                v-if="isSidebarOpen"
-                to="/"
-                class="inline-flex items-center text-xl text-primary"
-            >
-                <img
-                    src="/logo_text_primary.png"
-                    alt="ClassCraft Logo"
-                    class="h-8"
-                />
-            </nuxt-link>
-            <Button
-                :icon="isSidebarOpen ? 'pi pi-angle-left' : 'pi pi-angle-right'"
-                severity="secondary"
-                rounded
-                aria-label="Toggle sidebar"
-                @click="
-                    closeCallback
-                        ? closeCallback()
-                        : sidebarStore.toggleSidebar()
-                "
-            />
+          <img src="/logo_text_primary.png" alt="ClassCraft Logo" class="h-8" />
+        </nuxt-link>
+      </div>
+      <div>
+        <SearchButton>
+          <div
+            class="w-full flex items-center justify-between gap-2 p-2 bg-slate-100 text-slate-500 hover:bg-slate-200 rounded-lg duration-200"
+          >
+            <p>
+              <i class="pi pi-search" />
+              Search
+            </p>
+            <span class="text-slate-400 text-sm"> Ctrl+K</span>
+          </div>
+        </SearchButton>
+        <div class="mt-2">
+          <SidebarTab
+            to="/class"
+            label="Home"
+            icon="pi pi-home"
+            :isSidebarOpen="isSidebarOpen"
+            @click="closeCallback?.()"
+          />
         </div>
-        <div>
-            <SidebarTab
-                to="/class"
-                label="Home"
-                icon="pi pi-home"
-                :isSidebarOpen="isSidebarOpen"
-                @click="closeCallback?.()"
-            />
-            <SidebarTab
-                to="/discussion"
-                label="Topic request"
-                icon="pi pi-comments"
-                :isSidebarOpen="isSidebarOpen"
-                @click="closeCallback?.()"
-            />
-        </div>
-        <div
-            :class="{
-                'flex flex-col items-center': !isSidebarOpen,
-            }"
+      </div>
+      <div
+        :class="{
+          'flex flex-col items-center': !isSidebarOpen,
+        }"
+      >
+        <Accordion
+          multiple
+          :value="['0', '1']"
+          collapseIcon="pi pi-angle-up"
+          expandIcon="pi pi-angle-down"
         >
-            <Accordion
-                multiple
-                :value="['0', '1']"
-                collapseIcon="pi pi-angle-up"
-                expandIcon="pi pi-angle-down"
+          <AccordionPanel value="0" :pt="{ root: '!border-none' }">
+            <AccordionHeader
+              :pt="{ root: 'hover:!bg-slate-100 !rounded-lg !p-3' }"
             >
-                <AccordionPanel value="0" :pt="{ root: '!border-none' }">
-                    <AccordionHeader
-                        :pt="{ root: 'hover:!bg-slate-100 !rounded-xl !p-4' }"
-                    >
-                        <div v-if="isSidebarOpen" class="flex justify-between">
-                            <p class="text-slate-500 text-sm font-medium">
-                                HOSTED CLASSROOMS
-                            </p>
-                        </div>
-                    </AccordionHeader>
-                    <AccordionContent unstyled>
-                        <SidebarTab
-                            to="/class/new/edit"
-                            label="Create a classroom"
-                            icon="pi pi-plus"
-                            :isSidebarOpen="isSidebarOpen"
-                            @click="closeCallback?.()"
-                            class="text-primary hover:bg-blue-50"
-                        />
-                        <SidebarTab
-                            v-for="classroom in classrooms"
-                            :key="classroom?.id"
-                            :to="`/class/${classroom?.id}/edit`"
-                            :classroom="classroom"
-                            :isCollapsed="isSidebarOpen"
-                            @click="closeCallback?.()"
-                        />
-                    </AccordionContent>
-                </AccordionPanel>
-                <AccordionPanel value="1" :pt="{ root: '!border-none' }">
-                    <AccordionHeader
-                        :pt="{ root: 'hover:!bg-slate-100 !rounded-xl !p-4' }"
-                    >
-                        <div v-if="isSidebarOpen" class="flex justify-between">
-                            <p class="text-slate-500 text-sm font-medium">
-                                TOPIC REQUESTS
-                            </p>
-                        </div>
-                    </AccordionHeader>
-                    <AccordionContent unstyled>
-                        <SidebarTab
-                            to="/class/new/edit"
-                            label="Create a request"
-                            icon="pi pi-plus"
-                            :isSidebarOpen="isSidebarOpen"
-                            @click="closeCallback?.()"
-                            class="text-primary"
-                        />
-                        <SidebarTab
-                            v-for="classroom in classrooms"
-                            :key="classroom?.id"
-                            :to="`/class/${classroom?.id}/edit`"
-                            :classroom="classroom"
-                            :isCollapsed="isSidebarOpen"
-                            @click="closeCallback?.()"
-                        />
-                    </AccordionContent>
-                </AccordionPanel>
-            </Accordion>
-        </div>
+              <div v-if="isSidebarOpen" class="flex justify-between">
+                <p class="text-slate-500 !text-sm font-medium">
+                  Hosted classrooms
+                </p>
+              </div>
+            </AccordionHeader>
+            <AccordionContent unstyled>
+              <SidebarTab
+                v-for="classroom in classrooms"
+                :key="classroom?.id"
+                :to="`/class/${classroom?.id}/edit`"
+                :classroom="classroom"
+                :isCollapsed="isSidebarOpen"
+                @click="closeCallback?.()"
+              />
+            </AccordionContent>
+          </AccordionPanel>
+        </Accordion>
+      </div>
     </div>
+    <div class="sticky bottom-0">
+      <ProfileButton>
+        <div class="w-full flex items-center gap-3 p-2 py-3 border-t bg-white">
+          <img
+            :src="user?.photoURL || ''"
+            :alt="user?.displayName!"
+            class="w-10 h-10 rounded-full"
+          />
+          <div class="flex flex-col gap-2">
+            <h2>{{ user?.displayName }}</h2>
+          </div>
+        </div>
+      </ProfileButton>
+    </div>
+  </div>
 </template>
