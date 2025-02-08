@@ -32,22 +32,25 @@ useHead({
   <div class="w-full">
     <Headerbar />
     <div class="w-full max-w-screen-lg mx-auto">
-      <div class="flex flex-col gap-4 pb-2">
-        <div
-          class="grid grid-cols-2 w-64 text-center gap-1 bg-slate-100 p-1 rounded-xl font-medium"
-        >
+      <div class="flex flex-col gap-4 pb-2 pt-8">
+        <div class="flex flex-col sm:flex-row justify-between gap-4">
+          <h1 class="text-3xl font-bold">Classrooms</h1>
           <div
-            v-for="(option, index) in options"
-            :key="index"
-            class="py-1 px-3 rounded-lg cursor-pointer"
-            :class="
-              selectedOption === option
-                ? 'bg-white border'
-                : 'text-slate-500 hover:text-black duration-200'
-            "
-            @click="selectedOption = option"
+            class="grid grid-cols-2 w-full sm:w-64 text-center gap-1 bg-slate-100 rounded-xl font-medium p-1"
           >
-            {{ option }}
+            <div
+              v-for="(option, index) in options"
+              :key="index"
+              class="py-1 px-3 rounded-lg cursor-pointer"
+              :class="
+                selectedOption === option
+                  ? 'bg-white border'
+                  : 'text-slate-500 hover:text-black duration-200'
+              "
+              @click="selectedOption = option"
+            >
+              {{ option }}
+            </div>
           </div>
         </div>
         <div class="space-y-2">
@@ -82,7 +85,7 @@ useHead({
 /* width */
 ::-webkit-scrollbar {
   height: 0px;
-  width: 5px;
+  width: 3px;
 }
 
 /* Track */
