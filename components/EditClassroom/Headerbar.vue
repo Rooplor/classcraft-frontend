@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { EStepperStatus, type IClassroom } from "../../types/Classroom";
+import { type IClassroom } from "../../types/Classroom";
 
 const toast = useToast();
 const router = useRouter();
 const classroomStore = useClassroomStore();
-const { togglePublishStatus, deleteClassroom } = useClassroom();
+const { setPublishStatus, deleteClassroom } = useClassroom();
 
 const { editingClassroom } = storeToRefs(classroomStore) as {
   editingClassroom: Ref<IClassroom>;
@@ -46,21 +46,27 @@ const copyLink = () => {
 };
 
 const onPublish = async () => {
-  let res = await togglePublishStatus(editingClassroom.value.id)
+  let res = await setPublishStatus(editingClassroom.value.id, true);
 
   if (res.success) {
     classroomStore.setEditingClassroom(res.result);
     classroomStore.updateClassroom(res.result);
 
-    if (editingClassroom.value.published) {
-      toast.add({
-        severity: "success",
-        summary: "Classroom is published",
-        group: "tc",
-        life: 1000,
-      });
-      return;
-    }
+    toast.add({
+      severity: "success",
+      summary: "Classroom is published",
+      group: "tc",
+      life: 1000,
+    });
+  }
+};
+
+const onUnpublish = async () => {
+  let res = await setPublishStatus(editingClassroom.value.id, false);
+
+  if (res.success) {
+    classroomStore.setEditingClassroom(res.result);
+    classroomStore.updateClassroom(res.result);
 
     toast.add({
       severity: "info",
@@ -69,7 +75,21 @@ const onPublish = async () => {
       life: 1000,
     });
   }
-  }
+};
+
+const home = ref({
+  icon: "pi pi-home",
+  label: "Home",
+  url: "/",
+});
+const items = ref([
+  { label: "Hosted Classrooms" },
+  {
+    label: `${
+      editingClassroom.value ? editingClassroom.value.title : "Create Classroom"
+    }`,
+  },
+]);
 
 const handleDelete = async () => {
   if (deleteInput.value !== editingClassroom.value.title) {
@@ -87,35 +107,51 @@ const isDeleteDialogOpen = ref(false);
 </script>
 <template>
   <div
-    class="w-full p-2 mb-16 sticky top-2 flex justify-between items-center gap-2 bg-white border rounded-full z-10"
+    class="w-full mb-16 py-1 md:px-2 bg-slate-50 sticky top-0 flex justify-between items-center gap-2 z-10"
   >
     <DrawerButton />
+    <Breadcrumb
+      :home="home"
+      :model="items"
+      class="!bg-transparent !p-0 !text-slate-500 !text-sm hidden lg:block"
+    >
+      <template #item="{ item }">
+        <a class="cursor-pointer" :href="item.url && item.url">
+          <span>{{ item.label }}</span>
+        </a>
+      </template>
+      <template #separator> / </template>
+    </Breadcrumb>
     <div />
-    <div class="flex gap-2">
+
+    <div class="inline-flex items-center justify-center gap-2">
       <Button
         :disabled="!editingClassroom"
         label="Craft Content"
         icon="pi pi-sparkles"
         rounded
+        size="small"
         @click="isContentDialogVisible = true"
       />
+      <ViewSubmissionButton>
+        <Button
+          label="View Submissions"
+          icon="pi pi-eye"
+          rounded
+          outlined
+          size="small"
+        />
+      </ViewSubmissionButton>
       <div class="hidden gap-2 lg:flex">
         <Button
-          v-if="editingClassroom?.published"
-          label="Unpublish"
-          icon="pi pi-ban"
-          severity="secondary"
-          :disabled="!editingClassroom"
-          rounded
-          @click="onPublish"
-        />
-        <Button
-          v-else
+          v-if="!editingClassroom?.published"
           label="Publish"
           icon="pi pi-globe"
           outlined
           :disabled="!editingClassroom"
           rounded
+          text
+          size="small"
           @click="onPublish"
         />
       </div>
@@ -124,12 +160,16 @@ const isDeleteDialogOpen = ref(false);
         icon="pi pi-share-alt"
         :disabled="!editingClassroom"
         rounded
+        text
+        size="small"
         @click="toggleOp"
       />
       <Button
         icon="pi pi-ellipsis-v"
         severity="secondary"
         rounded
+        text
+        size="small"
         :disabled="!editingClassroom"
         @click="toggleAction"
       />
@@ -169,7 +209,7 @@ const isDeleteDialogOpen = ref(false);
           icon="pi pi-ban"
           severity="secondary"
           :disabled="!editingClassroom"
-          @click="onPublish"
+          @click="onUnpublish"
         />
         <Button
           v-else
