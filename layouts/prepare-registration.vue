@@ -311,12 +311,6 @@ if (editingClassroom.value) {
           <div v-else>
             <p class="text-slate-400 text-center py-8">
               No custom questions added.
-              <Button
-                label="Add New Question"
-                size="small"
-                text
-                @click="addQuestion"
-              />
             </p>
           </div>
         </div>
