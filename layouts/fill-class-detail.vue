@@ -162,7 +162,7 @@ const onCoverImageChange = async (event: any) => {
     try {
         const res = await uploadFile(formData);
         if (res.success) {
-            coverImage.value = res.result.url;
+            coverImage.value = res.result.urls[0];
         }
     } catch (error) {
         console.error("Error uploading file:", error);
@@ -184,7 +184,7 @@ const onInstructorAvatarChange = async (event: any) => {
     try {
         const res = await uploadFile(formData);
         if (res.success) {
-            instructorAvatar.value = res.result.url;
+            instructorAvatar.value = res.result.urls[0];
         }
     } catch (error) {
         console.error("Error uploading file:", error);
