@@ -13,8 +13,8 @@
             "dates": [
                 {
                     "date": {
-                        "startDateTime": "2024-12-05T01:00:00.000",
-                        "endDateTime": "2024-12-05T09:00:00.000"
+                        "startDateTime": "2025-12-05T01:00:00.000",
+                        "endDateTime": "2025-12-05T09:00:00.000"
                     },
                     "venueId": []
                 }
@@ -35,7 +35,7 @@
             "updatedWhen": "2024-11-30T20:12:11.618",
             "owner": "1",
             "coOwners": [],
-            "published": false
+            "published": true
         },
         {
             "id": "2",
@@ -44,20 +44,20 @@
             "target": "IT professionals, students, and businesses exploring cloud solutions",
             "prerequisite": "Basic knowledge of IT infrastructure",
             "type": "LECTURE",
-            "format": "ONSITE",
+            "format": "ONLINE",
             "capacity": 50,
             "dates": [
                 {
                     "date": {
-                        "startDateTime": "2024-12-04T17:00:00",
-                        "endDateTime": "2024-12-04T17:00:00"
+                        "startDateTime": "2025-12-04T17:00:00",
+                        "endDateTime": "2025-12-04T17:00:00"
                     },
                     "venueId": []
                 },
                 {
                     "date": {
-                        "startDateTime": "2024-12-05T17:00:00",
-                        "endDateTime": "2024-12-05T17:00:00"
+                        "startDateTime": "2025-12-05T17:00:00",
+                        "endDateTime": "2025-12-05T17:00:00"
                     },
                     "venueId": []
                 }

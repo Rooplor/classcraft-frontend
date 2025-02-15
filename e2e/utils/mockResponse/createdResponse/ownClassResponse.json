@@ -13,8 +13,8 @@
             "dates": [
                 {
                     "date": {
-                        "startDateTime": "2024-12-05T01:00:00.000",
-                        "endDateTime": "2024-12-05T09:00:00.000"
+                        "startDateTime": "2025-12-05T01:00:00.000",
+                        "endDateTime": "2025-12-05T09:00:00.000"
                     },
                     "venueId": []
                 }
@@ -31,11 +31,11 @@
             "instructorAvatar": "",
             "instructorFamiliarity": "SIT STUDENT",
             "coverImage": "",
-            "createdWhen": "2024-11-30T20:12:11.618",
-            "updatedWhen": "2024-11-30T20:12:11.618",
+            "createdWhen": "2025-11-30T20:12:11.618",
+            "updatedWhen": "2025-11-30T20:12:11.618",
             "owner": "1",
             "coOwners": [],
-            "published": false
+            "published": true
         }
     ],
     "error": null
