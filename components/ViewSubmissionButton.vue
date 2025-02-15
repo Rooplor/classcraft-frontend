@@ -1,5 +1,11 @@
-<script setup>
+<script setup lang="ts">
+import type { IClassroom } from "../types/Classroom";
+
 const isSubmissionDialogVisible = ref(false);
+const classroomStore = useClassroomStore();
+const { editingClassroom } = storeToRefs(classroomStore) as {
+  editingClassroom: Ref<IClassroom>;
+};
 </script>
 <template>
   <div @click="isSubmissionDialogVisible = true">
@@ -7,7 +13,7 @@ const isSubmissionDialogVisible = ref(false);
   </div>
   <Dialog
     v-model:visible="isSubmissionDialogVisible"
-    :header="`Submission of ${editingClassroom?.title}`"
+    :header="`Submissions of &quot;${editingClassroom?.title}&quot;`"
     :modal="true"
     :draggable="false"
     dismissableMask

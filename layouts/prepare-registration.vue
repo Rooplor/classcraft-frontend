@@ -18,8 +18,17 @@ const classroomStore = useClassroomStore();
 const { editingClassroom } = storeToRefs(classroomStore) as {
   editingClassroom: Ref<IClassroom>;
 };
+const customQuestions = computed(() => {
+  return questions.value.filter(
+    (field) =>
+      field.question !== "Email" &&
+      field.question !== "Full Name" &&
+      field.question !== "Phone"
+  );
+});
 const openDate = ref<Date | null>(null);
 const closeDate = ref<Date | null>(null);
+const isRequiredApproval = ref(false);
 
 const updateFormQuestions = () => {
   return updateForm({
@@ -29,6 +38,7 @@ const updateFormQuestions = () => {
     description: "Please fill out the form to register",
     openDate: openDate.value?.toISOString(),
     closeDate: closeDate.value?.toISOString(),
+    ownerApprovalRequired: isRequiredApproval.value,
     fields: [
       ...questions.value.map((q) => ({
         name: q.question,
@@ -144,29 +154,30 @@ const onCloseRegistration = async () => {
   }
 };
 
-editingClassroom.value &&
-  getFormById(editingClassroom.value.id).then((data) => {
-    const { result } = data;
+if (editingClassroom.value) {
+  let res = await getFormById(editingClassroom.value.id);
+  if (res.success) {
+    const { result } = res;
     openDate.value = result.openDate
       ? isoToDateWithTimezone(result.openDate)
       : null;
     closeDate.value = result.closeDate
       ? isoToDateWithTimezone(result.closeDate)
       : null;
+    isRequiredApproval.value = result.ownerApprovalRequired;
 
     questions.value = result.fields.map((field, index) => ({
       id: index,
       question: field.name,
     }));
-  });
+  }
+}
 </script>
 
 <template>
-  <div class="space-y-2">
+  <div class="space-y-4">
     <div class="p-6 bg-white border rounded-2xl space-y-4">
-      <div class="flex flex-col-reverse sm:flex-row gap-4 justify-between">
-        <h3 class="text-xl font-bold">Registration Questions</h3>
-      </div>
+      <h3 class="text-xl font-bold">Registration Questions</h3>
       <div class="space-y-8">
         <div class="space-y-2">
           <p class="inline-flex items-center gap-1 text-slate-400 mb-1">
@@ -210,17 +221,21 @@ editingClassroom.value &&
           </div>
         </div>
         <div class="space-y-2">
-          <p class="inline-flex items-center gap-1 text-slate-400 mb-1">
-            <i class="pi pi-question-circle" />Custom Questions
-          </p>
+          <div class="flex justify-between">
+            <p class="inline-flex items-center gap-1 text-slate-400 mb-1">
+              <i class="pi pi-question-circle" />Custom Questions
+            </p>
+            <Button
+              label="Add New Question"
+              icon="pi pi-plus"
+              size="small"
+              text
+              @click="addQuestion"
+            />
+          </div>
           <div
-            v-for="question in questions.filter((q) => {
-              return (
-                q.question !== 'Email' &&
-                q.question !== 'Full Name' &&
-                q.question !== 'Phone'
-              );
-            })"
+            v-if="customQuestions.length > 0"
+            v-for="question in customQuestions"
             :key="question.id"
           >
             <div
@@ -293,133 +308,137 @@ editingClassroom.value &&
               </div>
             </div>
           </div>
-          <div>
-            <button
-              :disabled="editingQuestion !== null && questions.length > 0"
-              v-ripple
-              @click="addQuestion"
-              class="w-full p-6 rounded-xl duration-150"
-              :class="
-                editingQuestion !== null && questions.length > 0
-                  ? 'cursor-not-allowed text-slate-400 bg-slate-100 border-slate-100'
-                  : 'text-primary bg-primary-50 border-primary hover:bg-primary-100'
-              "
-            >
-              <i class="pi pi-plus" />&nbsp; Add New Question
-            </button>
+          <div v-else>
+            <p class="text-slate-400 text-center py-8">
+              No custom questions added.
+            </p>
           </div>
         </div>
       </div>
     </div>
-    <div class="p-6 bg-white border rounded-2xl space-y-4">
-      <h3 class="text-xl font-bold">Schedule Registration</h3>
-      <div class="flex flex-col lg:flex-row gap-4">
-        <div class="space-y-2">
-          <label
-            for="date"
-            class="block text-sm font-medium text-slate-700 mb-1"
-          >
-            From (Optional)
-          </label>
-          <DatePicker
-            id="date"
-            v-model="openDate"
-            name="openDate"
-            showIcon
-            iconDisplay="input"
-            fluid
-            showTime
-            hourFormat="24"
-            :minDate="new Date()"
-            date-format="D d M yy"
-            showButtonBar
-            placeholder="Select opening date"
-            v-on:update:model-value="updateFormQuestions"
-          />
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-y-4 lg:gap-x-4">
+      <div class="p-6 bg-white col-span-2 border rounded-2xl space-y-4">
+        <h3 class="text-xl font-bold">Schedule Registration</h3>
+        <div class="flex flex-col lg:flex-row gap-4">
+          <div class="space-y-2">
+            <label
+              for="date"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              From (Optional)
+            </label>
+            <DatePicker
+              id="date"
+              v-model="openDate"
+              name="openDate"
+              showIcon
+              iconDisplay="input"
+              fluid
+              showTime
+              hourFormat="24"
+              :minDate="new Date()"
+              date-format="D d M yy"
+              showButtonBar
+              placeholder="Select opening date"
+              v-on:update:model-value="updateFormQuestions"
+            />
+          </div>
+          <div class="space-y-2">
+            <label
+              for="date"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              To (Optional)
+            </label>
+            <DatePicker
+              id="date"
+              v-model="closeDate"
+              name="closeDate"
+              showIcon
+              iconDisplay="input"
+              fluid
+              showTime
+              hourFormat="24"
+              :minDate="openDate ? openDate : new Date()"
+              date-format="D d M yy"
+              showButtonBar
+              placeholder="Select close date "
+              v-on:update:model-value="updateFormQuestions"
+            />
+          </div>
         </div>
-        <div class="space-y-2">
-          <label
-            for="date"
-            class="block text-sm font-medium text-slate-700 mb-1"
-          >
-            To (Optional)
-          </label>
-          <DatePicker
-            id="date"
-            v-model="closeDate"
-            name="closeDate"
-            showIcon
-            iconDisplay="input"
-            fluid
-            showTime
-            hourFormat="24"
-            :minDate="openDate ? openDate : new Date()"
-            date-format="D d M yy"
-            showButtonBar
-            placeholder="Select close date "
-            v-on:update:model-value="updateFormQuestions"
+      </div>
+      <div class="p-6 bg-white col-span-1 border rounded-2xl space-y-4">
+        <div>
+          <h3 class="text-xl font-bold">Approval Required</h3>
+        </div>
+        <p class="text-slate-400">
+          Require approval from the owner before registration is confirmed
+        </p>
+        <div class="flex items-center gap-4">
+          <ToggleSwitch
+            v-model="isRequiredApproval"
+            v-on:change="updateFormQuestions"
           />
         </div>
       </div>
-      <div class="flex justify-end pt-4">
-        <Button
-          v-if="
-            openDate &&
-            editingClassroom?.registrationStatus &&
-            new Date() <= openDate
-          "
-          :label="`Scheduled registration (opening in ${countdownTimer(
-            openDate
-          )})`"
-          severity="secondary"
-          fluid
-          rounded
-          size="large"
-          :disabled="!editingClassroom"
-          @click="onCloseRegistration"
-        />
-        <Button
-          v-else-if="
-            closeDate &&
-            editingClassroom?.registrationStatus &&
-            new Date() <= closeDate
-          "
-          :label="`Close registration (closing in ${countdownTimer(
-            closeDate
-          )})`"
-          severity="secondary"
-          fluid
-          rounded
-          size="large"
-          :disabled="!editingClassroom"
-          @click="onCloseRegistration"
-        />
-        <Button
-          v-else-if="editingClassroom?.registrationStatus"
-          :label="`Close registration now`"
-          severity="secondary"
-          fluid
-          rounded
-          size="large"
-          :disabled="!editingClassroom"
-          @click="onCloseRegistration"
-        />
-        <Button
-          v-else
-          :label="
-            openDate || closeDate
-              ? 'Schedule registration'
-              : 'Open registration now'
-          "
-          :icon="openDate || closeDate ? 'pi pi-calendar' : 'pi pi-check'"
-          severity="contrast"
-          fluid
-          rounded
-          size="large"
-          :disabled="!editingClassroom || editingClassroom.stepperStatus < 3"
-          @click="onOpenRegistration"
-        />
-      </div>
+    </div>
+    <div class="flex justify-end">
+      <Button
+        v-if="
+          openDate &&
+          editingClassroom?.registrationStatus &&
+          new Date() <= openDate
+        "
+        :label="`Scheduled registration (opening in ${countdownTimer(
+          openDate
+        )})`"
+        severity="secondary"
+        fluid
+        rounded
+        size="large"
+        :disabled="!editingClassroom"
+        @click="onCloseRegistration"
+      />
+      <Button
+        v-else-if="
+          closeDate &&
+          editingClassroom?.registrationStatus &&
+          new Date() <= closeDate
+        "
+        :label="`Close registration (closing in ${countdownTimer(closeDate)})`"
+        severity="secondary"
+        fluid
+        rounded
+        size="large"
+        :disabled="!editingClassroom"
+        @click="onCloseRegistration"
+      />
+      <Button
+        v-else-if="editingClassroom?.registrationStatus"
+        :label="`Close registration now`"
+        severity="secondary"
+        fluid
+        rounded
+        size="large"
+        :disabled="!editingClassroom"
+        @click="onCloseRegistration"
+      />
+      <Button
+        v-else
+        :label="
+          openDate || closeDate
+            ? 'Schedule registration'
+            : 'Open registration now'
+        "
+        :icon="openDate || closeDate ? 'pi pi-calendar' : 'pi pi-check'"
+        severity="contrast"
+        fluid
+        rounded
+        size="large"
+        :disabled="!editingClassroom || editingClassroom.stepperStatus < 3"
+        @click="onOpenRegistration"
+      />
     </div>
   </div>
 </template>

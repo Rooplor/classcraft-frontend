@@ -29,7 +29,7 @@ const onSubmit = async (event: Event) => {
     classroomId: id.toString(),
     responses: formData.value,
     submittedBy: "",
-    approvedByOwner: classroomForm.value.isOwnerApprovalRequired ? false : true,
+    approvedByOwner: classroomForm.value.ownerApprovalRequired ? false : true,
   });
 
   if (res.success) {
