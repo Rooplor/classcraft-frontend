@@ -271,7 +271,7 @@ test('should not create class with all fields empty.', async ({page}) => {
         '',
         '',
         '',
-        1,
+        0,
         ''
     );
 

@@ -47,6 +47,8 @@ test('should be select venue for class on 1 day', async ({page}) => {
 
     await page.getByText("1. Cybersecurity Essentials for the Digital World").click();
 
+    await page.getByLabel('Manage "1. Cybersecurity').click();
+
     await page.getByRole('tab', {name: 'Reserve venue'}).click();
     await page.getByText('LX-10 - 1').click();
 
@@ -62,6 +64,8 @@ test('should be select different venue for class on more than 1 day', async ({pa
     await page.goto('http://localhost:3000/class');
 
     await page.getByText("1. Cybersecurity Essentials for the Digital World").click();
+
+    await page.getByLabel('Manage "1. Cybersecurity').click();
 
     await page.getByRole('tab', {name: 'Reserve venue'}).click();
 
@@ -84,6 +88,8 @@ test('should be select same venue for class on more than 1 day', async ({page}) 
 
     await page.getByText("1. Cybersecurity Essentials for the Digital World").click();
 
+    await page.getByLabel('Manage "1. Cybersecurity').click();
+
     await page.getByRole('tab', {name: 'Reserve venue'}).click();
 
     await page.getByText('LX-10 - 1').click();
@@ -105,6 +111,8 @@ test('should be show status approved when got approve', async ({page}) => {
 
     await page.getByText("1. Cybersecurity Essentials for the Digital World").click();
 
+    await page.getByLabel('Manage "1. Cybersecurity').click();
+
     await page.getByRole('tab', {name: 'Reserve venue'}).click();
 
     await expect(page.getByText("Approved").nth(0)).toBeVisible();
@@ -120,6 +128,8 @@ test('should be show status rejected when got reject', async ({page}) => {
     await page.goto('http://localhost:3000/class');
 
     await page.getByText("1. Cybersecurity Essentials for the Digital World").click();
+
+    await page.getByLabel('Manage "1. Cybersecurity').click();
 
     await page.getByRole('tab', {name: 'Reserve venue'}).click();
 

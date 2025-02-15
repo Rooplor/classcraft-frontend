@@ -37,14 +37,42 @@ export async function initRoute(page) {
             path: './e2e/utils/mockResponse/createdResponse/ownClassResponse.json',
         })
     })
+
+    await page.route("http://localhost:8080/api/class/1", route => {
+        if (route.request().method() === "GET") {
+            route.fulfill({
+                path: `./e2e/utils/mockResponse/createdResponse/classState3Response.json`,
+            })
+        }
+    });
+
+    await page.route("http://localhost:8080/api/class", route => {
+        route.fulfill({
+            path: './e2e/utils/mockResponse/createdResponse/ownClassResponse.json',
+        })
+    })
+
+    await page.route("http://localhost:8080/api/user/1", route => {
+        route.fulfill({
+            path: './e2e/utils/mockResponse/user.json',
+        })
+    })
+
+    await page.route("http://localhost:8080/api/form/1", route => {
+        route.fulfill({
+            path: './e2e/utils/mockResponse/formclassroomResponse.json',
+        })
+    })
 };
 
 export async function testCreateClassHelper(page, classTitle, classDetails, attendees, prerequisites, classType, classFormat, maxAttendees, startTime, endTime, instructorName, instructorDetails, familiarity, numOfDays, pathResponse) {
     await page.goto('http://localhost:3000/class');
-    await page.getByRole('button', {name: 'Add class'}).click();
+    await page.getByLabel('Create').click();
+    await page.getByLabel('Classroom').locator('a').click();
     await page.getByPlaceholder('Class title').click();
     await page.getByPlaceholder('Class title').fill(classTitle);
-    await page.locator('#details div').nth(2).fill(classDetails);
+    await page.getByPlaceholder('Enter class details').click();
+    await page.getByPlaceholder('Enter class details').fill(classDetails);
     await page.getByPlaceholder('Who should attend this class?').click();
     await page.getByPlaceholder('Who should attend this class?').fill(attendees);
     await page.getByPlaceholder('What should attendees know').click();
@@ -61,9 +89,11 @@ export async function testCreateClassHelper(page, classTitle, classDetails, atte
         await page.getByPlaceholder('Select date').click();
         await page.getByPlaceholder('Select date').fill('Sun 5 Dec 2024');
         await page.getByPlaceholder('Select start time').click();
-        await page.getByPlaceholder('Select start time').fill(startTime);
-        await page.getByPlaceholder('Select end time').click();
-        await page.getByPlaceholder('Select end time').fill(endTime);
+        await page.getByLabel('Next Hour').first().click();
+        // await page.getByPlaceholder('Select start time').click();
+        // await page.getByPlaceholder('Select start time').fill(startTime);
+        // await page.getByPlaceholder('Select end time').click();
+        // await page.getByPlaceholder('Select end time').fill(endTime);
     }
 
     if (numOfDays === 2) {
@@ -71,12 +101,14 @@ export async function testCreateClassHelper(page, classTitle, classDetails, atte
         await page.getByPlaceholder('Select date').nth(1).click();
         await page.getByPlaceholder('Select date').nth(1).fill('Sun 6 Dec 2024');
         await page.getByPlaceholder('Select start time').nth(1).click();
-        await page.getByPlaceholder('Select start time').nth(1).fill(startTime);
-        await page.locator('input[name="dates\\[1\\]\\.date\\.endDateTime"]').click();
-        await page.locator('input[name="dates\\[1\\]\\.date\\.endDateTime"]').fill(endTime);
+        await page.getByLabel('Next Hour').nth(1).click();
+        // await page.getByPlaceholder('Select start time').nth(1).click();
+        // await page.getByPlaceholder('Select start time').nth(1).fill(startTime);
+        // await page.locator('input[name="dates\\[1\\]\\.date\\.endDateTime"]').click();
+        // await page.locator('input[name="dates\\[1\\]\\.date\\.endDateTime"]').fill(endTime);
     }
 
-    await page.getByLabel('I\'m the instructor').check();
+    await page.getByLabel('Yes, I teach this class by').click();
     await page.getByPlaceholder('Instructor name').click();
     await page.getByPlaceholder('Instructor name').fill(instructorName);
     await page.getByPlaceholder('Tell us about the instructor').click();
@@ -98,7 +130,7 @@ export async function testCreateClassHelper(page, classTitle, classDetails, atte
         })
     })
 
-    await page.getByRole('button', {name: 'Save'}).click();
+    await page.getByLabel('Create').click();
 }
 
 export async function showValidationMsg(page, validateMsg, notVisibleMsg, invert = false) {
@@ -154,7 +186,9 @@ export async function getOneOrTwoDayClassResponse(page, numOfDay) {
 }
 
 export async function fillContent(page, title, content, activityGuide, presentationGuide) {
-    await page.getByRole('tab', {name: 'Craft your content'}).click();
+    await page.getByLabel('Manage "1. Cybersecurity').click();
+    await page.getByLabel('Craft Content').click();
+    await page.getByRole('button', { name: '   Add Content' }).click();
     await page.getByPlaceholder('Enter Title').click();
     await page.getByPlaceholder('Enter Title').fill(title);
     await page.getByPlaceholder('Content').click();

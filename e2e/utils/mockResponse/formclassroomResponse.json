@@ -1,0 +1,51 @@
+{
+  "success": true,
+  "result": {
+    "id": "67ac7e8ac9d6476acdf0c5bb",
+    "classroomId": "67ac7e8ac9d6476acdf0c5bb",
+    "title": "Registration Form",
+    "description": "Please fill out the form to register",
+    "openDate": null,
+    "closeDate": null,
+    "fields": [
+      {
+        "name": "Full Name",
+        "type": "string",
+        "required": true,
+        "validation": "TEXT",
+        "options": [
+          "string"
+        ]
+      },
+      {
+        "name": "Email",
+        "type": "string",
+        "required": true,
+        "validation": "TEXT",
+        "options": [
+          "string"
+        ]
+      },
+      {
+        "name": "Phone",
+        "type": "string",
+        "required": true,
+        "validation": "TEXT",
+        "options": [
+          "string"
+        ]
+      },
+      {
+        "name": "Your Department",
+        "type": "string",
+        "required": true,
+        "validation": "TEXT",
+        "options": [
+          "string"
+        ]
+      }
+    ],
+    "ownerApprovalRequired": false
+  },
+  "error": null
+}
