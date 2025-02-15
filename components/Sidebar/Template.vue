@@ -77,6 +77,14 @@ const user = useCurrentUser();
               </div>
             </AccordionHeader>
             <AccordionContent unstyled>
+               <SidebarTab
+                to="/class/new/edit"
+                label="Create a classroom"
+                icon="pi pi-plus"
+                :isSidebarOpen="isSidebarOpen"
+                class="text-primary"
+                @click="closeCallback?.()"
+              />
               <SidebarTab
                 v-for="classroom in classrooms"
                 :key="classroom?.id"

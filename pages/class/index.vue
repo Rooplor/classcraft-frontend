@@ -7,6 +7,28 @@ let classrooms = ref<IClassroom[]>();
 const options = ref(["Upcoming", "Past"]);
 const selectedOption = ref(options.value[0]);
 
+const filteredClassrooms = computed(() => {
+  if (selectedOption.value === "Upcoming") {
+    return classrooms.value?.filter(
+      (classroom) =>
+        new Date() <
+        isoToDateWithTimezone(
+          classroom.dates[classroom.dates.length - 1].date.startDateTime
+        )
+    );
+  }
+
+  if (selectedOption.value === "Past") {
+    return classrooms.value?.filter(
+      (classroom) =>
+        new Date() >
+        isoToDateWithTimezone(
+          classroom.dates[classroom.dates.length - 1].date.startDateTime
+        )
+    );
+  }
+});
+
 try {
   classrooms.value = (await getAllClassroom()).result;
 } catch (error) {
@@ -30,7 +52,6 @@ useHead({
 
 <template>
   <div class="w-full">
-    <Headerbar />
     <div class="w-full max-w-screen-lg mx-auto">
       <div class="flex flex-col gap-4 pb-2 pt-8">
         <div class="flex flex-col sm:flex-row justify-between gap-4">
@@ -55,26 +76,23 @@ useHead({
         </div>
         <div class="space-y-2">
           <ClassroomListItem
-            v-if="selectedOption === 'Upcoming'"
-            v-for="(classroom, index) in classrooms?.filter(
-              (classroom) =>
-                new Date() <
-                isoToDateWithTimezone(classroom.dates[0].date.startDateTime)
-            )"
+            v-for="(classroom, index) in filteredClassrooms"
             :key="index"
             :classroom="classroom"
           />
-          <ClassroomListItem
-            v-else-if="selectedOption === 'Past'"
-            v-for="classroom in classrooms?.filter(
-              (classroom) =>
-                new Date() >
-                isoToDateWithTimezone(
-                  classroom.dates[classroom.dates.length - 1].date.endDateTime
-                )
-            )"
-            :classroom="classroom"
-          />
+          <div
+            v-if="filteredClassrooms?.length === 0"
+            class="flex flex-col items-center gap-4 h-96 justify-center"
+          >
+            <p class="text-slate-400">No classrooms found. Let's create one</p>
+            <nuxt-link to="/class/new">
+              <Button
+                label="Create a Classroom"
+                severity="secondary"
+                icon="pi pi-plus"
+              />
+            </nuxt-link>
+          </div>
         </div>
       </div>
     </div>
