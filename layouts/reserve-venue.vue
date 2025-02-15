@@ -26,6 +26,7 @@ const otherVenue = ref();
 const isLoading = ref(false);
 
 const handleSendRequest = async () => {
+    isLoading.value = true;
     let res = await reserveVenue(editingClassroom.value.id, editingClassroom.value.dates)
     
     if (res.success) {
@@ -46,9 +47,9 @@ const handleSendRequest = async () => {
             group: "tc",
             life: 3000,
         });
+        isLoading.value = false;
     }
 
-    isLoading.value = true;
 };
 
 const selectVenue = (id: string) => {
