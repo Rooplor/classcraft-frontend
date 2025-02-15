@@ -16,12 +16,30 @@ test.beforeEach(async ({page}) => {
             })
         }
     });
+
+    await page.route("http://localhost:8080/api/class", route => {
+        route.fulfill({
+            path: './e2e/utils/mockResponse/createdResponse/ownClassResponse.json',
+        })
+    })
+
+    await page.route("http://localhost:8080/api/user/1", route => {
+        route.fulfill({
+            path: './e2e/utils/mockResponse/user.json',
+        })
+    })
+
+    await page.route("http://localhost:8080/api/form/1", route => {
+        route.fulfill({
+            path: './e2e/utils/mockResponse/formclassroomResponse.json',
+        })
+    })
 });
 
 test('should be create content successfully', async ({page}) => {
     await page.goto('http://localhost:3000/class');
 
-    await page.getByText("1. Cybersecurity Essentials for the Digital World").click();
+    await page.locator('[id="__nuxt"]').getByText('1. Cybersecurity Essentials for the Digital World').click();
 
     await fillContent(
         page,
