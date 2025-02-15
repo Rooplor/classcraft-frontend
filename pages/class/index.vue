@@ -30,7 +30,6 @@ useHead({
 
 <template>
   <div class="w-full">
-    <Headerbar />
     <div class="w-full max-w-screen-lg mx-auto">
       <div class="flex flex-col gap-4 pb-2 pt-8">
         <div class="flex flex-col sm:flex-row justify-between gap-4">
@@ -59,7 +58,9 @@ useHead({
             v-for="(classroom, index) in classrooms?.filter(
               (classroom) =>
                 new Date() <
-                isoToDateWithTimezone(classroom.dates[0].date.startDateTime)
+                isoToDateWithTimezone(
+                  classroom.dates[classroom.dates.length - 1].date.startDateTime
+                )
             )"
             :key="index"
             :classroom="classroom"
@@ -75,6 +76,29 @@ useHead({
             )"
             :classroom="classroom"
           />
+          <div
+            v-if="
+              classrooms?.filter(
+                (classroom) =>
+                  new Date() >
+                  isoToDateWithTimezone(
+                    classroom.dates[classroom.dates.length - 1].date.endDateTime
+                  )
+              ).length === 0
+            "
+            class="flex justify-center items-center w-full h-96 bg-slate-50 rounded-lg"
+          >
+            <div class="flex flex-col items-center gap-8">
+              <p class="text-slate-400">No classrooms found</p>
+              <nuxt-link to="/class/new/edit">
+                <Button
+                  label="Create Classroom"
+                  severity="secondary"
+                  icon="pi pi-plus"
+                />
+              </nuxt-link>
+            </div>
+          </div>
         </div>
       </div>
     </div>
