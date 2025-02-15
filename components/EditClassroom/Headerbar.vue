@@ -80,13 +80,15 @@ const onUnpublish = async () => {
 const home = ref({
   icon: "pi pi-home",
   label: "Home",
-  url: "/",
+  url: "/class",
 });
 const items = ref([
   { label: "Hosted Classrooms" },
   {
     label: `${
-      editingClassroom.value ? editingClassroom.value.title : "Create Classroom"
+      editingClassroom.value
+        ? editingClassroom.value.title
+        : "Create a Classroom"
     }`,
   },
 ]);
@@ -107,7 +109,7 @@ const isDeleteDialogOpen = ref(false);
 </script>
 <template>
   <div
-    class="w-full mb-16 py-1 md:px-2 bg-slate-50 sticky top-0 flex justify-between items-center gap-2 z-10"
+    class="w-full mb-16 pt-1 pb-8 md:px-2 bg-gradient-to-b from-60% from-slate-50 to-slate-50/0 sticky top-0 flex justify-between items-center gap-2 z-10"
   >
     <DrawerButton />
     <Breadcrumb
@@ -133,18 +135,18 @@ const isDeleteDialogOpen = ref(false);
         size="small"
         @click="isContentDialogVisible = true"
       />
-      <ViewSubmissionButton>
-        <Button
-          label="View Submissions"
-          icon="pi pi-eye"
-          rounded
-          outlined
-          size="small"
-        />
-      </ViewSubmissionButton>
       <div class="hidden gap-2 lg:flex">
+        <ViewSubmissionButton v-if="editingClassroom?.published">
+          <Button
+            label="View Submissions"
+            icon="pi pi-users"
+            rounded
+            outlined
+            size="small"
+          />
+        </ViewSubmissionButton>
         <Button
-          v-if="!editingClassroom?.published"
+          v-else
           label="Publish"
           icon="pi pi-globe"
           outlined
