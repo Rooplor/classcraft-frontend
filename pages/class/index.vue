@@ -7,6 +7,28 @@ let classrooms = ref<IClassroom[]>();
 const options = ref(["Upcoming", "Past"]);
 const selectedOption = ref(options.value[0]);
 
+const filteredClassrooms = computed(() => {
+  if (selectedOption.value === "Upcoming") {
+    return classrooms.value?.filter(
+      (classroom) =>
+        new Date() <
+        isoToDateWithTimezone(
+          classroom.dates[classroom.dates.length - 1].date.startDateTime
+        )
+    );
+  }
+
+  if (selectedOption.value === "Past") {
+    return classrooms.value?.filter(
+      (classroom) =>
+        new Date() >
+        isoToDateWithTimezone(
+          classroom.dates[classroom.dates.length - 1].date.startDateTime
+        )
+    );
+  }
+});
+
 try {
   classrooms.value = (await getAllClassroom()).result;
 } catch (error) {
@@ -54,50 +76,22 @@ useHead({
         </div>
         <div class="space-y-2">
           <ClassroomListItem
-            v-if="selectedOption === 'Upcoming'"
-            v-for="(classroom, index) in classrooms?.filter(
-              (classroom) =>
-                new Date() <
-                isoToDateWithTimezone(
-                  classroom.dates[classroom.dates.length - 1].date.startDateTime
-                )
-            )"
+            v-for="(classroom, index) in filteredClassrooms"
             :key="index"
             :classroom="classroom"
           />
-          <ClassroomListItem
-            v-else-if="selectedOption === 'Past'"
-            v-for="classroom in classrooms?.filter(
-              (classroom) =>
-                new Date() >
-                isoToDateWithTimezone(
-                  classroom.dates[classroom.dates.length - 1].date.endDateTime
-                )
-            )"
-            :classroom="classroom"
-          />
           <div
-            v-if="
-              classrooms?.filter(
-                (classroom) =>
-                  new Date() >
-                  isoToDateWithTimezone(
-                    classroom.dates[classroom.dates.length - 1].date.endDateTime
-                  )
-              ).length === 0
-            "
-            class="flex justify-center items-center w-full h-96 bg-slate-50 rounded-lg"
+            v-if="filteredClassrooms?.length === 0"
+            class="flex flex-col items-center gap-4 h-96 justify-center"
           >
-            <div class="flex flex-col items-center gap-8">
-              <p class="text-slate-400">No classrooms found</p>
-              <nuxt-link to="/class/new/edit">
-                <Button
-                  label="Create Classroom"
-                  severity="secondary"
-                  icon="pi pi-plus"
-                />
-              </nuxt-link>
-            </div>
+            <p class="text-slate-400">No classrooms found. Let's create one</p>
+            <nuxt-link to="/class/new">
+              <Button
+                label="Create a Classroom"
+                severity="secondary"
+                icon="pi pi-plus"
+              />
+            </nuxt-link>
           </div>
         </div>
       </div>
