@@ -84,7 +84,7 @@ useHead({
                                     screenWidth > 768 && isSidebarOpen
                                         ? 'lg:block'
                                         : 'sm:block'
-                                }`"
+                                }`" 
                             >
                                 {{ step.label }}
                             </p>
@@ -112,7 +112,7 @@ useHead({
                                     iconPos="right"
                                     @click="activateCallback('2')"
                                     :disabled="!editingClassroom"
-                                    class="w-1/2"
+                                    class="w-1/2 !rounded-2xl"
                                 />
                             </div>
                         </div>
@@ -126,7 +126,8 @@ useHead({
                                     severity="secondary"
                                     icon="pi pi-arrow-left"
                                     @click="activateCallback('1')"
-                                    class="w-full"
+                                    fluid
+                                    class="!rounded-2xl"                                   
                                 />
                                 <Button
                                     label="Prepare for registration"
@@ -137,8 +138,9 @@ useHead({
                                         editingClassroom?.stepperStatus <= 2
                                     "
                                     @click="activateCallback('3')"
-                                    class="w-full"
-                                />
+                                    fluid
+                                    class="!rounded-2xl"                                
+                                    />
                             </div>
                         </div>
                     </StepPanel>
@@ -151,14 +153,16 @@ useHead({
                                     severity="secondary"
                                     icon="pi pi-arrow-left"
                                     @click="activateCallback('2')"
-                                    class="w-full"
+                                    fluid
+                                    class="!rounded-2xl"
                                 />
                                 <Button
-                                    label="Go to the classroom"
+                                    label="View classroom page"
                                     severity="secondary"
                                     icon="pi pi-arrow-up-right"
                                     iconPos="right"
-                                    class="w-full"
+                                    fluid
+                                    class="!rounded-2xl"
                                     @click="
                                         router.push(`/class/${editingClassroom.id}`)
                                     "

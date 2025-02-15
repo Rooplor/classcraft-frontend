@@ -22,9 +22,9 @@ const toggleMenu = (event: MouseEvent) => {
 </script>
 
 <template>
-  <div class="sticky top-0 z-20 mb-6">
+  <div class="sticky top-0 z-20 pb-2">
     <div
-      class="flex gap-1 md:gap-2 justify-between items-center py-1 md:px-2 m-auto w-full bg-slate-50"
+      class="flex gap-1 md:gap-2 justify-between items-center m-auto w-full"
     >
       <div class="md:hidden lg:block">
         <DrawerButton />
@@ -44,15 +44,6 @@ const toggleMenu = (event: MouseEvent) => {
         <div class="md:hidden">
           <Button icon="pi pi-plus" size="small" text rounded @click="toggleMenu" />
         </div>
-        <SearchButton>
-          <Button
-            icon="pi pi-search"
-            rounded
-            severity="secondary"
-            text
-            size="small"
-          />
-        </SearchButton>
       </div>
     </div>
   </div>
