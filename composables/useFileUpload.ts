@@ -4,16 +4,12 @@ const useFileUpload = () => {
     const config = useRuntimeConfig();
 
     const uploadFile = (
-        fileCategory: string,
-        formData: FormData[]
-    ): Promise<IResponse<{ url: string[] }>> => {
-        return $fetch(
-          `${config.public.baseUrl}/api/file/upload?fileCategory=${fileCategory}`,
-          {
+        formData: FormData
+    ): Promise<IResponse<{ urls: string[] }>> => {
+        return $fetch(`${config.public.baseUrl}/api/file/upload`, {
             body: formData,
             method: "POST",
-          }
-        );
+        });
     };
 
     return { uploadFile };

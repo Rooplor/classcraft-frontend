@@ -157,11 +157,12 @@ const onCoverImageChange = async (event: any) => {
 
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("fileCategory", EFileType.CLASSROOM_COVER);
 
     try {
-        const res = await uploadFile(EFileType.CLASSROOM_COVER, [formData]);
+        const res = await uploadFile(formData);
         if (res.success) {
-            coverImage.value = res.result.url[0];
+            coverImage.value = res.result.urls[0];
         }
     } catch (error) {
         console.error("Error uploading file:", error);
@@ -178,11 +179,12 @@ const onInstructorAvatarChange = async (event: any) => {
 
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("fileCategory", EFileType.INSTRUCTOR_AVATAR);
 
     try {
-        const res = await uploadFile(EFileType.INSTRUCTOR_AVATAR, [formData]);
+        const res = await uploadFile(formData   );
         if (res.success) {
-            instructorAvatar.value = res.result.url[0];
+            instructorAvatar.value = res.result.urls[0];
         }
     } catch (error) {
         console.error("Error uploading file:", error);
