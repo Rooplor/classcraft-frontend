@@ -52,8 +52,8 @@ watch(router.currentRoute, () => {
         </div>
         <i
           v-else
-          :class="icon"
-          :style="!isSidebarOpen && 'font-size: 1.2rem'"
+          :class="icon + ' pl-3 p-2'"
+          :style="'font-size: 1.3rem'"
         />
         <p v-if="isSidebarOpen" class="truncate">
           {{ classroom?.title || label }}
