@@ -26,6 +26,15 @@ export interface IClassroom {
     owner: string;
     coOwners: string[];
     coverImage: string;
+    classEnrollDetail: {
+        enrollBy: {
+            id: string;
+            username: string;
+            profilePicture: string;
+        }[];
+        enrolled: boolean;
+        approved: boolean;
+    }
 }
 
 export interface IAddClassroomDTO {
