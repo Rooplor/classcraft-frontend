@@ -27,6 +27,7 @@ const isLoading = ref(false);
 
 const handleSendRequest = async () => {
     let res = await reserveVenue(editingClassroom.value.id, editingClassroom.value.dates)
+    isLoading.value = true;
     
     if (res.success) {
         toast.add({
@@ -46,9 +47,9 @@ const handleSendRequest = async () => {
             group: "tc",
             life: 3000,
         });
+        isLoading.value = false;
     }
 
-    isLoading.value = true;
 };
 
 const selectVenue = (id: string) => {
