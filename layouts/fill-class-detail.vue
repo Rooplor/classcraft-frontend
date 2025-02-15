@@ -182,7 +182,7 @@ const onInstructorAvatarChange = async (event: any) => {
     formData.append("fileCategory", EFileType.INSTRUCTOR_AVATAR);
 
     try {
-        const res = await uploadFile(formData   );
+        const res = await uploadFile(formData);
         if (res.success) {
             instructorAvatar.value = res.result.urls[0];
         }
