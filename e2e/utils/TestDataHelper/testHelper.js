@@ -37,6 +37,32 @@ export async function initRoute(page) {
             path: './e2e/utils/mockResponse/createdResponse/ownClassResponse.json',
         })
     })
+
+    await page.route("http://localhost:8080/api/class/1", route => {
+        if (route.request().method() === "GET") {
+            route.fulfill({
+                path: `./e2e/utils/mockResponse/createdResponse/classState3Response.json`,
+            })
+        }
+    });
+
+    await page.route("http://localhost:8080/api/class", route => {
+        route.fulfill({
+            path: './e2e/utils/mockResponse/createdResponse/ownClassResponse.json',
+        })
+    })
+
+    await page.route("http://localhost:8080/api/user/1", route => {
+        route.fulfill({
+            path: './e2e/utils/mockResponse/user.json',
+        })
+    })
+
+    await page.route("http://localhost:8080/api/form/1", route => {
+        route.fulfill({
+            path: './e2e/utils/mockResponse/formclassroomResponse.json',
+        })
+    })
 };
 
 export async function testCreateClassHelper(page, classTitle, classDetails, attendees, prerequisites, classType, classFormat, maxAttendees, startTime, endTime, instructorName, instructorDetails, familiarity, numOfDays, pathResponse) {
