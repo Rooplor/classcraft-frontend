@@ -152,7 +152,6 @@ export async function showValidationMsg(page, validateMsg, notVisibleMsg, invert
         if (invert ? isVisible : !isVisible) {
             await expect(page.getByText(validateMsg[msg])).toBeVisible({visible: false});
         } else {
-            console.log(msg);
             await expect(page.getByText(validateMsg[msg])).toBeVisible();
         }
     }
