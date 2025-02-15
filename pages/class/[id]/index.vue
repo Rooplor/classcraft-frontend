@@ -43,6 +43,9 @@ try {
   isUserRegistered.value = userFormSubmission.value ? true : false;
   usersInClassroom.value = (await getUserInClassroom(id.toString())).result;
   seatsLeft = classroom.capacity - usersInClassroom.value.length;
+  if (!classroom.published && user.id !== classroom.owner) {
+    router.replace("/404");
+  }
 } catch (error) {
   router.replace("/404");
 }
@@ -105,14 +108,14 @@ useHead({
       <div class="mb-2 mx-auto md:w-1/2 lg:mt-0 lg:m-auto">
         <div
           v-if="classroom.coverImage"
-          class="max-w-96 h-full m-auto aspect-square rounded-3xl overflow-clip md:max-w-full"
+          class="max-w-96 h-full m-auto aspect-square rounded-2xl overflow-clip md:max-w-full"
         >
           <Image :preview="classroom.coverImage ? true : false">
             <template #image>
               <img
                 :src="classroom.coverImage"
                 :alt="`${classroom.title} class cover image`"
-                class="w-full bg-slate-200 aspect-square border rounded-3xl object-cover md:max-w-full"
+                class="w-full bg-slate-200 aspect-square border rounded-2xl object-cover md:max-w-full"
               />
             </template>
             <template #original="slotProps">
@@ -128,7 +131,7 @@ useHead({
         </div>
         <div
           v-else
-          class="hidden w-full max-w-96 m-auto aspect-square bg-slate-200 border rounded-3xl lg:flex justify-center items-center md:max-w-full"
+          class="hidden w-full max-w-96 m-auto aspect-square bg-slate-200 border rounded-2xl lg:flex justify-center items-center md:max-w-full"
         >
           <i class="pi pi-image text-slate-400" style="font-size: 4rem" />
         </div>
@@ -147,7 +150,7 @@ useHead({
         </div>
       </div>
       <div class="lg:w-1/2 space-y-8">
-        <div class="bg-white px-6 py-8 border rounded-3xl flex flex-col gap-10">
+        <div class="bg-white px-6 py-8 border rounded-2xl flex flex-col gap-10">
           <div>
             <div class="mb-4">
               <p
@@ -312,10 +315,11 @@ useHead({
             <Button
               v-if="classroom.owner === user.id"
               size="large"
+              icon="pi pi-arrow-right"
+              iconPos="right"
               :label="`Manage &quot;${classroom.title}&quot;`"
               rounded
               severity="secondary"
-              icon="pi pi-pencil"
               @click="router.push(`/class/${id}/edit`)"
             />
             <Button
@@ -353,6 +357,17 @@ useHead({
               />
             </div>
             <Button
+              v-else-if="
+                isoToDateWithTimezone(
+                  classroom.dates[classroom.dates.length - 1].date.endDateTime
+                ) < new Date()
+              "
+              size="large"
+              :label="`Request for &quot;${classroom.title}&quot;`"
+              rounded
+              outlined
+            />
+            <Button
               v-else
               size="large"
               :label="`Join &quot;${classroom.title}&quot;`"
@@ -385,45 +400,43 @@ useHead({
           </div>
         </div>
         <div>
-          <p class="text-xl font-bold mb-4">Who will be teaching me?</p>
-          <div class="bg-white p-6 border rounded-3xl flex flex-col gap-4">
-            <div class="space-y-5">
-              <div class="flex gap-4">
-                <div
-                  class="w-24 h-24 aspect-square border rounded-full overflow-clip"
-                >
-                  <Image preview>
-                    <template #image>
-                      <img
-                        :src="classroom.instructorAvatar"
-                        :alt="`${classroom.instructorName} profile image`"
-                        class="w-24 h-24 aspect-square border rounded-full object-cover"
-                      />
-                    </template>
-                    <template #original="slotProps">
-                      <img
-                        :src="classroom.instructorAvatar"
-                        :alt="`${classroom.instructorName} profile image`"
-                        :style="slotProps.style"
-                        @click="slotProps.previewCallback"
-                        class="w-[52rem] h-[52rem] aspect-square object-cover"
-                      />
-                    </template>
-                  </Image>
+          <p class="text-xl font-bold mb-4">Who Will Be Teaching Me?</p>
+          <div class="bg-white p-6 border rounded-2xl flex flex-col gap-4">
+            <div class="flex gap-4">
+              <div
+                class="w-24 h-24 aspect-square border rounded-full overflow-clip"
+              >
+                <Image preview>
+                  <template #image>
+                    <img
+                      :src="classroom.instructorAvatar"
+                      :alt="`${classroom.instructorName} profile image`"
+                      class="w-24 h-24 aspect-square border rounded-full object-cover"
+                    />
+                  </template>
+                  <template #original="slotProps">
+                    <img
+                      :src="classroom.instructorAvatar"
+                      :alt="`${classroom.instructorName} profile image`"
+                      :style="slotProps.style"
+                      @click="slotProps.previewCallback"
+                      class="w-[52rem] h-[52rem] aspect-square object-cover"
+                    />
+                  </template>
+                </Image>
+              </div>
+              <div class="space-y-4">
+                <div>
+                  <p class="text-xl font-bold">
+                    {{ classroom.instructorName }}
+                  </p>
+                  <p>{{ classroom.instructorBio }}</p>
                 </div>
-                <div class="space-y-4">
-                  <div>
-                    <p class="text-xl font-bold">
-                      {{ classroom.instructorName }}
-                    </p>
-                    <p>{{ classroom.instructorBio }}</p>
-                  </div>
-                  <div>
-                    <p class="text-slate-500">Familiarity to the topic</p>
-                    <p>
-                      {{ classroom.instructorFamiliarity || "" }}
-                    </p>
-                  </div>
+                <div>
+                  <p class="text-slate-500">Familiarity to the topic</p>
+                  <p>
+                    {{ classroom.instructorFamiliarity || "" }}
+                  </p>
                 </div>
               </div>
             </div>
