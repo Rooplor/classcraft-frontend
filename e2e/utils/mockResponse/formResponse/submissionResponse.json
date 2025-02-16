@@ -1,0 +1,23 @@
+{
+  "success": true,
+  "result": {
+    "id": "1",
+    "formId": "1",
+    "classroomId": "1",
+    "responses": {
+      "Full Name": "Natdanai Nitipan",
+      "Email": "c3bosskung@gmail.com",
+      "Phone": "0655065006",
+      "What is your department?": "SIT"
+    },
+    "submittedBy": "2",
+    "userDetail": {
+      "id": "2",
+      "username": "Natdanai Nitipan",
+      "profilePicture": "https://lh3.googleusercontent.com/a/ACg8ocLi7iT0Hu6LMAif9P8UyNpb2ga-yHhWwqy8RW9cjaQKAjDDjubk=s96-c"
+    },
+    "attendeesStatus": "PENDING",
+    "approvedByOwner": true
+  },
+  "error": null
+}

@@ -22,7 +22,7 @@
     "meetingUrl": null,
     "content": null,
     "registrationUrl": null,
-    "registrationStatus": false,
+    "registrationStatus": true,
     "venueStatus": 3,
     "rejectReason": "",
     "instructorName": "Natdanai Nitipan",
