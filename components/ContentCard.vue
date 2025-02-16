@@ -27,7 +27,7 @@ const emit = defineEmits(["edit"]);
             </div>
         </div>
         <div class="p-4 space-y-8">
-            <p class="whitespace-pre">
+            <p>
                 <span v-if="content.content">{{ content.content }}</span>
                 <span v-else class="text-slate-300">No Content</span>
             </p>
@@ -73,7 +73,7 @@ const emit = defineEmits(["edit"]);
                         :key="index"
                         class="aspect-video bg-slate-100 text-slate-500 rounded-xl p-4 duration-150 hover:bg-slate-200"
                     >
-                        <p class="whitespace-pre flex justify-between">
+                        <p class="flex justify-between">
                             <span v-if="guide.presentationGuide">{{
                                 guide.presentationGuide
                             }}</span>

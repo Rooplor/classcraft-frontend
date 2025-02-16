@@ -213,6 +213,14 @@ const isDeleteDialogOpen = ref(false);
   <Popover ref="action" style="border-radius: 1rem">
     <div class="flex flex-col gap-2 w-52">
       <div class="flex flex-col gap-2">
+        <ViewSubmissionButton v-if="editingClassroom?.published">
+          <Button
+            label="View Submissions"
+            icon="pi pi-users"
+            fluid
+            outlined
+          />
+        </ViewSubmissionButton>
         <Button
           v-if="editingClassroom?.published"
           label="Unpublish"
@@ -229,7 +237,6 @@ const isDeleteDialogOpen = ref(false);
           :disabled="!editingClassroom"
           @click="onPublish"
         />
-        <div v-if="editingClassroom?.published"></div>
       </div>
       <Button
         label="Delete Classroom"
@@ -297,13 +304,13 @@ const isDeleteDialogOpen = ref(false);
   <Dialog
     v-model:visible="isQrDialogVisible"
     dismissableMask
-    :header='`Check-In QR Code for "${editingClassroom?.title}"`'
+    :header="`Check-In QR Code for &quot;${editingClassroom?.title}&quot;`"
     :style="{ width: '48rem' }"
     modal
     :draggable="false"
   >
     <div class="flex flex-col items-center gap-4">
-      <QRCode :classroom-id="editingClassroom.id" class="w-full"/>
+      <QRCode :classroom-id="editingClassroom.id" class="w-full" />
     </div>
   </Dialog>
 </template>
