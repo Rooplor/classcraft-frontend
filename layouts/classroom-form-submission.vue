@@ -58,7 +58,7 @@ const setApprovalStatus = async (id: string, status: boolean) => {
 </script>
 <template>
   <div
-    class="p-4 border border-primary rounded-lg font-medium bg-primary-50 text-primary inline-block mb-4"
+    class="p-2 border border-primary rounded-lg font-medium bg-primary-50 text-primary inline-block mb-4"
   >
     <i class="pi pi-users" /> {{ formSubmission.length }} /
     {{ editingClassroom.capacity }} people registered
