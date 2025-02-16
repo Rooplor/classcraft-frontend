@@ -29,6 +29,7 @@ interface IFormSubmission {
     profilePicture: string;
   };
   approvedByOwner: boolean;
+  attendeesStatus: EAttendeeStatus;
 }
 
 enum EFieldValidation {
@@ -39,4 +40,12 @@ enum EFieldValidation {
   URL = "URL",
 }
 
-export { type IForm, type IFormSubmission, EFieldValidation };
+enum EAttendeeStatus {
+  Present = "PRESENT",
+  Absent = "ABSENT",
+  Late = "LATE",
+  Not_Going = "NOT_GOING",
+  Pending = "PENDING",
+}
+
+export { type IForm, type IFormSubmission, EFieldValidation, EAttendeeStatus };
