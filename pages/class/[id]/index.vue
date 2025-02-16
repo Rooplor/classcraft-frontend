@@ -404,7 +404,7 @@ useHead({
               </p>
             </div>
             <div v-else-if="user.id === classroom.owner" />
-            <div v-else-if="classroom.registrationStatus">
+            <div v-else-if="classroom.registrationStatus && usersInClassroom.length === 0">
               <p class="text-slate-500">Be the first to join this class</p>
             </div>
           </div>

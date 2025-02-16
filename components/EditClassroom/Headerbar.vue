@@ -242,6 +242,7 @@ const isDeleteDialogOpen = ref(false);
   </Popover>
   <Dialog
     v-model:visible="isContentDialogVisible"
+    dismissableMask
     header="Craft Content"
     position="top"
     :modal="true"
@@ -271,7 +272,6 @@ const isDeleteDialogOpen = ref(false);
         <span class="font-semibold"> "{{ editingClassroom?.title }}" </span>
         to delete</label
       >
-      <!-- Type text to match classroom title to delete, if not match, show error message -->
       <InputText
         id="classroom-title"
         class="flex-auto"

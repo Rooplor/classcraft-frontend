@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IClassroom } from "../types/Classroom";
-import type { IFormSubmission } from "../types/Form";
+import { EAttendeeStatus, type IFormSubmission } from "../types/Form";
 
 const classroomStore = useClassroomStore();
 const toast = useToast();
@@ -79,17 +79,46 @@ const setApprovalStatus = async (id: string, status: boolean) => {
         </nuxt-link>
       </template>
     </Column>
-    <Column field="approvedByOwner" header="Status">
+    <Column field="approvedByOwner" header="Registration">
       <template #body="slotProps">
         <button
           v-if="slotProps.data.approvedByOwner"
           @click="setApprovalStatus(slotProps.data.id, false)"
         >
-          <Tag severity="success" value="Approved" rounded />
+          <Tag severity="success" value="Approved" />
         </button>
         <button v-else @click="setApprovalStatus(slotProps.data.id, true)">
-          <Tag severity="warn" value="Pending" rounded />
+          <Tag severity="warn" value="Pending" />
         </button>
+      </template>
+    </Column>
+    <Column field="attendeesStatus" header="Status">
+      <template #body="slotProps">
+        <Tag
+          v-if="slotProps.data.attendeesStatus === EAttendeeStatus.Present"
+          severity="success"
+          value="Checked In"
+        />
+        <Tag
+          v-else-if="slotProps.data.attendeesStatus === EAttendeeStatus.Absent"
+          severity="danger"
+          value="Absent"
+        />
+        <Tag
+          v-else-if="slotProps.data.attendeesStatus === EAttendeeStatus.Late"
+          severity="warn"
+          value="Late"
+        />
+        <Tag
+          v-else-if="slotProps.data.attendeesStatus === EAttendeeStatus.Pending"
+          severity="warn"
+          value="Pending"
+        />
+        <Tag
+          v-else-if="slotProps.data.attendeesStatus === EAttendeeStatus.Not_Going"
+          severity="danger"
+          value="Not Going"
+        />
       </template>
     </Column>
     <Column
