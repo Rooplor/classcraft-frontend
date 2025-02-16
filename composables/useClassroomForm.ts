@@ -106,6 +106,24 @@ const useForm = () => {
     );
   };
 
+  const getCheckInQrCode = (id: string): Promise<any> => {
+    return $fetch(`${config.public.baseUrl}/api/form/qrcode/checkin/${id}`, {
+      method: "GET",
+    });
+  };
+
+  const setAttendeeStatus = (
+    id: string,
+    status: string
+  ): Promise<IResponse<IFormSubmission>> => {
+    return $fetch(
+      `${config.public.baseUrl}/api/form/attendees/${id}?status=${status}`,
+      {
+        method: "PATCH",
+      }
+    );
+  };
+
   return {
     getFormById,
     addForm,
@@ -119,6 +137,8 @@ const useForm = () => {
     getClassroomFormSubmissionByUserId,
     getUserInClassroom,
     setApprovalStatus,
+    getCheckInQrCode,
+    setAttendeeStatus,
   };
 };
 

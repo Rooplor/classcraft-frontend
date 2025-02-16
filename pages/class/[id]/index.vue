@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { EVenueRequestStatus, type IClassroom } from "../../../types/Classroom";
-import type { IForm, IFormSubmission } from "../../../types/Form";
+import {
+  EAttendeeStatus,
+  type IForm,
+  type IFormSubmission,
+} from "../../../types/Form";
 import type { IUser } from "../../../types/User";
 import type { IVenue } from "../../../types/Venue";
 
@@ -147,6 +151,12 @@ useHead({
               {{ owner.username }}
             </p>
           </nuxt-link>
+        </div>
+        <div
+          v-if="userFormSubmission?.attendeesStatus === EAttendeeStatus.Present"
+          class="p-4 border rounded-xl text-green-500 bg-green-100 flex flex-col gap-4 mt-6"
+        >
+          Checked in
         </div>
       </div>
       <div class="lg:w-1/2 space-y-8">

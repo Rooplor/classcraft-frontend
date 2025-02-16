@@ -13,6 +13,7 @@ const { editingClassroom } = storeToRefs(classroomStore) as {
 const op = ref();
 const action = ref();
 const isContentDialogVisible = ref(false);
+const isQrDialogVisible = ref(false);
 
 const deleteInput = ref("");
 const isMatch = ref(true);
@@ -127,6 +128,13 @@ const isDeleteDialogOpen = ref(false);
     <div />
 
     <div class="inline-flex items-center justify-center gap-2">
+      <Button
+        icon="pi pi-qrcode"
+        rounded
+        size="small"
+        :disabled="!editingClassroom"
+        @click="isQrDialogVisible = true"
+      />
       <Button
         :disabled="!editingClassroom"
         label="Craft Content"
@@ -284,6 +292,18 @@ const isDeleteDialogOpen = ref(false);
         text
         @click="handleDelete"
       />
+    </div>
+  </Dialog>
+  <Dialog
+    v-model:visible="isQrDialogVisible"
+    dismissableMask
+    :header='`Check-In QR Code for "${editingClassroom?.title}"`'
+    :style="{ width: '48rem' }"
+    modal
+    :draggable="false"
+  >
+    <div class="flex flex-col items-center gap-4">
+      <QRCode :classroom-id="editingClassroom.id" class="w-full"/>
     </div>
   </Dialog>
 </template>
