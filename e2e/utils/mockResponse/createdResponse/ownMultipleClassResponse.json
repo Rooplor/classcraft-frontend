@@ -35,7 +35,12 @@
             "updatedWhen": "2024-11-30T20:12:11.618",
             "owner": "1",
             "coOwners": [],
-            "published": true
+            "published": true,
+            "classEnrollDetail": {
+                "enrollBy": [],
+                "enrolled": false,
+                "approved": false
+            }
         },
         {
             "id": "2",
@@ -78,7 +83,12 @@
             "updatedWhen": "2024-12-01T02:34:51.146",
             "owner": "672857b92c95ec2252ec6b90",
             "coOwners": [],
-            "published": true
+            "published": true,
+            "classEnrollDetail": {
+                "enrollBy": [],
+                "enrolled": false,
+                "approved": false
+            }
         }
     ],
     "error": null

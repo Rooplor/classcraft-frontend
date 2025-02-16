@@ -34,7 +34,12 @@
     "updatedWhen": "2025-11-30T17:32:44.5132095",
     "owner": "1",
     "coOwners": null,
-    "published": true
+    "published": true,
+    "classEnrollDetail": {
+      "enrollBy": [],
+      "enrolled": false,
+      "approved": false
+    }
   },
   "error": null
 }

@@ -34,15 +34,6 @@
         "options": [
           "string"
         ]
-      },
-      {
-        "name": "Your Department",
-        "type": "string",
-        "required": true,
-        "validation": "TEXT",
-        "options": [
-          "string"
-        ]
       }
     ],
     "ownerApprovalRequired": false
