@@ -107,19 +107,19 @@ useHead({
     </div>
     <Headerbar />
     <div
-      class="flex flex-col gap-x-2 w-full mx-auto mb-3 lg:flex-row md:max-w-screen-lg"
+      class="grid lg:grid-cols-2 gap-x-2 w-full mx-auto mb-3 lg:flex-row md:max-w-screen-lg"
     >
-      <div class="mb-2 mx-auto md:w-1/2 lg:mt-0 lg:m-auto">
+      <div class="w-full mb-2 mx-auto lg:mt-0 lg:m-auto">
         <div
           v-if="classroom.coverImage"
-          class="max-w-96 h-full m-auto aspect-square rounded-2xl overflow-clip md:max-w-full"
+          class="w-96 m-auto aspect-square rounded-2xl overflow-clip lg:w-full"
         >
           <Image :preview="classroom.coverImage ? true : false">
             <template #image>
               <img
                 :src="classroom.coverImage"
                 :alt="`${classroom.title} class cover image`"
-                class="w-full bg-slate-200 aspect-square border rounded-2xl object-cover md:max-w-full"
+                class="w-[52rem] bg-slate-200 aspect-square border rounded-2xl object-cover "
               />
             </template>
             <template #original="slotProps">
@@ -128,7 +128,7 @@ useHead({
                 :alt="`${classroom.title} class cover image`"
                 :style="slotProps.style"
                 @click="slotProps.previewCallback"
-                class="w-full h-full aspect-square object-cover md:w-[52rem] p-2"
+                class="w-[52rem] h-full aspect-square object-cover p-2"
               />
             </template>
           </Image>
@@ -159,7 +159,7 @@ useHead({
           Checked in
         </div>
       </div>
-      <div class="lg:w-1/2 space-y-8">
+      <div class="space-y-8">
         <div class="bg-white px-6 py-8 border rounded-2xl flex flex-col gap-10">
           <div>
             <div class="mb-4">
