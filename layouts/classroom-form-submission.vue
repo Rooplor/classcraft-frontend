@@ -10,6 +10,7 @@ const { editingClassroom } = storeToRefs(classroomStore) as {
 const {
   getClassroomFormSubmission,
   getFormQuestions,
+  getFormCSV,
   setApprovalStatus: setApprovalStatusApi,
 } = useClassroomForm();
 
@@ -55,13 +56,34 @@ const setApprovalStatus = async (id: string, status: boolean) => {
     });
   }
 };
+
+const handleExportCSV = async () => {
+  const res = await getFormCSV(editingClassroom.value.id);
+  if (res) {
+    const blob = new Blob([res], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Submissions of ${editingClassroom.value.title}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+};
 </script>
 <template>
-  <div
-    class="p-2 border border-primary rounded-lg font-medium bg-primary-50 text-primary inline-block mb-4"
-  >
-    <i class="pi pi-users" /> {{ formSubmission.length }} /
-    {{ editingClassroom.capacity }} people registered
+  <div class="flex items-center gap-2 mb-4">
+    <div
+      class="p-2 border border-primary rounded-lg font-medium bg-primary-50 text-primary"
+    >
+      <i class="pi pi-users" /> {{ formSubmission.length }} /
+      {{ editingClassroom.capacity }} people registered
+    </div>
+    <Button
+      severity="secondary"
+      label="Export to CSV"
+      icon="pi pi-download"
+      @click="handleExportCSV"
+    />
   </div>
   <DataTable
     :value="formattedFormSubmission"
@@ -115,7 +137,9 @@ const setApprovalStatus = async (id: string, status: boolean) => {
           value="Pending"
         />
         <Tag
-          v-else-if="slotProps.data.attendeesStatus === EAttendeeStatus.Not_Going"
+          v-else-if="
+            slotProps.data.attendeesStatus === EAttendeeStatus.Not_Going
+          "
           severity="danger"
           value="Not Going"
         />
