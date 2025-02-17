@@ -13,7 +13,7 @@ test('should can view class', async ({page}) => {
     })
 
     await page.goto('http://localhost:3000/class');
-    await expect(page.getByRole('link')).toContainText('1. Cybersecurity Essentials for the Digital WorldLECTUREONSITE50Friday 5 DecTBAThis lecture covers fundamental cybersecurity principles, common threats, and practical strategies to protect digital assets.');
+    await expect(page.getByRole('link')).toContainText('1. Cybersecurity Essentials for the Digital WorldLECTUREONSITE50By testUserFriday 5 DecTBA');
 });
 
 test('should can view more than 1 class', async ({page}) => {

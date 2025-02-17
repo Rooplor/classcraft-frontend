@@ -23,7 +23,7 @@
             "meetingUrl": null,
             "content": null,
             "registrationUrl": null,
-            "registrationStatus": false,
+            "registrationStatus": true,
             "venueStatus": 1,
             "rejectReason": "",
             "instructorName": "testUser",
@@ -33,7 +33,7 @@
             "coverImage": "",
             "createdWhen": "2025-11-30T20:12:11.618",
             "updatedWhen": "2025-11-30T20:12:11.618",
-            "owner": "1",
+            "owner": "2",
             "coOwners": [],
             "published": true,
             "classEnrollDetail": {

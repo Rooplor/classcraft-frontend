@@ -16,6 +16,13 @@ test.beforeEach(async ({page}) => {
 });
 
 test('should be create class and display list of venue', async ({page}) => {
+
+    await page.route("http://localhost:8080/api/class", route => {
+        route.fulfill({
+            path: './e2e/utils/mockResponse/createdResponse/getEmptyClass.json',
+        })
+    })
+
     await testCreateClassHelper(
         page,
         '1. Cybersecurity Essentials for the Digital World',

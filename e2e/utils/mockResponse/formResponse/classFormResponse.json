@@ -1,8 +1,8 @@
 {
   "success": true,
   "result": {
-    "id": "67ac7e8ac9d6476acdf0c5bb",
-    "classroomId": "67ac7e8ac9d6476acdf0c5bb",
+    "id": "1",
+    "classroomId": "1",
     "title": "Registration Form",
     "description": "Please fill out the form to register",
     "openDate": null,
@@ -34,9 +34,18 @@
         "options": [
           "string"
         ]
+      },
+      {
+        "name": "What is your department?",
+        "type": "string",
+        "required": true,
+        "validation": "TEXT",
+        "options": [
+          "string"
+        ]
       }
     ],
-    "ownerApprovalRequired": false
+    "ownerApprovalRequired": true
   },
   "error": null
 }

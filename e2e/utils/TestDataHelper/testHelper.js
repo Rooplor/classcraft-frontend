@@ -68,7 +68,6 @@ export async function initRoute(page) {
 export async function testCreateClassHelper(page, classTitle, classDetails, attendees, prerequisites, classType, classFormat, maxAttendees, startTime, endTime, instructorName, instructorDetails, familiarity, numOfDays, pathResponse) {
     await page.goto('http://localhost:3000/class');
     await page.getByLabel('Create').click();
-    await page.getByLabel('Classroom').locator('a').click();
     await page.getByPlaceholder('Class title').click();
     await page.getByPlaceholder('Class title').fill(classTitle);
     await page.getByPlaceholder('Enter class details').click();
@@ -101,7 +100,7 @@ export async function testCreateClassHelper(page, classTitle, classDetails, atte
         await page.getByPlaceholder('Select date').nth(1).click();
         await page.getByPlaceholder('Select date').nth(1).fill('Sun 6 Dec 2024');
         await page.getByPlaceholder('Select start time').nth(1).click();
-        await page.getByLabel('Next Hour').nth(1).click();
+        await page.getByLabel('Next Hour').first().click();
         // await page.getByPlaceholder('Select start time').nth(1).click();
         // await page.getByPlaceholder('Select start time').nth(1).fill(startTime);
         // await page.locator('input[name="dates\\[1\\]\\.date\\.endDateTime"]').click();

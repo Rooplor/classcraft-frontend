@@ -14,7 +14,7 @@ test('Test delete class', async ({page}) => {
     await page.getByLabel('Delete Classroom').click();
     await page.locator('#classroom-title').click();
     await page.locator('#classroom-title').fill('1. Cybersecurity Essentials for the Digital World');
-    await page.getByLabel('Delete', { exact: true }).nth(1).click();
+    await page.getByLabel('Delete', { exact: true }).click();
 });
 
 test('Test delete class with wrong title input', async ({page}) => {
@@ -26,6 +26,6 @@ test('Test delete class with wrong title input', async ({page}) => {
     await page.getByLabel('Delete Classroom').click();
     await page.locator('#classroom-title').click();
     await page.locator('#classroom-title').fill('123');
-    await page.getByLabel('Delete', { exact: true }).nth(1).click();
+    await page.getByLabel('Delete', { exact: true }).click();
     await expect(page.getByText('Please type text to match')).toBeVisible();
 });
