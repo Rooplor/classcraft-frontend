@@ -11,6 +11,7 @@ const content = ref<IContent[]>(
   JSON.parse(editingClassroom?.value?.content || "[]")
 );
 const editingContent = ref<IContent | null>(null);
+const isGenerating = ref(false);
 const confirm = useConfirm();
 const toast = useToast();
 const { updateContent } = useClassroom();
@@ -81,6 +82,7 @@ const removeContent = async (id: number) => {
   let res = await updateContent(editingClassroom.value.id, content.value);
 
   if (res.success) {
+    classroomStore.setEditingClassroom(res.result);
     toast.add({
       severity: "error",
       summary: "Deleted",
@@ -159,69 +161,80 @@ const confirmDelete = (content: IContent) => {
 const generateContent = async () => {
   if (editingClassroom.value === null) return;
 
-  let res = (await $fetch("http://soijed.thddns.net:2721/api/chat", {
-    method: "POST",
-    body: JSON.stringify({
-      model: "deepseek-r1:1.5b",
-      messages: [
-        {
-          role: "user",
-          content: `Design ${editingClassroom.value.title} with detail: ${editingClassroom.value.details}, target:${editingClassroom.value.target}, target:${editingClassroom.value.prerequisite}. and with title: \"${editingClassroom.value.title}\" in ${editingClassroom.value.format} format and activityGuides and presentationGuides should be consistency`,
-        },
-      ],
-      stream: false,
-      format: {
-        type: "object",
-        properties: {
-          title: {
-            type: "string",
+  isGenerating.value = true;
+
+  try {
+    let res = (await $fetch("http://soijed.thddns.net:2721/api/chat", {
+      method: "POST",
+      body: JSON.stringify({
+        model: "deepseek-r1:1.5b",
+        messages: [
+          {
+            role: "user",
+            content: `Design ${editingClassroom.value.title} with detail: ${editingClassroom.value.details}, target:${editingClassroom.value.target}, target:${editingClassroom.value.prerequisite}. and with title: \"${editingClassroom.value.title}\" in ${editingClassroom.value.format} format and activityGuides and presentationGuides should be consistency`,
           },
-          content: {
-            type: "string",
-          },
-          activityGuides: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                topicName: { type: "string" },
-                activityGuide: { type: "string" },
+        ],
+        stream: false,
+        format: {
+          type: "object",
+          properties: {
+            title: {
+              type: "string",
+            },
+            content: {
+              type: "string",
+            },
+            activityGuides: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  topicName: { type: "string" },
+                  activityGuide: { type: "string" },
+                },
+                required: ["topicName", "activityGuide"],
               },
-              required: ["topicName", "activityGuide"],
+            },
+            presentationGuides: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  topicName: { type: "string" },
+                  presentationGuide: { type: "string" },
+                },
+                required: ["topicName", "presentationGuide"],
+              },
             },
           },
-          presentationGuides: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                topicName: { type: "string" },
-                presentationGuide: { type: "string" },
-              },
-              required: ["topicName", "presentationGuide"],
-            },
-          },
+          required: [
+            "title",
+            "content",
+            "activityGuides",
+            "presentationGuides",
+          ],
         },
-        required: ["title", "content", "activityGuides", "presentationGuides"],
-      },
-    }),
-  })) as string;
+      }),
+    })) as string;
 
-  if (res) {
-    let parsedContent = JSON.parse(res.message.content) as IContent;
+    if (res) {
+      let parsedContent = JSON.parse(res.message.content) as IContent;
 
-    addEmptyContent();
-    onSaveContent({
-      ...parsedContent,
-      id: content.value.length,
-    });
-    toast.add({
-      severity: "success",
-      summary: "Generated",
-      detail: `Content has been generated`,
-      group: "tc",
-      life: 3000,
-    });
+      addEmptyContent();
+      onSaveContent({
+        ...parsedContent,
+        id: content.value.length,
+      });
+      toast.add({
+        severity: "success",
+        summary: "Generated",
+        detail: `Content has been generated`,
+        group: "tc",
+        life: 3000,
+      });
+    }
+  } finally {
+    isGenerating.value = false;
   }
 };
 </script>
@@ -378,7 +391,14 @@ const generateContent = async () => {
     </Button>
     <Button
       label="Generate using AI"
-      icon="pi pi-sparkles"
+      :icon="isGenerating ? 'pi pi-spin pi-spinner' : 'pi pi-sparkles'"
+      :loading="isGenerating"
+      class="w-full p-6 border rounded-2xl duration-150"
+      :class="
+        isGenerating
+          ? 'cursor-not-allowed text-slate-400 bg-slate-100 border-slate-100'
+          : 'text-primary bg-primary-50 border-primary hover:bg-primary-100'
+      "
       @click="generateContent"
     />
   </div>
