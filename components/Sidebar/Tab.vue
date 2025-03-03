@@ -37,7 +37,7 @@ watch(router.currentRoute, () => {
       "
       class="flex items-start"
     >
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 w-full">
         <img
           v-if="classroom?.coverImage"
           :src="classroom?.coverImage"
