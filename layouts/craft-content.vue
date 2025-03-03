@@ -158,6 +158,15 @@ const confirmDelete = (content: IContent) => {
   });
 };
 
+const onAdvancedUpload = () => {
+  toast.add({
+    severity: "info",
+    summary: "Success",
+    detail: "File Uploaded",
+    life: 3000,
+  });
+};
+
 const generateContent = async () => {
   if (editingClassroom.value === null) return;
 
@@ -239,167 +248,201 @@ const generateContent = async () => {
 };
 </script>
 <template>
-  <div class="space-y-4">
-    <div v-if="content.length > 0" v-for="(c, index) in content" :key="index">
-      <div
-        v-if="editingContent && c.id === editingContent?.id"
-        class="border rounded-3xl bg-white overflow-clip divide-y"
-      >
-        <div class="p-4">
-          <div class="flex justify-between items-center gap-2">
-            <InputText
-              v-model="editingContent.title"
-              placeholder="Enter Title"
-              unstyled
-              focus
-              class="w-full text-xl border p-2 bg-slate-50 font-bold rounded-lg outline-none"
-            />
-          </div>
-        </div>
-        <div class="p-4 space-y-8">
-          <Textarea
-            v-model="editingContent.content"
-            placeholder="Content"
-            unstyled
-            rows="5"
-            class="w-full p-2 border bg-slate-50 outline-none resize-none rounded-lg"
-          />
-          <div class="space-y-2">
-            <small class="text-slate-400">Activity Guides</small>
-            <div class="space-y-2">
-              <div
-                v-for="(guide, index) in editingContent.activityGuides"
-                :key="index"
-                class="p-2 px-4 bg-slate-100 text-slate-500 rounded-xl flex gap-2 items-center duration-150 hover:bg-slate-200"
-              >
-                <p class="text-slate-400">{{ index + 1 }}.</p>
-                <div class="w-full flex justify-end gap-2">
+  <Tabs :value="0">
+    <TabList>
+      <Tab :value="0">Content</Tab>
+      <Tab :value="1">Class Material</Tab>
+    </TabList>
+    <TabPanels>
+      <TabPanel :value="0">
+        <div class="space-y-4">
+          <div
+            v-if="content.length > 0"
+            v-for="(c, index) in content"
+            :key="index"
+          >
+            <div
+              v-if="editingContent && c.id === editingContent?.id"
+              class="border rounded-3xl bg-white overflow-clip divide-y"
+            >
+              <div class="p-4">
+                <div class="flex justify-between items-center gap-2">
                   <InputText
-                    v-model="guide.activityGuide"
-                    placeholder="Enter Activity Guide"
+                    v-model="editingContent.title"
+                    placeholder="Enter Title"
                     unstyled
-                    required
-                    class="w-full bg-transparent outline-none border-b border-slate-300"
-                  />
-                  <Button
-                    icon="pi pi-times"
-                    severity="danger"
-                    rounded
-                    text
-                    @click="removeActivityGuide(guide.id)"
+                    focus
+                    class="w-full text-xl border p-2 bg-slate-50 font-bold rounded-lg outline-none"
                   />
                 </div>
               </div>
-              <Button
-                @click="addActivityGuide"
-                unstyled
-                class="w-full p-4 border rounded-xl text-primary bg-primary-50 border-primary hover:bg-primary-100 duration-150"
-              >
-                <i class="pi pi-plus" />&nbsp; Add Activity Guide
-              </Button>
-            </div>
-          </div>
-          <div class="space-y-2">
-            <small class="text-slate-400"> Presentation Guides </small>
-            <div class="grid grid-cols-2 gap-2">
-              <div
-                v-for="(guide, index) in editingContent.presentationGuides"
-                :key="index"
-                class="aspect-video bg-slate-100 text-slate-500 rounded-xl p-4 duration-150 hover:bg-slate-200"
-              >
-                <div class="relative">
-                  <Textarea
-                    v-model="guide.presentationGuide"
-                    placeholder="Presentation Guide"
-                    rows="7"
-                    required
-                    unstyled
-                    class="bg-transparent outline-none border-slate-300 w-full"
-                  />
-                  <div class="absolute top-0 right-0">
+              <div class="p-4 space-y-8">
+                <Textarea
+                  v-model="editingContent.content"
+                  placeholder="Content"
+                  unstyled
+                  rows="5"
+                  class="w-full p-2 border bg-slate-50 outline-none resize-none rounded-lg"
+                />
+                <div class="space-y-2">
+                  <small class="text-slate-400">Activity Guides</small>
+                  <div class="space-y-2">
+                    <div
+                      v-for="(guide, index) in editingContent.activityGuides"
+                      :key="index"
+                      class="p-2 px-4 bg-slate-100 text-slate-500 rounded-xl flex gap-2 items-center duration-150 hover:bg-slate-200"
+                    >
+                      <p class="text-slate-400">{{ index + 1 }}.</p>
+                      <div class="w-full flex justify-end gap-2">
+                        <InputText
+                          v-model="guide.activityGuide"
+                          placeholder="Enter Activity Guide"
+                          unstyled
+                          required
+                          class="w-full bg-transparent outline-none border-b border-slate-300"
+                        />
+                        <Button
+                          icon="pi pi-times"
+                          severity="danger"
+                          rounded
+                          text
+                          @click="removeActivityGuide(guide.id)"
+                        />
+                      </div>
+                    </div>
                     <Button
-                      icon="pi pi-times"
-                      severity="danger"
-                      rounded
-                      text
-                      @click="removePresentationGuide(guide.id)"
-                    />
+                      @click="addActivityGuide"
+                      unstyled
+                      class="w-full p-4 border rounded-xl text-primary bg-primary-50 border-primary hover:bg-primary-100 duration-150"
+                    >
+                      <i class="pi pi-plus" />&nbsp; Add Activity Guide
+                    </Button>
+                  </div>
+                </div>
+                <div class="space-y-2">
+                  <small class="text-slate-400"> Presentation Guides </small>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div
+                      v-for="(
+                        guide, index
+                      ) in editingContent.presentationGuides"
+                      :key="index"
+                      class="aspect-video bg-slate-100 text-slate-500 rounded-xl p-4 duration-150 hover:bg-slate-200"
+                    >
+                      <div class="relative">
+                        <Textarea
+                          v-model="guide.presentationGuide"
+                          placeholder="Presentation Guide"
+                          rows="7"
+                          required
+                          unstyled
+                          class="bg-transparent outline-none border-slate-300 w-full"
+                        />
+                        <div class="absolute top-0 right-0">
+                          <Button
+                            icon="pi pi-times"
+                            severity="danger"
+                            rounded
+                            text
+                            @click="removePresentationGuide(guide.id)"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <Button
+                      @click="addPresentationGuide"
+                      label="Add"
+                      fluid
+                      unstyled
+                      class="aspect-video p-2 border rounded-xl text-primary bg-primary-50 border-primary hover:bg-primary-100 duration-150"
+                    >
+                      <i class="pi pi-plus" />&nbsp; Add Presentation Guide
+                    </Button>
                   </div>
                 </div>
               </div>
-              <Button
-                @click="addPresentationGuide"
-                label="Add"
-                fluid
-                unstyled
-                class="aspect-video p-2 border rounded-xl text-primary bg-primary-50 border-primary hover:bg-primary-100 duration-150"
-              >
-                <i class="pi pi-plus" />&nbsp; Add Presentation Guide
-              </Button>
-            </div>
-          </div>
-        </div>
-        <div class="p-4 flex gap-2 justify-between">
-          <Button
-            severity="danger"
-            text
-            label="Delete"
-            @click="confirmDelete(editingContent)"
-          />
-          <div class="flex gap-2">
-            <Button
-              severity="secondary"
-              label="Cancel"
-              @click="
+              <div class="p-4 flex gap-2 justify-between">
+                <Button
+                  severity="danger"
+                  text
+                  label="Delete"
+                  @click="confirmDelete(editingContent)"
+                />
+                <div class="flex gap-2">
+                  <Button
+                    severity="secondary"
+                    label="Cancel"
+                    @click="
                                         () => {
                                             isContentEmpty(editingContent?.init) 
                                             ? confirmDelete(editingContent?.init as IContent)
                                             : editingContent = null
                                         }
                                     "
-            />
-            <Button
-              icon="pi pi-check"
-              label="Save"
-              :disabled="isContentEmpty(editingContent)"
-              @click="onSaveContent(editingContent)"
-            />
+                  />
+                  <Button
+                    icon="pi pi-check"
+                    label="Save"
+                    :disabled="isContentEmpty(editingContent)"
+                    @click="onSaveContent(editingContent)"
+                  />
+                </div>
+              </div>
+            </div>
+            <ContentCard v-else :content="c" @edit="editingContent = c" />
           </div>
+          <div v-else>
+            <div class="flex justify-center items-center h-52">
+              <p class="text-slate-400">
+                No content available. Click the button below to add content.
+              </p>
+            </div>
+          </div>
+          <Button
+            :disabled="editingContent !== null && content.length > 0"
+            @click="addEmptyContent"
+            unstyled
+            class="w-full p-6 border rounded-2xl duration-150"
+            :class="
+              editingContent !== null && content.length > 0
+                ? 'cursor-not-allowed text-slate-400 bg-slate-100 border-slate-100'
+                : 'text-primary bg-primary-50 border-primary hover:bg-primary-100'
+            "
+          >
+            <i class="pi pi-plus" />&nbsp; Add Content
+          </Button>
+          <Button
+            label="Generate using AI"
+            :icon="isGenerating ? 'pi pi-spin pi-spinner' : 'pi pi-sparkles'"
+            :loading="isGenerating"
+            class="w-full p-6 border rounded-2xl duration-150"
+            :class="
+              isGenerating
+                ? 'cursor-not-allowed text-slate-400 bg-slate-100 border-slate-100'
+                : 'text-primary bg-primary-50 border-primary hover:bg-primary-100'
+            "
+            @click="generateContent"
+          />
         </div>
-      </div>
-      <ContentCard v-else :content="c" @edit="editingContent = c" />
-    </div>
-    <div v-else>
-      <div class="flex justify-center items-center h-52">
-        <p class="text-slate-400">
-          No content available. Click the button below to add content.
-        </p>
-      </div>
-    </div>
-    <Button
-      :disabled="editingContent !== null && content.length > 0"
-      @click="addEmptyContent"
-      unstyled
-      class="w-full p-6 border rounded-2xl duration-150"
-      :class="
-        editingContent !== null && content.length > 0
-          ? 'cursor-not-allowed text-slate-400 bg-slate-100 border-slate-100'
-          : 'text-primary bg-primary-50 border-primary hover:bg-primary-100'
-      "
-    >
-      <i class="pi pi-plus" />&nbsp; Add Content
-    </Button>
-    <Button
-      label="Generate using AI"
-      :icon="isGenerating ? 'pi pi-spin pi-spinner' : 'pi pi-sparkles'"
-      :loading="isGenerating"
-      class="w-full p-6 border rounded-2xl duration-150"
-      :class="
-        isGenerating
-          ? 'cursor-not-allowed text-slate-400 bg-slate-100 border-slate-100'
-          : 'text-primary bg-primary-50 border-primary hover:bg-primary-100'
-      "
-      @click="generateContent"
-    />
-  </div>
+      </TabPanel>
+      <TabPanel :value="1">
+        <div class="card">
+          <Toast />
+          <!-- image, pdf -->
+          <FileUpload
+            name="demo[]"
+            url="/api/upload"
+            @upload="onAdvancedUpload($event)"
+            :multiple="true"
+            accept="image/*, application/pdf"
+            :maxFileSize="10000000"
+          >
+            <template #empty>
+              <span>Drag and drop files to here to upload.</span>
+            </template>
+          </FileUpload>
+        </div>
+      </TabPanel>
+    </TabPanels>
+  </Tabs>
 </template>
