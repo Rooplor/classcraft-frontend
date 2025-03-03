@@ -61,9 +61,10 @@ useHead({
         <EditClassroomHeaderbar />
         <div class="flex justify-center">
             <Stepper value="1" class="basis-full max-w-screen-lg m-auto">
-                <div v-if="editingClassroom" class="inline-flex items-center gap-2 px-4 text-3xl mb-10 text-slate-500 font-bold">
+                <div v-if="editingClassroom" class="inline-flex items-start gap-2 px-4 text-3xl mb-10 text-slate-500 font-bold">
                     <i class="pi pi-pencil" style="
                         font-size: 1.5rem;
+                        margin-top: 0.25rem;
                     " />
                     <p>Editing "{{ editingClassroom.title }}"</p>
                 </div>
