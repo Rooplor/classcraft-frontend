@@ -52,6 +52,7 @@ useHead({
 
 <template>
   <div class="w-full">
+    <Headerbar/>
     <div class="w-full max-w-screen-lg mx-auto">
       <div class="flex flex-col gap-4 pb-2 pt-8">
         <div class="flex flex-col sm:flex-row justify-between gap-4">
