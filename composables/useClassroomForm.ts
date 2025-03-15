@@ -1,5 +1,5 @@
 import type { IResponse } from "../types/Response";
-import type { IForm, IFormSubmission } from "../types/Form";
+import type { EAttendeeStatus, IForm, IFormSubmission } from "../types/Form";
 import type { IUser } from "../types/User";
 
 const useForm = () => {
@@ -114,10 +114,11 @@ const useForm = () => {
 
   const setAttendeeStatus = (
     id: string,
-    status: string
+    status: EAttendeeStatus,
+    day: number,
   ): Promise<IResponse<IFormSubmission>> => {
     return $fetch(
-      `${config.public.baseUrl}/api/form/attendees/${id}?status=${status}`,
+      `${config.public.baseUrl}/api/form/attendees/${id}?status=${status}&day=${day}`,
       {
         method: "PATCH",
       }
