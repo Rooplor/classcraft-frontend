@@ -18,6 +18,7 @@ const { getVenueByIds } = useVenue();
 const { getUserById, getUserProfile } = useUser();
 const isRegistrationDialogVisible = ref(false);
 const isSubmissionDialogVisible = ref(false);
+const isUserCheckedIn = ref(false);
 const isUserRegistered = ref(false);
 const user = (await getUserProfile()).result;
 const userFormSubmission = ref<IFormSubmission>();
@@ -45,6 +46,8 @@ try {
     await getUserFormSubmissions(user.id, id.toString())
   ).result;
   isUserRegistered.value = userFormSubmission.value ? true : false;
+  isUserCheckedIn.value =
+    userFormSubmission.value?.attendeesStatus === EAttendeeStatus.Present;
   usersInClassroom.value = (await getUserInClassroom(id.toString())).result;
   seatsLeft = classroom.capacity - usersInClassroom.value.length;
   if (!classroom.published && user.id !== classroom.owner) {
@@ -153,7 +156,7 @@ useHead({
           </nuxt-link>
         </div>
         <div
-          v-if="userFormSubmission?.attendeesStatus === EAttendeeStatus.Present"
+          v-if="isUserCheckedIn"
           class="p-4 border rounded-xl text-green-500 bg-green-100 flex flex-col gap-4 mt-6"
         >
           <p>Checked in</p>
@@ -349,6 +352,22 @@ useHead({
               disabled
             />
             <div
+              v-else-if="
+                isUserCheckedIn &&
+                isoToDateWithTimezone(
+                  classroom.dates[classroom.dates.length - 1].date.endDateTime
+                ) < new Date()
+              "
+              class="p-4 border rounded-xl bg-primary-50 flex flex-col gap-4"
+            >
+              <div class="flex justify-center items-center gap-2">
+                <p class="text-primary">
+                  Congrats! You have completed this class
+                </p>
+              </div>
+              <Button :label="`Send classroom feedback`" />
+            </div>
+            <div
               v-else-if="isUserRegistered"
               class="p-4 border rounded-xl bg-slate-50 flex flex-col gap-4"
             >
@@ -380,7 +399,7 @@ useHead({
             <Button
               v-else
               size="large"
-              :label="`Join &quot;${classroom.title}&quot;`"
+              :label="`Join Now`"
               rounded
               :severity="'primary'"
               @click="isRegistrationDialogVisible = true"
@@ -413,7 +432,7 @@ useHead({
             </div>
           </div>
         </div>
-        <div 
+        <div
           v-if="userFormSubmission?.attendeesStatus === EAttendeeStatus.Present"
         >
           <p class="text-xl font-bold mb-4">Class Materials</p>
