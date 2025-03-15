@@ -7,6 +7,8 @@ const router = useRouter();
 const toast = useToast();
 
 const { id } = router.currentRoute.value.params as { id: string };
+const { day } = router.currentRoute.value.query as { day: string };
+
 const userFormSubmission = ref<IFormSubmission>();
 const user = (await getUserProfile()).result;
 
@@ -58,7 +60,8 @@ onMounted(async () => {
   } else {
     let attendeeStatusResponse = await setAttendeeStatus(
       userFormSubmission.value?.id,
-      EAttendeeStatus.Present
+      EAttendeeStatus.Present,
+      Number(day)
     );
     if (attendeeStatusResponse.success) {
       toast.add({
