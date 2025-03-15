@@ -170,6 +170,10 @@ if (editingClassroom.value) {
       id: index,
       question: field.name,
     }));
+
+    if (closeDate.value && closeDate.value < new Date()) {
+      setRegistrationStatus(editingClassroom.value.id, false);
+    }
   }
 }
 </script>

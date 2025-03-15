@@ -14,6 +14,7 @@ const op = ref();
 const action = ref();
 const isContentDialogVisible = ref(false);
 const isQrDialogVisible = ref(false);
+const isCheckinDialogVisible = ref(false);
 
 const deleteInput = ref("");
 const isMatch = ref(true);
@@ -136,6 +137,14 @@ const isDeleteDialogOpen = ref(false);
         @click="isQrDialogVisible = true"
       />
       <Button
+        icon="pi pi-check"
+        label="Check-In"
+        rounded
+        size="small"
+        :disabled="!editingClassroom"
+        @click="isCheckinDialogVisible = true"
+      />
+      <Button
         :disabled="!editingClassroom"
         label="Craft Content"
         icon="pi pi-sparkles"
@@ -214,12 +223,7 @@ const isDeleteDialogOpen = ref(false);
     <div class="flex flex-col gap-2 w-52">
       <div class="flex flex-col gap-2">
         <ViewSubmissionButton v-if="editingClassroom?.published">
-          <Button
-            label="View Submissions"
-            icon="pi pi-users"
-            fluid
-            outlined
-          />
+          <Button label="View Submissions" icon="pi pi-users" fluid outlined />
         </ViewSubmissionButton>
         <Button
           v-if="editingClassroom?.published"
@@ -300,6 +304,21 @@ const isDeleteDialogOpen = ref(false);
         @click="handleDelete"
       />
     </div>
+  </Dialog>
+  <Dialog
+    v-model:visible="isCheckinDialogVisible"
+    dismissableMask
+    header="Check-In Status"
+    position="center"
+    :modal="true"
+    :draggable="false"
+    class="w-full mx-3 m-auto"
+    :style="{
+      height: '100vh',
+      background: '#f8fafc',
+    }"
+  >
+    <NuxtLayout name="check-in" />
   </Dialog>
   <Dialog
     v-model:visible="isQrDialogVisible"

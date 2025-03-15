@@ -114,37 +114,6 @@ const handleExportCSV = async () => {
         </button>
       </template>
     </Column>
-    <Column field="attendeesStatus" header="Status">
-      <template #body="slotProps">
-        <Tag
-          v-if="slotProps.data.attendeesStatus === EAttendeeStatus.Present"
-          severity="success"
-          value="Checked In"
-        />
-        <Tag
-          v-else-if="slotProps.data.attendeesStatus === EAttendeeStatus.Absent"
-          severity="danger"
-          value="Absent"
-        />
-        <Tag
-          v-else-if="slotProps.data.attendeesStatus === EAttendeeStatus.Late"
-          severity="warn"
-          value="Late"
-        />
-        <Tag
-          v-else-if="slotProps.data.attendeesStatus === EAttendeeStatus.Pending"
-          severity="warn"
-          value="Pending"
-        />
-        <Tag
-          v-else-if="
-            slotProps.data.attendeesStatus === EAttendeeStatus.Not_Going
-          "
-          severity="danger"
-          value="Not Going"
-        />
-      </template>
-    </Column>
     <Column
       v-for="column in columns"
       :field="column.field"
