@@ -35,6 +35,7 @@ export interface IClassroom {
         enrolled: boolean;
         approved: boolean;
     }
+    classMaterials: string[];
 }
 
 export interface IAddClassroomDTO {

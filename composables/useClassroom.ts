@@ -144,6 +144,16 @@ const useClassroom = () => {
         });
     };
 
+    const updateClassMaterial = (
+        id: string,
+        urls: string[]
+    ): Promise<IResponse<IClassroom>> => {
+        return $fetch(`${config.public.baseUrl}/api/class/${id}/materials`, {
+            body: JSON.stringify(urls),
+            method: "PATCH",
+        });
+    }
+
     const updateClassroomStatus = (
         id: string,
         status: string
@@ -200,6 +210,7 @@ const useClassroom = () => {
         updateRegistrationUrl,
         updateMeetingUrl,
         updateContent,
+        updateClassMaterial,
         updateClassroomStatus,
         reserveVenue,
         updateVenueStatus,

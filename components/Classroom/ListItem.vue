@@ -156,15 +156,6 @@ const formatDateRange = (dates: IReservationDateAndVenue[]) => {
               class=""
             />
             <Badge
-              v-if="
-                classroom?.classEnrollDetail.enrolled &&
-                !classroom?.classEnrollDetail.approved
-              "
-              value="Pending registration"
-              severity="warn"
-              class=""
-            />
-            <Badge
               v-else-if="
                 classroom?.classEnrollDetail.enrolled &&
                 classroom?.classEnrollDetail.approved

@@ -3,4 +3,5 @@ export enum EFileType {
     EMAIL_IMAGE = "2",
     VENUE_IMAGE = "3",
     INSTRUCTOR_AVATAR = "4",
+    CLASS_MATERIAL = "5",
 }
