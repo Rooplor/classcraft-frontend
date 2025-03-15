@@ -190,7 +190,7 @@ const onFileSelect = async (e: any) => {
       }
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
