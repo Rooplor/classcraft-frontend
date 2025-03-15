@@ -11,8 +11,14 @@ const useFileUpload = () => {
             method: "POST",
         });
     };
+    
+    const removeFile = (url: string): Promise<IResponse<null>> => {
+      return $fetch(`${config.public.baseUrl}/api/file/remove?fileUrl=${url}`, {
+        method: "POST",
+      });
+    };
 
-    return { uploadFile };
+    return { uploadFile, removeFile };
 };
 
 export default useFileUpload;

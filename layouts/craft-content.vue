@@ -17,7 +17,7 @@ const isGenerating = ref(false);
 const confirm = useConfirm();
 const toast = useToast();
 const { updateContent, updateClassMaterial } = useClassroom();
-const { uploadFile } = useFileUpload();
+const { uploadFile, removeFile } = useFileUpload();
 
 const removeEmptyPresentationGuide = (content: IContent) => {
   content.presentationGuides = content.presentationGuides.filter(
@@ -194,7 +194,7 @@ const onFileSelect = async (e: any) => {
   }
 };
 
-const onRemoveFile = async (e: Event, index: number) => {
+const onRemoveFile = async (e: Event, file: string, index: number) => {
   e.preventDefault();
   if (!editingClassroom.value) return;
 
@@ -205,6 +205,7 @@ const onRemoveFile = async (e: Event, index: number) => {
 
   if (res.success) {
     classroomStore.setEditingClassroom(res.result);
+    removeFile(file);
     toast.add({
       severity: "error",
       summary: "Deleted",
@@ -524,7 +525,7 @@ const generateContent = async () => {
                       severity="danger"
                       rounded
                       text
-                      @click="onRemoveFile($event, index)"
+                      @click="onRemoveFile($event, file, index)"
                     />
                   </div>
                 </a>
