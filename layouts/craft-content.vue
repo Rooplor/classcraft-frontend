@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { getFileNameFromUrl } from "../composables/file";
 import type { IClassroom } from "../types/Classroom";
 import type { IContent } from "../types/Content";
+import { EFileType } from "../types/File";
 
 const classroomStore = useClassroomStore();
 const { editingClassroom } = storeToRefs(classroomStore) as {
@@ -14,7 +16,8 @@ const editingContent = ref<IContent | null>(null);
 const isGenerating = ref(false);
 const confirm = useConfirm();
 const toast = useToast();
-const { updateContent } = useClassroom();
+const { updateContent, updateClassMaterial } = useClassroom();
+const { uploadFile } = useFileUpload();
 
 const removeEmptyPresentationGuide = (content: IContent) => {
   content.presentationGuides = content.presentationGuides.filter(
@@ -158,13 +161,58 @@ const confirmDelete = (content: IContent) => {
   });
 };
 
-const onAdvancedUpload = () => {
-  toast.add({
-    severity: "info",
-    summary: "Success",
-    detail: "File Uploaded",
-    life: 3000,
+const onFileSelect = async (e: any) => {
+  if (e.files.length === 0 || !editingClassroom.value) return;
+
+  const formData = new FormData();
+  e.files.forEach((file: any) => {
+    formData.append("file", file);
+    formData.append("fileCategory", EFileType.CLASS_MATERIAL);
   });
+
+  try {
+    const uploadResponse = await uploadFile(formData);
+    if (uploadResponse.success) {
+      let res = await updateClassMaterial(editingClassroom.value.id, [
+        ...editingClassroom.value.classMaterials,
+        ...uploadResponse.result.urls,
+      ]);
+
+      if (res.success) {
+        classroomStore.setEditingClassroom(res.result);
+        toast.add({
+          severity: "success",
+          summary: "Uploaded",
+          detail: `Class materials has been uploaded`,
+          group: "tc",
+          life: 3000,
+        });
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const onRemoveFile = async (e: Event, index: number) => {
+  e.preventDefault();
+  if (!editingClassroom.value) return;
+
+  let files = editingClassroom.value.classMaterials;
+  files.splice(index, 1);
+
+  let res = await updateClassMaterial(editingClassroom.value.id, files);
+
+  if (res.success) {
+    classroomStore.setEditingClassroom(res.result);
+    toast.add({
+      severity: "error",
+      summary: "Deleted",
+      detail: `Class material has been removed`,
+      group: "tc",
+      life: 3000,
+    });
+  }
 };
 
 const generateContent = async () => {
@@ -251,7 +299,7 @@ const generateContent = async () => {
   <Tabs :value="0">
     <TabList>
       <Tab :value="0">Content</Tab>
-      <Tab :value="1">Class Material</Tab>
+      <Tab :value="1">Class Materials</Tab>
     </TabList>
     <TabPanels>
       <TabPanel :value="0">
@@ -373,12 +421,12 @@ const generateContent = async () => {
                     severity="secondary"
                     label="Cancel"
                     @click="
-                                        () => {
-                                            isContentEmpty(editingContent?.init) 
-                                            ? confirmDelete(editingContent?.init as IContent)
-                                            : editingContent = null
-                                        }
-                                    "
+                      () => {
+                          isContentEmpty(editingContent?.init) 
+                          ? confirmDelete(editingContent?.init as IContent)
+                          : editingContent = null
+                      }
+                    "
                   />
                   <Button
                     icon="pi pi-check"
@@ -426,19 +474,67 @@ const generateContent = async () => {
         </div>
       </TabPanel>
       <TabPanel :value="1">
-        <div class="card">
+        <div>
           <Toast />
-          <!-- image, pdf -->
           <FileUpload
-            name="demo[]"
-            url="/api/upload"
-            @upload="onAdvancedUpload($event)"
+            @select="onFileSelect($event)"
             :multiple="true"
-            accept="image/*, application/pdf"
-            :maxFileSize="10000000"
+            accept="application/pdf"
+            :maxFileSize="25000000"
           >
-            <template #empty>
-              <span>Drag and drop files to here to upload.</span>
+            <template #header="{ chooseCallback, clearCallback }">
+              <div class="flex justify-between items-center">
+                <Button
+                  label="Upload"
+                  icon="pi pi-upload"
+                  @click="
+                    () => {
+                      chooseCallback();
+                      clearCallback();
+                    }
+                  "
+                />
+              </div>
+            </template>
+            <template #content="{ messages }">
+              <div class="grid grid-cols-1 gap-2">
+                <Message
+                  v-for="message of messages"
+                  :key="message"
+                  severity="error"
+                >
+                  {{ message }}
+                </Message>
+                <a
+                  v-for="(file, index) in editingClassroom?.classMaterials"
+                  :key="index"
+                  :href="file"
+                  target="_blank"
+                  class="border border-gray-200 rounded-lg p-4 bg-white hover:bg-slate-50 duration-200"
+                >
+                  <div class="flex justify-between items-center gap-2">
+                    <div class="flex gap-2 items-center">
+                      <i
+                        class="pi pi-file text-primary rounded-lg p-2 bg-primary-50"
+                      />
+                      <p>{{ getFileNameFromUrl(file) }}</p>
+                    </div>
+                    <Button
+                      icon="pi pi-times"
+                      severity="danger"
+                      rounded
+                      text
+                      @click="onRemoveFile($event, index)"
+                    />
+                  </div>
+                </a>
+              </div>
+              <div
+                v-if="editingClassroom?.classMaterials.length === 0"
+                class="flex justify-center items-center h-32"
+              >
+                <p class="text-slate-400">No class materials uploaded.</p>
+              </div>
             </template>
           </FileUpload>
         </div>

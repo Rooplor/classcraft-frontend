@@ -119,7 +119,7 @@ useHead({
               <img
                 :src="classroom.coverImage"
                 :alt="`${classroom.title} class cover image`"
-                class="w-[52rem] bg-slate-200 aspect-square border rounded-2xl object-cover "
+                class="w-[52rem] bg-slate-200 aspect-square border rounded-2xl object-cover"
               />
             </template>
             <template #original="slotProps">
@@ -156,7 +156,7 @@ useHead({
           v-if="userFormSubmission?.attendeesStatus === EAttendeeStatus.Present"
           class="p-4 border rounded-xl text-green-500 bg-green-100 flex flex-col gap-4 mt-6"
         >
-          Checked in
+          <p>Checked in</p>
         </div>
       </div>
       <div class="space-y-8">
@@ -404,8 +404,30 @@ useHead({
               </p>
             </div>
             <div v-else-if="user.id === classroom.owner" />
-            <div v-else-if="classroom.registrationStatus && usersInClassroom.length === 0">
+            <div
+              v-else-if="
+                classroom.registrationStatus && usersInClassroom.length === 0
+              "
+            >
               <p class="text-slate-500">Be the first to join this class</p>
+            </div>
+          </div>
+        </div>
+        <div 
+          v-if="userFormSubmission?.attendeesStatus === EAttendeeStatus.Present"
+        >
+          <p class="text-xl font-bold mb-4">Class Materials</p>
+          <div class="bg-white p-6 border rounded-2xl flex flex-col gap-4">
+            <div
+              v-if="classroom?.classMaterials?.length > 0"
+              class="grid grid-cols-1 gap-2"
+            >
+              <ClassMaterialItem
+                v-for="(file, index) in classroom?.classMaterials"
+                :key="index"
+                :file="file"
+                :index="index"
+              />
             </div>
           </div>
         </div>
