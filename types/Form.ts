@@ -7,6 +7,7 @@ interface IForm {
   closeDate?: string;
   fields: IField[];
   ownerApprovalRequired: boolean;
+  feedback: IField[];
 }
 
 interface IField {
@@ -22,6 +23,7 @@ interface IFormSubmission {
   formId: string;
   classroomId: string;
   responses: any;
+  feedbackResponse: any;
   submittedBy: string;
   userDetail: {
     id: string;
@@ -29,7 +31,12 @@ interface IFormSubmission {
     profilePicture: string;
   };
   approvedByOwner: boolean;
-  attendeesStatus: EAttendeeStatus;
+  attendeesStatus: {
+    day: number;
+    attendeesStatus: EAttendeeStatus;
+    date: string;
+    checkInDateTime: string;
+  }[];
 }
 
 enum EFieldValidation {
@@ -48,4 +55,10 @@ enum EAttendeeStatus {
   Pending = "PENDING",
 }
 
-export { type IForm, type IFormSubmission, EFieldValidation, EAttendeeStatus };
+export {
+  type IForm,
+  type IField,
+  type IFormSubmission,
+  EFieldValidation,
+  EAttendeeStatus,
+};
