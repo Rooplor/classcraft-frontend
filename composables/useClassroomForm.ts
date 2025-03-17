@@ -115,7 +115,7 @@ const useForm = () => {
   const setAttendeeStatus = (
     id: string,
     status: EAttendeeStatus,
-    day: number,
+    day: number
   ): Promise<IResponse<IFormSubmission>> => {
     return $fetch(
       `${config.public.baseUrl}/api/form/attendees/${id}?status=${status}&day=${day}`,
@@ -125,6 +125,28 @@ const useForm = () => {
     );
   };
 
+  const updateFeedbackForm = (
+    formId: string,
+    feedbackForm: object[]
+  ): Promise<IResponse<IForm>> => {
+    return $fetch(`${config.public.baseUrl}/api/form/feedback/${formId}`, {
+      body: JSON.stringify(feedbackForm),
+      method: "PATCH",
+    });
+  };
+
+  const submitFeedbackForm = (
+    formSubmissionId: string,
+    form: object
+  ): Promise<IResponse<IForm>> => {
+    return $fetch(
+      `${config.public.baseUrl}/api/form/feedback/submit/${formSubmissionId}`,
+      {
+        body: JSON.stringify(form),
+        method: "PATCH",
+      }
+    );
+  };
   return {
     getFormById,
     addForm,
@@ -140,6 +162,8 @@ const useForm = () => {
     setApprovalStatus,
     getCheckInQrCode,
     setAttendeeStatus,
+    updateFeedbackForm,
+    submitFeedbackForm,
   };
 };
 
