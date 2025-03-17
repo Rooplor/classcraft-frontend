@@ -15,6 +15,7 @@ const action = ref();
 const isContentDialogVisible = ref(false);
 const isQrDialogVisible = ref(false);
 const isCheckinDialogVisible = ref(false);
+const isFeedbackDialogVisible = ref(false);
 
 const deleteInput = ref("");
 const isMatch = ref(true);
@@ -151,6 +152,15 @@ const isDeleteDialogOpen = ref(false);
         rounded
         size="small"
         @click="isContentDialogVisible = true"
+      />
+      <Button
+        :disabled="!editingClassroom"
+        label="Feedback"
+        icon="pi pi-heart"
+        rounded
+        outlined
+        size="small"
+        @click="isFeedbackDialogVisible = true"
       />
       <div class="hidden gap-2 lg:flex">
         <ViewSubmissionButton v-if="editingClassroom?.published">
@@ -319,6 +329,21 @@ const isDeleteDialogOpen = ref(false);
     }"
   >
     <NuxtLayout name="check-in" />
+  </Dialog>
+  <Dialog
+    v-model:visible="isFeedbackDialogVisible"
+    dismissableMask
+    :header="`Feedback for &quot;${editingClassroom?.title}&quot;`"
+    position="center"
+    :modal="true"
+    :draggable="false"
+    class="w-full mx-3 m-auto"
+    :style="{
+      height: '100vh',
+      background: '#f8fafc',
+    }"
+  >
+    <NuxtLayout name="create-feedback-form" />
   </Dialog>
   <Dialog
     v-model:visible="isQrDialogVisible"
