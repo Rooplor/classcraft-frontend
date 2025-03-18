@@ -222,7 +222,7 @@ const generateContent = async () => {
   isGenerating.value = true;
 
   try {
-    let res = (await $fetch("http://soijed.thddns.net:2721/api/chat", {
+    let res = (await $fetch("http://10.13.104.105:11434/api/chat", {
       method: "POST",
       body: JSON.stringify({
         model: "deepseek-r1:1.5b",
