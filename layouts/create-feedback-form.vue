@@ -22,8 +22,6 @@ const customQuestions = computed(() => {
   return questions.value;
 });
 
-const feedbackResponses = ref([]);
-
 const onSaveQuestion = async (question: Question) => {
   const index = questions.value.findIndex((q) => q.id === question.init?.id);
   questions.value[index].question = question.question;
@@ -116,113 +114,99 @@ if (editingClassroom.value) {
   let res = await getClassroomFormSubmission(editingClassroom.value.id);
   if (res.success) {
     const { result } = res;
-    console.log(result);
   }
 }
 </script>
 <template>
-  <Tabs :value="0">
-    <TabList>
-      <Tab :value="0">Questions</Tab>
-      <Tab :value="1">Responses</Tab>
-    </TabList>
-    <TabPanels>
-      <TabPanel :value="0">
-        <div class="space-y-2">
-          <div class="flex justify-end">
-            <Button
-              label="Add New Question"
-              icon="pi pi-plus"
-              size="small"
-              text
-              @click="addQuestion"
-            />
-          </div>
-          <div
-            v-if="customQuestions.length > 0"
-            v-for="question in customQuestions"
-            :key="question.id"
-          >
-            <div
-              v-if="editingQuestion?.init?.id !== question.id"
-              class="flex justify-between items-center p-4 bg-slate-100 hover:bg-slate-200 duration-150 rounded-xl"
-            >
-              <div class="inline-flex flex-col gap-1">
-                <p class="text-sm text-slate-400">
-                  <i class="pi pi-pen-to-square" style="font-size: 12px" />
-                  Text
-                </p>
-                <p class="text-lg">{{ question.question }}</p>
-              </div>
-              <div v-if="editingQuestion === null">
-                <Button
-                  icon="pi pi-pencil"
-                  aria-label="Edit"
-                  severity="secondary"
-                  rounded
-                  text
-                  @click="onEdit(question)"
-                />
-                <Button
-                  icon="pi pi-times"
-                  aria-label="Delete"
-                  severity="danger"
-                  rounded
-                  text
-                  @click="confirmDelete(question)"
-                />
-              </div>
-            </div>
-            <div
-              v-else
-              class="flex justify-between items-center p-4 bg-slate-200 hover:bg-slate-200 border border-primary duration-150 rounded-xl"
-            >
-              <div class="w-full inline-flex flex-col gap-1">
-                <label
-                  :for="`question-${question.id}`"
-                  class="text-sm text-slate-400"
-                >
-                  <i class="pi pi-pen-to-square" style="font-size: 12px" />
-                  Text
-                </label>
-                <InputText
-                  :id="`question-${question.id}`"
-                  v-model="editingQuestion.question"
-                  unstyled
-                  placeholder="Enter question"
-                  class="bg-transparent border-none outline-none text-lg"
-                />
-              </div>
-
-              <div class="flex justify-end gap-2">
-                <Button
-                  label="Save"
-                  icon="pi pi-check"
-                  :disabled="!editingQuestion.question"
-                  @click="onSaveQuestion(editingQuestion)"
-                />
-                <Button
-                  label="Cancel"
-                  severity="secondary"
-                  @click="
-                    editingQuestion?.init?.question === ''
-                      ? confirmDelete(question)
-                      : (editingQuestion = null)
-                  "
-                />
-              </div>
-            </div>
-          </div>
-          <div v-else>
-            <p class="text-slate-400 text-center py-8">
-              No feedback questions added.
-            </p>
-          </div>
+  <div class="space-y-2">
+    <div class="flex justify-end">
+      <Button
+        label="Add New Question"
+        icon="pi pi-plus"
+        size="small"
+        text
+        @click="addQuestion"
+      />
+    </div>
+    <div
+      v-if="customQuestions.length > 0"
+      v-for="question in customQuestions"
+      :key="question.id"
+    >
+      <div
+        v-if="editingQuestion?.init?.id !== question.id"
+        class="flex justify-between items-center p-4 bg-slate-100 hover:bg-slate-200 duration-150 rounded-xl"
+      >
+        <div class="inline-flex flex-col gap-1">
+          <p class="text-sm text-slate-400">
+            <i class="pi pi-pen-to-square" style="font-size: 12px" />
+            Text
+          </p>
+          <p class="text-lg">{{ question.question }}</p>
         </div>
-      </TabPanel>
-      <TabPanel :value="1">
-        <div>Response</div>
-      </TabPanel>
-    </TabPanels>
-  </Tabs>
+        <div v-if="editingQuestion === null">
+          <Button
+            icon="pi pi-pencil"
+            aria-label="Edit"
+            severity="secondary"
+            rounded
+            text
+            @click="onEdit(question)"
+          />
+          <Button
+            icon="pi pi-times"
+            aria-label="Delete"
+            severity="danger"
+            rounded
+            text
+            @click="confirmDelete(question)"
+          />
+        </div>
+      </div>
+      <div
+        v-else
+        class="flex justify-between items-center p-4 bg-slate-200 hover:bg-slate-200 border border-primary duration-150 rounded-xl"
+      >
+        <div class="w-full inline-flex flex-col gap-1">
+          <label
+            :for="`question-${question.id}`"
+            class="text-sm text-slate-400"
+          >
+            <i class="pi pi-pen-to-square" style="font-size: 12px" />
+            Text
+          </label>
+          <InputText
+            :id="`question-${question.id}`"
+            v-model="editingQuestion.question"
+            unstyled
+            placeholder="Enter question"
+            class="bg-transparent border-none outline-none text-lg"
+          />
+        </div>
+
+        <div class="flex justify-end gap-2">
+          <Button
+            label="Save"
+            icon="pi pi-check"
+            :disabled="!editingQuestion.question"
+            @click="onSaveQuestion(editingQuestion)"
+          />
+          <Button
+            label="Cancel"
+            severity="secondary"
+            @click="
+              editingQuestion?.init?.question === ''
+                ? confirmDelete(question)
+                : (editingQuestion = null)
+            "
+          />
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <p class="text-slate-400 text-center py-8">
+        No feedback questions added.
+      </p>
+    </div>
+  </div>
 </template>
