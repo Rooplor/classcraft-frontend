@@ -19,6 +19,8 @@ const toast = useToast();
 const { updateContent, updateClassMaterial } = useClassroom();
 const { uploadFile, removeFile } = useFileUpload();
 
+const config = useRuntimeConfig();
+
 const removeEmptyPresentationGuide = (content: IContent) => {
   content.presentationGuides = content.presentationGuides.filter(
     (g, i) =>
