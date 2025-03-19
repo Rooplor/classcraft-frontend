@@ -19,6 +19,8 @@ const onSubmit = async (event: Event) => {
   );
 
   if (res.success) {
+    props.userFormSubmission.feedbackResponse = res.result;
+
     toast.add({
       severity: "success",
       summary: "Success",
