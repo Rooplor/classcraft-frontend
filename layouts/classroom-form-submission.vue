@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { IClassroom } from "../types/Classroom";
-import { EAttendeeStatus, type IFormSubmission } from "../types/Form";
+import { type IFormSubmission } from "../types/Form";
+import type { IUser } from "../types/User";
 
 const classroomStore = useClassroomStore();
 const toast = useToast();
@@ -11,8 +12,21 @@ const {
   getClassroomFormSubmission,
   getFormQuestions,
   getFormCSV,
+  getUserInClassroom,
   setApprovalStatus: setApprovalStatusApi,
 } = useClassroomForm();
+
+const usersInClassroom = ref<Partial<IUser>[]>([]);
+
+try {
+  let res = await getUserInClassroom(editingClassroom.value.id.toString());
+
+  if (res.success) {
+    usersInClassroom.value = res.result;
+  }
+} catch (error) {
+  console.error("Error getting users in classroom:", error);
+}
 
 const formSubmission = ref<IFormSubmission[]>(
   (await getClassroomFormSubmission(editingClassroom.value.id)).result || []
@@ -71,12 +85,24 @@ const handleExportCSV = async () => {
 };
 </script>
 <template>
-  <div class="flex items-center gap-2 mb-4">
-    <div
-      class="p-2 border border-primary rounded-lg font-medium bg-primary-50 text-primary"
-    >
-      <i class="pi pi-users" /> {{ formSubmission.length }} /
-      {{ editingClassroom.capacity }} people registered
+  <div class="flex justify-between items-center gap-2 mb-4">
+    <div class="flex gap-2">
+      <div
+        class="p-2 border rounded-lg font-medium"
+        :class="{
+          'bg-green-50 text-green-600 border-green-400':
+            editingClassroom.capacity
+              ? formSubmission.length <= editingClassroom.capacity
+              : true,
+          'bg-yellow-50 text-yellow-500 border-yellow-400':
+            editingClassroom.capacity
+              ? formSubmission.length > editingClassroom.capacity
+              : false,
+        }"
+      >
+        <i class="pi pi-users" /> {{ usersInClassroom.length }} /
+        {{ editingClassroom.capacity }} people approved
+      </div>
     </div>
     <Button
       severity="secondary"
