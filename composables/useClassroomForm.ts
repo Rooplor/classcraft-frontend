@@ -147,6 +147,18 @@ const useForm = () => {
       }
     );
   };
+
+  const getClassroomFeedbackResponses = (
+    classroomId: string
+  ): Promise<IResponse<object[]>> => {
+    return $fetch(
+      `${config.public.baseUrl}/api/form/feedback/${classroomId}`,
+      {
+        method: "GET",
+      }
+    );
+  }
+
   return {
     getFormById,
     addForm,
@@ -164,6 +176,7 @@ const useForm = () => {
     setAttendeeStatus,
     updateFeedbackForm,
     submitFeedbackForm,
+    getClassroomFeedbackResponses,
   };
 };
 
