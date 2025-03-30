@@ -20,10 +20,10 @@ const useRequestClassroom = () => {
     });
   };
 
-  const getRequestsByClassroomOwnerId = (
-    ownerId?: string
-  ): Promise<IResponse<IClassroomRequest[]>> => {
-    return $fetch(`${config.public.baseUrl}/api/request/owner/${ownerId}`, {
+  const getRequestsByClassroomOwnerId = (): Promise<
+    IResponse<IClassroomRequest[]>
+  > => {
+    return $fetch(`${config.public.baseUrl}/api/request/owner/`, {
       method: "GET",
     });
   };
