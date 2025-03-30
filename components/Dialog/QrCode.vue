@@ -12,18 +12,12 @@ const open = () => {
 };
 
 const isCheckInEnable = computed(() => {
-  return (
-    isoToDateWithTimezone(
-      editingClassroom.value.dates[0].date.startDateTime
-    ).getTime() -
-      Date.now() <
-      30 * 60 * 1000 &&
-    Date.now() <
-      isoToDateWithTimezone(
-        editingClassroom.value.dates[editingClassroom.value.dates.length - 1]
-          .date.endDateTime
-      ).getTime()
-  );
+  const { dates } = editingClassroom.value;
+  const startDateTime = isoToDateWithTimezone(dates[0].date.startDateTime).getTime();
+  const endDateTime = isoToDateWithTimezone(dates[dates.length - 1].date.endDateTime).getTime();
+  const currentTime = Date.now();
+
+  return startDateTime - currentTime < 30 * 60 * 1000 && currentTime < endDateTime;
 });
 </script>
 <template>
