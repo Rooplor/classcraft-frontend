@@ -17,7 +17,7 @@ const toggleAction = (event: MouseEvent) => {
     <div class="flex flex-col gap-2 w-52">
       <div class="flex flex-col gap-2">
         <DialogSubmission v-if="editingClassroom?.published">
-          <template v-slot:default="{ onClick }">
+          <template v-slot:button="{ onClick }">
             <Button
               label="View Submissions"
               icon="pi pi-users"
@@ -28,7 +28,7 @@ const toggleAction = (event: MouseEvent) => {
           </template>
         </DialogSubmission>
         <ClassroomUnpublishButton v-if="editingClassroom?.published">
-          <template v-slot:default="{ onClick }">
+          <template v-slot:button="{ onClick }">
             <Button
               label="Unpublish"
               icon="pi pi-ban"
@@ -39,7 +39,7 @@ const toggleAction = (event: MouseEvent) => {
           </template>
         </ClassroomUnpublishButton>
         <ClassroomPublishButton v-else>
-          <template v-slot:default="{ onClick }">
+          <template v-slot:button="{ onClick }">
             <Button
               label="Publish"
               icon="pi pi-globe"
@@ -51,7 +51,7 @@ const toggleAction = (event: MouseEvent) => {
         </ClassroomPublishButton>
       </div>
       <DialogDeleteClassroom>
-        <template v-slot:default="{ onClick }">
+        <template v-slot:button="{ onClick }">
           <Button
             label="Delete Classroom"
             icon="pi pi-trash"
