@@ -115,7 +115,7 @@ const useForm = () => {
   const setAttendeeStatus = (
     id: string,
     status: EAttendeeStatus,
-    day: number,
+    day: number
   ): Promise<IResponse<IFormSubmission>> => {
     return $fetch(
       `${config.public.baseUrl}/api/form/attendees/${id}?status=${status}&day=${day}`,
@@ -124,6 +124,40 @@ const useForm = () => {
       }
     );
   };
+
+  const updateFeedbackForm = (
+    formId: string,
+    feedbackForm: object[]
+  ): Promise<IResponse<IForm>> => {
+    return $fetch(`${config.public.baseUrl}/api/form/feedback/${formId}`, {
+      body: JSON.stringify(feedbackForm),
+      method: "PATCH",
+    });
+  };
+
+  const submitFeedbackForm = (
+    formSubmissionId: string,
+    form: object
+  ): Promise<IResponse<IForm>> => {
+    return $fetch(
+      `${config.public.baseUrl}/api/form/feedback/submit/${formSubmissionId}`,
+      {
+        body: JSON.stringify(form),
+        method: "PATCH",
+      }
+    );
+  };
+
+  const getClassroomFeedbackResponses = (
+    classroomId: string
+  ): Promise<IResponse<object[]>> => {
+    return $fetch(
+      `${config.public.baseUrl}/api/form/feedback/${classroomId}`,
+      {
+        method: "GET",
+      }
+    );
+  }
 
   return {
     getFormById,
@@ -140,6 +174,9 @@ const useForm = () => {
     setApprovalStatus,
     getCheckInQrCode,
     setAttendeeStatus,
+    updateFeedbackForm,
+    submitFeedbackForm,
+    getClassroomFeedbackResponses,
   };
 };
 

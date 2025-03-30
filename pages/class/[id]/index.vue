@@ -10,51 +10,54 @@ import type { IUser } from "../../../types/User";
 import type { IVenue } from "../../../types/Venue";
 
 const router = useRouter();
-const { id } = router.currentRoute.value.params;
+let classroomId = router.currentRoute.value.params.id?.toString();
+
 const { getClassroomById } = useClassroom();
 const { getUserFormSubmissions, getFormById, getUserInClassroom } =
   useClassroomForm();
 const { getVenueByIds } = useVenue();
 const { getUserById, getUserProfile } = useUser();
-const isRegistrationDialogVisible = ref(false);
-const isSubmissionDialogVisible = ref(false);
-const isUserRegistered = ref(false);
-const user = (await getUserProfile()).result;
+const auth = useFirebaseAuth();
+
 const userFormSubmission = ref<IFormSubmission>();
 const usersInClassroom = ref<Partial<IUser>[]>([]);
 const classroomForm = ref<IForm>({} as IForm);
-let classroom: IClassroom = {} as IClassroom;
-let owner: IUser = {} as IUser;
-let venues: IVenue[] = [];
-let seatsLeft = 0;
+let classroom = ref<IClassroom>({} as IClassroom);
+let owner = ref<IUser>({} as IUser);
+let venues = ref<IVenue[]>([]);
+const userProfile = (await getUserProfile()).result;
 
-try {
-  classroom = (await getClassroomById(id.toString())).result;
-  owner = (await getUserById(classroom.owner)).result;
-  venues = (
-    await getVenueByIds(
-      classroom.dates
-        .map((date) => date.venueId.map((id) => id.toString()))
-        .flat()
-    )
-  ).result.filter((venue, index, self) => {
-    return index === self.findIndex((t) => t.id === venue.id);
-  });
-  classroomForm.value = (await getFormById(classroom.id)).result;
-  userFormSubmission.value = (
-    await getUserFormSubmissions(user.id, id.toString())
-  ).result;
-  isUserRegistered.value = userFormSubmission.value ? true : false;
-  usersInClassroom.value = (await getUserInClassroom(id.toString())).result;
-  seatsLeft = classroom.capacity - usersInClassroom.value.length;
-  if (!classroom.published && user.id !== classroom.owner) {
-    router.replace("/404");
-  }
-} catch (error) {
-  router.replace("/404");
-}
+const isRegistrationDialogVisible = ref(false);
+const isSubmissionDialogVisible = ref(false);
 
-const auth = useFirebaseAuth();
+const isUserCheckedIn = computed(() => {
+  return userFormSubmission.value?.attendeesStatus.some(
+    (attendee) => attendee.attendeesStatus === EAttendeeStatus.Present
+  );
+});
+const isUserRegistered = computed(() => {
+  return userFormSubmission.value ? true : false;
+});
+const isFormOpen = computed(() => {
+  if (!classroomForm.value.openDate) return true;
+  return new Date() > isoToDateWithTimezone(classroomForm.value.openDate);
+});
+
+const isFormClosed = computed(() => {
+  if (!classroomForm.value.closeDate) return false;
+  return new Date() > isoToDateWithTimezone(classroomForm.value.closeDate);
+});
+
+const isClassEnded = computed(() => {
+  return (
+    isoToDateWithTimezone(
+      classroom.value.dates[classroom.value.dates.length - 1].date.endDateTime
+    ) < new Date()
+  );
+});
+let seatsLeft = computed(() => {
+  return classroom.value.capacity - usersInClassroom.value.length;
+});
 
 const signInWithGoogle = async () => {
   if (!auth) return;
@@ -62,29 +65,68 @@ const signInWithGoogle = async () => {
     const res = await signInWithPopup(auth, new GoogleAuthProvider());
     const token = await res.user.getIdToken();
     await useAuth().login(token);
-    router.push(`/class/${id}`);
+    router.push(`/class/${classroomId}`);
   } catch (error) {
     console.error("Error signing in with Google:", error);
   }
 };
 
+const checkViewAccess = () => {
+  if (!classroom.value.published && userProfile.id !== classroom.value.owner) {
+    router.replace("/404");
+  }
+};
+
 const onFormSubmitted = (submission: IFormSubmission) => {
   isRegistrationDialogVisible.value = false;
-  isUserRegistered.value = true;
   usersInClassroom.value.push(submission.userDetail);
   userFormSubmission.value = submission;
 };
 
+const fetchClassroomData = async () => {
+  try {
+    classroom.value = (await getClassroomById(classroomId)).result;
+    userFormSubmission.value = (
+      await getUserFormSubmissions(userProfile.id, classroomId)
+    ).result;
+    usersInClassroom.value = (await getUserInClassroom(classroomId)).result;
+  } catch (error) {
+    router.replace("/404");
+  }
+};
+
+const fetchAdditionalData = async () => {
+  try {
+    owner.value = (await getUserById(classroom.value.owner)).result;
+    venues.value = (
+      await getVenueByIds(
+        classroom.value.dates
+          .map((date) => date.venueId.map((id) => id.toString()))
+          .flat()
+      )
+    ).result.filter((venue, index, self) => {
+      return index === self.findIndex((t) => t.id === venue.id);
+    });
+    classroomForm.value = (await getFormById(classroom.value.id)).result;
+  } catch (error) {
+    console.error("Error fetching additional data:", error);
+  }
+};
+
+await fetchClassroomData();
+checkViewAccess();
+await fetchAdditionalData();
+
 useHead({
-  title: `${classroom.title} · ClassCraft`,
+  title: `${classroom.value.title} · ClassCraft`,
   meta: [
     {
       name: "description",
-      content: `${classroom.title} class details.`,
+      content: `${classroom.value.title} class details.`,
     },
     {
       name: "keywords",
-      content: `${classroom.title}, class, details`,
+      content: `${classroom.value.title}, class, details`,
     },
   ],
 });
@@ -92,7 +134,7 @@ useHead({
 <template>
   <div class="w-full flex flex-col">
     <div
-      v-if="!user"
+      v-if="!userProfile"
       class="inline-flex justify-center items-center gap-4 p-2 bg-primary-100 text-primary border border-primary-300 rounded-lg text-lg text-center m-2 mb-4"
     >
       <p>Join ClassCraft for your full experience</p>
@@ -153,7 +195,7 @@ useHead({
           </nuxt-link>
         </div>
         <div
-          v-if="userFormSubmission?.attendeesStatus === EAttendeeStatus.Present"
+          v-if="isUserCheckedIn"
           class="p-4 border rounded-xl text-green-500 bg-green-100 flex flex-col gap-4 mt-6"
         >
           <p>Checked in</p>
@@ -323,24 +365,35 @@ useHead({
           </div>
           <div class="flex flex-col text-center gap-2">
             <Button
-              v-if="classroom.owner === user.id"
+              v-if="classroom.owner === userProfile.id"
               size="large"
               icon="pi pi-arrow-right"
               iconPos="right"
               :label="`Manage &quot;${classroom.title}&quot;`"
               rounded
               severity="secondary"
-              @click="router.push(`/class/${id}/edit`)"
+              @click="router.push(`/class/${classroomId}/edit`)"
             />
+            <div
+              v-else-if="
+                isUserCheckedIn &&
+                isClassEnded &&
+                classroomForm.feedback.length > 0
+              "
+              class="p-4 border rounded-xl bg-primary-50 flex flex-col gap-4"
+            >
+              <NuxtLayout
+                name="feedback-form"
+                :userFormSubmission="userFormSubmission"
+                :feedbackForm="classroomForm.feedback"
+              />
+            </div>
             <Button
               v-else-if="
                 !classroom.registrationStatus ||
                 seatsLeft <= 0 ||
-                (classroomForm.openDate &&
-                  new Date() <=
-                    isoToDateWithTimezone(classroomForm.openDate)) ||
-                (classroomForm.closeDate &&
-                  new Date() > isoToDateWithTimezone(classroomForm.closeDate))
+                (classroomForm.openDate && !isFormOpen) ||
+                (classroomForm.closeDate && isFormClosed)
               "
               :label="`Subscribe to &quot;${classroom.title}&quot; waitlist`"
               size="large"
@@ -380,7 +433,7 @@ useHead({
             <Button
               v-else
               size="large"
-              :label="`Join &quot;${classroom.title}&quot;`"
+              :label="`Join Now`"
               rounded
               :severity="'primary'"
               @click="isRegistrationDialogVisible = true"
@@ -403,7 +456,7 @@ useHead({
                 <span v-else>(Full)</span>
               </p>
             </div>
-            <div v-else-if="user.id === classroom.owner" />
+            <div v-else-if="userProfile.id === classroom.owner" />
             <div
               v-else-if="
                 classroom.registrationStatus && usersInClassroom.length === 0
@@ -413,15 +466,10 @@ useHead({
             </div>
           </div>
         </div>
-        <div 
-          v-if="userFormSubmission?.attendeesStatus === EAttendeeStatus.Present"
-        >
+        <div v-if="classroom?.classMaterials?.length > 0 && isUserCheckedIn">
           <p class="text-xl font-bold mb-4">Class Materials</p>
           <div class="bg-white p-6 border rounded-2xl flex flex-col gap-4">
-            <div
-              v-if="classroom?.classMaterials?.length > 0"
-              class="grid grid-cols-1 gap-2"
-            >
+            <div class="grid grid-cols-1 gap-2">
               <ClassMaterialItem
                 v-for="(file, index) in classroom?.classMaterials"
                 :key="index"
