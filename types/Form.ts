@@ -1,3 +1,5 @@
+import type { IUser } from "./User";
+
 interface IForm {
   id: string;
   classroomId: string;
@@ -25,11 +27,7 @@ interface IFormSubmission {
   responses: any;
   feedbackResponse: any;
   submittedBy: string;
-  userDetail: {
-    id: string;
-    username: string;
-    profilePicture: string;
-  };
+  userDetail: Partial<IUser>;
   approvedByOwner: boolean;
   attendeesStatus: {
     day: number;

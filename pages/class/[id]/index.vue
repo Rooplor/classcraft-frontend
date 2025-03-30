@@ -259,26 +259,15 @@ useHead({
               :userFormSubmission="userFormSubmission"
               :classroomTitle="classroom.title"
             />
-            <Button
+            <ClassroomRequestButton
               v-else-if="
                 !classroom.registrationStatus ||
                 seatsLeft === 0 ||
                 (classroomForm.openDate && !isFormOpen) ||
-                (classroomForm.closeDate && isFormClosed)
+                (classroomForm.closeDate && isFormClosed) ||
+                isClassEnded
               "
-              :label="`Subscribe to &quot;${classroom.title}&quot; waitlist`"
-              size="large"
-              severity="secondary"
-              rounded
-              disabled
-            />
-            
-            <Button
-              v-else-if="isClassEnded"
-              size="large"
-              :label="`Request for &quot;${classroom.title}&quot;`"
-              rounded
-              outlined
+              :classroom="classroom"
             />
             <ClassroomRegistrationButton
               v-else
@@ -314,7 +303,10 @@ useHead({
           </div>
         </div>
         <ClassMaterialLayout
-          v-if="classroom?.classMaterials?.length > 0 && (isUserCheckedIn || isOwner)"
+          v-if="
+            classroom?.classMaterials?.length > 0 &&
+            (isUserCheckedIn || isOwner)
+          "
           :classMaterials="classroom.classMaterials"
         />
         <InstructorLayout :classroom="classroom" />
