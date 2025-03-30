@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getFileNameFromUrl } from '../composables/file';
+import { getFileNameFromUrl } from '../../composables/file';
 
 defineProps<{
   file: string;

@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import type { IClassroom } from "../types/Classroom";
+import type { IClassroom } from "../../types/Classroom";
 
-const isSubmissionDialogVisible = ref(false);
+const isVisible = ref(false);
 const classroomStore = useClassroomStore();
 const { editingClassroom } = storeToRefs(classroomStore) as {
   editingClassroom: Ref<IClassroom>;
 };
+
+const open = () => {
+  isVisible.value = true;
+};
 </script>
 <template>
-  <div @click="isSubmissionDialogVisible = true">
-    <slot />
-  </div>
+  <slot name="button" :onClick="open" />
   <Dialog
-    v-model:visible="isSubmissionDialogVisible"
+    v-model:visible="isVisible"
     :header="`Submissions of &quot;${editingClassroom?.title}&quot;`"
     :modal="true"
     :draggable="false"

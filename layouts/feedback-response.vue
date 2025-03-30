@@ -46,8 +46,6 @@ const feedbackResponses = ref<object[]>(
   (await getClassroomFeedbackResponses(editingClassroom.value.id)).result || []
 );
 
-console.log(feedbackResponses.value);
-
 const formattedFormSubmission = computed(() => {
   return feedbackResponses.value.map((submission: object) => {
     return {
@@ -68,7 +66,7 @@ const questions = ref(MOCK_QUESTIONS);
     stripedRows
     tableStyle="min-width: 50rem"
   >
-    <Column field="userDetail" header="User">
+    <!-- <Column field="userDetail" header="User">
       <template #body="{ data }">
         <nuxt-link
           :to="`/user/${data.userDetail.id}`"
@@ -78,7 +76,7 @@ const questions = ref(MOCK_QUESTIONS);
           <span>{{ data.userDetail.username }}</span>
         </nuxt-link>
       </template>
-    </Column>
+    </Column> -->
     <Column
       v-for="column in questions"
       :field="column.question"
