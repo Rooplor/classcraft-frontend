@@ -5,7 +5,6 @@ const { getRequestsByClassroomOwnerId } = useRequestClassroom();
 const toast = useToast();
 let classroomRequests = ref<IClassroomRequest[]>([]);
 
-
 try {
   let res = await getRequestsByClassroomOwnerId();
   if (res.success) {
@@ -29,6 +28,7 @@ try {
           <ClassroomRequestListItem
             v-for="(request, index) in classroomRequests"
             :key="index"
+            :classroomId="request.classroomId"
             :classroom="request.classroomDetail"
             :requestList="request.requestList"
           />
