@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { IClassroom } from "../types/Classroom";
 
+const toast = useToast();
 const classroomStore = useClassroomStore();
 const { editingClassroom } = storeToRefs(classroomStore) as {
   editingClassroom: Ref<IClassroom>;
@@ -37,14 +38,24 @@ const columns = computed(() => {
 });
 
 if (editingClassroom.value) {
-  let res = await getFormById(editingClassroom.value.id);
-  if (res.success) {
-    const { result } = res;
+  try {
+    let res = await getFormById(editingClassroom.value.id);
+    if (res.success) {
+      const { result } = res;
 
-    questions.value = result.feedback.map((field, index) => ({
-      id: index,
-      question: field.name,
-    }));
+      questions.value = result.feedback.map((field, index) => ({
+        id: index,
+        question: field.name,
+      }));
+    }
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Could not fetch questions",
+      detail: "There was an error fetching questions. Please try again later.",
+      life: 3000,
+      group: "tc",
+    });
   }
 }
 </script>

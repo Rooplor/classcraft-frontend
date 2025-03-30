@@ -25,7 +25,13 @@ try {
     usersInClassroom.value = res.result;
   }
 } catch (error) {
-  console.error("Error getting users in classroom:", error);
+  toast.add({
+    severity: "error",
+    summary: "Could not fetch users",
+    detail: "There was an error fetching users. Please try again later.",
+    life: 3000,
+    group: "tc",
+  });
 }
 
 const formSubmission = ref<IFormSubmission[]>(
@@ -50,7 +56,7 @@ const formattedFormSubmission = computed(() => {
       id: submission.id,
       userDetail: submission.userDetail,
       approvedByOwner: submission.approvedByOwner,
-      
+
       ...Object.keys(submission.responses).reduce((acc: any, key: string) => {
         acc[key.toUpperCase()] = submission.responses[key];
         return acc;
@@ -65,14 +71,25 @@ const setApprovalStatus = async (id: string, status: boolean) => {
     submission.approvedByOwner = status;
   }
 
-  const res = await setApprovalStatusApi(id, status);
-  if (res.success) {
+  try {
+    const res = await setApprovalStatusApi(id, status);
+    if (res.success) {
+      toast.add({
+        severity: "success",
+        summary: "Approval status updated",
+        detail: "The approval status has been updated successfully.",
+        group: "tc",
+        life: 1000,
+      });
+    }
+  } catch (error) {
     toast.add({
-      severity: "success",
-      summary: "Success",
-      detail: "Approval status updated",
+      severity: "error",
+      summary: "Could not update approval status",
+      detail:
+        "There was an error updating the approval status. Please try again later.",
       group: "tc",
-      life: 1000,
+      life: 3000,
     });
   }
 };

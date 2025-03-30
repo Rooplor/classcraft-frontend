@@ -7,6 +7,7 @@ definePageMeta({
 
 const auth = useFirebaseAuth();
 const router = useRouter();
+const toast = useToast();
 
 const signInWithGoogle = async () => {
     if (!auth) return;
@@ -16,7 +17,13 @@ const signInWithGoogle = async () => {
         await useAuth().login(token);
         router.push("/");
     } catch (error) {
-        console.error("Error signing in with Google:", error);
+        toast.add({
+            severity: "error",
+            summary: "Error signing in with Google",
+            detail: "There was an error signing in with Google. Please try again later.",
+            life: 3000,
+            group: "tc",
+        });
     }
 };
 

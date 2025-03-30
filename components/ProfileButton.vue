@@ -6,6 +6,7 @@ const user = useCurrentUser();
 
 const auth = useFirebaseAuth();
 const router = useRouter();
+const toast = useToast();
 
 const togglePopOver = (event: MouseEvent) => {
   op.value.toggle(event);
@@ -17,13 +18,18 @@ const handleProfileClick = () => {
 };
 
 const handleSignOut = async () => {
+  if (!auth) return;
   try {
-    if (auth) {
-      await signOut(auth);
-      await useAuth().logout();
-    }
+    await signOut(auth);
+    await useAuth().logout();
   } catch (error) {
-    console.error("Error signing out:", error);
+    toast.add({
+      severity: "error",
+      summary: "Error signing out",
+      detail: "There was an error signing out. Please try again later.",
+      life: 3000,
+      group: "tc",
+    });
   }
 };
 </script>

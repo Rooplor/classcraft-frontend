@@ -23,24 +23,33 @@ const userProfile = ref();
 
 const onSubmit = async (event: Event) => {
   event.preventDefault();
+  try {
+    let res = await submitForm({
+      formId: id.toString(),
+      classroomId: id.toString(),
+      responses: formData.value,
+      submittedBy: "",
+      approvedByOwner: classroomForm.value.ownerApprovalRequired ? false : true,
+    });
 
-  let res = await submitForm({
-    formId: id.toString(),
-    classroomId: id.toString(),
-    responses: formData.value,
-    submittedBy: "",
-    approvedByOwner: classroomForm.value.ownerApprovalRequired ? false : true,
-  });
-
-  if (res.success) {
+    if (res.success) {
+      toast.add({
+        severity: "success",
+        summary: "Success",
+        detail: "Form submitted successfully",
+        life: 3000,
+        group: "tc",
+      });
+      emit("submitted", res.result);
+    }
+  } catch (error) {
     toast.add({
-      severity: "success",
-      summary: "Success",
-      detail: "Form submitted successfully",
+      severity: "error",
+      summary: "Could not submit form",
+      detail: "There was an error submitting the form. Please try again later.",
       life: 3000,
       group: "tc",
     });
-    emit("submitted", res.result);
   }
 };
 

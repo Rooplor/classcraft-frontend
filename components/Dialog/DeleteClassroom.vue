@@ -7,6 +7,7 @@ const { editingClassroom } = storeToRefs(classroomStore) as {
   editingClassroom: Ref<IClassroom>;
 };
 
+const toast = useToast();
 const router = useRouter();
 
 const isVisible = ref(false);
@@ -22,10 +23,21 @@ const open = () => {
 const handleDelete = async () => {
   if (!isMatch) return;
 
-  const res = await deleteClassroom(editingClassroom.value.id);
-  if (res.success) {
-    classroomStore.removeClassroomById(editingClassroom.value.id);
-    router.push("/class");
+  try {
+    const res = await deleteClassroom(editingClassroom.value.id);
+    if (res.success) {
+      classroomStore.removeClassroomById(editingClassroom.value.id);
+      router.push("/class");
+    }
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Could not delete classroom",
+      detail:
+        "There was an error deleting the classroom. Please try again later.",
+      life: 3000,
+      group: "tc",
+    });
   }
 };
 </script>

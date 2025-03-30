@@ -8,6 +8,7 @@ definePageMeta({
     layout: false,
 });
 
+const toast = useToast();
 const router = useRouter();
 const { id } = router.currentRoute.value.params;
 const { getClassroomById, updateVenueStatus } = useClassroom();
@@ -26,7 +27,14 @@ const onSubmit = async (e: Event) => {
         );
         window.close();
     } catch (error) {
-        console.error(error);
+        toast.add({
+            severity: "error",
+            summary: "Could not reject venue reservation",
+            detail:
+                "There was an error rejecting the venue reservation. Please try again later.",
+            life: 3000,
+            group: "tc",
+        });
     }
 };
 

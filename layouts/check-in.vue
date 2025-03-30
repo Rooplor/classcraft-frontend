@@ -27,19 +27,29 @@ const onSelectStatus = async (
   status: EAttendeeStatus,
   day: number
 ) => {
-  const res = await setAttendeeStatus(submissionId, status, day);
+  try {
+    const res = await setAttendeeStatus(submissionId, status, day);
 
-  if (res.success) {
-    formattedFormSubmission.value.find(
-      (item) => item.id === submissionId
-    ).attendeesStatus[day - 1].attendeesStatus = status;
+    if (res.success) {
+      formattedFormSubmission.value.find(
+        (item) => item.id === submissionId
+      ).attendeesStatus[day - 1].attendeesStatus = status;
 
+      toast.add({
+        severity: "success",
+        summary: "Check-in status updated",
+        detail: "The check-in status has been updated successfully.",
+        group: "tc",
+        life: 1000,
+      });
+    }
+  } catch (error) {
     toast.add({
-      severity: "success",
-      summary: "Success",
-      detail: "Status updated",
+      severity: "error",
+      summary: "Could not update status",
+      detail: "There was an error updating the status. Please try again later.",
       group: "tc",
-      life: 1000,
+      life: 3000,
     });
   }
 };

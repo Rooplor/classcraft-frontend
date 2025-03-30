@@ -50,18 +50,28 @@ const onSaveContent = async (newContent: IContent) => {
   removeEmptyActivityGuide(newContent);
   content.value[index] = newContent;
 
-  let res = await updateContent(editingClassroom.value.id, content.value);
+  try {
+    let res = await updateContent(editingClassroom.value.id, content.value);
 
-  if (res.success) {
-    classroomStore.setEditingClassroom(res.result);
+    if (res.success) {
+      classroomStore.setEditingClassroom(res.result);
+      toast.add({
+        severity: "success",
+        summary: "Saved",
+        detail: `Content has been saved`,
+        group: "tc",
+        life: 3000,
+      });
+      editingContent.value = null;
+    }
+  } catch (error) {
     toast.add({
-      severity: "success",
-      summary: "Saved",
-      detail: `Content has been saved`,
+      severity: "error",
+      summary: "Could not save content",
+      detail: "There was an error saving the content. Please try again later.",
       group: "tc",
       life: 3000,
     });
-    editingContent.value = null;
   }
 };
 
@@ -84,18 +94,29 @@ const removeContent = async (id: number) => {
   if (editingClassroom.value === null) return;
 
   content.value = content.value.filter((c) => c.id !== id);
-  let res = await updateContent(editingClassroom.value.id, content.value);
+  try {
+    let res = await updateContent(editingClassroom.value.id, content.value);
 
-  if (res.success) {
-    classroomStore.setEditingClassroom(res.result);
+    if (res.success) {
+      classroomStore.setEditingClassroom(res.result);
+      toast.add({
+        severity: "error",
+        summary: "Deleted",
+        detail: `Content has been removed`,
+        group: "tc",
+        life: 3000,
+      });
+      editingContent.value = null;
+    }
+  } catch (error) {
     toast.add({
       severity: "error",
-      summary: "Deleted",
-      detail: `Content has been removed`,
+      summary: "Could not delete content",
+      detail:
+        "There was an error deleting the content. Please try again later.",
       group: "tc",
       life: 3000,
     });
-    editingContent.value = null;
   }
 };
 
@@ -175,24 +196,41 @@ const onFileSelect = async (e: any) => {
   try {
     const uploadResponse = await uploadFile(formData);
     if (uploadResponse.success) {
-      let res = await updateClassMaterial(editingClassroom.value.id, [
-        ...editingClassroom.value.classMaterials,
-        ...uploadResponse.result.urls,
-      ]);
+      try {
+        let res = await updateClassMaterial(editingClassroom.value.id, [
+          ...editingClassroom.value.classMaterials,
+          ...uploadResponse.result.urls,
+        ]);
 
-      if (res.success) {
-        classroomStore.setEditingClassroom(res.result);
+        if (res.success) {
+          classroomStore.setEditingClassroom(res.result);
+          toast.add({
+            severity: "success",
+            summary: "Uploaded",
+            detail: `Class materials has been uploaded`,
+            group: "tc",
+            life: 3000,
+          });
+        }
+      } catch (error) {
         toast.add({
-          severity: "success",
-          summary: "Uploaded",
-          detail: `Class materials has been uploaded`,
+          severity: "error",
+          summary: "Could not upload file",
+          detail:
+            "There was an error uploading the file. Please try again later.",
           group: "tc",
           life: 3000,
         });
       }
     }
   } catch (error) {
-    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: "Could not upload file",
+      detail: "There was an error uploading the file. Please try again later.",
+      group: "tc",
+      life: 3000,
+    });
   }
 };
 
@@ -202,16 +240,25 @@ const onRemoveFile = async (e: Event, file: string, index: number) => {
 
   let files = editingClassroom.value.classMaterials;
   files.splice(index, 1);
+  try {
+    let res = await updateClassMaterial(editingClassroom.value.id, files);
 
-  let res = await updateClassMaterial(editingClassroom.value.id, files);
-
-  if (res.success) {
-    classroomStore.setEditingClassroom(res.result);
-    removeFile(file);
+    if (res.success) {
+      classroomStore.setEditingClassroom(res.result);
+      removeFile(file);
+      toast.add({
+        severity: "error",
+        summary: "Deleted",
+        detail: `Class material has been removed`,
+        group: "tc",
+        life: 3000,
+      });
+    }
+  } catch (error) {
     toast.add({
       severity: "error",
-      summary: "Deleted",
-      detail: `Class material has been removed`,
+      summary: "Could not delete file",
+      detail: "There was an error deleting the file. Please try again later.",
       group: "tc",
       life: 3000,
     });

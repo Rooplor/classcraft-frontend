@@ -114,13 +114,10 @@ const typeOption = ref([
     { name: "Discussion", value: "DISCUSSION" },
 ]);
 
-const onSubmit = handleSubmit(async (values: any) => {
-    values.dates = convertDatesToIsoString(values.dates)
-        .sortDatesByStartDateTime()
-        .removeDuplicatedDatesTime()
-        .get();
+const submitUpdateClassroom = async (values:any) => {
+    if (!editingClassroom.value) return;
 
-    if (editingClassroom.value) {
+    try {
         let res = await updateClassroom(editingClassroom.value.id, values)
 
         if (res.success) {
@@ -133,20 +130,52 @@ const onSubmit = handleSubmit(async (values: any) => {
                 life: 3000,
             });
         }
-        return;
-    }
-
-    let res = await addClassroom(values)
-    if (res.success) {
-        router.push(`/class/${res.result.id}/edit`);
-        classroomStore.addClassroom(res.result);
+    } catch (error) {
         toast.add({
-            severity: "success",
-            summary: "Class created",
-            group: "tc",
+            severity: "error",
+            summary: "Could not update class",
+            detail: "There was an error updating the class. Please try again later.",
             life: 3000,
+            group: "tc",
         });
-        resetForm();
+    }
+}
+
+const submitCreateClassroom = async (values:any) => {
+    try {let res = await addClassroom(values)
+        if (res.success) {
+            router.push(`/class/${res.result.id}/edit`);
+            classroomStore.addClassroom(res.result);
+            toast.add({
+                severity: "success",
+                summary: "Class created",
+                group: "tc",
+                life: 3000,
+            });
+            resetForm();
+        }
+    } catch (error) {
+        toast.add({
+            severity: "error",
+            summary: "Could not create class",
+            detail: "There was an error creating the class. Please try again later.",
+            life: 3000,
+            group: "tc",
+        });
+    }
+}
+
+const onSubmit = handleSubmit(async (values: any) => {
+    values.dates = convertDatesToIsoString(values.dates)
+        .sortDatesByStartDateTime()
+        .removeDuplicatedDatesTime()
+        .get();
+
+    if (editingClassroom.value) {
+        submitUpdateClassroom(values);
+    }
+    else {
+        submitCreateClassroom(values);
     }
 });
 
@@ -164,7 +193,13 @@ const onCoverImageChange = async (event: any) => {
             coverImage.value = res.result.urls[0];
         }
     } catch (error) {
-        console.error("Error uploading file:", error);
+        toast.add({
+            severity: "error",
+            summary: "Error uploading file",
+            detail: "There was an error uploading the file. Please try again later.",
+            life: 3000,
+            group: "tc",
+        });
     }
 };
 
@@ -186,7 +221,13 @@ const onInstructorAvatarChange = async (event: any) => {
             instructorAvatar.value = res.result.urls[0];
         }
     } catch (error) {
-        console.error("Error uploading file:", error);
+        toast.add({
+            severity: "error",
+            summary: "Error uploading file",
+            detail: "There was an error uploading the file. Please try again later.",
+            life: 3000,
+            group: "tc",
+        });
     }
 };
 
