@@ -28,10 +28,31 @@ const useRequestClassroom = () => {
     });
   };
 
+  const isClassroomRequestExist = (
+    classroomId?: string
+  ): Promise<IResponse<boolean>> => {
+    return $fetch(
+      `${config.public.baseUrl}/api/request/exists/${classroomId}`,
+      {
+        method: "GET",
+      }
+    );
+  };
+
+  const getUserClassroomRequests = (): Promise<
+    IResponse<IClassroomRequest[]>
+  > => {
+    return $fetch(`${config.public.baseUrl}/api/request/my-requests`, {
+      method: "GET",
+    });
+  };
+
   return {
     sendClassroomRequest,
     deleteClassroomRequest,
     getRequestsByClassroomOwnerId,
+    isClassroomRequestExist,
+    getUserClassroomRequests,
   };
 };
 
