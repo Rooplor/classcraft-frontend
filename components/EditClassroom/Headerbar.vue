@@ -343,7 +343,7 @@ const isDeleteDialogOpen = ref(false);
       background: '#f8fafc',
     }"
   >
-    <NuxtLayout name="create-feedback-form" />
+    <NuxtLayout name="feedback" />
   </Dialog>
   <Dialog
     v-model:visible="isQrDialogVisible"
