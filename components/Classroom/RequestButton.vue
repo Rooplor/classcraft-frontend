@@ -55,7 +55,11 @@ onMounted(() => {
   <Button
     @click="onSendClassroomRequest"
     icon="pi pi-bookmark"
-    :label="`Add &quot;${classroom.title}&quot; to wishlist`"
+    :label="
+      isRequested
+        ? `Added to wishlist`
+        : `Add &quot;${classroom.title}&quot; to wishlist`
+    "
     size="large"
     severity="secondary"
     rounded
