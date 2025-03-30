@@ -121,16 +121,17 @@ const onSubmit = handleSubmit(async (values: any) => {
         .get();
 
     if (editingClassroom.value) {
-        try{let res = await updateClassroom(editingClassroom.value.id, values)
+        try {
+            let res = await updateClassroom(editingClassroom.value.id, values)
 
-        if (res.success) {
-            classroomStore.updateClassroom(res.result);
-            classroomStore.setEditingClassroom(res.result);
-            toast.add({
-                severity: "success",
-                summary: "Class updated",
-                group: "tc",
-                life: 3000,
+            if (res.success) {
+                classroomStore.updateClassroom(res.result);
+                classroomStore.setEditingClassroom(res.result);
+                toast.add({
+                    severity: "success",
+                    summary: "Class updated",
+                    group: "tc",
+                    life: 3000,
             });
         }} catch (error) {
             toast.add({
