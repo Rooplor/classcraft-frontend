@@ -23,7 +23,7 @@ const useRequestClassroom = () => {
   const getRequestsByClassroomOwnerId = (): Promise<
     IResponse<IClassroomRequest[]>
   > => {
-    return $fetch(`${config.public.baseUrl}/api/request/owner/`, {
+    return $fetch(`${config.public.baseUrl}/api/request/owner`, {
       method: "GET",
     });
   };
