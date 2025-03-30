@@ -79,13 +79,24 @@ const onFormSubmitted = (submission: IFormSubmission) => {
 };
 
 const onSendClassroomRequest = async () => {
-  let res = await sendClassroomRequest(classroom.value.id);
-
-  if (res.success) {
+  try {
+    let res = await sendClassroomRequest(classroom.value.id);
+    if (res.success) {
+      toast.add({
+        severity: "success",
+        summary: "Request sent",
+        detail: `Your request to join "${classroom.value.title}" has been sent.`,
+        life: 3000,
+        group: "tc",
+      });
+    }
+  } catch (error) {
     toast.add({
-      severity: "success",
-      summary: "Request sent",
-      detail: `Your request to join "${classroom.value.title}" has been sent.`,
+      severity: "error",
+      summary: "Request failed",
+      detail: `There was an error sending your request to join "${classroom.value.title}". Please try again later.`,
+      life: 3000,
+      group: "tc",
     });
   }
 };
