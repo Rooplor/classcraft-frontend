@@ -19,17 +19,18 @@ const onSendClassroomRequest = async () => {
     if (res.success) {
       toast.add({
         severity: "success",
-        summary: "Request sent",
-        detail: `Your request to join "${props.classroom.title}" has been sent.`,
+        summary: "Added to your wishlist",
+        detail: `Successfully adding "${props.classroom.title}" to your wishlist.`,
         life: 3000,
         group: "tc",
       });
+      isRequested.value = true;
     }
   } catch (error) {
     toast.add({
       severity: "error",
       summary: "Request failed",
-      detail: `There was an error sending your request to join "${props.classroom.title}". Please try again later.`,
+      detail: `There was an error adding "${props.classroom.title}" to your wishlist. Please try again later.`,
       life: 3000,
       group: "tc",
     });
