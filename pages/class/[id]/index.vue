@@ -9,6 +9,7 @@ import type { IUser } from "../../../types/User";
 import type { IVenue } from "../../../types/Venue";
 
 const router = useRouter();
+const toast = useToast();
 let classroomId = router.currentRoute.value.params.id?.toString();
 
 const { getClassroomById } = useClassroom();
@@ -16,6 +17,7 @@ const { getUserFormSubmissions, getFormById, getUserInClassroom } =
   useClassroomForm();
 const { getVenueByIds } = useVenue();
 const { getUserById, getUserProfile } = useUser();
+const { sendClassroomRequest } = useRequestClassroom();
 
 const userFormSubmission = ref<IFormSubmission>();
 const usersInClassroom = ref<Partial<IUser>[]>([]);
@@ -74,6 +76,18 @@ const checkViewAccess = ({
 const onFormSubmitted = (submission: IFormSubmission) => {
   usersInClassroom.value.push(submission.userDetail);
   userFormSubmission.value = submission;
+};
+
+const onSendClassroomRequest = async () => {
+  let res = await sendClassroomRequest(classroom.value.id);
+
+  if (res.success) {
+    toast.add({
+      severity: "success",
+      summary: "Request sent",
+      detail: `Your request to join "${classroom.value.title}" has been sent.`,
+    });
+  }
 };
 
 const fetchClassroomData = async () => {
@@ -266,13 +280,13 @@ useHead({
                 (classroomForm.openDate && !isFormOpen) ||
                 (classroomForm.closeDate && isFormClosed)
               "
-              :label="`Subscribe to &quot;${classroom.title}&quot; waitlist`"
+              @click="onSendClassroomRequest"
+              icon="pi pi-bookmark"
+              :label="`Add &quot;${classroom.title}&quot; to wishlist`"
               size="large"
               severity="secondary"
               rounded
-              disabled
             />
-            
             <Button
               v-else-if="isClassEnded"
               size="large"
@@ -314,7 +328,10 @@ useHead({
           </div>
         </div>
         <ClassMaterialLayout
-          v-if="classroom?.classMaterials?.length > 0 && (isUserCheckedIn || isOwner)"
+          v-if="
+            classroom?.classMaterials?.length > 0 &&
+            (isUserCheckedIn || isOwner)
+          "
           :classMaterials="classroom.classMaterials"
         />
         <InstructorLayout :classroom="classroom" />
