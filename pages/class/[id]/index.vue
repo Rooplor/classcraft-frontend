@@ -231,7 +231,7 @@ useHead({
           </div>
           <div class="flex flex-col text-center gap-2">
             <Button
-              v-if="!isOwner"
+              v-if="isOwner"
               size="large"
               icon="pi pi-arrow-right"
               iconPos="right"
