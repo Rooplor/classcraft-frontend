@@ -2,7 +2,6 @@
 import { useForm } from "vee-validate";
 import * as yup from "yup";
 import { EFileType } from "../types/File";
-import type { EditorLoadEvent } from "primevue/editor";
 import type { IClassroom } from "../types/Classroom";
 
 const { addClassroom, updateClassroom } = useClassroom();
@@ -195,14 +194,6 @@ const removeInstructorAvatar = () => {
     instructorAvatar.value = null;
 };
 
-function initEditorValue({ instance }: EditorLoadEvent) {
-    instance.setContents(
-        instance.clipboard.convert({
-            html: editingClassroom.value?.details,
-        })
-    );
-}
-
 watch(selfInstructored, (value) => {
     if (value) {
         instructorName.value = user.value?.displayName;
@@ -270,8 +261,8 @@ watch(selfInstructored, (value) => {
                         v-model="title"
                         aria-describedby="title-help"
                         :class="errors.title && 'p-invalid'"
-                        placeholder="Class title"
-                        class="font-bold !text-4xl !outline-none !border-none !shadow-none !p-0"
+                        placeholder="Fill class title"
+                        class="font-bold !text-4xl !outline-none !border-none !shadow-none !p-0 placeholder-slate-300"
                         fluid
                     />
                     <VeeErrorMessage name="title" class="text-red-500" />
@@ -283,7 +274,7 @@ watch(selfInstructored, (value) => {
                         v-model="details"
                         aria-describedby="details-help"
                         :class="errors.details && 'p-invalid'"
-                        placeholder="Enter class details"
+                        placeholder="Fill class details"
                         rows="10"
                         style="resize: none"
                     />

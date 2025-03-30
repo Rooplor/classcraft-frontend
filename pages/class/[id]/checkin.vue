@@ -8,6 +8,7 @@ const toast = useToast();
 
 const { id } = router.currentRoute.value.params as { id: string };
 const { day } = router.currentRoute.value.query as { day: string };
+const parsedDay = Number(day);
 
 const userFormSubmission = ref<IFormSubmission>();
 const user = (await getUserProfile()).result;
@@ -45,7 +46,8 @@ onMounted(async () => {
     }, 3000);
     return;
   } else if (
-    userFormSubmission.value.attendeesStatus === EAttendeeStatus.Present
+    userFormSubmission.value.attendeesStatus[parsedDay - 1].attendeesStatus ===
+    EAttendeeStatus.Present
   ) {
     toast.add({
       severity: "error",
@@ -61,7 +63,7 @@ onMounted(async () => {
     let attendeeStatusResponse = await setAttendeeStatus(
       userFormSubmission.value?.id,
       EAttendeeStatus.Present,
-      Number(day)
+      parsedDay
     );
     if (attendeeStatusResponse.success) {
       toast.add({

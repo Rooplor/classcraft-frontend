@@ -38,7 +38,7 @@ const formQuestions = ref(
 const columns = computed(() => {
   return Object.keys(formQuestions.value).map((key) => {
     return {
-      field: key,
+      field: key.toUpperCase(),
       header: key,
     };
   });
@@ -47,8 +47,14 @@ const columns = computed(() => {
 const formattedFormSubmission = computed(() => {
   return formSubmission.value.map((submission) => {
     return {
-      ...submission,
-      ...submission.responses,
+      id: submission.id,
+      userDetail: submission.userDetail,
+      approvedByOwner: submission.approvedByOwner,
+      
+      ...Object.keys(submission.responses).reduce((acc: any, key: string) => {
+        acc[key.toUpperCase()] = submission.responses[key];
+        return acc;
+      }, {}),
     };
   });
 });
