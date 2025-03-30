@@ -54,7 +54,7 @@ if (editingClassroom.value) {
     stripedRows
     tableStyle="min-width: 50rem"
   >
-    <!-- <Column field="userDetail" header="User">
+    <Column field="userDetail" header="User">
       <template #body="{ data }">
         <nuxt-link
           :to="`/user/${data.userDetail.id}`"
@@ -64,7 +64,7 @@ if (editingClassroom.value) {
           <span>{{ data.userDetail.username }}</span>
         </nuxt-link>
       </template>
-    </Column> -->
+    </Column>
     <Column
       v-for="column in columns"
       :field="column.field"
