@@ -109,13 +109,6 @@ if (editingClassroom.value) {
     }));
   }
 }
-
-if (editingClassroom.value) {
-  let res = await getClassroomFormSubmission(editingClassroom.value.id);
-  if (res.success) {
-    const { result } = res;
-  }
-}
 </script>
 <template>
   <div class="space-y-2">
@@ -129,8 +122,19 @@ if (editingClassroom.value) {
       />
     </div>
     <div
+        class="flex justify-between items-center p-4 bg-slate-100 hover:bg-slate-200 duration-150 rounded-xl"
+      >
+        <div class="inline-flex flex-col gap-1">
+          <p class="text-sm text-slate-400">
+            <i class="pi pi-pen-to-square" style="font-size: 12px" />
+            Text
+          </p>
+          <p class="text-lg">Rating</p>
+        </div>
+      </div>
+    <div
       v-if="customQuestions.length > 0"
-      v-for="question in customQuestions"
+      v-for="question in customQuestions.filter((q) => q.question !== 'Rating')"
       :key="question.id"
     >
       <div
@@ -144,6 +148,7 @@ if (editingClassroom.value) {
           </p>
           <p class="text-lg">{{ question.question }}</p>
         </div>
+        <!-- hidden if Rating -->
         <div v-if="editingQuestion === null">
           <Button
             icon="pi pi-pencil"
