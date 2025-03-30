@@ -28,7 +28,7 @@ const useRequestClassroom = () => {
     });
   };
 
-  const isClassroomRequestExist = (
+  const getClassroomRequestExist = (
     classroomId?: string
   ): Promise<IResponse<boolean>> => {
     return $fetch(
@@ -51,7 +51,7 @@ const useRequestClassroom = () => {
     sendClassroomRequest,
     deleteClassroomRequest,
     getRequestsByClassroomOwnerId,
-    isClassroomRequestExist,
+    getClassroomRequestExist,
     getUserClassroomRequests,
   };
 };
