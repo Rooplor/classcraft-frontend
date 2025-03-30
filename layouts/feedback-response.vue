@@ -1,64 +1,52 @@
 <script setup lang="ts">
 import type { IClassroom } from "../types/Classroom";
-import { type IFormSubmission } from "../types/Form";
-
-const MOCK_QUESTIONS = [
-  {
-    question: "What do you think about the class?",
-  },
-  {
-    question: "What do you think about the teacher?",
-  },
-];
-
-const MOCK_FEEDBACK_RESPONSES = [
-  {
-    userDetail: {
-      id: 1,
-      username: "John Doe",
-      profilePicture: "",
-    },
-    responses: {
-      "What do you think about the class?": "It's great",
-      "What do you think about the teacher?": "He's awesome",
-    },
-  },
-  {
-    userDetail: {
-      id: 2,
-      username: "Jane Doe",
-      profilePicture: "",
-    },
-    responses: {
-      "What do you think about the class?": "It's boring",
-      "What do you think about the teacher?": "He's boring",
-    },
-  },
-];
 
 const classroomStore = useClassroomStore();
 const { editingClassroom } = storeToRefs(classroomStore) as {
   editingClassroom: Ref<IClassroom>;
 };
-const { getClassroomFeedbackResponses } = useClassroomForm();
-
+const { getClassroomFeedbackResponses, getFormById } = useClassroomForm();
+const questions: Ref<{ id: number; question: string }[]> = ref([]);
 const feedbackResponses = ref<object[]>(
   (await getClassroomFeedbackResponses(editingClassroom.value.id)).result || []
 );
 
 const formattedFormSubmission = computed(() => {
-  return feedbackResponses.value.map((submission: object) => {
+  return feedbackResponses.value.map((submission: any) => {
     return {
       userDetail: submission.userDetail,
-      ...Object.keys(submission.responses).reduce((acc: any, key: string) => {
-        acc[key] = submission.responses[key];
-        return acc;
-      }, {}),
+
+      ...Object.keys(submission.feedbackResponse).reduce(
+        (acc: any, key: string) => {
+          acc[key.toUpperCase()] = submission.feedbackResponse[key];
+          return acc;
+        },
+        {}
+      ),
     };
   });
 });
 
-const questions = ref(MOCK_QUESTIONS);
+const columns = computed(() => {
+  return questions.value.map((key) => {
+    return {
+      field: key.question.toUpperCase(),
+      header: key.question,
+    };
+  });
+});
+
+if (editingClassroom.value) {
+  let res = await getFormById(editingClassroom.value.id);
+  if (res.success) {
+    const { result } = res;
+
+    questions.value = result.feedback.map((field, index) => ({
+      id: index,
+      question: field.name,
+    }));
+  }
+}
 </script>
 <template>
   <DataTable
@@ -78,9 +66,9 @@ const questions = ref(MOCK_QUESTIONS);
       </template>
     </Column> -->
     <Column
-      v-for="column in questions"
-      :field="column.question"
-      :header="column.question"
+      v-for="column in columns"
+      :field="column.field"
+      :header="column.header"
     />
     <template #empty>
       <p class="text-slate-500">No submissions</p>

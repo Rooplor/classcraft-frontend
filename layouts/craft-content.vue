@@ -19,6 +19,8 @@ const toast = useToast();
 const { updateContent, updateClassMaterial } = useClassroom();
 const { uploadFile, removeFile } = useFileUpload();
 
+const config = useRuntimeConfig();
+
 const removeEmptyPresentationGuide = (content: IContent) => {
   content.presentationGuides = content.presentationGuides.filter(
     (g, i) =>
@@ -222,7 +224,7 @@ const generateContent = async () => {
   isGenerating.value = true;
 
   try {
-    let res = (await $fetch("http://soijed.thddns.net:2721/api/chat", {
+    let res = (await $fetch(`${config.public.baseUrl}/ai`, {
       method: "POST",
       body: JSON.stringify({
         model: "deepseek-r1:1.5b",
