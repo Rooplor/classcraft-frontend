@@ -264,16 +264,10 @@ useHead({
                 !classroom.registrationStatus ||
                 seatsLeft === 0 ||
                 (classroomForm.openDate && !isFormOpen) ||
-                (classroomForm.closeDate && isFormClosed)
+                (classroomForm.closeDate && isFormClosed) ||
+                isClassEnded
               "
               :classroom="classroom"
-            />
-            <Button
-              v-else-if="isClassEnded"
-              size="large"
-              :label="`Request for &quot;${classroom.title}&quot;`"
-              rounded
-              outlined
             />
             <ClassroomRegistrationButton
               v-else
