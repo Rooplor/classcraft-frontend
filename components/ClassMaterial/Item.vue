@@ -13,11 +13,13 @@ defineProps<{
   <a
     :href="file"
     target="_blank"
-    class="border border-gray-200 rounded-lg p-4 bg-white hover:bg-slate-50 duration-200"
+    class="border rounded-lg p-4 bg-primary-50 hover:bg-primary-100 duration-200 overflow-clip"
   >
-    <div class="flex justify-between items-center gap-2">
+    <div class="relative flex justify-between items-center gap-2">
+      <div class="absolute top-4 right-4 bg-primary-100 border border-primary-300 rounded-lg w-32 aspect-square"></div>
+      <div class="absolute top-4 right-2 bg-primary-100 border border-primary-300 rounded-lg w-32 aspect-square rotate-6"></div>
+
       <div class="flex gap-2 items-center">
-        <i class="pi pi-file text-primary rounded-lg p-2 bg-primary-50" />
         <p>{{ getFileNameFromUrl(file) }}</p>
       </div>
     </div>
