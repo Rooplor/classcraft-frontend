@@ -121,7 +121,7 @@ const onSubmit = handleSubmit(async (values: any) => {
         .get();
 
     if (editingClassroom.value) {
-        let res = await updateClassroom(editingClassroom.value.id, values)
+        try{let res = await updateClassroom(editingClassroom.value.id, values)
 
         if (res.success) {
             classroomStore.updateClassroom(res.result);
@@ -132,11 +132,19 @@ const onSubmit = handleSubmit(async (values: any) => {
                 group: "tc",
                 life: 3000,
             });
+        }} catch (error) {
+            toast.add({
+                severity: "error",
+                summary: "Could not update class",
+                detail: "There was an error updating the class. Please try again later.",
+                life: 3000,
+                group: "tc",
+            });
         }
         return;
     }
 
-    let res = await addClassroom(values)
+    try {let res = await addClassroom(values)
     if (res.success) {
         router.push(`/class/${res.result.id}/edit`);
         classroomStore.addClassroom(res.result);
@@ -147,6 +155,14 @@ const onSubmit = handleSubmit(async (values: any) => {
             life: 3000,
         });
         resetForm();
+    }} catch (error) {
+        toast.add({
+            severity: "error",
+            summary: "Could not create class",
+            detail: "There was an error creating the class. Please try again later.",
+            life: 3000,
+            group: "tc",
+        });
     }
 });
 
@@ -164,7 +180,13 @@ const onCoverImageChange = async (event: any) => {
             coverImage.value = res.result.urls[0];
         }
     } catch (error) {
-        console.error("Error uploading file:", error);
+        toast.add({
+            severity: "error",
+            summary: "Error uploading file",
+            detail: "There was an error uploading the file. Please try again later.",
+            life: 3000,
+            group: "tc",
+        });
     }
 };
 
@@ -186,7 +208,13 @@ const onInstructorAvatarChange = async (event: any) => {
             instructorAvatar.value = res.result.urls[0];
         }
     } catch (error) {
-        console.error("Error uploading file:", error);
+        toast.add({
+            severity: "error",
+            summary: "Error uploading file",
+            detail: "There was an error uploading the file. Please try again later.",
+            life: 3000,
+            group: "tc",
+        });
     }
 };
 

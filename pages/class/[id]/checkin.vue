@@ -60,21 +60,31 @@ onMounted(async () => {
     }, 3000);
     return;
   } else {
-    let attendeeStatusResponse = await setAttendeeStatus(
-      userFormSubmission.value?.id,
-      EAttendeeStatus.Present,
-      parsedDay
-    );
-    if (attendeeStatusResponse.success) {
+    try {
+      let attendeeStatusResponse = await setAttendeeStatus(
+        userFormSubmission.value?.id,
+        EAttendeeStatus.Present,
+        parsedDay
+      );
+      if (attendeeStatusResponse.success) {
+        toast.add({
+          severity: "success",
+          summary: "You have been checked in",
+          group: "tc",
+          life: 3000,
+        });
+        setTimeout(() => {
+          router.push(`/class/${id}`);
+        }, 3000);
+      }
+    } catch (error) {
       toast.add({
-        severity: "success",
-        summary: "You have been checked in",
+        severity: "error",
+        summary: "Could not check you in",
+        detail: "There was an error checking you in. Please try again later.",
         group: "tc",
         life: 3000,
       });
-      setTimeout(() => {
-        router.push(`/class/${id}`);
-      }, 3000);
     }
   }
 });

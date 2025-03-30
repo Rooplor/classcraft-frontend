@@ -13,18 +13,29 @@ const formData = ref<{ [key: string]: any }>({});
 const onSubmit = async (event: Event) => {
   event.preventDefault();
 
-  const res = await submitFeedbackForm(
-    props.userFormSubmission.id,
-    formData.value
-  );
+  try {
+    const res = await submitFeedbackForm(
+      props.userFormSubmission.id,
+      formData.value
+    );
 
-  if (res.success) {
-    props.userFormSubmission.feedbackResponse = res.result;
+    if (res.success) {
+      props.userFormSubmission.feedbackResponse = res.result;
 
+      toast.add({
+        severity: "success",
+        summary: "Success",
+        detail: "Feedback submitted successfully",
+        life: 3000,
+        group: "tc",
+      });
+    }
+  } catch (error) {
     toast.add({
-      severity: "success",
-      summary: "Success",
-      detail: "Feedback submitted successfully",
+      severity: "error",
+      summary: "Could not submit feedback",
+      detail:
+        "There was an error submitting the feedback. Please try again later.",
       life: 3000,
       group: "tc",
     });

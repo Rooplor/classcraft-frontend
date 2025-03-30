@@ -54,16 +54,26 @@ const updateFormQuestions = () => {
 const onSaveQuestion = async (question: Question) => {
   const index = questions.value.findIndex((q) => q.id === question.init?.id);
   questions.value[index].question = question.question;
-  const res = await updateFormQuestions();
-  if (res.success) {
+  try {
+    const res = await updateFormQuestions();
+    if (res.success) {
+      toast.add({
+        severity: "success",
+        summary: "Saved",
+        detail: `Your question has been saved`,
+        group: "tc",
+        life: 3000,
+      });
+      editingQuestion.value = null;
+    }
+  } catch (error) {
     toast.add({
-      severity: "success",
-      summary: "Saved",
-      detail: `Your question has been saved`,
+      severity: "error",
+      summary: "Could not save",
+      detail: "There was an error saving the question. Please try again later.",
       group: "tc",
       life: 3000,
     });
-    editingQuestion.value = null;
   }
 };
 const addQuestion = () => {
@@ -93,13 +103,24 @@ const confirmDelete = (question: Question) => {
     },
     accept: async () => {
       removeQuestion(question.id);
-      const res = await updateFormQuestions();
-      if (res.success) {
-        editingQuestion.value = null;
+      try {
+        const res = await updateFormQuestions();
+        if (res.success) {
+          editingQuestion.value = null;
+          toast.add({
+            severity: "error",
+            summary: "Deleted",
+            detail: `Your question has been deleted`,
+            group: "tc",
+            life: 3000,
+          });
+        }
+      } catch (error) {
         toast.add({
           severity: "error",
-          summary: "Deleted",
-          detail: `Your question has been deleted`,
+          summary: "Could not delete",
+          detail:
+            "There was an error deleting the question. Please try again later.",
           group: "tc",
           life: 3000,
         });
@@ -136,44 +157,76 @@ const onOpenRegistration = async () => {
     await setPublishStatus(editingClassroom.value.id, true);
   }
 
-  let registrationRes = await setRegistrationStatus(
-    editingClassroom.value.id,
-    true
-  );
-  if (registrationRes.success) {
-    updateClassroomStore(registrationRes.result);
-    showRegistrationToast(editingClassroom.value.registrationStatus);
+  try {
+    let registrationRes = await setRegistrationStatus(
+      editingClassroom.value.id,
+      true
+    );
+    if (registrationRes.success) {
+      updateClassroomStore(registrationRes.result);
+      showRegistrationToast(editingClassroom.value.registrationStatus);
+    }
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Could not open registration",
+      detail:
+        "There was an error opening registration. Please try again later.",
+      life: 3000,
+      group: "tc",
+    });
   }
 };
 
 const onCloseRegistration = async () => {
-  let res = await setRegistrationStatus(editingClassroom.value.id, false);
-  if (res.success) {
-    updateClassroomStore(res.result);
-    showRegistrationToast(editingClassroom.value.registrationStatus);
+  try {
+    let res = await setRegistrationStatus(editingClassroom.value.id, false);
+    if (res.success) {
+      updateClassroomStore(res.result);
+      showRegistrationToast(editingClassroom.value.registrationStatus);
+    }
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Could not close registration",
+      detail:
+        "There was an error closing registration. Please try again later.",
+      life: 3000,
+      group: "tc",
+    });
   }
 };
 
 if (editingClassroom.value) {
-  let res = await getFormById(editingClassroom.value.id);
-  if (res.success) {
-    const { result } = res;
-    openDate.value = result.openDate
-      ? isoToDateWithTimezone(result.openDate)
-      : null;
-    closeDate.value = result.closeDate
-      ? isoToDateWithTimezone(result.closeDate)
-      : null;
-    isRequiredApproval.value = result.ownerApprovalRequired;
+  try {
+    let res = await getFormById(editingClassroom.value.id);
+    if (res.success) {
+      const { result } = res;
+      openDate.value = result.openDate
+        ? isoToDateWithTimezone(result.openDate)
+        : null;
+      closeDate.value = result.closeDate
+        ? isoToDateWithTimezone(result.closeDate)
+        : null;
+      isRequiredApproval.value = result.ownerApprovalRequired;
 
-    questions.value = result.fields.map((field, index) => ({
-      id: index,
-      question: field.name,
-    }));
+      questions.value = result.fields.map((field, index) => ({
+        id: index,
+        question: field.name,
+      }));
 
-    if (closeDate.value && closeDate.value < new Date()) {
-      setRegistrationStatus(editingClassroom.value.id, false);
+      if (closeDate.value && closeDate.value < new Date()) {
+        setRegistrationStatus(editingClassroom.value.id, false);
+      }
     }
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Could not fetch questions",
+      detail: "There was an error fetching questions. Please try again later.",
+      life: 3000,
+      group: "tc",
+    });
   }
 }
 </script>

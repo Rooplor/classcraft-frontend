@@ -20,13 +20,24 @@ const showPublishToast = () => {
 };
 
 const publish = async () => {
-  let res = await setPublishStatus(editingClassroom.value.id, true);
+  try {
+    let res = await setPublishStatus(editingClassroom.value.id, true);
 
-  if (res.success) {
-    classroomStore.setEditingClassroom(res.result);
-    classroomStore.updateClassroom(res.result);
+    if (res.success) {
+      classroomStore.setEditingClassroom(res.result);
+      classroomStore.updateClassroom(res.result);
 
-    showPublishToast();
+      showPublishToast();
+    }
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Could not publish classroom",
+      detail:
+        "There was an error publishing the classroom. Please try again later.",
+      life: 3000,
+      group: "tc",
+    });
   }
 };
 </script>

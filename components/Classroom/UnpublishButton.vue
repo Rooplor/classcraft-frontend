@@ -20,13 +20,24 @@ const showUnpublishToast = () => {
 };
 
 const unpublish = async () => {
-  let res = await setPublishStatus(editingClassroom.value.id, false);
+  try {
+    let res = await setPublishStatus(editingClassroom.value.id, false);
 
-  if (res.success) {
-    classroomStore.setEditingClassroom(res.result);
-    classroomStore.updateClassroom(res.result);
+    if (res.success) {
+      classroomStore.setEditingClassroom(res.result);
+      classroomStore.updateClassroom(res.result);
 
-    showUnpublishToast();
+      showUnpublishToast();
+    }
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Could not unpublish classroom",
+      detail:
+        "There was an error unpublishing the classroom. Please try again later.",
+      life: 3000,
+      group: "tc",
+    });
   }
 };
 </script>

@@ -27,29 +27,32 @@ const isLoading = ref(false);
 
 const handleSendRequest = async () => {
     isLoading.value = true;
-    let res = await reserveVenue(editingClassroom.value.id, editingClassroom.value.dates)
-    
-    if (res.success) {
-        toast.add({
-            severity: "success",
-            summary: "Request sent",
-            group: "tc",
-            life: 3000,
-        });
-        editingClassroom.value.venueStatus =
-            EVenueRequestStatus.PENDING;
-        isLoading.value = false;
-    } else {
+
+    try{ 
+        let res = await reserveVenue(editingClassroom.value.id, editingClassroom.value.dates)
+        
+        if (res.success) {
+            toast.add({
+                severity: "success",
+                summary: "Request sent",
+                group: "tc",
+                life: 3000,
+            });
+            editingClassroom.value.venueStatus =
+                EVenueRequestStatus.PENDING;
+        } 
+    } catch (error) {
         toast.add({
             severity: "error",
-            summary: "Request failed",
-            detail: res.error,
-            group: "tc",
+            summary: "Could not send request",
+            detail:
+                "There was an error sending the request. Please try again later.",
             life: 3000,
+            group: "tc",
         });
+    } finally {
         isLoading.value = false;
     }
-
 };
 
 const selectVenue = (id: string) => {

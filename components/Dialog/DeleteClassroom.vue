@@ -22,10 +22,14 @@ const open = () => {
 const handleDelete = async () => {
   if (!isMatch) return;
 
-  const res = await deleteClassroom(editingClassroom.value.id);
-  if (res.success) {
-    classroomStore.removeClassroomById(editingClassroom.value.id);
-    router.push("/class");
+  try {
+    const res = await deleteClassroom(editingClassroom.value.id);
+    if (res.success) {
+      classroomStore.removeClassroomById(editingClassroom.value.id);
+      router.push("/class");
+    }
+  } catch (error) {
+    console.error(error);
   }
 };
 </script>
