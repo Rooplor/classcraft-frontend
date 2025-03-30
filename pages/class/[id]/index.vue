@@ -114,7 +114,13 @@ const fetchAdditionalData = async () => {
     venues.value = (await getVenueByIds(uniqueVenueIds)).result;
     classroomForm.value = (await getFormById(classroom.value.id)).result;
   } catch (error) {
-    console.error("Error fetching additional data:", error);
+    toast.add({
+      severity: "error",
+      summary: "Could not fetch additional data",
+      detail: "There was an error fetching additional data. Please try again later.",
+      group: "tc",
+      life: 3000,
+    });
   }
 };
 
