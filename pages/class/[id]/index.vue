@@ -17,7 +17,6 @@ const { getUserFormSubmissions, getFormById, getUserInClassroom } =
   useClassroomForm();
 const { getVenueByIds } = useVenue();
 const { getUserById, getUserProfile } = useUser();
-const { sendClassroomRequest } = useRequestClassroom();
 
 const userFormSubmission = ref<IFormSubmission>();
 const usersInClassroom = ref<Partial<IUser>[]>([]);
@@ -76,29 +75,6 @@ const checkViewAccess = ({
 const onFormSubmitted = (submission: IFormSubmission) => {
   usersInClassroom.value.push(submission.userDetail);
   userFormSubmission.value = submission;
-};
-
-const onSendClassroomRequest = async () => {
-  try {
-    let res = await sendClassroomRequest(classroom.value.id);
-    if (res.success) {
-      toast.add({
-        severity: "success",
-        summary: "Request sent",
-        detail: `Your request to join "${classroom.value.title}" has been sent.`,
-        life: 3000,
-        group: "tc",
-      });
-    }
-  } catch (error) {
-    toast.add({
-      severity: "error",
-      summary: "Request failed",
-      detail: `There was an error sending your request to join "${classroom.value.title}". Please try again later.`,
-      life: 3000,
-      group: "tc",
-    });
-  }
 };
 
 const fetchClassroomData = async () => {
@@ -284,19 +260,14 @@ useHead({
               :userFormSubmission="userFormSubmission"
               :classroomTitle="classroom.title"
             />
-            <Button
+            <ClassroomRequestButton
               v-else-if="
                 !classroom.registrationStatus ||
                 seatsLeft === 0 ||
                 (classroomForm.openDate && !isFormOpen) ||
                 (classroomForm.closeDate && isFormClosed)
               "
-              @click="onSendClassroomRequest"
-              icon="pi pi-bookmark"
-              :label="`Add &quot;${classroom.title}&quot; to wishlist`"
-              size="large"
-              severity="secondary"
-              rounded
+              :classroom="classroom"
             />
             <Button
               v-else-if="isClassEnded"
