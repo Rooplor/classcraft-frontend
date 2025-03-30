@@ -53,6 +53,20 @@ const user = useCurrentUser();
             :isSidebarOpen="isSidebarOpen"
             @click="closeCallback?.()"
           />
+          <SidebarTab
+            to="/request"
+            label="Request"
+            icon="pi pi-inbox"
+            :isSidebarOpen="isSidebarOpen"
+            @click="closeCallback?.()"
+          />
+          <SidebarTab
+            to="/wishlist"
+            label="Wishlist"
+            icon="pi pi-bookmark"
+            :isSidebarOpen="isSidebarOpen"
+            @click="closeCallback?.()"
+          />
         </div>
       </div>
       <div
@@ -77,7 +91,7 @@ const user = useCurrentUser();
               </div>
             </AccordionHeader>
             <AccordionContent unstyled>
-               <SidebarTab
+              <SidebarTab
                 to="/class/new/edit"
                 label="Create a classroom"
                 icon="pi pi-plus"
