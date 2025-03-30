@@ -2,6 +2,7 @@
 import { type IClassroom } from "../../types/Classroom";
 
 const { getAllClassroom } = useClassroom();
+const toast = useToast();
 let classrooms = ref<IClassroom[]>();
 
 const options = ref(["Upcoming", "Past"]);
@@ -32,7 +33,13 @@ const filteredClassrooms = computed(() => {
 try {
   classrooms.value = (await getAllClassroom()).result;
 } catch (error) {
-  console.error("Error getting classrooms:", error);
+  toast.add({
+    severity: "error",
+    summary: "Could not fetch classrooms",
+    detail: "There was an error fetching classrooms. Please try again later.",
+    life: 3000,
+    group: "tc",
+  });
 }
 
 useHead({

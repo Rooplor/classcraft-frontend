@@ -2,6 +2,7 @@
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 const auth = useFirebaseAuth();
+const toast = useToast();
 
 const signInWithGoogle = async () => {
   if (!auth) return;
@@ -10,7 +11,13 @@ const signInWithGoogle = async () => {
     const token = await res.user.getIdToken();
     await useAuth().login(token);
   } catch (error) {
-    console.error("Error signing in with Google:", error);
+    toast.add({
+      severity: "error",
+      summary: "Error signing in with Google",
+      detail: "There was an error signing in with Google. Please try again later.",
+      life: 3000,
+      group: "tc",
+    });
   }
 };
 </script>
