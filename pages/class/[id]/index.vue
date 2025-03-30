@@ -9,7 +9,6 @@ import type { IUser } from "../../../types/User";
 import type { IVenue } from "../../../types/Venue";
 
 const router = useRouter();
-const toast = useToast();
 let classroomId = router.currentRoute.value.params.id?.toString();
 
 const { getClassroomById } = useClassroom();
@@ -17,7 +16,6 @@ const { getUserFormSubmissions, getFormById, getUserInClassroom } =
   useClassroomForm();
 const { getVenueByIds } = useVenue();
 const { getUserById, getUserProfile } = useUser();
-const { sendClassroomRequest } = useRequestClassroom();
 
 const userFormSubmission = ref<IFormSubmission>();
 const usersInClassroom = ref<Partial<IUser>[]>([]);
@@ -76,18 +74,6 @@ const checkViewAccess = ({
 const onFormSubmitted = (submission: IFormSubmission) => {
   usersInClassroom.value.push(submission.userDetail);
   userFormSubmission.value = submission;
-};
-
-const onSendClassroomRequest = async () => {
-  let res = await sendClassroomRequest(classroom.value.id);
-
-  if (res.success) {
-    toast.add({
-      severity: "success",
-      summary: "Request sent",
-      detail: `Your request to join "${classroom.value.title}" has been sent.`,
-    });
-  }
 };
 
 const fetchClassroomData = async () => {
@@ -279,26 +265,15 @@ useHead({
               :userFormSubmission="userFormSubmission"
               :classroomTitle="classroom.title"
             />
-            <Button
+            <ClassroomRequestButton
               v-else-if="
                 !classroom.registrationStatus ||
                 seatsLeft === 0 ||
                 (classroomForm.openDate && !isFormOpen) ||
-                (classroomForm.closeDate && isFormClosed)
+                (classroomForm.closeDate && isFormClosed) ||
+                isClassEnded
               "
-              @click="onSendClassroomRequest"
-              icon="pi pi-bookmark"
-              :label="`Add &quot;${classroom.title}&quot; to wishlist`"
-              size="large"
-              severity="secondary"
-              rounded
-            />
-            <Button
-              v-else-if="isClassEnded"
-              size="large"
-              :label="`Request for &quot;${classroom.title}&quot;`"
-              rounded
-              outlined
+              :classroom="classroom"
             />
             <ClassroomRegistrationButton
               v-else

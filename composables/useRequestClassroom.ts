@@ -20,10 +20,29 @@ const useRequestClassroom = () => {
     });
   };
 
-  const getRequestsByClassroomOwnerId = (
-    ownerId?: string
-  ): Promise<IResponse<IClassroomRequest[]>> => {
-    return $fetch(`${config.public.baseUrl}/api/request/owner/${ownerId}`, {
+  const getRequestsByClassroomOwnerId = (): Promise<
+    IResponse<IClassroomRequest[]>
+  > => {
+    return $fetch(`${config.public.baseUrl}/api/request/owner`, {
+      method: "GET",
+    });
+  };
+
+  const getClassroomRequestExist = (
+    classroomId?: string
+  ): Promise<IResponse<boolean>> => {
+    return $fetch(
+      `${config.public.baseUrl}/api/request/exists/${classroomId}`,
+      {
+        method: "GET",
+      }
+    );
+  };
+
+  const getUserClassroomRequests = (): Promise<
+    IResponse<IClassroomRequest[]>
+  > => {
+    return $fetch(`${config.public.baseUrl}/api/request/my-requests`, {
       method: "GET",
     });
   };
@@ -32,6 +51,8 @@ const useRequestClassroom = () => {
     sendClassroomRequest,
     deleteClassroomRequest,
     getRequestsByClassroomOwnerId,
+    getClassroomRequestExist,
+    getUserClassroomRequests,
   };
 };
 
