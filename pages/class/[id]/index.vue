@@ -9,7 +9,6 @@ import type { IUser } from "../../../types/User";
 import type { IVenue } from "../../../types/Venue";
 
 const router = useRouter();
-const toast = useToast();
 let classroomId = router.currentRoute.value.params.id?.toString();
 
 const { getClassroomById } = useClassroom();
