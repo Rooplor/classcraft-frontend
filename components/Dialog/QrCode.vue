@@ -17,12 +17,21 @@ const isCheckInEnable = computed(() => {
       editingClassroom.value.dates[0].date.startDateTime
     ).getTime() -
       Date.now() <
-    30 * 60 * 1000
+      30 * 60 * 1000 &&
+    Date.now() <
+      isoToDateWithTimezone(
+        editingClassroom.value.dates[editingClassroom.value.dates.length - 1]
+          .date.endDateTime
+      ).getTime()
   );
 });
 </script>
 <template>
-  <slot name="button" :onClick="open" :disabled="!editingClassroom || !isCheckInEnable" />
+  <slot
+    name="button"
+    :onClick="open"
+    :disabled="!editingClassroom || !isCheckInEnable"
+  />
   <Dialog
     v-model:visible="isVisible"
     dismissableMask
