@@ -87,7 +87,6 @@ onMounted(() => {
     size="large"
     severity="secondary"
     rounded
-    disabled
   />
   <Button
     v-else
