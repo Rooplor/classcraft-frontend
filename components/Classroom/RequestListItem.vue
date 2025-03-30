@@ -1,12 +1,15 @@
 <script setup lang="ts">
 defineProps<{
+  classroomId: string;
   classroom: any;
   requestList: any;
 }>();
 </script>
 <template>
-  <div
+  <nuxt-link
+    :to="'/class/' + classroomId"
     class="flex gap-3 bg-white border rounded-2xl p-3 duration-150 hover:border-slate-300 hover:drop-shadow-sm animate-fadein md:gap-6"
+    v-ripple
   >
     <div
       alt="class image"
@@ -89,5 +92,5 @@ defineProps<{
         />
       </div> -->
     </div>
-  </div>
+  </nuxt-link>
 </template>

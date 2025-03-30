@@ -28,6 +28,7 @@ try {
           <ClassroomRequestListItem
             v-for="(request, index) in classroomRequests"
             :key="index"
+            :classroomId="request.classroomId"
             :classroom="request.classroomDetail"
             :requestList="request.requestList"
           />
