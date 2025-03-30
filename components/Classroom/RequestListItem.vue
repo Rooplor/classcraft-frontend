@@ -1,13 +1,12 @@
 <script setup lang="ts">
 defineProps<{
   classroom: any;
+  requestList: any;
 }>();
 </script>
 <template>
-  <nuxt-link
-    :to="'/class/' + classroom.id"
+  <div
     class="flex gap-3 bg-white border rounded-2xl p-3 duration-150 hover:border-slate-300 hover:drop-shadow-sm animate-fadein md:gap-6"
-    v-ripple
   >
     <div
       alt="class image"
@@ -62,7 +61,33 @@ defineProps<{
           <p>By {{ classroom.instructorName }}</p>
         </div>
       </div>
+      <div class="flex items-center gap-4">
+        <AvatarGroup class="flex justify-start">
+          <Avatar
+            v-for="(requestUser, index) in requestList.slice(0, 6)"
+            :key="index"
+            :image="requestUser.requestedBy.profilePicture"
+            shape="circle"
+          />
+          <Avatar
+            v-if="requestList.length > 6"
+            label="+{{ requestList.length - 6 }}"
+            shape="circle"
+          />
+        </AvatarGroup>
+        <p class="text-slate-500">
+          {{ requestList.length }} people want to join
+        </p>
+      </div>
+      <!-- <div class="flex items-center gap-2 text-slate-500 text-sm">
+        <Button label="Recreate this class" icon="pi pi-plus" fluid />
+        <Button
+          label="Remove from wishlist"
+          icon="pi pi-bookmark-fill"
+          severity="secondary"
+          fluid
+        />
+      </div> -->
     </div>
-    <div></div>
-  </nuxt-link>
+  </div>
 </template>
