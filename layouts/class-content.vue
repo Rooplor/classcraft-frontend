@@ -4,7 +4,7 @@
       <Tab :value="0">Drafted Content</Tab>
       <Tab :value="1">Class Materials</Tab>
     </TabList>
-    <TabPanels :pt="{ root: `bg-transparent !px-0` }">
+    <TabPanels :pt="{ root: `!bg-transparent !px-0` }">
       <TabPanel :value="0">
         <NuxtLayout name="create-drafted-content" />
       </TabPanel>
