@@ -68,8 +68,8 @@ const items = ref([
       <DialogClassroomContent>
         <template v-slot:button="{ onClick, disabled }">
           <Button
-            label="Class Content"
-            icon="pi pi-sparkles"
+            label="Content"
+            icon="pi pi-plus"
             rounded
             size="small"
             :disabled="disabled"
