@@ -5,7 +5,7 @@
       <Tab :value="0">Questions</Tab>
       <Tab :value="1">Responses</Tab>
     </TabList>
-    <TabPanels :pt="{ root: `bg-transparent px-0` }">
+    <TabPanels :pt="{ root: `!bg-transparent !px-0` }">
       <TabPanel :value="0">
         <NuxtLayout name="create-feedback-form" />
       </TabPanel>
