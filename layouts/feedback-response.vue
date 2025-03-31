@@ -64,6 +64,7 @@ if (editingClassroom.value) {
     :value="formattedFormSubmission"
     stripedRows
     tableStyle="min-width: 50rem"
+    :pt="{ root: `border rounded-lg overflow-clip` }"
   >
     <Column field="userDetail" header="User">
       <template #body="{ data }">

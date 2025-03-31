@@ -23,6 +23,7 @@ const open = () => {
     class="w-full mx-3 m-auto"
     :style="{
       height: '100vh',
+      background: '#f8fafc'
     }"
   >
     <NuxtLayout name="classroom-form-submission" />

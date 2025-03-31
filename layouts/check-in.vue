@@ -59,6 +59,7 @@ const onSelectStatus = async (
     :value="formattedFormSubmission"
     stripedRows
     tableStyle="min-width: 50rem"
+    :pt="{ root: `border rounded-xl overflow-clip` }"
   >
     <Column field="userDetail" header="User">
       <template #body="{ data }">
