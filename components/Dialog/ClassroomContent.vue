@@ -16,15 +16,15 @@ const open = () => {
   <Dialog
     v-model:visible="isVisible"
     dismissableMask
-    header="Craft Content"
+    header="Class Content"
     :modal="true"
     :draggable="false"
-    class="w-full max-w-screen-lg m-auto"
+    class="w-full mx-3"
     :style="{
       height: '100vh',
       background: '#f8fafc',
     }"
   >
-    <NuxtLayout name="craft-content" />
+    <NuxtLayout name="class-content" />
   </Dialog>
 </template>
