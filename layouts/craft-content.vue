@@ -1,10 +1,10 @@
 <template>
   <Tabs :value="0">
-    <TabList>
-      <Tab :value="0">Content</Tab>
+    <TabList  :pt="{ root: `border rounded-lg overflow-clip` }">
+      <Tab :value="0">Drafted Content</Tab>
       <Tab :value="1">Class Materials</Tab>
     </TabList>
-    <TabPanels>
+    <TabPanels :pt="{ root: `bg-transparent px-0` }">
       <TabPanel :value="0">
         <NuxtLayout name="create-craft-content" />
       </TabPanel>
