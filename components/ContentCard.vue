@@ -11,7 +11,7 @@ defineProps({
 const emit = defineEmits(["edit"]);
 </script>
 <template>
-    <div class="border rounded-3xl bg-white overflow-clip divide-y">
+    <div class="border rounded-xl bg-white overflow-clip">
         <div class="p-4">
             <div class="flex justify-between items-center">
                 <p class="text-xl font-bold">
