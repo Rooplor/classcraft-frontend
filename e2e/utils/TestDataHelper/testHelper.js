@@ -186,7 +186,7 @@ export async function getOneOrTwoDayClassResponse(page, numOfDay) {
 
 export async function fillContent(page, title, content, activityGuide, presentationGuide) {
     await page.getByLabel('Manage "1. Cybersecurity').click();
-    await page.getByLabel('Craft Content').click();
+    await page.getByLabel('Class Content').click();
     await page.getByRole('button', { name: '   Add Content' }).click();
     await page.getByPlaceholder('Enter Title').click();
     await page.getByPlaceholder('Enter Title').fill(title);

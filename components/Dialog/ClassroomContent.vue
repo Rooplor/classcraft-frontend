@@ -16,7 +16,7 @@ const open = () => {
   <Dialog
     v-model:visible="isVisible"
     dismissableMask
-    header="Craft Content"
+    header="Class Content"
     :modal="true"
     :draggable="false"
     class="w-full max-w-screen-lg m-auto"
