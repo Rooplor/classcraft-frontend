@@ -36,15 +36,24 @@ const searchDialogOptions: SearchDialogOption[] = [
         },
       },
       {
-        icon: "pi pi-plus",
-        label: "Create new topic request",
-        onClick: () => {},
-      },
-      {
         icon: "pi pi-home",
         label: "Open home page",
         onClick: () => {
           router.push("/");
+        },
+      },
+      {
+        icon: "pi pi-inbox",
+        label: "Open classroom requests page",
+        onClick: () => {
+          router.push("/request");
+        },
+      },
+      {
+        icon: "pi pi-bookmark",
+        label: "Open wishlist page",
+        onClick: () => {
+          router.push("/wishlist");
         },
       },
       {
