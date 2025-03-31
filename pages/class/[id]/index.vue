@@ -104,7 +104,8 @@ const fetchAdditionalData = async () => {
     toast.add({
       severity: "error",
       summary: "Could not fetch additional data",
-      detail: "There was an error fetching additional data. Please try again later.",
+      detail:
+        "There was an error fetching additional data. Please try again later.",
       group: "tc",
       life: 3000,
     });
@@ -253,20 +254,29 @@ useHead({
                 isClassEnded &&
                 classroomForm.feedback.length > 0
               "
-              class="p-4 border rounded-xl bg-primary-50 flex flex-col gap-4"
             >
-              <NuxtLayout
-                name="feedback-form"
+              <div
+                class="p-4 border rounded-xl bg-primary-50 flex flex-col gap-4"
+              >
+                <NuxtLayout
+                  name="feedback-form"
+                  :userFormSubmission="userFormSubmission"
+                  :feedbackForm="classroomForm.feedback"
+                />
+              </div>
+            </div>
+            <div v-else-if="isRegistered">
+              <ClassroomSubmissionDetail
                 :userFormSubmission="userFormSubmission"
-                :feedbackForm="classroomForm.feedback"
+                :classroomTitle="classroom.title"
+              />
+              <ClassroomRegisteredPeople
+                :usersInClassroom="usersInClassroom"
+                :seatsLeft="seatsLeft"
+                :registration-status="classroom.registrationStatus"
               />
             </div>
-            <ClassroomSubmissionDetail
-              v-else-if="isRegistered"
-              :userFormSubmission="userFormSubmission"
-              :classroomTitle="classroom.title"
-            />
-            <ClassroomRequestButton
+            <div
               v-else-if="
                 !classroom.registrationStatus ||
                 seatsLeft === 0 ||
@@ -274,38 +284,19 @@ useHead({
                 (classroomForm.closeDate && isFormClosed) ||
                 isClassEnded
               "
-              :classroom="classroom"
-            />
-            <ClassroomRegistrationButton
-              v-else
-              :classroom-title="classroom.title"
-              @submitted="onFormSubmitted($event)"
-            />
-            <div
-              v-if="usersInClassroom.length > 0"
-              class="flex justify-center items-center gap-2"
             >
-              <AvatarGroup class="flex justify-center">
-                <Avatar
-                  v-for="(user, index) in usersInClassroom.slice(0, 5)"
-                  :key="index"
-                  :image="user.profilePicture"
-                  shape="circle"
-                />
-              </AvatarGroup>
-              <p class="text-slate-500 text-left">
-                {{ usersInClassroom.length }} people joined this class
-                <span v-if="seatsLeft > 0">({{ seatsLeft }} seats left)</span>
-                <span v-else>(Full)</span>
-              </p>
+              <ClassroomRequestButton :classroom="classroom" />
             </div>
-            <div v-else-if="userProfile.id === classroom.owner" />
-            <div
-              v-else-if="
-                classroom.registrationStatus && usersInClassroom.length === 0
-              "
-            >
-              <p class="text-slate-500">Be the first to join this class</p>
+            <div v-else>
+              <ClassroomRegistrationButton
+                :classroom-title="classroom.title"
+                @submitted="onFormSubmitted($event)"
+              />
+              <ClassroomRegisteredPeople
+                :usersInClassroom="usersInClassroom"
+                :seatsLeft="seatsLeft"
+                :registration-status="classroom.registrationStatus"
+              />
             </div>
           </div>
         </div>

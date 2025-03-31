@@ -13,6 +13,7 @@ const isRegistrationDialogVisible = ref(false);
     :label="`Join Now`"
     rounded
     :severity="'primary'"
+    fluid
     @click="isRegistrationDialogVisible = true"
   />
   <Dialog
