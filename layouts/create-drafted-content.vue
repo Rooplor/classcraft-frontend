@@ -262,141 +262,12 @@ const generateContent = async () => {
 };
 </script>
 <template>
-  <div v-if="content.length > 0" v-for="(c, index) in content" :key="index">
-    <div
-      v-if="editingContent && c.id === editingContent?.id"
-      class="border rounded-xl bg-white overflow-clip"
-    >
-      <div class="p-4">
-        <div class="flex justify-between items-center gap-2">
-          <InputText
-            v-model="editingContent.title"
-            placeholder="Enter Title"
-            unstyled
-            focus
-            class="w-full text-xl border p-2 bg-slate-50 font-bold rounded-lg outline-none"
-          />
-        </div>
-      </div>
-      <div class="p-4 space-y-8">
-        <Textarea
-          v-model="editingContent.content"
-          placeholder="Content"
-          unstyled
-          rows="5"
-          class="w-full p-2 border bg-slate-50 outline-none resize-none rounded-lg"
-        />
-        <div class="space-y-2">
-          <small class="text-slate-400">Activity Guides</small>
-          <div class="space-y-2">
-            <div
-              v-for="(guide, index) in editingContent.activityGuides"
-              :key="index"
-              class="p-2 px-4 bg-slate-100 text-slate-500 rounded-lg flex gap-2 items-center duration-150 hover:bg-slate-200"
-            >
-              <p class="text-slate-400">{{ index + 1 }}.</p>
-              <div class="w-full flex justify-end gap-2">
-                <InputText
-                  v-model="guide.activityGuide"
-                  placeholder="Enter Activity Guide"
-                  unstyled
-                  required
-                  class="w-full bg-transparent outline-none border-b border-slate-300"
-                />
-                <Button
-                  icon="pi pi-times"
-                  severity="danger"
-                  rounded
-                  text
-                  @click="removeActivityGuide(guide.id)"
-                />
-              </div>
-            </div>
-            <Button
-              @click="addActivityGuide"
-              unstyled
-              class="w-full p-4 border rounded-lg text-primary bg-primary-50 border-primary hover:bg-primary-100 duration-150"
-            >
-              <i class="pi pi-plus" />&nbsp; Add Activity Guide
-            </Button>
-          </div>
-        </div>
-        <div class="space-y-2">
-          <small class="text-slate-400"> Presentation Guides </small>
-          <div class="grid grid-cols-2 gap-2">
-            <div
-              v-for="(guide, index) in editingContent.presentationGuides"
-              :key="index"
-              class="aspect-video bg-slate-100 text-slate-500 rounded-lg p-4 duration-150 hover:bg-slate-200"
-            >
-              <div class="relative">
-                <Textarea
-                  v-model="guide.presentationGuide"
-                  placeholder="Presentation Guide"
-                  rows="7"
-                  required
-                  unstyled
-                  class="bg-transparent outline-none border-slate-300 w-full"
-                />
-                <div class="absolute top-0 right-0">
-                  <Button
-                    icon="pi pi-times"
-                    severity="danger"
-                    rounded
-                    text
-                    @click="removePresentationGuide(guide.id)"
-                  />
-                </div>
-              </div>
-            </div>
-            <Button
-              @click="addPresentationGuide"
-              label="Add"
-              fluid
-              unstyled
-              class="aspect-video p-2 border rounded-lg text-primary bg-primary-50 border-primary hover:bg-primary-100 duration-150"
-            >
-              <i class="pi pi-plus" />&nbsp; Add Presentation Guide
-            </Button>
-          </div>
-        </div>
-      </div>
-      <div class="p-4 flex gap-2 justify-between">
-        <Button
-          severity="danger"
-          text
-          label="Delete"
-          @click="confirmDelete(editingContent)"
-        />
-        <div class="flex gap-2">
-          <Button
-            severity="secondary"
-            label="Cancel"
-            @click="
-                      () => {
-                          isContentEmpty(editingContent?.init) 
-                          ? confirmDelete(editingContent?.init as IContent)
-                          : editingContent = null
-                      }
-                    "
-          />
-          <Button
-            icon="pi pi-check"
-            label="Save"
-            :disabled="isContentEmpty(editingContent)"
-            @click="onSaveContent(editingContent)"
-          />
-        </div>
-      </div>
-    </div>
-    <ContentCard v-else :content="c" @edit="editingContent = c" />
-
-    <div class="grid grid-cols-2 gap-4 mt-6">
+  <div class="space-y-4 bg-white border rounded-xl p-4">
+    <div class="flex w-full justify-end gap-2">
       <Button
         label="Generate Content"
         :icon="isGenerating ? 'pi pi-spin pi-spinner' : 'pi pi-sparkles'"
         :loading="isGenerating"
-        class="w-full p-4 border rounded-xl duration-150"
         :class="
           isGenerating
             ? 'cursor-not-allowed text-slate-400 bg-slate-100 border-slate-100'
@@ -408,14 +279,138 @@ const generateContent = async () => {
         icon="pi pi-plus"
         label="Add Content"
         :disabled="editingContent !== null && content.length > 0"
+        text
         @click="addEmptyContent"
-        class="w-full p-4 border rounded-xl duration-150"
-        :class="
-          editingContent !== null && content.length > 0
-            ? 'cursor-not-allowed text-slate-400 bg-slate-100 border-slate-100'
-            : '!text-primary bg-primary-50 border-primary hover:!bg-primary-100'
-        "
       />
+    </div>
+    <div v-if="content.length > 0" v-for="(c, index) in content" :key="index">
+      <div
+        v-if="editingContent && c.id === editingContent?.id"
+        class="border rounded-lg bg-primary-50 overflow-clip"
+      >
+        <div class="p-4">
+          <div class="flex justify-between items-center gap-2">
+            <InputText
+              v-model="editingContent.title"
+              placeholder="Enter Title"
+              unstyled
+              focus
+              class="w-full text-xl border p-2 bg-slate-50 font-bold rounded-lg outline-none"
+            />
+          </div>
+        </div>
+        <div class="p-4 space-y-8">
+          <Textarea
+            v-model="editingContent.content"
+            placeholder="Content"
+            unstyled
+            rows="5"
+            class="w-full p-2 border bg-slate-50 outline-none resize-none rounded-lg"
+          />
+          <div class="space-y-2">
+            <small class="text-slate-400">Activity Guides</small>
+            <div class="space-y-2">
+              <div
+                v-for="(guide, index) in editingContent.activityGuides"
+                :key="index"
+                class="p-2 px-4 bg-slate-100 text-slate-500 rounded-lg flex gap-2 items-center duration-150 hover:bg-slate-200"
+              >
+                <p class="text-slate-400">{{ index + 1 }}.</p>
+                <div class="w-full flex justify-end gap-2">
+                  <InputText
+                    v-model="guide.activityGuide"
+                    placeholder="Enter Activity Guide"
+                    unstyled
+                    required
+                    class="w-full bg-transparent outline-none border-b border-slate-300"
+                  />
+                  <Button
+                    icon="pi pi-times"
+                    severity="danger"
+                    rounded
+                    text
+                    @click="removeActivityGuide(guide.id)"
+                  />
+                </div>
+              </div>
+              <Button
+                @click="addActivityGuide"
+                unstyled
+                class="w-full p-4 border rounded-lg text-primary bg-primary-100 border-primary hover:bg-primary-100 duration-150"
+              >
+                <i class="pi pi-plus" />&nbsp; Add Activity Guide
+              </Button>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <small class="text-slate-400"> Presentation Guides </small>
+            <div class="grid grid-cols-2 gap-2">
+              <div
+                v-for="(guide, index) in editingContent.presentationGuides"
+                :key="index"
+                class="aspect-video bg-slate-100 text-slate-500 rounded-lg p-4 duration-150 hover:bg-slate-200"
+              >
+                <div class="relative">
+                  <Textarea
+                    v-model="guide.presentationGuide"
+                    placeholder="Presentation Guide"
+                    rows="7"
+                    required
+                    unstyled
+                    class="bg-transparent outline-none border-slate-300 w-full"
+                  />
+                  <div class="absolute top-0 right-0">
+                    <Button
+                      icon="pi pi-times"
+                      severity="danger"
+                      rounded
+                      text
+                      @click="removePresentationGuide(guide.id)"
+                    />
+                  </div>
+                </div>
+              </div>
+              <Button
+                @click="addPresentationGuide"
+                label="Add"
+                fluid
+                unstyled
+                class="aspect-video p-2 border rounded-lg text-primary bg-primary-100 border-primary hover:bg-primary-100 duration-150"
+              >
+                <i class="pi pi-plus" />&nbsp; Add Presentation Guide
+              </Button>
+            </div>
+          </div>
+        </div>
+        <div class="p-4 flex gap-2 justify-between">
+          <Button
+            severity="danger"
+            text
+            label="Delete"
+            @click="confirmDelete(editingContent)"
+          />
+          <div class="flex gap-2">
+            <Button
+              severity="secondary"
+              label="Cancel"
+              @click="
+                      () => {
+                          isContentEmpty(editingContent?.init) 
+                          ? confirmDelete(editingContent?.init as IContent)
+                          : editingContent = null
+                      }
+                    "
+            />
+            <Button
+              icon="pi pi-check"
+              label="Save"
+              :disabled="isContentEmpty(editingContent)"
+              @click="onSaveContent(editingContent)"
+            />
+          </div>
+        </div>
+      </div>
+      <ContentCard v-else :content="c" @edit="editingContent = c" />
     </div>
   </div>
 </template>

@@ -11,10 +11,10 @@ defineProps({
 const emit = defineEmits(["edit"]);
 </script>
 <template>
-    <div class="border rounded-xl bg-white overflow-clip">
+    <div class="border rounded-lg bg-slate-100 overflow-clip">
         <div class="p-4">
             <div class="flex justify-between items-center">
-                <p class="text-xl font-bold">
+                <p class="text-lg font-bold">
                     <span v-if="content.title">{{ content.title }}</span>
                     <span v-else class="text-slate-300">No Title</span>
                 </p>
@@ -44,7 +44,7 @@ const emit = defineEmits(["edit"]);
                         v-else
                         v-for="(guide, index) in content.activityGuides"
                         :key="index"
-                        class="p-4 bg-slate-100 text-slate-500 rounded-xl flex gap-2 items-center duration-150 hover:bg-slate-200"
+                        class="p-4 bg-slate-100 text-slate-500 rounded-lg flex gap-2 items-center duration-150 hover:bg-slate-200"
                     >
                         <p class="text-slate-400">{{ index + 1 }}.</p>
                         <p>
@@ -71,7 +71,7 @@ const emit = defineEmits(["edit"]);
                         v-else
                         v-for="(guide, index) in content.presentationGuides"
                         :key="index"
-                        class="aspect-video bg-slate-100 text-slate-500 rounded-xl p-4 duration-150 hover:bg-slate-200"
+                        class="aspect-video bg-slate-100 text-slate-500 rounded-lg p-4 duration-150 hover:bg-slate-200"
                     >
                         <p class="flex justify-between">
                             <span v-if="guide.presentationGuide">{{
