@@ -555,29 +555,14 @@ const generateContent = async () => {
                 >
                   {{ message }}
                 </Message>
-                <a
+                <ClassMaterialItem
                   v-for="(file, index) in editingClassroom?.classMaterials"
                   :key="index"
-                  :href="file"
-                  target="_blank"
-                  class="border border-gray-200 rounded-lg p-4 bg-white hover:bg-slate-50 duration-200"
-                >
-                  <div class="flex justify-between items-center gap-2">
-                    <div class="flex gap-2 items-center">
-                      <i
-                        class="pi pi-file text-primary rounded-lg p-2 bg-primary-50"
-                      />
-                      <p>{{ getFileNameFromUrl(file) }}</p>
-                    </div>
-                    <Button
-                      icon="pi pi-times"
-                      severity="danger"
-                      rounded
-                      text
-                      @click="onRemoveFile($event, file, index)"
-                    />
-                  </div>
-                </a>
+                  :file="file"
+                  :index="index"
+                  removable
+                  @remove="onRemoveFile"
+                />
               </div>
               <div
                 v-if="editingClassroom?.classMaterials.length === 0"
