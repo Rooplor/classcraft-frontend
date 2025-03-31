@@ -87,6 +87,7 @@ onMounted(() => {
     size="large"
     severity="secondary"
     rounded
+    fluid
   />
   <Button
     v-else
@@ -96,5 +97,6 @@ onMounted(() => {
     size="large"
     severity="secondary"
     rounded
+    fluid
   />
 </template>
