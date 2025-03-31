@@ -134,43 +134,45 @@ const handleExportCSV = async () => {
       @click="handleExportCSV"
     />
   </div>
-  <DataTable
-    :value="formattedFormSubmission"
-    stripedRows
-    tableStyle="min-width: 50rem"
-  >
-    <Column field="userDetail" header="User">
-      <template #body="{ data }">
-        <nuxt-link
-          :to="`/user/${data.userDetail.id}`"
-          class="flex items-center gap-2"
-        >
-          <Avatar :image="data.userDetail.profilePicture" shape="circle" />
-          <span>{{ data.userDetail.username }}</span>
-        </nuxt-link>
-      </template>
-    </Column>
-    <Column field="approvedByOwner" header="Registration">
-      <template #body="slotProps">
-        <button
-          v-if="slotProps.data.approvedByOwner"
-          @click="setApprovalStatus(slotProps.data.id, false)"
-        >
-          <Tag severity="success" value="Approved" />
-        </button>
-        <button v-else @click="setApprovalStatus(slotProps.data.id, true)">
-          <Tag severity="warn" value="Pending" />
-        </button>
-      </template>
-    </Column>
-    <Column
-      v-for="column in columns"
-      :field="column.field"
-      :header="column.header"
+  <div class="bg-white border rounded-xl overflow-clip">
+    <DataTable
+      :value="formattedFormSubmission"
+      stripedRows
+      tableStyle="min-width: 50rem"
     >
-    </Column>
-    <template #empty>
-      <p class="text-slate-500">No submissions</p>
-    </template>
-  </DataTable>
+      <Column field="userDetail" header="User">
+        <template #body="{ data }">
+          <nuxt-link
+            :to="`/user/${data.userDetail.id}`"
+            class="flex items-center gap-2"
+          >
+            <Avatar :image="data.userDetail.profilePicture" shape="circle" />
+            <span>{{ data.userDetail.username }}</span>
+          </nuxt-link>
+        </template>
+      </Column>
+      <Column field="approvedByOwner" header="Registration">
+        <template #body="slotProps">
+          <button
+            v-if="slotProps.data.approvedByOwner"
+            @click="setApprovalStatus(slotProps.data.id, false)"
+          >
+            <Tag severity="success" value="Approved" />
+          </button>
+          <button v-else @click="setApprovalStatus(slotProps.data.id, true)">
+            <Tag severity="warn" value="Pending" />
+          </button>
+        </template>
+      </Column>
+      <Column
+        v-for="column in columns"
+        :field="column.field"
+        :header="column.header"
+      >
+      </Column>
+      <template #empty>
+        <p class="text-slate-500">No submissions</p>
+      </template>
+    </DataTable>
+  </div>
 </template>
