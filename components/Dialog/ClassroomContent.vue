@@ -25,6 +25,6 @@ const open = () => {
       background: '#f8fafc',
     }"
   >
-    <NuxtLayout name="craft-content" />
+    <NuxtLayout name="class-content" />
   </Dialog>
 </template>

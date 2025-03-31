@@ -6,7 +6,7 @@
     </TabList>
     <TabPanels :pt="{ root: `bg-transparent px-0` }">
       <TabPanel :value="0">
-        <NuxtLayout name="create-craft-content" />
+        <NuxtLayout name="create-drafted-content" />
       </TabPanel>
       <TabPanel :value="1">
         <NuxtLayout name="create-class-material" />
