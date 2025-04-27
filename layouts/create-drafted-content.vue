@@ -190,7 +190,8 @@ const generateContent = async () => {
     let res = (await $fetch(`${config.public.baseUrl}/ai`, {
       method: "POST",
       body: JSON.stringify({
-        model: "deepseek-r1:1.5b",
+        // model: "deepseek-r1:1.5b",
+        model: "gemma3:1b",
         messages: [
           {
             role: "user",
